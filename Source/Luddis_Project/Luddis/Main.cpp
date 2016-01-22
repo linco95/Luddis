@@ -26,7 +26,7 @@ int main(){
 	//	// Draw
 	//	
 	//	window.display();
-	}
+	//}
 
 	return 0;
 }
