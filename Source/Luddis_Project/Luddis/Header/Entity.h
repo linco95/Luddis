@@ -7,6 +7,7 @@
 // Framåtdeklaration
 namespace sf{
 	class Clock;
+	class Sprite;
 }
 
 class Entity : public sf::Transformable, public sf::Drawable {
@@ -17,6 +18,7 @@ public:
 	// Funktion för att uppdatera entiteten
 	virtual void tick(const sf::Clock& gameTime) = 0;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
+	virtual sf::Sprite& loadTexture() const = 0;
 };
 
 #endif
