@@ -4,6 +4,7 @@ Repository for our game project.
 
 I did not include the SFML files in this repo. You've got to download them yourself and put them into the luddis_project folder. 
 You also need to copy the files to your debug folder (where the .exe is located):
+- openal32.dll
 - sfml-audio-2.dll
 - sfml-audio-d-2.dll
 - sfml-graphics-2.dll
