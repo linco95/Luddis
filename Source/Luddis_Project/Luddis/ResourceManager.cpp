@@ -16,14 +16,17 @@ ResourceManager::~ResourceManager(){
 	clearAllSoundBuffers();
 	clearAllTextures();
 }
+#pragma warning ( disable : 4715 )
 
 sf::Texture& ResourceManager::getTexture(std::string filename){
+	assert(mTextures.size() > 0);
 	for (TexturePairVector::size_type i = 0; i < mTextures.size(); i++){
 		if (mTextures.at(i).second == filename){
 			return *mTextures.at(i).first;
 		}
 	}
 }
+#pragma warning ( default : 4715 )
 
 void ResourceManager::loadTexture(std::string filename){
 	for (TexturePairVector::size_type i = 0; i < mTextures.size(); i++){
@@ -56,13 +59,17 @@ void ResourceManager::clearAllTextures(){
 	}
 }
 
+#pragma warning ( disable : 4715 )
+
 sf::Font& ResourceManager::getFont(std::string filename){
+	assert(mFonts.size() > 0);
 	for (FontPairVector::size_type i = 0; i < mFonts.size(); i++){
 		if (mFonts.at(i).second == filename){
 			return *mFonts.at(i).first;
 		}
 	}
 }
+#pragma warning ( default : 4715 )
 
 void ResourceManager::loadFont(std::string filename){
 	for (FontPairVector::size_type i = 0; i < mFonts.size(); i++){
@@ -94,14 +101,16 @@ void ResourceManager::clearAllFonts(){
 		mFonts.pop_back();
 	}
 }
-
+#pragma warning ( disable : 4715 )
 sf::SoundBuffer& ResourceManager::getSoundBuffer(std::string filename){
+	assert(mSoundBuffers.size() > 0);
 	for (SoundBufferPairVector::size_type i = 0; i < mSoundBuffers.size(); i++){
 		if (mSoundBuffers.at(i).second == filename){
 			return *mSoundBuffers.at(i).first;
 		}
 	}
 }
+#pragma warning ( default : 4715 )
 
 void ResourceManager::loadSoundBuffer(std::string filename){
 	for (SoundBufferPairVector::size_type i = 0; i < mSoundBuffers.size(); i++){
@@ -133,14 +142,17 @@ void ResourceManager::clearAllSoundBuffers(){
 		mSoundBuffers.pop_back();
 	}
 }
+#pragma warning ( disable : 4715 )
 
 sf::Music& ResourceManager::getMusic(std::string filename){
+	assert(mMusic.size() > 0);
 	for (MusicPairVector::size_type i = 0; i < mMusic.size(); i++){
 		if (mMusic.at(i).second == filename){
 			return *mMusic.at(i).first;
 		}
 	}
 }
+#pragma warning ( default : 4715 )
 
 void ResourceManager::loadMusic(std::string filename){
 	for (MusicPairVector::size_type i = 0; i < mMusic.size(); i++){
