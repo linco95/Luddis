@@ -34,9 +34,12 @@ public:
 	void clearMusic(std::string filename);
 	void clearAllMusic();
 
+	// Delete copy and = to avoid bypassing singleton
+	ResourceManager& operator=(ResourceManager&) = delete;
+	ResourceManager(const ResourceManager&) = delete;
+
 private:
 	ResourceManager();
-	ResourceManager& operator=(ResourceManager& rM);
 	typedef std::vector<std::pair<sf::Texture*, std::string>> TexturePairVector;
 	TexturePairVector mTextures;
 	typedef std::vector<std::pair<sf::Font*, std::string>> FontPairVector;

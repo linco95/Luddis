@@ -1,0 +1,1 @@
+// Class to handle entities (deallocating etc)

@@ -1,21 +1,32 @@
-#include <SFML/Graphics.hpp>
+//#include <SFML/Graphics.hpp>
+
+#include "GameManager.h"
 
 int main(){
-	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-	sf::CircleShape shape(100.f);
-	shape.setFillColor(sf::Color::Green);
+	
+	// TODO: Use gamemanager
 
-	while (window.isOpen()) {
-		sf::Event event;
-		while (window.pollEvent(event)) {
-			if (event.type == sf::Event::Closed)
-				window.close();
-		}
+	GameManager::getInstance().run();
 
-		window.clear();
-		window.draw(shape);
-		window.display();
-	}
+	//sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!", sf::Style::Fullscreen);
+	//while (window.isOpen()) {
+	//	sf::Event event;
+	//	while (window.pollEvent(event)) {
+	//		switch (event.type){
+	//		case sf::Event::Closed:
+	//			window.close();
+	//			break;
+	//		case sf::Event::KeyPressed:
+	//			if (event.key.code == sf::Keyboard::Escape){
+	//			}
+	//			break;
+	//		}
+	//	}
+	//	window.clear();
+	//	// Draw
+	//	
+	//	window.display();
+	//}
 
 	return 0;
 }
