@@ -13,12 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\ResourceManager">
-      <UniqueIdentifier>{f5dff213-de56-4d48-8ba6-aaf89cf5eff3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\ResourceManager">
-      <UniqueIdentifier>{b413232a-eb5d-458e-b7d1-4825d92a7ca3}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -31,13 +25,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
-      <Filter>Source Files\ResourceManager</Filter>
-    </ClCompile>
-    <ClCompile Include="SoundManager.cpp">
-      <Filter>Source Files\ResourceManager</Filter>
-    </ClCompile>
-    <ClCompile Include="GraphicManager.cpp">
-      <Filter>Source Files\ResourceManager</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -48,13 +36,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ResourceManager.h">
-      <Filter>Header Files\ResourceManager</Filter>
-    </ClInclude>
-    <ClInclude Include="SoundManager.h">
-      <Filter>Header Files\ResourceManager</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphicManager.h">
-      <Filter>Header Files\ResourceManager</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

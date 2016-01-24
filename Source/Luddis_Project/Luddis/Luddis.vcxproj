@@ -86,17 +86,13 @@
   <ItemGroup>
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="GraphicManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
-    <ClCompile Include="SoundManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Background.h" />
     <ClInclude Include="Entity.h" />
-    <ClInclude Include="GraphicManager.h" />
     <ClInclude Include="ResourceManager.h" />
-    <ClInclude Include="SoundManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
