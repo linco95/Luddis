@@ -13,6 +13,9 @@ struct GameManagerImp{
 		mIsRunning = true;
 	}
 
+	void initializeLevel(const int& levelIndex){
+		
+	}
 
 	void gameLoop(){
 		while (mMainWindow.isOpen() && mIsRunning){
@@ -20,7 +23,7 @@ struct GameManagerImp{
 			// Handle Events         In  EventManager
 			// Update Entities     |
 			// Kill dead Entities  | In EntityManager
-			// Render
+			// Render			     In rendermanager
 		}
 	}
 	bool mIsRunning;
