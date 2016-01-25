@@ -1,32 +1,28 @@
-//#include <SFML/Graphics.hpp>
+#include <SFML/Graphics.hpp>
+#include "ResourceManager.h"
 
-#include "GameManager.h"
+static const std::string APPNAME = "Luddis";
+static const int WIDTH = 1080;
+static const int HEIGHT = 720;
+
+static const std::string TEXTURE_FILE_NAME = "Resources/TestTexture.png";
 
 int main(){
-	
-	// TODO: Use gamemanager
+	ResourceManager::getInstance().loadTexture(TEXTURE_FILE_NAME);
+	sf::Sprite sprite(ResourceManager::getInstance().getTexture(TEXTURE_FILE_NAME));
+	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), APPNAME);
 
-	GameManager::getInstance().run();
+	while (window.isOpen()) {
+		sf::Event event;
+		while (window.pollEvent(event)) {
+			if (event.type == sf::Event::Closed)
+				window.close();
+		}
 
-	//sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!", sf::Style::Fullscreen);
-	//while (window.isOpen()) {
-	//	sf::Event event;
-	//	while (window.pollEvent(event)) {
-	//		switch (event.type){
-	//		case sf::Event::Closed:
-	//			window.close();
-	//			break;
-	//		case sf::Event::KeyPressed:
-	//			if (event.key.code == sf::Keyboard::Escape){
-	//			}
-	//			break;
-	//		}
-	//	}
-	//	window.clear();
-	//	// Draw
-	//	
-	//	window.display();
-	//}
+		window.clear();
+		window.draw(sprite);
+		window.display();
+	}
 
 	return 0;
 }

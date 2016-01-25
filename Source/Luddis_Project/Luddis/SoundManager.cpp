@@ -11,16 +11,15 @@ SoundManager::~SoundManager(){
 	clearAllMusic();
 }
 
-//Returns a soundbuffer associated with the filename
+//Returns a soundbuffer associated with the filename. If there is none, it will create one
 sf::SoundBuffer& SoundManager::getSoundBuffer(std::string filename){
-	assert(mSoundBuffers.size() > 0);
 	for (SoundBufferPairVector::size_type i = 0; i < mSoundBuffers.size(); i++){
 		if (mSoundBuffers.at(i).second == filename){
 			return *mSoundBuffers.at(i).first;
 		}
 	}
-	//TODO : Fix 
-	//There is no path out if the resource is not found (compiler warning)
+	loadSoundBuffer(filename);
+	return getSoundBuffer(filename);
 }
 
 //Loads a soundbuffer into memory. !!Cannot store two files with the same filename!!
@@ -57,16 +56,15 @@ void SoundManager::clearAllSoundBuffers(){
 	}
 }
 
-//Returns a music track associated with the filename
+//Returns a music track associated with the filename. If there is none, it will create one
 sf::Music& SoundManager::getMusic(std::string filename){
-	assert(mMusic.size() > 0);
 	for (MusicPairVector::size_type i = 0; i < mMusic.size(); i++){
 		if (mMusic.at(i).second == filename){
 			return *mMusic.at(i).first;
 		}
 	}
-	//TODO : Fix 
-	//There is no path out if the resource is not found (compiler warning)
+	loadMusic(filename);
+	return getMusic(filename);
 }
 
 //Loads a music track into memory. !!Cannot store two files with the same filename!!

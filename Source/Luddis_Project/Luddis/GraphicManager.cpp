@@ -11,16 +11,15 @@ GraphicManager::~GraphicManager(){
 	clearAllFonts();
 }
 
-//Returns a texture associated with the filename
+//Returns a texture associated with the filename. If there is none, it will create one
 sf::Texture& GraphicManager::getTexture(std::string filename){
-	assert(mTextures.size() > 0);
 	for (TexturePairVector::size_type i = 0; i < mTextures.size(); i++){
 		if (mTextures.at(i).second == filename){
 			return *mTextures.at(i).first;
 		}
 	}
-	//TODO : Fix 
-	//There is no path out if the resource is not found (compiler warning)
+	loadTexture(filename);
+	return getTexture(filename);
 }
 
 //Loads an image into memory. !!Cannot store two files with the same filename!!
@@ -57,16 +56,15 @@ void GraphicManager::clearAllTextures(){
 	}
 }
 
-//Returns a font associated with the filename
+//Returns a font associated with the filename. If there is none, it will create one
 sf::Font& GraphicManager::getFont(std::string filename){
-	assert(mFonts.size() > 0);
 	for (FontPairVector::size_type i = 0; i < mFonts.size(); i++){
 		if (mFonts.at(i).second == filename){
 			return *mFonts.at(i).first;
 		}
 	}
-	//TODO : Fix 
-	//There is no path out if the resource is not found (compiler warning)
+	loadFont(filename);
+	return getFont(filename);
 }
 
 //Loads a font into memory. !!Cannot store two files with the same filename!!
