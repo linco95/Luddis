@@ -6,6 +6,8 @@
 
 class SoundManager{
 public:
+	SoundManager(const SoundManager&) = delete;
+	SoundManager& operator =(const SoundManager&) = delete;
 	~SoundManager();
 
 	//SoundBuffer related functions
@@ -22,8 +24,6 @@ public:
 protected:
 	SoundManager();
 private:
-	SoundManager(const SoundManager&) = delete;
-	SoundManager& operator =(const SoundManager&) = delete;
 	typedef std::vector<std::pair<sf::SoundBuffer*, std::string>> SoundBufferPairVector;
 	SoundBufferPairVector mSoundBuffers;
 	typedef std::vector<std::pair<sf::Music*, std::string>> MusicPairVector;

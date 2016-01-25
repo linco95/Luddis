@@ -6,6 +6,8 @@
 
 class GraphicManager{
 public:
+	GraphicManager(const GraphicManager&) = delete;
+	GraphicManager& operator =(const GraphicManager&) = delete;
 	~GraphicManager();
 
 	//Texture related functions
@@ -22,8 +24,6 @@ public:
 protected:
 	GraphicManager();
 private:
-	GraphicManager(const GraphicManager&) = delete;
-	GraphicManager& operator =(const GraphicManager&) = delete;
 	typedef std::vector<std::pair<sf::Texture*, std::string>> TexturePairVector;
 	TexturePairVector mTextures;
 	typedef std::vector<std::pair<sf::Font*, std::string>> FontPairVector;

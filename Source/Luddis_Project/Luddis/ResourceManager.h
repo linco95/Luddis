@@ -7,11 +7,12 @@
 class ResourceManager: public GraphicManager, public SoundManager{
 public:
 	static ResourceManager& getInstance();
+
+	ResourceManager(const ResourceManager&) = delete;
+	ResourceManager& operator=(const ResourceManager&) = delete;
 	~ResourceManager();
 private:
 	ResourceManager();
-	ResourceManager(const ResourceManager&) = delete;
-	ResourceManager& operator=(const ResourceManager&) = delete;
 };
 
 #endif
