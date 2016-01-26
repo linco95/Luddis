@@ -6,32 +6,31 @@ EntityManager::EntityManager(){
 
 // Destructor for the entity manager
 EntityManager::~EntityManager(){
-	std::for_each(_objects.begin(), _objects.end(), ObjectDeallocator());
+	while (!mEntities.empty())
+		mEntities.pop_back();
 }
 
 // Function to add entities to the manager (input "name" and an entity pointer)
-void EntityManager::addEntity(std::string name, Entity* entity){
-	_objects.insert(std::pair<std::string, Entity*>(name, entity));
+void EntityManager::addEntity(Entity* entity){
+	mEntities.push_back(entity);
 }
+
 
 // Function to remove entities from the manager and memory (input "name")
-void EntityManager::removeEntity(std::string name){
-	std::map<std::string, Entity*>::iterator results = _objects.find(name);
-	if (results != _objects.end()){
-		delete results->second;
-		_objects.erase(results);
+void EntityManager::removeDeadEntities(){
+	EntitiesVector temp;
+	for (auto e : mEntities){
+		if (e->isAlive()) {
+			temp.push_back(e);
+		}
 	}
-}
-
-// Retrieves an entity with a certain "name"
-Entity* EntityManager::getEntity(std::string name){
-	std::map<std::string, Entity*>::const_iterator results = _objects.find(name);
-	if (results == _objects.end())
-		return NULL;
-	return results->second;
+	mEntities = temp;
+	return;
 }
 
 // Iterate through the entities and updates them
-void EntityManager::updateEntities(){
-	//TODO
+void EntityManager::updateEntities(const sf::Time& deltaTime){
+	for (auto e : mEntities){
+		e->tick(deltaTime);
+	}
 }

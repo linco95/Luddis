@@ -9,7 +9,7 @@
 #define INCLUDED_ENTITYMANAGER
 
 #include <SFML/System.hpp>
-#include <map>
+#include <vector>
 #include "Entity.h"
 
 class EntityManager {
@@ -17,18 +17,12 @@ public:
 	EntityManager();
 	~EntityManager();
 	
-	void addEntity(std::string name, Entity* entity);
-	void removeEntity(std::string name);
-	Entity* getEntity(std::string name);
+	void addEntity(Entity* entity);
+	void removeDeadEntities();
 
-	void updateEntities();
+	void updateEntities(const sf::Time& deltaTime);
 private:
-	std::map<std::string, Entity*>_objects;
-
-	struct ObjectDeallocator{
-		void operator()(const std::pair<std::string, Entity*> & p) const{
-			delete p.second;
-		}
-	};
+	typedef std::vector<Entity*> EntitiesVector;
+	EntitiesVector mEntities;
 };
 #endif
