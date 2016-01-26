@@ -2,41 +2,48 @@
 #define INCLUDED_EVENTMANAGER
 
 #include "EventSubject.h"
+#include <set>
+#include <unordered_map>
 
 /* TODO
 	-	Implement observer pattern
+	-	Implement singelton pattern
 */
 
 namespace sf{
 	class Window;
 }
 
+// Class that handles incoming events and notifies every observer which event was incoming.
 class EventManager : public EventSubject {
 public:
-	EventManager();
+	static EventManager& getInstance();
 	~EventManager();
 
 	// Function that adds an observer that listens for the types in types. Observer will get notified if any of the specific types are occuring. if
-	virtual void attatch(EventObserver *obs, const std::vector<const sf::Event::EventType&> &types) override;
+	void attatch(EventObserver *obs, const std::vector<sf::Event::EventType> &types) override;
 	// same as above, but listens to a specific type
-	virtual void attatch(EventObserver *obs, const sf::Event::EventType &type) override;
-	// same as above, but listens to all kinds of events
-	virtual void attatch(EventObserver *obs) override;
-
-
+	void attatch(EventObserver *obs, const sf::Event::EventType &type) override;
 
 	// Notify all observers. (according to their interests)
-	virtual const sf::Event& notify() const override;
-
+	void notify(const sf::Event& aEvent) const override;
 
 	// Detatch this observer from the corresponding types
-	virtual void detatch(EventObserver *obs, const std::vector<const sf::Event::EventType&> &types) override;
+	void detatch(EventObserver *obs, const std::vector<sf::Event::EventType> &types) override;
 	// Detatch this observer from the specific type
-	virtual void detatch(EventObserver *obs, const sf::Event::EventType &type) override;
-	// Detatch this observer from all types
-	virtual void detatch(EventObserver *obs) override;
+	void detatch(EventObserver *obs, const sf::Event::EventType &type) override;
 
 
+	EventManager& operator=(const EventManager&) = delete;
+	EventManager(const EventManager&) = delete;
+
+private:
+	typedef std::set<EventObserver*> ObserverSet;
+	typedef std::unordered_map<sf::Event::EventType, ObserverSet> EventToObservers;
+
+	EventToObservers mEventToObservers;
+
+	EventManager();
 };
 
 #endif
