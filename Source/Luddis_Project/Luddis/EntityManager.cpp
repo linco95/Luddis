@@ -15,16 +15,13 @@ void EntityManager::addEntity(Entity* entity){
 	mEntities.push_back(entity);
 }
 
-
 // Function to remove dead entities from the manager and memory
 void EntityManager::removeDeadEntities(){
 	EntitiesVector temp;
 	for (auto e : mEntities){
-		/*
 		if (e->isAlive()) {
 			temp.push_back(e);
 		}
-		*/
 	}
 	mEntities = temp;
 	return;
