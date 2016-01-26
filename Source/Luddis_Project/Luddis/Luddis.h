@@ -4,6 +4,7 @@
 #include <string>
 #include "Entity.h"
 #include <SFML/Window.hpp>
+#include <SFML/Audio/Sound.hpp>
 
 class Luddis : public Entity{
 public:
@@ -11,11 +12,17 @@ public:
 	~Luddis();
 	virtual void tick(const sf::Time& deltaTime);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-	virtual bool isAlive() const override;
+	virtual bool isAlive() const;
 private:
+	void updateMovement();
+	void handleInput();
+	bool mIsAlive;
 	sf::Sprite mSprite;
 	sf::Window* mWindow;
-	bool mIsAlive;
+	sf::Sound mTestSound1;
+	sf::Sound mTestSound2;
+	sf::Sound mTestSound3;
+	sf::Sound mTestSound4;
 };
 
 #endif // !_INCLUDED_LUDDIS_

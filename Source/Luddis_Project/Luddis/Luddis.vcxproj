@@ -94,6 +94,7 @@
     <ClCompile Include="GraphicManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="SoundEngine.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="VectorMath.cpp" />
   </ItemGroup>
@@ -108,8 +109,18 @@
     <ClInclude Include="GraphicManager.h" />
     <ClInclude Include="Luddis.h" />
     <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="SoundEngine.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="VectorMath.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Knight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Resources\Audio\MGF-99-MULTI-Doepfer Modular - Classic Acid C2.wav" />
+    <Media Include="Resources\Audio\MGF-99-MULTI-Doepfer Modular - Classic Acid C3.wav" />
+    <Media Include="Resources\Audio\MGF-99-MULTI-Doepfer Modular - Classic Acid C4.wav" />
+    <Media Include="Resources\Audio\MGF-99-MULTI-Doepfer Modular - Classic Acid E1.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
