@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\EventManager">
+      <UniqueIdentifier>{3708fa9d-70e1-4e75-a32d-5a28c8c17b87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\EventManager">
+      <UniqueIdentifier>{5657ba8b-2162-45bb-b02e-b5962e3c0385}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -42,6 +48,9 @@
     <ClCompile Include="VectorMath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EventManager.cpp">
+      <Filter>Source Files\EventManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -62,9 +71,6 @@
     <ClInclude Include="CollisionManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EventManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GraphicManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -73,6 +79,12 @@
     </ClInclude>
     <ClInclude Include="VectorMath.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventManager.h">
+      <Filter>Header Files\EventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSubject.h">
+      <Filter>Header Files\EventManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

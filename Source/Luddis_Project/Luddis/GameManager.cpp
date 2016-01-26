@@ -1,4 +1,5 @@
 #include "GameManager.h"
+#include "EventManager.h"
 #include <SFML\Graphics.hpp>
 using namespace sf;
 
