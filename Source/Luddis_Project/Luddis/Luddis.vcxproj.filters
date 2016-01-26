@@ -65,9 +65,6 @@
     <ClInclude Include="GameManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EntityManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CollisionManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -80,11 +77,14 @@
     <ClInclude Include="VectorMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EventManager.h">
+	 <ClInclude Include="EventManager.h">
       <Filter>Header Files\EventManager</Filter>
     </ClInclude>
     <ClInclude Include="EventSubject.h">
       <Filter>Header Files\EventManager</Filter>
+    </ClInclude>
+	  <ClInclude Include="EntityManager.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
