@@ -14,8 +14,10 @@ public:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	virtual bool isAlive() const;
 private:
-	void updateMovement();
 	void handleInput();
+	void updateMovement();
+	void updateRotation();
+	void attack();
 	bool mIsAlive;
 	sf::Sprite mSprite;
 	sf::Window* mWindow;
