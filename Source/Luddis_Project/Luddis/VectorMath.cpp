@@ -1,20 +1,20 @@
 #include "VectorMath.h"
 #include <cmath>
 
-double VectorMath::dotProduct(sf::Vector2<double>& a, sf::Vector2<double>& b){
+float VectorMath::dotProduct(sf::Vector2f& a, sf::Vector2f& b){
 	return a.x * b.x + a.y* b.y;
 }
 
-double VectorMath::getVectorLength(sf::Vector2<double>& vector){
+float VectorMath::getVectorLength(sf::Vector2f& vector){
 	return sqrt(dotProduct(vector, vector));
 }
 
-double VectorMath::getVectorLengthSq(sf::Vector2<double>& vector){
+float VectorMath::getVectorLengthSq(sf::Vector2f& vector){
 	return dotProduct(vector, vector);
 }
 
-sf::Vector2<double> VectorMath::normalizeVector(sf::Vector2<double>& vector){
-	double factor = 1 / getVectorLength(vector);
-	sf::Vector2<double> vect(vector.x*factor, vector.y*factor);
+sf::Vector2f VectorMath::normalizeVector(sf::Vector2f& vector){
+	float factor = 1 / getVectorLength(vector);
+	sf::Vector2f vect(vector.x*factor, vector.y*factor);
 	return vect;
 }
