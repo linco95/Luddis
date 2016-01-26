@@ -18,17 +18,17 @@ sf::Texture& GraphicManager::getTexture(std::string filename){
 			return *mTextures.at(i).first;
 		}
 	}
-	loadTexture(filename);
+	loadTexture(filename, sf::IntRect());
 	return getTexture(filename);
 }
 
 //Loads an image into memory. !!Cannot store two files with the same filename!!
-void GraphicManager::loadTexture(std::string filename){
+void GraphicManager::loadTexture(std::string filename, sf::IntRect& rect){
 	for (TexturePairVector::size_type i = 0; i < mTextures.size(); i++){
 		assert(mTextures.at(i).second != filename);
 	}
 	sf::Texture* texture = new sf::Texture();
-	assert(texture->loadFromFile(filename));
+	assert(texture->loadFromFile(filename, rect));	
 
 
 	std::pair<sf::Texture*, std::string> p1;
