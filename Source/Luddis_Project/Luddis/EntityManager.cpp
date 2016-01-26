@@ -10,13 +10,13 @@ EntityManager::~EntityManager(){
 		mEntities.pop_back();
 }
 
-// Function to add entities to the manager (input "name" and an entity pointer)
+// Function to add entities to the manager (an entity pointer)
 void EntityManager::addEntity(Entity* entity){
 	mEntities.push_back(entity);
 }
 
 
-// Function to remove entities from the manager and memory (input "name")
+// Function to remove dead entities from the manager and memory
 void EntityManager::removeDeadEntities(){
 	EntitiesVector temp;
 	for (auto e : mEntities){
@@ -30,7 +30,7 @@ void EntityManager::removeDeadEntities(){
 	return;
 }
 
-// Iterate through the entities and updates them
+// Iterate through the entities and updates them (input time)
 void EntityManager::updateEntities(const sf::Time& deltaTime){
 	for (auto e : mEntities){
 		e->tick(deltaTime);

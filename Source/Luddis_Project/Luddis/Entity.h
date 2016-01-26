@@ -3,11 +3,13 @@
 
 #include <SFML\Graphics\Transformable.hpp>
 #include <SFML\Graphics\Drawable.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+
 
 // Framåtdeklaration
 namespace sf{
 	class Time;
-	class Sprite;
+//	class Sprite;
 }
 
 class Entity : public sf::Transformable, public sf::Drawable {

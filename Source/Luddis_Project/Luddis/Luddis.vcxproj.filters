@@ -51,6 +51,15 @@
     <ClCompile Include="EventManager.cpp">
       <Filter>Source Files\EventManager</Filter>
     </ClCompile>
+    <ClCompile Include="Luddis.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -77,13 +86,7 @@
     <ClInclude Include="VectorMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-	 <ClInclude Include="EventManager.h">
-      <Filter>Header Files\EventManager</Filter>
-    </ClInclude>
-    <ClInclude Include="EventSubject.h">
-      <Filter>Header Files\EventManager</Filter>
-    </ClInclude>
-	  <ClInclude Include="EntityManager.h">
+    <ClInclude Include="EntityManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

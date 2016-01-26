@@ -12,7 +12,7 @@ public:
 
 	//Texture related functions
 	sf::Texture& getTexture(std::string filename);
-	void loadTexture(std::string filename/*, TODO : add a second parameter for segmented textures*/);
+	void loadTexture(std::string filename, sf::IntRect& rect);
 	void clearTexture(std::string filename);
 	void clearAllTextures();
 

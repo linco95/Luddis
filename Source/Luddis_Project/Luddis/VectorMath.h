@@ -10,10 +10,10 @@ public:
 	~VectorMath();
 	VectorMath& operator=(VectorMath&) = delete;
 	VectorMath(const VectorMath&) = delete;
-	static double dotProduct(sf::Vector2<double>& a, sf::Vector2<double>& b);
-	static double getVectorLength(sf::Vector2<double>& vector);
-	static double getVectorLengthSq(sf::Vector2<double>& vector);
-	static sf::Vector2<double> normalizeVector(sf::Vector2<double>& vector);
+	static float dotProduct(sf::Vector2f& a, sf::Vector2f& b);
+	static float getVectorLength(sf::Vector2f& vector);
+	static float getVectorLengthSq(sf::Vector2f& vector);
+	static sf::Vector2f normalizeVector(sf::Vector2f& vector);
 
 };
 
