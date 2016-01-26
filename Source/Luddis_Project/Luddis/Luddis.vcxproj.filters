@@ -60,6 +60,12 @@
     <ClCompile Include="SoundManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EventSubject.cpp">
+      <Filter>Source Files\EventManager</Filter>
+    </ClCompile>
+    <ClCompile Include="EventObserver.cpp">
+      <Filter>Source Files\EventManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -88,6 +94,18 @@
     </ClInclude>
     <ClInclude Include="EntityManager.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Luddis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventManager.h">
+      <Filter>Header Files\EventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSubject.h">
+      <Filter>Header Files\EventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="EventObserver.h">
+      <Filter>Header Files\EventManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
