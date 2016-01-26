@@ -10,11 +10,11 @@ static const std::string TEXTURE_NAME = "Knight.png";
 static const std::string FONT_NAME = "arial.ttf";
 
 int main(){
-	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), APPNAME, sf::Style::Fullscreen);
+	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), APPNAME);
 	
 	sf::Time deltaTime;
 	Luddis luddis(TEXTURE_NAME, &window);
-
+	
 	while (window.isOpen()) {
 		sf::Event event;
 		while (window.pollEvent(event)) {

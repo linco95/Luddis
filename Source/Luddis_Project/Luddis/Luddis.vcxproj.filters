@@ -19,6 +19,12 @@
     <Filter Include="Source Files\EventManager">
       <UniqueIdentifier>{5657ba8b-2162-45bb-b02e-b5962e3c0385}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Resourcemanager">
+      <UniqueIdentifier>{cf0ff222-f2a8-4866-b76d-f1e3bfa47e65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ResourceManager">
+      <UniqueIdentifier>{294cea54-df24-419d-a36c-bd9dbc0b96f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -30,16 +36,7 @@
     <ClCompile Include="Background.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GameManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GraphicManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SoundManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="EntityManager.cpp">
@@ -60,11 +57,23 @@
     <ClCompile Include="SoundManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EventSubject.cpp">
-      <Filter>Source Files\EventManager</Filter>
+    <ClCompile Include="SoundEngine.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="EventObserver.cpp">
-      <Filter>Source Files\EventManager</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EventSubject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicManager.cpp">
+      <Filter>Source Files\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Source Files\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Source Files\ResourceManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -74,19 +83,10 @@
     <ClInclude Include="Background.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CollisionManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphicManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SoundManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="VectorMath.h">
@@ -95,17 +95,48 @@
     <ClInclude Include="EntityManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="EventSubject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Luddis.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EventManager.h">
       <Filter>Header Files\EventManager</Filter>
     </ClInclude>
-    <ClInclude Include="EventSubject.h">
-      <Filter>Header Files\EventManager</Filter>
+    <ClInclude Include="SoundEngine.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EventObserver.h">
-      <Filter>Header Files\EventManager</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Header Files\Resourcemanager</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Header Files\Resourcemanager</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicManager.h">
+      <Filter>Header Files\Resourcemanager</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Knight.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Resources\Audio\MGF-99-MULTI-Doepfer Modular - Classic Acid C2.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Resources\Audio\MGF-99-MULTI-Doepfer Modular - Classic Acid C3.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Resources\Audio\MGF-99-MULTI-Doepfer Modular - Classic Acid C4.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Resources\Audio\MGF-99-MULTI-Doepfer Modular - Classic Acid E1.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
   </ItemGroup>
 </Project>

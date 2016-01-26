@@ -1,5 +1,4 @@
 #include "GameManager.h"
-#include "EventManager.h"
 #include <SFML\Graphics.hpp>
 using namespace sf;
 
@@ -12,6 +11,7 @@ struct GameManagerImp{
 	void run(){
 		mMainWindow.create(VideoMode(), "Luddis", Style::Fullscreen);
 		mIsRunning = true;
+		gameLoop();
 	}
 
 	void initializeLevel(const int& levelIndex){

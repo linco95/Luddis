@@ -25,7 +25,7 @@ sf::SoundBuffer& SoundManager::getSoundBuffer(std::string filename){
 //Loads a soundbuffer into memory. !!Cannot store two files with the same filename!!
 void SoundManager::loadSoundBuffer(std::string filename){
 	for (SoundBufferPairVector::size_type i = 0; i < mSoundBuffers.size(); i++){
-		assert(mSoundBuffers.at(i).second == filename);
+		assert(mSoundBuffers.at(i).second != filename);
 	}
 
 	sf::SoundBuffer* soundBuffer = new sf::SoundBuffer();
@@ -70,7 +70,7 @@ sf::Music& SoundManager::getMusic(std::string filename){
 //Loads a music track into memory. !!Cannot store two files with the same filename!!
 void SoundManager::loadMusic(std::string filename){
 	for (MusicPairVector::size_type i = 0; i < mMusic.size(); i++){
-		assert(mMusic.at(i).second == filename);
+		assert(mMusic.at(i).second != filename);
 	}
 
 	sf::Music* music = new sf::Music();
