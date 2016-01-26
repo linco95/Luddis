@@ -89,6 +89,8 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="EventManager.cpp" />
+    <ClCompile Include="EventObserver.cpp" />
+    <ClCompile Include="EventSubject.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Luddis.cpp" />
     <ClCompile Include="GraphicManager.cpp" />
@@ -104,6 +106,7 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="EventManager.h" />
+    <ClInclude Include="EventObserver.h" />
     <ClInclude Include="EventSubject.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GraphicManager.h" />

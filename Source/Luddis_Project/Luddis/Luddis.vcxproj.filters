@@ -60,6 +60,12 @@
     <ClCompile Include="SoundManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EventSubject.cpp">
+      <Filter>Source Files\EventManager</Filter>
+    </ClCompile>
+    <ClCompile Include="EventObserver.cpp">
+      <Filter>Source Files\EventManager</Filter>
+    </ClCompile>
     <ClCompile Include="SoundEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -123,5 +129,17 @@
     <Media Include="Resources\Audio\MGF-99-MULTI-Doepfer Modular - Classic Acid E1.wav">
       <Filter>Resource Files</Filter>
     </Media>
+    <ClInclude Include="Luddis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventManager.h">
+      <Filter>Header Files\EventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSubject.h">
+      <Filter>Header Files\EventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="EventObserver.h">
+      <Filter>Header Files\EventManager</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
