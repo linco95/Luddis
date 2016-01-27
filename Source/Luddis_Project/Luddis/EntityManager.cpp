@@ -1,7 +1,8 @@
 #include "EntityManager.h"
 
 // Constructor for the entity manager (empty)
-EntityManager::EntityManager(){
+EntityManager::EntityManager():
+mEntities(){
 }
 
 // Destructor for the entity manager
@@ -9,6 +10,12 @@ EntityManager::~EntityManager(){
 	while (!mEntities.empty())
 		mEntities.pop_back();
 	// Deallocation!
+}
+
+//Fetch the singleton instance
+EntityManager& EntityManager::getInstance(){
+	static EntityManager eM;
+	return eM;
 }
 
 // Function to add entities to the manager (an entity pointer)
@@ -24,9 +31,9 @@ void EntityManager::removeDeadEntities(){
 			temp.push_back(e);
 		}
 		// Shouldn't this deallocate the memory like this too? Memory leak?
-		/*else{
+		else{
 			delete e;
-		}*/
+		}
 	}
 	mEntities = temp;
 	return;

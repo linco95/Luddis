@@ -1,12 +1,19 @@
 #include "Luddis.h"
 #include "ResourceManager.h"
+#include "EntityManager.h"
 #include "VectorMath.h"
+#include "Projectile.h"
+#include <SFML/System.hpp>
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <string>
 
 static const std::string SOUND_FILENAME1 = "Resources/Audio/MGF-99-MULTI-Doepfer Modular - Classic Acid C2.wav";
 
+//This should be dynamic later to determine what texture to use for projectiles
+static const std::string PROJECTILE_FILENAME = "Resources/Images/Turd.png";
+
+static const sf::Time PROJECTILE_TIMER = sf::seconds(3);
 static const float graceArea = 12;
 
 Luddis::Luddis(std::string textureFilename, sf::Window* window) : 
@@ -56,7 +63,10 @@ void Luddis::updateRotation(){
 }
 
 void Luddis::attack(){
+	sf::Vector2f direction = VectorMath::normalizeVector( getVectorMouseToSprite());
 
+	EntityManager::getInstance().addEntity(new Projectile(PROJECTILE_FILENAME,
+		direction, PROJECTILE_TIMER));
 }
 
 void Luddis::handleInput(){

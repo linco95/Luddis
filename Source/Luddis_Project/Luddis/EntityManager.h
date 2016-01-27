@@ -16,9 +16,11 @@ class EntityManager {
 public:
 	typedef std::vector<Entity*> EntitiesVector;
 
-
-	EntityManager();
+	EntityManager(EntityManager&) = delete;
+	EntityManager& operator=(EntityManager&) = delete;
 	~EntityManager();
+
+	static EntityManager& getInstance();
 	
 	void addEntity(Entity* entity);
 	void removeDeadEntities();
@@ -30,6 +32,7 @@ public:
 
 	// Singelton??
 private:
+	EntityManager();
 	EntitiesVector mEntities;
 };
 #endif

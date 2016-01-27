@@ -12,7 +12,7 @@ static const std::string APPNAME = "Luddis";
 static const int WIDTH = 1920;
 static const int HEIGHT = 1080;
 static const Color BGCOLOR = Color::Black;
-static const std::string TEXTURE_NAME = "Knight.png";
+static const std::string TEXTURE_NAME = "Resources/Images/Knight.png";
 static const std::string FONT_NAME = "arial.ttf";
 
 /*
@@ -33,7 +33,7 @@ struct GameManagerImp : public EventObserver {
 
 	void initializeLevel(const int& levelIndex){
 		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow);
-		mEntityManager.addEntity(mPlayer);
+		EntityManager::getInstance().addEntity(mPlayer);
 	}
 	void update(const Event& aEvent) override{
 
@@ -53,10 +53,10 @@ struct GameManagerImp : public EventObserver {
 	}
 	
 	// Temporary renderfunction until we need a rendermanager, mainly to optimize rendering and reducing drawcalls
-	void render(RenderWindow& aWindow, const EntityManager& aEntityManager){
+	void render(RenderWindow& aWindow){
 		aWindow.clear(BGCOLOR);
 
-		for (auto e : aEntityManager.getEntities()){
+		for (auto e : EntityManager::getInstance().getEntities()){
 			aWindow.draw(*e);
 		}
 
@@ -77,16 +77,15 @@ struct GameManagerImp : public EventObserver {
 			handleEvents(mMainWindow);
 
 			// Update Entities     |
-			mEntityManager.updateEntities(gameClock.getElapsedTime());
+			EntityManager::getInstance().updateEntities(gameClock.getElapsedTime());
 			gameClock.restart();
 			// Kill dead Entities  | In EntityManager
 			// Render			     (In rendermanager in the future)
-			render(mMainWindow, mEntityManager);
+			render(mMainWindow);
 		}
 	}
 	RenderWindow mMainWindow;
 	Luddis *mPlayer;
-	EntityManager mEntityManager;
 };
 
 GameManager::GameManager() :
