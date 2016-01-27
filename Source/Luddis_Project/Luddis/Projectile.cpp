@@ -21,9 +21,9 @@ Projectile::~Projectile(){
 }
 
 void Projectile::tick(const sf::Time& deltaTime){
-	mLifeTime -= deltaTime.asMilliseconds();
+	mLifeTime -= deltaTime.asSeconds();
 	checkLifeTime();
-	updateMovement();
+	updateMovement(deltaTime);
 }
 
 void Projectile::draw(sf::RenderTarget& target, sf::RenderStates states) const{
@@ -35,8 +35,8 @@ bool Projectile::isAlive() const{
 	return mIsAlive;
 }
 
-void Projectile::updateMovement(){
-	mSprite.move(mDirection);
+void Projectile::updateMovement(const sf::Time& deltaTime){
+	mSprite.move(mDirection*deltaTime.asSeconds());
 }
 
 void Projectile::checkLifeTime(){

@@ -13,10 +13,12 @@ static const std::string SOUND_FILENAME1 = "Resources/Audio/MGF-99-MULTI-Doepfer
 //This should be dynamic later to determine what texture to use for projectiles
 static const std::string PROJECTILE_FILENAME = "Resources/Images/Projectile.png";
 
-//All float values are in milliseconds
-static const float PROJECTILE_RELOAD = 1000;
-static const float PROJECTILE_TIMER = 3000;
-static const float graceArea = 12;
+//All float times are in seconds
+static const float PROJECTILE_RELOAD = 1.0f;
+static const float PROJECTILE_TIMER = 3.0f;
+static const float GRACEAREA = 12;
+static const float MOVESPEED = 200;
+static const float PROJECTILE_SPEED = 300;
 
 Luddis::Luddis(std::string textureFilename, sf::Window* window) : 
 	mIsAlive(true), 
@@ -36,7 +38,7 @@ bool Luddis::isAlive() const{
 	return mIsAlive;
 }
 void Luddis::tick(const sf::Time& deltaTime){
-	mProjectileCooldown -= deltaTime.asMilliseconds();
+	mProjectileCooldown -= deltaTime.asSeconds();
 	handleInput(deltaTime);
 	updateRotation();
 }
@@ -55,9 +57,9 @@ sf::Vector2f Luddis::getVectorMouseToSprite() const{
 void Luddis::updateMovement(const sf::Time& deltaTime){
 	sf::Vector2f direction = getVectorMouseToSprite();
 	//Only move if not close to the cursor position
-	if (VectorMath::getVectorLengthSq(direction) > graceArea){
+	if (VectorMath::getVectorLengthSq(direction) > GRACEAREA){
 		sf::Vector2f offset(VectorMath::normalizeVector(direction));
-		mSprite.move(offset.x*deltaTime.asSeconds(), offset.y*deltaTime.asSeconds());
+		mSprite.move(offset.x*deltaTime.asSeconds()*MOVESPEED, offset.y*deltaTime.asSeconds()*MOVESPEED);
 	}
 }
 
@@ -68,8 +70,8 @@ void Luddis::updateRotation(){
 }
 
 void Luddis::attack(){
-	sf::Vector2f direction = VectorMath::normalizeVector( getVectorMouseToSprite());
-	sf::Vector2f muzzlePoint = mSprite.getPosition() + (direction * (float)10);
+	sf::Vector2f direction = VectorMath::normalizeVector( getVectorMouseToSprite())*PROJECTILE_SPEED;
+	sf::Vector2f muzzlePoint = mSprite.getPosition() + direction*30.0f/PROJECTILE_SPEED;
 	EntityManager::getInstance().addEntity(new Projectile(PROJECTILE_FILENAME,
 		direction, muzzlePoint, PROJECTILE_TIMER));
 	mProjectileCooldown = PROJECTILE_RELOAD;

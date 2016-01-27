@@ -15,7 +15,7 @@ public:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	virtual bool isAlive() const;
 private:
-	void updateMovement();
+	void updateMovement(const sf::Time& deltaTime);
 	void checkLifeTime();
 
 	sf::Sprite mSprite;
