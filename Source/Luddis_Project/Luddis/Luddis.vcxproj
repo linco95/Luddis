@@ -95,6 +95,7 @@
     <ClCompile Include="Luddis.cpp" />
     <ClCompile Include="GraphicManager.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="SoundEngine.cpp" />
     <ClCompile Include="SoundManager.cpp" />
@@ -111,6 +112,7 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GraphicManager.h" />
     <ClInclude Include="Luddis.h" />
+    <ClInclude Include="Projectile.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="SoundEngine.h" />
     <ClInclude Include="SoundManager.h" />
@@ -121,9 +123,6 @@
   </ItemGroup>
   <ItemGroup>
     <Media Include="Resources\Audio\MGF-99-MULTI-Doepfer Modular - Classic Acid C2.wav" />
-    <Media Include="Resources\Audio\MGF-99-MULTI-Doepfer Modular - Classic Acid C3.wav" />
-    <Media Include="Resources\Audio\MGF-99-MULTI-Doepfer Modular - Classic Acid C4.wav" />
-    <Media Include="Resources\Audio\MGF-99-MULTI-Doepfer Modular - Classic Acid E1.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

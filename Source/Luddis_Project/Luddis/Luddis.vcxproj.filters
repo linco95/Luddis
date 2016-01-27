@@ -75,6 +75,9 @@
     <ClCompile Include="SoundManager.cpp">
       <Filter>Source Files\ResourceManager</Filter>
     </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -119,6 +122,9 @@
     <ClInclude Include="GraphicManager.h">
       <Filter>Header Files\Resourcemanager</Filter>
     </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Knight.png">
@@ -127,15 +133,6 @@
   </ItemGroup>
   <ItemGroup>
     <Media Include="Resources\Audio\MGF-99-MULTI-Doepfer Modular - Classic Acid C2.wav">
-      <Filter>Resource Files</Filter>
-    </Media>
-    <Media Include="Resources\Audio\MGF-99-MULTI-Doepfer Modular - Classic Acid C3.wav">
-      <Filter>Resource Files</Filter>
-    </Media>
-    <Media Include="Resources\Audio\MGF-99-MULTI-Doepfer Modular - Classic Acid C4.wav">
-      <Filter>Resource Files</Filter>
-    </Media>
-    <Media Include="Resources\Audio\MGF-99-MULTI-Doepfer Modular - Classic Acid E1.wav">
       <Filter>Resource Files</Filter>
     </Media>
   </ItemGroup>

@@ -15,6 +15,7 @@ public:
 	virtual bool isAlive() const;
 private:
 	void handleInput();
+	sf::Vector2f getVectorMouseToSprite() const;
 	void updateMovement();
 	void updateRotation();
 	void attack();
@@ -22,9 +23,6 @@ private:
 	sf::Sprite mSprite;
 	sf::Window* mWindow;
 	sf::Sound mTestSound1;
-	sf::Sound mTestSound2;
-	sf::Sound mTestSound3;
-	sf::Sound mTestSound4;
 };
 
 #endif // !_INCLUDED_LUDDIS_
