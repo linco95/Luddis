@@ -93,6 +93,7 @@
     <ClCompile Include="EventObserver.cpp" />
     <ClCompile Include="EventSubject.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="Level.cpp" />
     <ClCompile Include="Luddis.cpp" />
     <ClCompile Include="GraphicManager.cpp" />
     <ClCompile Include="Main.cpp" />

@@ -4,8 +4,8 @@
 #include "EntityManager.h"
 #include "EventObserver.h"
 #include "EventManager.h"
+#include "Level.h"
 #include <vector>
-
 using namespace sf;
 
 static const std::string APPNAME = "Luddis";
@@ -27,16 +27,17 @@ struct GameManagerImp : public EventObserver {
 
 	void run(){
 		mMainWindow.create(VideoMode(WIDTH, HEIGHT), APPNAME, Style::Fullscreen);
-		initializeLevel(0);
+		initializeGame();
 		gameLoop();
 	}
 
 	void gameOver(){
 		mMainWindow.close();
 	}
-	void initializeLevel(const int& levelIndex){
+	void initializeGame(){
 		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mPlayer);
+		// initializeLevel
 	}
 	void update(const Event& aEvent) override{
 
@@ -72,6 +73,7 @@ struct GameManagerImp : public EventObserver {
 			EventManager::getInstance().notify(currEvent);
 		}
 	}
+
 	void gameLoop(){
 		Clock gameClock;
 		// To avoid multiple functioncalls every iteration of gameloop
@@ -83,18 +85,23 @@ struct GameManagerImp : public EventObserver {
 
 			// Update Entities     |
 			em->updateEntities(gameClock.getElapsedTime());
+
+			
 			gameClock.restart();
 			// Kill dead Entities  | In EntityManager
 			if (!mPlayer->isAlive()){
 				gameOver();
 			}
 			em->removeDeadEntities();
+
 			// Render			     (In rendermanager in the future)
 			render(mMainWindow);
 		}
 	}
 	RenderWindow mMainWindow;
 	Luddis *mPlayer;
+
+	Level mLevel; //To be replaced with LevelManager with LevelVector
 };
 
 GameManager::GameManager() :
