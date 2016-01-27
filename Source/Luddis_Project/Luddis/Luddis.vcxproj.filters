@@ -134,6 +134,8 @@
     <ClInclude Include="Projectile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Level.h">
+      <Filter>Header Files</Filter>
     <ClInclude Include="Silverfish.h">
       <Filter>Header Files</Filter>
     </ClInclude>

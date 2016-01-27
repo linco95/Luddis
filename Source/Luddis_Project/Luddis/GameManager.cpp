@@ -31,6 +31,9 @@ struct GameManagerImp : public EventObserver {
 		gameLoop();
 	}
 
+	void gameOver(){
+		mMainWindow.close();
+	}
 	void initializeLevel(const int& levelIndex){
 		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mPlayer);
@@ -39,11 +42,11 @@ struct GameManagerImp : public EventObserver {
 
 		switch(aEvent.type){
 			case (Event::EventType::Closed):
-				mMainWindow.close();
+				gameOver();
 				break;
 			case (Event::EventType::KeyPressed):
 				if (aEvent.key.code == Keyboard::Escape){
-					mMainWindow.close();
+					gameOver();
 				}
 				break;
 			default:
@@ -71,15 +74,21 @@ struct GameManagerImp : public EventObserver {
 	}
 	void gameLoop(){
 		Clock gameClock;
+		// To avoid multiple functioncalls every iteration of gameloop
+		EntityManager* em = &EntityManager::getInstance();
 		while (mMainWindow.isOpen()){
 
 			// Handle Events         In  EventManager
 			handleEvents(mMainWindow);
 
 			// Update Entities     |
-			EntityManager::getInstance().updateEntities(gameClock.getElapsedTime());
+			em->updateEntities(gameClock.getElapsedTime());
 			gameClock.restart();
 			// Kill dead Entities  | In EntityManager
+			if (!mPlayer->isAlive()){
+				gameOver();
+			}
+			em->removeDeadEntities();
 			// Render			     (In rendermanager in the future)
 			render(mMainWindow);
 		}
@@ -99,7 +108,9 @@ GameManager::~GameManager(){
 void GameManager::run(){
 	mGMImp->run();
 }
-
+void GameManager::gameOver(){
+	mGMImp->gameOver();
+}
 GameManager& GameManager::getInstance(){
 	static GameManager gm;
 	return gm;
