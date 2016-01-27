@@ -8,6 +8,7 @@ EntityManager::EntityManager(){
 EntityManager::~EntityManager(){
 	while (!mEntities.empty())
 		mEntities.pop_back();
+	// Deallocation!
 }
 
 // Function to add entities to the manager (an entity pointer)
@@ -22,9 +23,17 @@ void EntityManager::removeDeadEntities(){
 		if (e->isAlive()) {
 			temp.push_back(e);
 		}
+		// Shouldn't this deallocate the memory like this too? Memory leak?
+		/*else{
+			delete e;
+		}*/
 	}
 	mEntities = temp;
 	return;
+}
+
+const EntityManager::EntitiesVector& EntityManager::getEntities() const{
+	return mEntities;
 }
 
 // Iterate through the entities and updates them (input time)

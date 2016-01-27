@@ -22,18 +22,20 @@ void EventManager::attatch(EventObserver *obs, const std::vector<Event::EventTyp
 // same as above, but listens to a specific type
 void EventManager::attatch(EventObserver *obs, const Event::EventType &type){
 	// Get the ObserverSet at the specific event, and insert observer
-	mEventToObservers.at(type).insert(obs);
+	mEventToObservers[type].insert(obs);
 	// WEAK REFERENCE, do not delete object here. That is for the ObjectManager. Objects are responsible for detatching from the subject.
 }
 
 
-
 // Notify all observers. (according to their interests)
 void EventManager::notify(const sf::Event& aEvent) const{
-	const ObserverSet& observers = mEventToObservers.at(aEvent.type);
-	for (auto o : observers){
-		o->update(aEvent);
+	if (mEventToObservers.find(aEvent.type) != mEventToObservers.end()){
+		const ObserverSet& observers = mEventToObservers.at(aEvent.type);
+		for (auto o : observers){
+			o->update(aEvent);
+		}
 	}
+	
 }
 
 
@@ -45,7 +47,7 @@ void EventManager::detatch(EventObserver *obs, const std::vector<Event::EventTyp
 }
 // Detatch this observer from the specific type
 void EventManager::detatch(EventObserver *obs, const Event::EventType &type){
-	mEventToObservers.at(type).erase(obs);
+	mEventToObservers[type].erase(obs);
 }
 #pragma endregion Functions related to the observer pattern
 
