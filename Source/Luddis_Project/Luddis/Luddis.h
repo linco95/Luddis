@@ -14,15 +14,16 @@ public:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	virtual bool isAlive() const;
 private:
-	void handleInput();
 	sf::Vector2f getVectorMouseToSprite() const;
-	void updateMovement();
+	void handleInput(const sf::Time& deltaTime);
+	void updateMovement(const sf::Time& deltaTime);
 	void updateRotation();
 	void attack();
 	bool mIsAlive;
 	sf::Sprite mSprite;
 	sf::Window* mWindow;
 	sf::Sound mTestSound1;
+	float mProjectileCooldown;
 };
 
 #endif // !_INCLUDED_LUDDIS_
