@@ -3,7 +3,7 @@
 
 #include <SFML\Graphics.hpp>
 
-class Level {
+class Level : public sf::Drawable {
 
 public:
 
@@ -12,6 +12,7 @@ public:
 
 
 	void initializeLevel();
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 	// "/resources/level1BG.png"
 private:

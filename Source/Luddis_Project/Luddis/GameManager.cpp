@@ -37,7 +37,7 @@ struct GameManagerImp : public EventObserver {
 	void initializeGame(){
 		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mPlayer);
-		// initializeLevel
+		mLevel.initializeLevel();
 	}
 	void update(const Event& aEvent) override{
 
@@ -59,7 +59,7 @@ struct GameManagerImp : public EventObserver {
 	// Temporary renderfunction until we need a rendermanager, mainly to optimize rendering and reducing drawcalls
 	void render(RenderWindow& aWindow){
 		aWindow.clear(BGCOLOR);
-
+		aWindow.draw(mLevel);
 		for (auto e : EntityManager::getInstance().getEntities()){
 			aWindow.draw(*e);
 		}

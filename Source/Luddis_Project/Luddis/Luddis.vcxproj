@@ -94,6 +94,8 @@
     <ClCompile Include="EventObserver.cpp" />
     <ClCompile Include="EventSubject.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="GraphicalUserInterface.cpp" />
+    <ClCompile Include="InterfaceElement.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Luddis.cpp" />
     <ClCompile Include="GraphicManager.cpp" />
@@ -115,7 +117,9 @@
     <ClInclude Include="EventObserver.h" />
     <ClInclude Include="EventSubject.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="GraphicalUserInterface.h" />
     <ClInclude Include="GraphicManager.h" />
+    <ClInclude Include="InterfaceElement.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Luddis.h" />
     <ClInclude Include="Projectile.h" />
