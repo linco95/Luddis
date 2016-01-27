@@ -2,17 +2,18 @@
 #define _INCLUDED_LUDDIS_
 
 #include <string>
-#include "Entity.h"
+#include "Collidable.h"
 #include <SFML/Window.hpp>
 #include <SFML/Audio/Sound.hpp>
 
-class Luddis : public Entity{
+class Luddis : public Collidable{
 public:
 	Luddis(std::string textureFilename, sf::Window* window);
 	~Luddis();
 	virtual void tick(const sf::Time& deltaTime);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	virtual bool isAlive() const;
+
 private:
 	sf::Vector2f getVectorMouseToSprite() const;
 	void handleInput(const sf::Time& deltaTime);
@@ -24,6 +25,9 @@ private:
 	sf::Window* mWindow;
 	sf::Sound mTestSound1;
 	float mProjectileCooldown;
+	virtual Category getCategory();
+	virtual Type getType();
+	virtual int collide();
 };
 
 #endif // !_INCLUDED_LUDDIS_

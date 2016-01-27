@@ -86,6 +86,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Background.cpp" />
+    <ClCompile Include="Collidable.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityManager.cpp" />
@@ -93,6 +94,8 @@
     <ClCompile Include="EventObserver.cpp" />
     <ClCompile Include="EventSubject.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="GraphicalUserInterface.cpp" />
+    <ClCompile Include="InterfaceElement.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Luddis.cpp" />
     <ClCompile Include="GraphicManager.cpp" />
@@ -106,6 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Background.h" />
+    <ClInclude Include="Collidable.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityManager.h" />
@@ -113,7 +117,9 @@
     <ClInclude Include="EventObserver.h" />
     <ClInclude Include="EventSubject.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="GraphicalUserInterface.h" />
     <ClInclude Include="GraphicManager.h" />
+    <ClInclude Include="InterfaceElement.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Luddis.h" />
     <ClInclude Include="Projectile.h" />

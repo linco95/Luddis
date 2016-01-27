@@ -6,7 +6,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Audio/Sound.hpp>
 
-class Silverfish {
+class Silverfish : public Entity {
 public:
 	Silverfish(std::string textureFilename, sf::Window* window);
 	~Silverfish();
@@ -14,14 +14,11 @@ public:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	virtual bool isAlive() const;
 private:
-	void updateMovement();
-	void updateRotation();
+	void updateMovement(const sf::Time& deltaTime);
 	bool mIsAlive;
 	sf::Sprite mSprite;
 	sf::Window* mWindow;
-
-	float mDirection;
-
+	sf::Vector2f mDirection;
 };
 
 #endif

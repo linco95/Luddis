@@ -3,7 +3,7 @@
 
 using namespace sf;
 
-static const char* BGFILEPATH = "resources/images/level1B__G.png";
+static const char* BGFILEPATH = "resources/images/level1BG.png";
 Level::Level(){
 
 }
@@ -17,7 +17,7 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget){
 	//assert(aTarget != 0);
 	std::cout << "\nMax size of texture with my hardware: " << Texture::getMaximumSize() << "\n\n";
 	mTarget = aTarget;
-	ResourceManager::getInstance().loadTexture(BGFILEPATH, IntRect(Vector2<int>(), Vector2<int>(Texture::getMaximumSize(), Texture::getMaximumSize())));
+	ResourceManager::getInstance().loadTexture(BGFILEPATH, IntRect(Vector2<int>(), Vector2<int>(Texture::getMaximumSize(), 978) ));
 	mBackground.setTexture(ResourceManager::getInstance().getTexture(BGFILEPATH));
 	mView = aWindow.getView();
 	mView.setCenter(mView.getSize() / 2.0f);
