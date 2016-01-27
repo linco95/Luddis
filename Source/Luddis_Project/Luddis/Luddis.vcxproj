@@ -111,6 +111,7 @@
     <ClInclude Include="EventSubject.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GraphicManager.h" />
+    <ClInclude Include="Level.h" />
     <ClInclude Include="Luddis.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="ResourceManager.h" />
