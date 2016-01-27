@@ -1,8 +1,16 @@
-#ifndef _INCLUDED_EVENTOBSERVER_
-#define _INCLUDED_EVENTOBSERVER_
-//Derp
+#ifndef INCLUDED_EVENTOBSERVER
+#define INCLUDED_EVENTOBSERVER
+
+namespace sf{
+	class Event;
+}
+
 class EventObserver{
-	~EventObserver();
+public:
+	virtual ~EventObserver();
+
+	virtual void update(const sf::Event &aEvent) = 0;
+	
 };
 
-#endif // !_INCLUDED_EVENTOBSERVER_
+#endif

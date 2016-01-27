@@ -14,6 +14,9 @@
 
 class EntityManager {
 public:
+	typedef std::vector<Entity*> EntitiesVector;
+
+
 	EntityManager();
 	~EntityManager();
 	
@@ -21,8 +24,12 @@ public:
 	void removeDeadEntities();
 
 	void updateEntities(const sf::Time& deltaTime);
+
+	// Function that gets used to read all entities. (Added to be used by rendering)
+	const EntitiesVector& getEntities() const;
+
+	// Singelton??
 private:
-	typedef std::vector<Entity*> EntitiesVector;
 	EntitiesVector mEntities;
 };
 #endif
