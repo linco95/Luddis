@@ -1,7 +1,7 @@
 #ifndef INCLUDED_LEVEL
 #define INCLUDED_LEVEL
 
-#include <SFML\Graphics\View.hpp>
+#include <SFML\Graphics.hpp>
 
 class Level {
 
@@ -17,7 +17,7 @@ public:
 private:
 
 	sf::View mView;
-	
+	sf::Sprite mBackground;
 };
 
 #endif
