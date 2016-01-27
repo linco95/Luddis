@@ -63,6 +63,8 @@ void Luddis::updateMovement(const sf::Time& deltaTime){
 	}
 }
 
+#include <iostream>
+
 void Luddis::updateRotation(){
 	sf::Vector2f direction = getVectorMouseToSprite();
 	float rotation = std::atan2f(direction.x, -direction.y) * 180 / (float)M_PI;
@@ -87,8 +89,11 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 		attack();
 	}
 	//Handle keyboard clicks
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
+	static bool isPlaying = false;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && !isPlaying){
+		std::cout << "Playing" << std::endl;
 		mTestSound1.play();
+		isPlaying = true;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
 		
