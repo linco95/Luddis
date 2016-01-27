@@ -8,8 +8,8 @@
 class Projectile : public Entity{
 public:
 	//The max life time should be entered in milliseconds
-	Projectile(std::string textureFilename, sf::Vector2f direction, sf::Time maxLifeTimeMS);
-	~Projectile();
+	Projectile(std::string textureFilename, sf::Vector2f direction,sf::Vector2f position, float maxLifeTimeMS);
+	virtual ~Projectile();
 
 	virtual void tick(const sf::Time& deltaTime);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -19,8 +19,7 @@ private:
 	void checkLifeTime();
 
 	sf::Sprite mSprite;
-	sf::Clock mLifeTime;
-	const sf::Time mMaxLifeTime;
+	float mLifeTime;
 	bool mIsAlive;
 	sf::Vector2f mDirection;
 };

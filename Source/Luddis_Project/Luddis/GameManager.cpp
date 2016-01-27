@@ -12,7 +12,7 @@ static const std::string APPNAME = "Luddis";
 static const int WIDTH = 1920;
 static const int HEIGHT = 1080;
 static const Color BGCOLOR = Color::Black;
-static const std::string TEXTURE_NAME = "Resources/Images/Knight.png";
+static const std::string TEXTURE_NAME = "Resources/Images/Luddis.png";
 static const std::string FONT_NAME = "arial.ttf";
 
 /*
