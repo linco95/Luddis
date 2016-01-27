@@ -52,6 +52,9 @@
     <ClCompile Include="SoundManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Background.h">
@@ -107,17 +110,14 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Media Include="Resources\Audio\MGF-99-MULTI-Doepfer Modular - Classic Acid C2.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Knight.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Filter Include="Header Files">
       <UniqueIdentifier>{cae7f079-11e5-4850-9b29-efaf9deadb18}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{a6254654-ee0d-44e2-a9b9-8a70ca381880}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{6d7dcde2-ac9a-46ad-90ef-ea550c17929d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

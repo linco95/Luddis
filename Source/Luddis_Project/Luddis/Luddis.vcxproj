@@ -123,12 +123,6 @@
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="VectorMath.h" />
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="Knight.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Media Include="Resources\Audio\MGF-99-MULTI-Doepfer Modular - Classic Acid C2.wav" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

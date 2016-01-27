@@ -6,6 +6,8 @@
 #include "EventManager.h"
 #include "Level.h"
 #include <vector>
+
+
 using namespace sf;
 
 static const std::string APPNAME = "Luddis";
@@ -37,7 +39,7 @@ struct GameManagerImp : public EventObserver {
 	void initializeGame(){
 		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mPlayer);
-		mLevel.initializeLevel();
+		mLevel.initializeLevel(mMainWindow, mPlayer);
 	}
 	void update(const Event& aEvent) override{
 
