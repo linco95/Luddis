@@ -19,6 +19,8 @@ static const float PROJECTILE_TIMER = 3.0f;
 static const float GRACEAREA = 12;
 static const float MOVESPEED = 200;
 static const float PROJECTILE_SPEED = 300;
+static const float MUZZLEOFFSET = 50.0f;
+static const sf::Vector2f FRONTVECTOR(1, 0);
 
 Luddis::Luddis(std::string textureFilename, sf::Window* window) : 
 	mIsAlive(true), 
@@ -66,14 +68,26 @@ void Luddis::updateMovement(const sf::Time& deltaTime){
 #include <iostream>
 
 void Luddis::updateRotation(){
+	
 	sf::Vector2f direction = getVectorMouseToSprite();
-	float rotation = std::atan2f(direction.x, -direction.y) * 180 / (float)M_PI;
+	//float rotation = std::atan2f(direction.x, -direction.y) * 180 / (float)M_PI;
+	float rotation = VectorMath::getAngle(sf::Vector2f(FRONTVECTOR), direction) * 180 / (float)M_PI;
 	mSprite.setRotation(rotation);
+
+	static bool isFlipped = false;
+	if (direction.x <= 0 && !isFlipped){
+		mSprite.scale(sf::Vector2f(1, -1));
+		isFlipped = true;
+	}
+	else if (direction.x > 0 && isFlipped){
+		mSprite.scale(sf::Vector2f(1, -1));
+		isFlipped = false;
+	}
 }
 
 void Luddis::attack(){
-	sf::Vector2f direction = VectorMath::normalizeVector( getVectorMouseToSprite())*PROJECTILE_SPEED;
-	sf::Vector2f muzzlePoint = mSprite.getPosition() + direction*30.0f/PROJECTILE_SPEED;
+	sf::Vector2f direction = VectorMath::normalizeVector( getVectorMouseToSprite()) * PROJECTILE_SPEED;
+	sf::Vector2f muzzlePoint = mSprite.getPosition() + direction * MUZZLEOFFSET / PROJECTILE_SPEED;
 	EntityManager::getInstance().addEntity(new Projectile(PROJECTILE_FILENAME,
 		direction, muzzlePoint, PROJECTILE_TIMER));
 	mProjectileCooldown = PROJECTILE_RELOAD;

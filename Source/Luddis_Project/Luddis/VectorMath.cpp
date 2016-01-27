@@ -18,3 +18,10 @@ sf::Vector2f VectorMath::normalizeVector(sf::Vector2f& vector){
 	sf::Vector2f vect(vector.x*factor, vector.y*factor);
 	return vect;
 }
+
+// Returns the angle between two vectors.
+float VectorMath::getAngle(sf::Vector2f& v1, sf::Vector2f& v2){
+	sf::Vector2f nv1 = normalizeVector(v1);
+	sf::Vector2f nv2 = normalizeVector(v2);
+	return std::atan2(nv2.y, nv2.x) - std::atan2(nv1.y, nv1.x);
+}

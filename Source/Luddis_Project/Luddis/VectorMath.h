@@ -14,6 +14,7 @@ public:
 	static float getVectorLength(sf::Vector2f& vector);
 	static float getVectorLengthSq(sf::Vector2f& vector);
 	static sf::Vector2f normalizeVector(sf::Vector2f& vector);
+	static float getAngle(sf::Vector2f& v1, sf::Vector2f& v2);
 
 };
 
