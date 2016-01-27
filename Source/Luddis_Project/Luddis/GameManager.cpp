@@ -6,7 +6,6 @@
 #include "EventManager.h"
 #include "Level.h"
 #include <vector>
-
 using namespace sf;
 
 static const std::string APPNAME = "Luddis";
@@ -74,6 +73,7 @@ struct GameManagerImp : public EventObserver {
 			EventManager::getInstance().notify(currEvent);
 		}
 	}
+
 	void gameLoop(){
 		Clock gameClock;
 		// To avoid multiple functioncalls every iteration of gameloop
@@ -85,6 +85,8 @@ struct GameManagerImp : public EventObserver {
 
 			// Update Entities     |
 			em->updateEntities(gameClock.getElapsedTime());
+
+			
 			gameClock.restart();
 			// Kill dead Entities  | In EntityManager
 			if (!mPlayer->isAlive()){
