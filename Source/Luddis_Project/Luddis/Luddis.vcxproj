@@ -86,6 +86,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Background.cpp" />
+    <ClCompile Include="Collidable.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityManager.cpp" />
@@ -106,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Background.h" />
+    <ClInclude Include="Collidable.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityManager.h" />

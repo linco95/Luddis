@@ -85,7 +85,7 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 		updateMovement(deltaTime);
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right) == true
-		&& mProjectileCooldown<=0){
+		&& mProjectileCooldown <= 0){
 		attack();
 	}
 	//Handle keyboard clicks
@@ -96,18 +96,29 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 		isPlaying = true;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
-		
+
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)){
-		
+
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
-		
+
+	}
+}
+
+Luddis::Category Luddis::getCategory(){
+	return FRIEND;
 	}
 
+Luddis::Type Luddis::getType(){
+	return REC;
+}
 
+
+int Luddis::collide(){
+	return 1;
+}
 
 	/*if (mTestSound1.getStatus() == sf::Sound::Playing){
 		mTestSound1.stop();
 	}*/
-}
