@@ -1,15 +1,16 @@
 #include "EntityManager.h"
 
-// Constructor for the entity manager (empty)
+// Constructor for the entity manager
 EntityManager::EntityManager():
 mEntities(){
 }
 
 // Destructor for the entity manager
 EntityManager::~EntityManager(){
-	while (!mEntities.empty())
+	while (!mEntities.empty()){
+		delete mEntities.back();
 		mEntities.pop_back();
-	// Deallocation!
+	}
 }
 
 //Fetch the singleton instance
@@ -30,7 +31,6 @@ void EntityManager::removeDeadEntities(){
 		if (e->isAlive()) {
 			temp.push_back(e);
 		}
-		// Shouldn't this deallocate the memory like this too? Memory leak?
 		else{
 			delete e;
 		}
@@ -39,13 +39,15 @@ void EntityManager::removeDeadEntities(){
 	return;
 }
 
+// Function that gets used to read all entities. (Added to be used by rendering)
 const EntityManager::EntitiesVector& EntityManager::getEntities() const{
 	return mEntities;
 }
 
 // Iterate through the entities and updates them (input time)
 void EntityManager::updateEntities(const sf::Time& deltaTime){
-	for (auto e : mEntities){
+	EntitiesVector temp(mEntities);
+	for (auto e : temp){
 		e->tick(deltaTime);
 	}
 }

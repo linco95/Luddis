@@ -9,6 +9,7 @@ public:
 	~GameManager();
 
 	void run();
+	void gameOver();
 
 	GameManager(const GameManager&) = delete;
 	GameManager& operator=(const GameManager&) = delete;

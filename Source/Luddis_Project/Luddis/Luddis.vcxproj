@@ -97,6 +97,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="Silverfish.cpp" />
     <ClCompile Include="SoundEngine.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="VectorMath.cpp" />
@@ -111,9 +112,11 @@
     <ClInclude Include="EventSubject.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GraphicManager.h" />
+    <ClInclude Include="Level.h" />
     <ClInclude Include="Luddis.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="Silverfish.h" />
     <ClInclude Include="SoundEngine.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="VectorMath.h" />
