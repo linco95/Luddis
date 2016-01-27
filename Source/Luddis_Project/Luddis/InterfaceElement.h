@@ -1,6 +1,8 @@
 #ifndef _INCLUDED_INTERFACEELEMENT_
 #define _INCLUDED_INTERFACEELEMENT_
 
+#include <SFML\Graphics.hpp>
+#include <SFML\System.hpp>
 
 class InterfaceElement{
 public:
