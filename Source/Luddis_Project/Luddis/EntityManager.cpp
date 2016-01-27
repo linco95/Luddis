@@ -45,7 +45,8 @@ const EntityManager::EntitiesVector& EntityManager::getEntities() const{
 
 // Iterate through the entities and updates them (input time)
 void EntityManager::updateEntities(const sf::Time& deltaTime){
-	for (auto e : mEntities){
+	EntitiesVector temp(mEntities);
+	for (auto e : temp){
 		e->tick(deltaTime);
 	}
 }

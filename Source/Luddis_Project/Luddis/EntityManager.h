@@ -30,7 +30,6 @@ public:
 	// Function that gets used to read all entities. (Added to be used by rendering)
 	const EntitiesVector& getEntities() const;
 
-	// Singelton??
 private:
 	EntityManager();
 	EntitiesVector mEntities;
