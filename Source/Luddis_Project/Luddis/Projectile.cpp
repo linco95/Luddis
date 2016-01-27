@@ -1,11 +1,12 @@
 #include "Projectile.h"
 #include "ResourceManager.h"
 
+//The max life time should be entered in milliseconds
 Projectile::Projectile(std::string textureFilename, sf::Vector2f direction, sf::Time maxLifeTimeMS):
 	mIsAlive(true),
 	mDirection(direction),
 	mLifeTime(),
-	mMaxLifeTime(maxLifeTime),
+	mMaxLifeTime(maxLifeTimeMS),
 	mSprite(ResourceManager::getInstance().getTexture(textureFilename)){
 
 }
