@@ -6,10 +6,11 @@
 #include "Collidable.h"
 #include <SFML/Window.hpp>
 #include <SFML/Audio/Sound.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 
 class Silverfish : public Entity, public Collidable {
 public:
-	Silverfish(std::string textureFilename, sf::Window* window);
+	Silverfish(std::string textureFilename, sf::RenderWindow* window);
 	~Silverfish();
 	virtual void tick(const sf::Time& deltaTime);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -20,7 +21,7 @@ private:
 	void updateMovement(const sf::Time& deltaTime);
 	bool mIsAlive;
 	sf::Sprite mSprite;
-	sf::Window* mWindow;
+	sf::RenderWindow* mWindow;
 	sf::Vector2f mDirection;
 	virtual Category getCollisionCategory();
 	virtual Type getCollisionType();

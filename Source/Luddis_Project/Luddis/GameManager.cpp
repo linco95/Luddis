@@ -109,8 +109,8 @@ struct GameManagerImp : public EventObserver {
 			em->removeDeadEntities();
 
 			// Render			     (In rendermanager in the future)
-			//em->renderEntities(mMainWindow);
-			render(mMainWindow);
+			em->renderEntities(mMainWindow);
+			//render(mMainWindow);
 		}
 	}
 
