@@ -4,16 +4,18 @@
 #include <string>
 #include "Collidable.h"
 #include <SFML/Graphics/RenderWindow.hpp>
+#include "Entity.h"
+#include <SFML/Window.hpp>
 #include <SFML/Audio/Sound.hpp>
 
-class Luddis : public Collidable{
+class Luddis : public Entity, public Collidable{
 public:
 	Luddis(std::string textureFilename, sf::RenderWindow* window);
 	~Luddis();
 	virtual void tick(const sf::Time& deltaTime);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	virtual bool isAlive() const;
-
+	virtual RenderLayer getRenderLayer() const;
 private:
 	sf::Vector2f getVectorMouseToSprite() const;
 	void handleInput(const sf::Time& deltaTime);
@@ -28,6 +30,7 @@ private:
 	virtual Category getCategory();
 	virtual Type getType();
 	virtual int collide();
+	virtual sf::FloatRect getHitBox();
 };
 
 #endif // !_INCLUDED_LUDDIS_

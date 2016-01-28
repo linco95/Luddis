@@ -21,6 +21,7 @@ static const float MOVESPEED = 200;
 static const float PROJECTILE_SPEED = 300;
 static const float MUZZLEOFFSET = 50.0f;
 static const sf::Vector2f FRONTVECTOR(1, 0);
+static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 
 Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) : 
 	mIsAlive(true), 
@@ -31,6 +32,7 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	mSprite.setPosition((float)mWindow->getSize().x / 2, (float)mWindow->getSize().y / 2);
+
 }
 
 Luddis::~Luddis(){
@@ -134,6 +136,14 @@ int Luddis::collide(){
 	return 1;
 }
 
+sf::FloatRect Luddis::getHitBox(){
+	return mSprite.getGlobalBounds();
+}
+
 	/*if (mTestSound1.getStatus() == sf::Sound::Playing){
 		mTestSound1.stop();
 	}*/
+
+Entity::RenderLayer Luddis::getRenderLayer() const {
+	return LAYER;
+}

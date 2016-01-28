@@ -11,6 +11,7 @@
 #include <SFML/System.hpp>
 #include <vector>
 #include "Entity.h"
+#include <SFML\Graphics.hpp>
 
 class EntityManager {
 public:
@@ -30,6 +31,7 @@ public:
 	// Function that gets used to read all entities. (Added to be used by rendering)
 	const EntitiesVector& getEntities() const;
 
+	void renderEntities(sf::RenderWindow& window);
 private:
 	EntityManager();
 	EntitiesVector mEntities;

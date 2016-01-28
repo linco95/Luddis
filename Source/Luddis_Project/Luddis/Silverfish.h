@@ -13,6 +13,7 @@ public:
 	virtual void tick(const sf::Time& deltaTime);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	virtual bool isAlive() const;
+	virtual RenderLayer getRenderLayer() const;
 private:
 	void updateMovement(const sf::Time& deltaTime);
 	bool mIsAlive;

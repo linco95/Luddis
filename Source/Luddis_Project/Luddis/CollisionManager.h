@@ -9,8 +9,10 @@ class CollisionManager {
 public:
 	CollisionManager();
 	~CollisionManager();
+	static CollisionManager& getInstance();
 	void addCollidable(Collidable* collidable);
 	Collidable::CollidableVector mCollidables;
+	void CollisionManager::detectCollisions();
 };
 
 #endif
