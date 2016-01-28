@@ -39,6 +39,32 @@ void EntityManager::removeDeadEntities(){
 	return;
 }
 
+/*
+RenderingsFörslag
+
+
+Entity{
+
+enum RenderLayer{
+LEVEL,
+BACKGROUND,
+ITEMS,
+}
+
+
+
+void Render(){
+sortering efter den enumen
+
+EntityList temp(mEntities);
+
+for(e : temp){
+if(e.getRenderLAyer() >
+
+
+for(auto e : temp){
+aWindow.draw(e);
+*/
 // Function that gets used to read all entities. (Added to be used by rendering)
 const EntityManager::EntitiesVector& EntityManager::getEntities() const{
 	return mEntities;

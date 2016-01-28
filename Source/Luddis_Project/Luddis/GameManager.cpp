@@ -28,7 +28,6 @@ struct GameManagerImp : public EventObserver {
 	}
 
 	void run(){
-		mMainWindow.create(VideoMode(WIDTH, HEIGHT), APPNAME, Style::Fullscreen);
 		initializeGame();
 		gameLoop();
 	}
@@ -37,6 +36,8 @@ struct GameManagerImp : public EventObserver {
 		mMainWindow.close();
 	}
 	void initializeGame(){
+		mMainWindow.create(VideoMode(WIDTH, HEIGHT), APPNAME, Style::Fullscreen);
+		mMainWindow.setVerticalSyncEnabled(true);
 		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mPlayer);
 		mLevel.initializeLevel(mMainWindow, mPlayer);

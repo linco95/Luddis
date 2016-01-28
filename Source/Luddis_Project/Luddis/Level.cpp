@@ -11,11 +11,10 @@ Level::Level(){
 Level::~Level(){
 
 }
-#include <iostream>
-#include <string>
+
 void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget){
 	//assert(aTarget != 0);
-	std::cout << "\nMax size of texture with my hardware: " << Texture::getMaximumSize() << "\n\n";
+
 	mTarget = aTarget;
 	ResourceManager::getInstance().loadTexture(BGFILEPATH, IntRect(Vector2<int>(), Vector2<int>(Texture::getMaximumSize(), 978) ));
 	mBackground.setTexture(ResourceManager::getInstance().getTexture(BGFILEPATH));
