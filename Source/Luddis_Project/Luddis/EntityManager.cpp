@@ -1,4 +1,7 @@
 #include "EntityManager.h"
+#include <SFML\Graphics.hpp>
+
+static const sf::Color BGCOLOR = sf::Color::Black;
 
 // Constructor for the entity manager
 EntityManager::EntityManager():
@@ -46,7 +49,9 @@ void EntityManager::removeDeadEntities(){
 * 2 - ITEM,
 * 3 - PLAYER,
 * 4 - FOREGROUND
+* 5 - GUI
 */
+
 void EntityManager::renderEntities(sf::RenderWindow& window){
 
 	/*
@@ -66,7 +71,7 @@ void EntityManager::renderEntities(sf::RenderWindow& window){
 	}
 	unsorted.clear();
 	// 1
-	for (auto e : unsorted){
+	for (auto e : unsortedTwo){
 		if (e->getRenderLayer() == 1)
 			sorted.push_back(e);
 		else
@@ -82,7 +87,7 @@ void EntityManager::renderEntities(sf::RenderWindow& window){
 	}
 	unsorted.clear();
 	// 3
-	for (auto e : unsorted){
+	for (auto e : unsortedTwo){
 		if (e->getRenderLayer() == 3)
 			sorted.push_back(e);
 		else
@@ -97,7 +102,16 @@ void EntityManager::renderEntities(sf::RenderWindow& window){
 		else
 			unsortedTwo.push_back(e);
 	}
-	
+	unsorted.clear();
+	// 5
+	for (auto e : unsortedTwo){
+		if (e->getRenderLayer() == 5)
+			sorted.push_back(e);
+		else
+			unsorted.push_back(e);
+	}
+	//assert(unsorted.size() == 0);
+	window.clear(BGCOLOR);
 	for (auto e : sorted){
 		window.draw(*e);
 	}

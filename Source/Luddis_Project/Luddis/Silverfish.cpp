@@ -6,6 +6,7 @@
 #include "VectorMath.h"
 
 static const float SPEED = 50;
+static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 
 Silverfish::Silverfish(std::string textureFilename, sf::Window* window) :
 mIsAlive(true),
@@ -56,4 +57,8 @@ void Silverfish::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 
 bool Silverfish::isAlive() const{
 	return mIsAlive;
+}
+
+Entity::RenderLayer Silverfish::getRenderLayer() const{
+	return LAYER;
 }

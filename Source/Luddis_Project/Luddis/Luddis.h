@@ -13,7 +13,7 @@ public:
 	virtual void tick(const sf::Time& deltaTime);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	virtual bool isAlive() const;
-
+	virtual RenderLayer getRenderLayer() const;
 private:
 	sf::Vector2f getVectorMouseToSprite() const;
 	void handleInput(const sf::Time& deltaTime);

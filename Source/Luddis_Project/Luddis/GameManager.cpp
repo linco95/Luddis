@@ -6,6 +6,7 @@
 #include "EventManager.h"
 #include "Level.h"
 #include <vector>
+#include "Silverfish.h"
 
 
 using namespace sf;
@@ -38,8 +39,15 @@ struct GameManagerImp : public EventObserver {
 	void initializeGame(){
 		mMainWindow.create(VideoMode(WIDTH, HEIGHT), APPNAME, Style::Fullscreen);
 		mMainWindow.setVerticalSyncEnabled(true);
+
+		mEnemy1 = new Silverfish(TEXTURE_NAME, &mMainWindow);
+		EntityManager::getInstance().addEntity(mEnemy1);
+		mEnemy2 = new Silverfish(TEXTURE_NAME, &mMainWindow);
+		EntityManager::getInstance().addEntity(mEnemy2);
 		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mPlayer);
+		
+
 		mLevel.initializeLevel(mMainWindow, mPlayer);
 	}
 	void update(const Event& aEvent) override{
@@ -98,11 +106,14 @@ struct GameManagerImp : public EventObserver {
 			em->removeDeadEntities();
 
 			// Render			     (In rendermanager in the future)
+			//em->renderEntities(mMainWindow);
 			render(mMainWindow);
 		}
 	}
 	RenderWindow mMainWindow;
 	Luddis *mPlayer;
+	Silverfish *mEnemy1;
+	Silverfish *mEnemy2;
 
 	Level mLevel; //To be replaced with LevelManager with LevelVector
 };
