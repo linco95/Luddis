@@ -16,10 +16,14 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget){
 	//assert(aTarget != 0);
 
 	mTarget = aTarget;
-	ResourceManager::getInstance().loadTexture(BGFILEPATH, IntRect(Vector2<int>(), Vector2<int>(Texture::getMaximumSize(), 978) ));
+	ResourceManager::getInstance().loadTexture(BGFILEPATH, IntRect(Vector2<int>(), Vector2<int>(Texture::getMaximumSize(), Texture::getMaximumSize())));
 	mBackground.setTexture(ResourceManager::getInstance().getTexture(BGFILEPATH));
+	// assert(mBackground.getTextureRect().height() >= aWindow.getSize().y);
 	mView = aWindow.getView();
-	mView.setCenter(mView.getSize() / 2.0f);
+	mView.setSize(mView.getSize().x, (float)mBackground.getTextureRect().height);
+	mView.setCenter(mView.getSize().x / 2.0f, mView.getSize().y / 2.0f);
+	////aWindow.
+	//mView.setCenter(mVie)
 	aWindow.setView(mView);
 }
 
