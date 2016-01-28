@@ -18,7 +18,7 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget){
 	//assert(aTarget != 0);
 
 	mTarget = aTarget;
-	ResourceManager::getInstance().loadTexture(BGFILEPATH, IntRect(Vector2<int>(), Vector2<int>(Texture::getMaximumSize(), Texture::getMaximumSize())));
+	ResourceManager::getInstance().loadTexture(BGFILEPATH, IntRect(Vector2<int>(), Vector2<int>(Texture::getMaximumSize(), (int)aWindow.getView().getSize().y)));
 	mBackground.setTexture(ResourceManager::getInstance().getTexture(BGFILEPATH));
 	// assert(mBackground.getTextureRect().height() >= aWindow.getSize().y);
 

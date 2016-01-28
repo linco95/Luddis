@@ -65,7 +65,10 @@ struct GameManagerImp : public EventObserver {
 		
 		// Set up view
 		View view = mMainWindow.getView();
-		Vector2f actualSize(view.getSize());
+		
+		// Make the resolution scale properly to smaller screens.
+		
+		/*Vector2f actualSize(view.getSize());
 		float scale = 1.0f;
 		float aspectRatio = actualSize.y / actualSize.x;
 		Vector2f crop;
@@ -92,12 +95,12 @@ struct GameManagerImp : public EventObserver {
 		std::cout << crop.x << " " << crop.y << std::endl;
 		std::cout << 1 - 2 * crop.x << " " << 1 - 2 * crop.y << "\n";
 		FloatRect viewport(crop.x, crop.y, 1 - 2 * crop.x, 1 - 2 * crop.y);
-		view.setViewport(viewport);
+		view.setViewport(viewport);*/
 
 		mMainWindow.setView(view);
 	}
-	void update(const Event& aEvent) override{
 
+	void update(const Event& aEvent) override{
 		switch(aEvent.type){
 			case (Event::EventType::Closed):
 				gameOver();
