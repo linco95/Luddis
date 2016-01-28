@@ -13,7 +13,16 @@ namespace sf{
 }
 
 class Entity : public sf::Transformable, public sf::Drawable {
-public:
+public:	
+	enum RenderLayer{
+		BACKGROUND,
+		OBSTACLES,
+		ITEM,
+		PLAYER,
+		FOREGROUND,
+		GUI
+	};
+
 	Entity();
 	virtual ~Entity();
 
@@ -21,6 +30,7 @@ public:
 	virtual void tick(const sf::Time& deltaTime) = 0;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
 	virtual bool isAlive() const = 0;
+	virtual RenderLayer getRenderLayer() const = 0;
 };
 
 #endif

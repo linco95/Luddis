@@ -3,6 +3,8 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
+
 //The max life time should be entered in milliseconds
 Projectile::Projectile(std::string textureFilename, sf::Vector2f direction, sf::Vector2f position, float maxLifeTimeMS):
 	mIsAlive(true),
@@ -43,4 +45,8 @@ void Projectile::checkLifeTime(){
 	if (mLifeTime<=0){
 		mIsAlive = false;
 	}
+}
+
+Entity::RenderLayer Projectile::getRenderLayer() const{
+	return LAYER;
 }
