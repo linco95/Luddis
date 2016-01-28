@@ -16,7 +16,7 @@ public:
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 	bool isAlive() const override;
-	RenderLayer getRenderLayer() const override;
+	Entity::RenderLayer getRenderLayer() const override;
 
 private:
 	sf::Transformable* mTarget;

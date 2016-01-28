@@ -31,10 +31,10 @@ void Level::tick(const sf::Time& deltaTime) {
 
 }
 bool Level::isAlive() const {
-
+	return true;
 }
-RenderLayer Level::getRenderLayer() const {
-	return RenderLayer::BACKGROUND;
+Entity::RenderLayer Level::getRenderLayer() const {
+	return Entity::RenderLayer::BACKGROUND;
 }
 
 void Level::draw(RenderTarget& target, RenderStates states) const {
