@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include "VectorMath.h"
 
-static const float SPEED = 10;
+static const float SPEED = 50;
 
 Silverfish::Silverfish(std::string textureFilename, sf::Window* window) :
 mIsAlive(true),
@@ -42,11 +42,11 @@ Silverfish::~Silverfish(){
 }
 
 void Silverfish::tick(const sf::Time& deltaTime){
-	updateMovement(SPEED*deltaTime);
+	updateMovement(deltaTime);
 }
 
 void Silverfish::updateMovement(const sf::Time& deltaTime){
-	mSprite.move(mDirection*deltaTime.asSeconds());
+	mSprite.move(mDirection * SPEED * deltaTime.asSeconds());
 }
 
 void Silverfish::draw(sf::RenderTarget& target, sf::RenderStates states) const{

@@ -39,32 +39,71 @@ void EntityManager::removeDeadEntities(){
 	return;
 }
 
+// Sorted rendering depending on the enum of the entity
 /*
-RenderingsFörslag
+* 0 - BACKGROUND,
+* 1 - OBSTACLES,
+* 2 - ITEM,
+* 3 - PLAYER,
+* 4 - FOREGROUND
+*/
+void EntityManager::renderEntities(sf::RenderWindow& window){
 
+	/*
+	* TODO Fix the quickfix
+	* Make looped sorting dynamic
+	*/
 
-Entity{
+	EntitiesVector unsorted(mEntities);
+	EntitiesVector unsortedTwo;
+	EntitiesVector sorted;
+	// 0
+	for (auto e : unsorted){
+		if (e->getRenderLayer() == 0)
+			sorted.push_back(e);
+		else
+			unsortedTwo.push_back(e);
+	}
+	unsorted.clear();
+	// 1
+	for (auto e : unsorted){
+		if (e->getRenderLayer() == 1)
+			sorted.push_back(e);
+		else
+			unsorted.push_back(e);
+	}
+	unsortedTwo.clear();
+	// 2
+	for (auto e : unsorted){
+		if (e->getRenderLayer() == 2)
+			sorted.push_back(e);
+		else
+			unsortedTwo.push_back(e);
+	}
+	unsorted.clear();
+	// 3
+	for (auto e : unsorted){
+		if (e->getRenderLayer() == 3)
+			sorted.push_back(e);
+		else
+			unsorted.push_back(e);
 
-enum RenderLayer{
-LEVEL,
-BACKGROUND,
-ITEMS,
+	}
+	unsortedTwo.clear();
+	// 4
+	for (auto e : unsorted){
+		if (e->getRenderLayer() == 4)
+			sorted.push_back(e);
+		else
+			unsortedTwo.push_back(e);
+	}
+	
+	for (auto e : sorted){
+		window.draw(*e);
+	}
+
 }
 
-
-
-void Render(){
-sortering efter den enumen
-
-EntityList temp(mEntities);
-
-for(e : temp){
-if(e.getRenderLAyer() >
-
-
-for(auto e : temp){
-aWindow.draw(e);
-*/
 // Function that gets used to read all entities. (Added to be used by rendering)
 const EntityManager::EntitiesVector& EntityManager::getEntities() const{
 	return mEntities;
