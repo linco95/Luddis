@@ -15,6 +15,7 @@ using namespace sf;
 static const std::string APPNAME = "Luddis";
 static const int WIDTH = 1920;
 static const int HEIGHT = 1080;
+static const float DESIRED_ASPECTRATIO = (float)WIDTH / (float)HEIGHT;
 static const Color BGCOLOR = Color::Black;
 static const std::string TEXTURE_NAME = "Resources/Images/Grafik_Luddis120x80_s1d3v1.png";
 static const std::string FONT_NAME = "arial.ttf";
@@ -38,8 +39,7 @@ struct GameManagerImp : public EventObserver {
 		mMainWindow.close();
 	}
 	void initializeGame(){
-		mMainWindow.create(VideoMode(WIDTH, HEIGHT), APPNAME, Style::Fullscreen);
-		mMainWindow.setVerticalSyncEnabled(true);
+		initializeWindow();
 
 		mEnemy1 = new Silverfish(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mEnemy1);
@@ -48,7 +48,27 @@ struct GameManagerImp : public EventObserver {
 		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mPlayer);
 		CollisionManager::getInstance().addCollidable(mPlayer);
-		mLevel.initializeLevel(mMainWindow, mPlayer);
+		mLevel = new Level();
+		mLevel->initializeLevel(mMainWindow, mPlayer);
+		EntityManager::getInstance().addEntity(mLevel);
+	}
+	// http://acamara.es/blog/2012/02/keep-screen-aspect-ratio-with-different-resolutions-using-libgdx/
+	void initializeWindow(){
+		mMainWindow.create(VideoMode(WIDTH, HEIGHT), APPNAME, Style::Fullscreen);
+		mMainWindow.setVerticalSyncEnabled(true);
+		
+		// Set up view
+		View view = mMainWindow.getView();
+		Vector2f actualSize(view.getSize());
+		float scale = 1.0f;
+		float aspectRatio = actualSize.y / actualSize.x;
+		if (aspectRatio > DESIRED_ASPECTRATIO){
+			scale = actualSize.x / HEIGHT;
+		}
+		Vector2f crop(0.f, 0.f);
+
+
+		mMainWindow.setView(view);
 	}
 	void update(const Event& aEvent) override{
 
@@ -70,7 +90,6 @@ struct GameManagerImp : public EventObserver {
 	// Temporary renderfunction until we need a rendermanager, mainly to optimize rendering and reducing drawcalls
 	void render(RenderWindow& aWindow){
 		aWindow.clear(BGCOLOR);
-		aWindow.draw(mLevel);
 		for (auto e : EntityManager::getInstance().getEntities()){
 			aWindow.draw(*e);
 		}
@@ -117,7 +136,7 @@ struct GameManagerImp : public EventObserver {
 	Silverfish *mEnemy1;
 	Silverfish *mEnemy2;
 
-	Level mLevel; //To be replaced with LevelManager with LevelVector
+	Level* mLevel; //To be replaced with LevelManager with LevelVector
 };
 
 GameManager::GameManager() :

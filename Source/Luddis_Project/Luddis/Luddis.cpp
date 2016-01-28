@@ -31,7 +31,7 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	mTestSound1(ResourceManager::getInstance().getSoundBuffer(SOUND_FILENAME1))
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
-	mSprite.setPosition((float)mWindow->getSize().x / 2, (float)mWindow->getSize().y / 2);
+	mSprite.setPosition(mWindow->getView().getSize().x / 2, mWindow->getView().getSize().y / 2);
 
 }
 
@@ -54,7 +54,6 @@ void Luddis::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 
 sf::Vector2f Luddis::getVectorMouseToSprite() const{
 	sf::Vector2f playerPosition(mSprite.getPosition());
-	// Make it neater
 	sf::Vector2f mousePosition(mWindow->mapPixelToCoords(sf::Mouse::getPosition(*mWindow)));
 	return mousePosition - playerPosition;
 }
