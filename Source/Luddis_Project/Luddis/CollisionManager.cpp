@@ -1,7 +1,6 @@
 #include "CollisionManager.h"
 
 CollisionManager::CollisionManager(){
-
 }
 
 CollisionManager::~CollisionManager(){
@@ -18,11 +17,12 @@ void CollisionManager::addCollidable(Collidable* collidable){
 }
 
 void CollisionManager::detectCollisions(){
-	Collidable::CollidableVector collidables(mCollidables);
-	for (Collidable::CollidableVector::size_type i = 0; i < collidables.size(); i++){
-		Collidable *collidable0 = collidables[i];
-		for (Collidable::CollidableVector::size_type j = i + 1; j < collidables.size(); j++){
-			Collidable *collidable1 = collidables[j];
+	
+	CollidableVector collidables(mCollidables);
+	for (CollidableVector::size_type i = 0; i < collidables.size(); i++){
+		Collidable *collidable0 = collidables.at(i);
+		for (CollidableVector::size_type j = i + 1; j < collidables.size(); j++){
+			Collidable *collidable1 = collidables.at(j);
 			if (collidable0->getHitBox().intersects(collidable1->getHitBox())){
 				collidable0->collide();
 				collidable1->collide();

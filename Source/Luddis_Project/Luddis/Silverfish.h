@@ -3,10 +3,11 @@
 
 #include <string>
 #include "Entity.h"
+#include "Collidable.h"
 #include <SFML/Window.hpp>
 #include <SFML/Audio/Sound.hpp>
 
-class Silverfish : public Entity {
+class Silverfish : public Entity, public Collidable {
 public:
 	Silverfish(std::string textureFilename, sf::Window* window);
 	~Silverfish();
@@ -14,12 +15,16 @@ public:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	virtual bool isAlive() const;
 	virtual RenderLayer getRenderLayer() const;
+	virtual sf::FloatRect getHitBox();
 private:
 	void updateMovement(const sf::Time& deltaTime);
 	bool mIsAlive;
 	sf::Sprite mSprite;
 	sf::Window* mWindow;
 	sf::Vector2f mDirection;
+	virtual Category getCategory();
+	virtual Type getType();
+	virtual void collide();
 };
 
 #endif

@@ -62,3 +62,20 @@ bool Silverfish::isAlive() const{
 Entity::RenderLayer Silverfish::getRenderLayer() const{
 	return LAYER;
 }
+
+Silverfish::Category Silverfish::getCategory(){
+	return FRIEND;
+}
+
+Silverfish::Type Silverfish::getType(){
+	return REC;
+}
+
+
+void Silverfish::collide(){
+	mIsAlive=false;
+}
+
+sf::FloatRect Silverfish::getHitBox(){
+	return mSprite.getGlobalBounds();
+}

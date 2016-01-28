@@ -15,6 +15,7 @@ public:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	virtual bool isAlive() const;
 	virtual RenderLayer getRenderLayer() const;
+	virtual sf::FloatRect getHitBox();
 private:
 	sf::Vector2f getVectorMouseToSprite() const;
 	void handleInput(const sf::Time& deltaTime);
@@ -28,8 +29,7 @@ private:
 	float mProjectileCooldown;
 	virtual Category getCategory();
 	virtual Type getType();
-	virtual int collide();
-	virtual sf::FloatRect getHitBox();
+	virtual void collide();
 };
 
 #endif // !_INCLUDED_LUDDIS_

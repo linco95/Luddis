@@ -17,14 +17,13 @@ public:
 		REC,
 		CIRCLE
 	};
-	typedef std::vector<Collidable*> CollidableVector;
 	Collidable();
 	virtual ~Collidable();
 
 	// Funktion för att uppdatera entiteten
 	virtual Category getCategory() = 0;
 	virtual Type getType() = 0;
-	virtual int collide() = 0;
+	virtual void collide() = 0;
 	virtual sf::FloatRect getHitBox() = 0;
 };
 

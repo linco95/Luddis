@@ -131,8 +131,8 @@ Luddis::Type Luddis::getType(){
 }
 
 
-int Luddis::collide(){
-	return 1;
+void Luddis::collide(){
+
 }
 
 sf::FloatRect Luddis::getHitBox(){
