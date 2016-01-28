@@ -15,7 +15,7 @@ static const std::string SOUND_FILENAME1 = "Resources/Audio/MGF-99-MULTI-Doepfer
 static const std::string PROJECTILE_FILENAME = "Resources/Images/Projectile.png";
 
 //All float times are in seconds
-static const float PROJECTILE_RELOAD = 1.0f;
+static const float PROJECTILE_RELOAD = 0.1f;
 static const float PROJECTILE_TIMER = 3.0f;
 static const float GRACEAREA = 12;
 static const float MOVESPEED = 200;
