@@ -8,9 +8,11 @@
 static const float SPEED = 50;
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 static const int DAMAGE = 10;
+static const int LIFE = 15;
 
 Silverfish::Silverfish(std::string textureFilename, sf::RenderWindow* window) :
 mIsAlive(true),
+mLife(LIFE),
 mWindow(window),
 mSprite(ResourceManager::getInstance().getTexture(textureFilename))
 {
@@ -75,7 +77,9 @@ Silverfish::Type Silverfish::getCollisionType(){
 
 
 void Silverfish::collide(){
-	mIsAlive = false;
+	
+	mLife -= 5;
+	if (mLife <= 0) mIsAlive = false;
 }
 
 sf::FloatRect Silverfish::getHitBox(){

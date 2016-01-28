@@ -26,6 +26,7 @@ private:
 	virtual Category getCollisionCategory();
 	virtual Type getCollisionType();
 	virtual void collide();
+	int mLife;
 };
 
 #endif

@@ -23,6 +23,7 @@ static const float PROJECTILE_SPEED = 300;
 static const float MUZZLEOFFSET = 50.0f;
 static const sf::Vector2f FRONTVECTOR(1, 0);
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
+static int LIFE = 10;
 
 Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) : 
 	mIsAlive(true), 
@@ -135,7 +136,8 @@ Luddis::Type Luddis::getCollisionType(){
 
 
 void Luddis::collide(){
-
+	LIFE -= 5;
+	if (LIFE <= 0) mIsAlive = false;
 }
 
 sf::FloatRect Luddis::getHitBox(){
