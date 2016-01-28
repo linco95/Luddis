@@ -7,20 +7,24 @@
 
 static const float SPEED = 50;
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
+static const int DAMAGE = 10;
+static const int LIFE = 15;
 
-Silverfish::Silverfish(std::string textureFilename, sf::Window* window) :
+Silverfish::Silverfish(std::string textureFilename, sf::RenderWindow* window) :
 mIsAlive(true),
+mLife(LIFE),
 mWindow(window),
 mSprite(ResourceManager::getInstance().getTexture(textureFilename))
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	// Get a y-spawn position
-	sf::Vector2u size = mWindow->getSize();
-	int r1 = rand() % size.y;
+	sf::Vector2f size = mWindow->getView().getSize();
+	int r1 = rand() % (int)size.y + 1;
 	// Set spawn position
 	mSprite.setPosition((float)size.x, (float)r1);
 
-	// Chose direction (to the left)
+
+	// Chose direction (towards the left)
 	int r2 = rand()%2;
 	sf::Vector2f dir;
 	// Diagonally up
@@ -55,10 +59,29 @@ void Silverfish::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	target.draw(mSprite, states);
 }
 
-bool Silverfish::isAlive() const{
+bool Silverfish::isAlive(){
 	return mIsAlive;
 }
 
 Entity::RenderLayer Silverfish::getRenderLayer() const{
 	return LAYER;
+}
+
+Silverfish::Category Silverfish::getCollisionCategory(){
+	return ENEMY;
+}
+
+Silverfish::Type Silverfish::getCollisionType(){
+	return REC;
+}
+
+
+void Silverfish::collide(){
+	
+	mLife -= 5;
+	if (mLife <= 0) mIsAlive = false;
+}
+
+sf::FloatRect Silverfish::getHitBox(){
+	return mSprite.getGlobalBounds();
 }

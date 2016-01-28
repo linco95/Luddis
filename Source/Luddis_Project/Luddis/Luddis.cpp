@@ -1,6 +1,7 @@
 #include "Luddis.h"
 #include "ResourceManager.h"
 #include "EntityManager.h"
+#include "CollisionManager.h"
 #include "VectorMath.h"
 #include "Projectile.h"
 #include <SFML/System.hpp>
@@ -14,7 +15,7 @@ static const std::string SOUND_FILENAME1 = "Resources/Audio/MGF-99-MULTI-Doepfer
 static const std::string PROJECTILE_FILENAME = "Resources/Images/Projectile.png";
 
 //All float times are in seconds
-static const float PROJECTILE_RELOAD = 1.0f;
+static const float PROJECTILE_RELOAD = 0.1f;
 static const float PROJECTILE_TIMER = 3.0f;
 static const float GRACEAREA = 12;
 static const float MOVESPEED = 200;
@@ -22,6 +23,7 @@ static const float PROJECTILE_SPEED = 300;
 static const float MUZZLEOFFSET = 50.0f;
 static const sf::Vector2f FRONTVECTOR(1, 0);
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
+static int LIFE = 10;
 
 Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) : 
 	mIsAlive(true), 
@@ -38,7 +40,7 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 Luddis::~Luddis(){
 
 }
-bool Luddis::isAlive() const{
+bool Luddis::isAlive() {
 	return mIsAlive;
 }
 void Luddis::tick(const sf::Time& deltaTime){
@@ -90,9 +92,10 @@ void Luddis::updateRotation(){
 void Luddis::attack(){
 	sf::Vector2f direction = VectorMath::normalizeVector( getVectorMouseToSprite()) * PROJECTILE_SPEED;
 	sf::Vector2f muzzlePoint = mSprite.getPosition() + direction * MUZZLEOFFSET / PROJECTILE_SPEED;
-	EntityManager::getInstance().addEntity(new Projectile(PROJECTILE_FILENAME,
-		direction, muzzlePoint, PROJECTILE_TIMER));
+	Projectile *proj = new Projectile(PROJECTILE_FILENAME, direction, muzzlePoint, PROJECTILE_TIMER);
+	EntityManager::getInstance().addEntity(proj);
 	mProjectileCooldown = PROJECTILE_RELOAD;
+	CollisionManager::getInstance().addCollidable(proj);
 }
 
 void Luddis::handleInput(const sf::Time& deltaTime){
@@ -122,17 +125,18 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 	}
 }
 
-Luddis::Category Luddis::getCategory(){
+Luddis::Category Luddis::getCollisionCategory(){
 	return FRIEND;
 	}
 
-Luddis::Type Luddis::getType(){
+Luddis::Type Luddis::getCollisionType(){
 	return REC;
 }
 
 
-int Luddis::collide(){
-	return 1;
+void Luddis::collide(){
+	LIFE -= 5;
+	//if (LIFE <= 0) mIsAlive = false;
 }
 
 sf::FloatRect Luddis::getHitBox(){

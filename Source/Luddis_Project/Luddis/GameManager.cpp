@@ -10,6 +10,8 @@
 #include "Silverfish.h"
 
 
+#include <iostream>
+
 using namespace sf;
 
 static const std::string APPNAME = "Luddis";
@@ -41,16 +43,20 @@ struct GameManagerImp : public EventObserver {
 	void initializeGame(){
 		initializeWindow();
 
-		mEnemy1 = new Silverfish(TEXTURE_NAME, &mMainWindow);
-		EntityManager::getInstance().addEntity(mEnemy1);
-		mEnemy2 = new Silverfish(TEXTURE_NAME, &mMainWindow);
-		EntityManager::getInstance().addEntity(mEnemy2);
-		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow);
-		EntityManager::getInstance().addEntity(mPlayer);
-		CollisionManager::getInstance().addCollidable(mPlayer);
 		mLevel = new Level();
 		mLevel->initializeLevel(mMainWindow, mPlayer);
 		EntityManager::getInstance().addEntity(mLevel);
+
+		mEnemy1 = new Silverfish(TEXTURE_NAME, &mMainWindow);
+		EntityManager::getInstance().addEntity(mEnemy1);
+		CollisionManager::getInstance().addCollidable(mEnemy1);
+		mEnemy2 = new Silverfish(TEXTURE_NAME, &mMainWindow);
+		EntityManager::getInstance().addEntity(mEnemy2);
+		CollisionManager::getInstance().addCollidable(mEnemy2);
+		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow);
+		EntityManager::getInstance().addEntity(mPlayer);
+		CollisionManager::getInstance().addCollidable(mPlayer);
+		
 	}
 	// http://acamara.es/blog/2012/02/keep-screen-aspect-ratio-with-different-resolutions-using-libgdx/
 	void initializeWindow(){
@@ -62,11 +68,31 @@ struct GameManagerImp : public EventObserver {
 		Vector2f actualSize(view.getSize());
 		float scale = 1.0f;
 		float aspectRatio = actualSize.y / actualSize.x;
-		if (aspectRatio > DESIRED_ASPECTRATIO){
-			scale = actualSize.x / HEIGHT;
-		}
-		Vector2f crop(0.f, 0.f);
+		Vector2f crop;
 
+		if (aspectRatio > DESIRED_ASPECTRATIO){
+			scale = actualSize.y / HEIGHT;
+			crop.x = (actualSize.x - WIDTH * scale) / 2.f;
+		}
+		else if (aspectRatio < DESIRED_ASPECTRATIO) {
+			scale = actualSize.x / WIDTH;
+			crop.x = (actualSize.y - HEIGHT * scale) / 2.f;
+		}
+		else{
+			scale = actualSize.x / WIDTH;
+		}
+
+		float h = HEIGHT * scale;
+		float w = WIDTH * scale;
+
+		crop.x /= actualSize.x;
+		crop.y /= actualSize.y;
+
+		std::cout << h << " " << w << std::endl;
+		std::cout << crop.x << " " << crop.y << std::endl;
+		std::cout << 1 - 2 * crop.x << " " << 1 - 2 * crop.y << "\n";
+		FloatRect viewport(crop.x, crop.y, 1 - 2 * crop.x, 1 - 2 * crop.y);
+		view.setViewport(viewport);
 
 		mMainWindow.setView(view);
 	}
@@ -88,14 +114,14 @@ struct GameManagerImp : public EventObserver {
 	}
 	
 	// Temporary renderfunction until we need a rendermanager, mainly to optimize rendering and reducing drawcalls
-	void render(RenderWindow& aWindow){
+	/*void render(RenderWindow& aWindow){
 		aWindow.clear(BGCOLOR);
 		for (auto e : EntityManager::getInstance().getEntities()){
 			aWindow.draw(*e);
 		}
 
 		aWindow.display();
-	}
+	}*/
 
 	void handleEvents(RenderWindow& aWindow){
 		Event currEvent;
@@ -108,6 +134,7 @@ struct GameManagerImp : public EventObserver {
 		Clock gameClock;
 		// To avoid multiple functioncalls every iteration of gameloop
 		EntityManager* em = &EntityManager::getInstance();
+		CollisionManager* cm = &CollisionManager::getInstance();
 		while (mMainWindow.isOpen()){
 
 			// Handle Events         In  EventManager
@@ -115,18 +142,19 @@ struct GameManagerImp : public EventObserver {
 
 			// Update Entities     |
 			em->updateEntities(gameClock.getElapsedTime());
-
-			
 			gameClock.restart();
+			cm->detectCollisions();
+
 			// Kill dead Entities  | In EntityManager
 			if (!mPlayer->isAlive()){
 				gameOver();
 			}
+			cm->removeDeadCollidables();
 			em->removeDeadEntities();
 
 			// Render			     (In rendermanager in the future)
-			//em->renderEntities(mMainWindow);
-			render(mMainWindow);
+			em->renderEntities(mMainWindow);
+			//render(mMainWindow);
 		}
 	}
 

@@ -33,7 +33,7 @@ void Projectile::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	target.draw(mSprite, states);
 }
 
-bool Projectile::isAlive() const{
+bool Projectile::isAlive() {
 	return mIsAlive;
 }
 
@@ -49,4 +49,21 @@ void Projectile::checkLifeTime(){
 
 Entity::RenderLayer Projectile::getRenderLayer() const{
 	return LAYER;
+}
+
+Projectile::Category Projectile::getCollisionCategory(){
+	return FRIEND;
+}
+
+Projectile::Type Projectile::getCollisionType(){
+	return REC;
+}
+
+
+void Projectile::collide(){
+	mIsAlive = false;
+}
+
+sf::FloatRect Projectile::getHitBox(){
+	return mSprite.getGlobalBounds();
 }

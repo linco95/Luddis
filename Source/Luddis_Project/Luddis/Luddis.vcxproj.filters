@@ -67,6 +67,12 @@
     <ClCompile Include="CollisionManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Dust.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DustCounter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Background.h">
@@ -129,6 +135,12 @@
     <ClInclude Include="Collidable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Dust.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DustCounter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -140,5 +152,10 @@
     <Filter Include="Resource Files">
       <UniqueIdentifier>{6d7dcde2-ac9a-46ad-90ef-ea550c17929d}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\Images\Silverfisk_prototyp.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

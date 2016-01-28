@@ -7,12 +7,14 @@
 
 class CollisionManager {
 public:
+	typedef std::vector<Collidable*> CollidableVector;
 	CollisionManager();
 	~CollisionManager();
 	static CollisionManager& getInstance();
 	void addCollidable(Collidable* collidable);
-	Collidable::CollidableVector mCollidables;
+	CollidableVector mCollidables;
 	void CollisionManager::detectCollisions();
+	void CollisionManager::removeDeadCollidables();
 };
 
 #endif
