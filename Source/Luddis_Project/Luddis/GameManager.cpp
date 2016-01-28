@@ -101,6 +101,8 @@ struct GameManagerImp : public EventObserver {
 			render(mMainWindow);
 		}
 	}
+
+
 	RenderWindow mMainWindow;
 	Luddis *mPlayer;
 
@@ -118,6 +120,7 @@ GameManager::~GameManager(){
 void GameManager::run(){
 	mGMImp->run();
 }
+
 void GameManager::gameOver(){
 	mGMImp->gameOver();
 }

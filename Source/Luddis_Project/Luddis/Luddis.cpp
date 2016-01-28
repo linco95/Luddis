@@ -22,7 +22,7 @@ static const float PROJECTILE_SPEED = 300;
 static const float MUZZLEOFFSET = 50.0f;
 static const sf::Vector2f FRONTVECTOR(1, 0);
 
-Luddis::Luddis(std::string textureFilename, sf::Window* window) : 
+Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) : 
 	mIsAlive(true), 
 	mWindow(window), 
 	mProjectileCooldown(0), 
@@ -52,7 +52,8 @@ void Luddis::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 
 sf::Vector2f Luddis::getVectorMouseToSprite() const{
 	sf::Vector2f playerPosition(mSprite.getPosition());
-	sf::Vector2f mousePosition(sf::Mouse::getPosition(*mWindow));
+	// Make it neater
+	sf::Vector2f mousePosition(mWindow->mapPixelToCoords(sf::Mouse::getPosition(*mWindow)));
 	return mousePosition - playerPosition;
 }
 

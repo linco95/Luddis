@@ -3,12 +3,12 @@
 
 #include <string>
 #include "Collidable.h"
-#include <SFML/Window.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Audio/Sound.hpp>
 
 class Luddis : public Collidable{
 public:
-	Luddis(std::string textureFilename, sf::Window* window);
+	Luddis(std::string textureFilename, sf::RenderWindow* window);
 	~Luddis();
 	virtual void tick(const sf::Time& deltaTime);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -22,7 +22,7 @@ private:
 	void attack();
 	bool mIsAlive;
 	sf::Sprite mSprite;
-	sf::Window* mWindow;
+	sf::RenderWindow* mWindow;
 	sf::Sound mTestSound1;
 	float mProjectileCooldown;
 	virtual Category getCategory();
