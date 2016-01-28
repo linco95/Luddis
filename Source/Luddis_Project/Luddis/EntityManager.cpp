@@ -115,7 +115,7 @@ void EntityManager::renderEntities(sf::RenderWindow& window){
 	for (auto e : sorted){
 		window.draw(*e);
 	}
-
+	window.display();
 }
 
 // Function that gets used to read all entities. (Added to be used by rendering)

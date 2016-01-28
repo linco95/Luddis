@@ -8,19 +8,20 @@
 static const float SPEED = 50;
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 
-Silverfish::Silverfish(std::string textureFilename, sf::Window* window) :
+Silverfish::Silverfish(std::string textureFilename, sf::RenderWindow* window) :
 mIsAlive(true),
 mWindow(window),
 mSprite(ResourceManager::getInstance().getTexture(textureFilename))
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	// Get a y-spawn position
-	sf::Vector2u size = mWindow->getSize();
-	int r1 = rand() % size.y;
+	sf::Vector2f size = mWindow->getView().getSize();
+	int r1 = rand() % (int)size.y + 1;
 	// Set spawn position
 	mSprite.setPosition((float)size.x, (float)r1);
 
-	// Chose direction (to the left)
+
+	// Chose direction (towards the left)
 	int r2 = rand()%2;
 	sf::Vector2f dir;
 	// Diagonally up

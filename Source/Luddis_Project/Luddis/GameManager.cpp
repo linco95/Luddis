@@ -43,8 +43,10 @@ struct GameManagerImp : public EventObserver {
 
 		mEnemy1 = new Silverfish(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mEnemy1);
+
 		mEnemy2 = new Silverfish(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mEnemy2);
+
 		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mPlayer);
 		CollisionManager::getInstance().addCollidable(mPlayer);
@@ -106,8 +108,8 @@ struct GameManagerImp : public EventObserver {
 			em->removeDeadEntities();
 
 			// Render			     (In rendermanager in the future)
-			//em->renderEntities(mMainWindow);
-			render(mMainWindow);
+			em->renderEntities(mMainWindow);
+			//render(mMainWindow);
 		}
 	}
 
