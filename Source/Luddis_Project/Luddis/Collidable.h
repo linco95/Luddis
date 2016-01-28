@@ -21,9 +21,10 @@ public:
 	virtual ~Collidable();
 
 	// Funktion för att uppdatera entiteten
-	virtual Category getCategory() = 0;
-	virtual Type getType() = 0;
+	virtual Category getCollisionCategory() = 0;
+	virtual Type getCollisionType() = 0;
 	virtual void collide() = 0;
+	virtual bool isAlive() = 0;
 	virtual sf::FloatRect getHitBox() = 0;
 };
 

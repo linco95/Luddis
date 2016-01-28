@@ -7,6 +7,7 @@
 
 static const float SPEED = 50;
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
+static const int DAMAGE = 10;
 
 Silverfish::Silverfish(std::string textureFilename, sf::Window* window) :
 mIsAlive(true),
@@ -55,7 +56,7 @@ void Silverfish::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	target.draw(mSprite, states);
 }
 
-bool Silverfish::isAlive() const{
+bool Silverfish::isAlive(){
 	return mIsAlive;
 }
 
@@ -63,17 +64,17 @@ Entity::RenderLayer Silverfish::getRenderLayer() const{
 	return LAYER;
 }
 
-Silverfish::Category Silverfish::getCategory(){
-	return FRIEND;
+Silverfish::Category Silverfish::getCollisionCategory(){
+	return ENEMY;
 }
 
-Silverfish::Type Silverfish::getType(){
+Silverfish::Type Silverfish::getCollisionType(){
 	return REC;
 }
 
 
 void Silverfish::collide(){
-	mIsAlive=false;
+	mIsAlive = false;
 }
 
 sf::FloatRect Silverfish::getHitBox(){

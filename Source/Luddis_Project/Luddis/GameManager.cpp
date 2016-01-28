@@ -41,12 +41,12 @@ struct GameManagerImp : public EventObserver {
 		mMainWindow.create(VideoMode(WIDTH, HEIGHT), APPNAME, Style::Fullscreen);
 		mMainWindow.setVerticalSyncEnabled(true);
 
-	/*	mEnemy1 = new Silverfish(TEXTURE_NAME, &mMainWindow);
+		mEnemy1 = new Silverfish(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mEnemy1);
 		CollisionManager::getInstance().addCollidable(mEnemy1);
 		mEnemy2 = new Silverfish(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mEnemy2);
-		CollisionManager::getInstance().addCollidable(mEnemy2);*/
+		CollisionManager::getInstance().addCollidable(mEnemy2);
 		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mPlayer);
 		CollisionManager::getInstance().addCollidable(mPlayer);
@@ -105,6 +105,7 @@ struct GameManagerImp : public EventObserver {
 			if (!mPlayer->isAlive()){
 				gameOver();
 			}
+			cm->removeDeadCollidables();
 			em->removeDeadEntities();
 
 			// Render			     (In rendermanager in the future)

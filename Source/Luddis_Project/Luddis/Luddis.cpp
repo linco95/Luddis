@@ -1,6 +1,7 @@
 #include "Luddis.h"
 #include "ResourceManager.h"
 #include "EntityManager.h"
+#include "CollisionManager.h"
 #include "VectorMath.h"
 #include "Projectile.h"
 #include <SFML/System.hpp>
@@ -38,7 +39,7 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 Luddis::~Luddis(){
 
 }
-bool Luddis::isAlive() const{
+bool Luddis::isAlive() {
 	return mIsAlive;
 }
 void Luddis::tick(const sf::Time& deltaTime){
@@ -91,9 +92,10 @@ void Luddis::updateRotation(){
 void Luddis::attack(){
 	sf::Vector2f direction = VectorMath::normalizeVector( getVectorMouseToSprite()) * PROJECTILE_SPEED;
 	sf::Vector2f muzzlePoint = mSprite.getPosition() + direction * MUZZLEOFFSET / PROJECTILE_SPEED;
-	EntityManager::getInstance().addEntity(new Projectile(PROJECTILE_FILENAME,
-		direction, muzzlePoint, PROJECTILE_TIMER));
+	Projectile *proj = new Projectile(PROJECTILE_FILENAME, direction, muzzlePoint, PROJECTILE_TIMER);
+	EntityManager::getInstance().addEntity(proj);
 	mProjectileCooldown = PROJECTILE_RELOAD;
+	CollisionManager::getInstance().addCollidable(proj);
 }
 
 void Luddis::handleInput(const sf::Time& deltaTime){
@@ -123,11 +125,11 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 	}
 }
 
-Luddis::Category Luddis::getCategory(){
+Luddis::Category Luddis::getCollisionCategory(){
 	return FRIEND;
 	}
 
-Luddis::Type Luddis::getType(){
+Luddis::Type Luddis::getCollisionType(){
 	return REC;
 }
 

@@ -14,6 +14,7 @@ public:
 	void addCollidable(Collidable* collidable);
 	CollidableVector mCollidables;
 	void CollisionManager::detectCollisions();
+	void CollisionManager::removeDeadCollidables();
 };
 
 #endif

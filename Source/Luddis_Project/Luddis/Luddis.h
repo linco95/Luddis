@@ -14,7 +14,7 @@ public:
 	~Luddis();
 	virtual void tick(const sf::Time& deltaTime);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-	virtual bool isAlive() const;
+	virtual bool isAlive() ;
 	virtual RenderLayer getRenderLayer() const;
 	virtual sf::FloatRect getHitBox();
 private:
@@ -28,8 +28,8 @@ private:
 	sf::RenderWindow* mWindow;
 	sf::Sound mTestSound1;
 	float mProjectileCooldown;
-	virtual Category getCategory();
-	virtual Type getType();
+	virtual Category getCollisionCategory();
+	virtual Type getCollisionType();
 	virtual void collide();
 };
 
