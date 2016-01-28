@@ -144,8 +144,8 @@ struct GameManagerImp : public EventObserver {
 			handleEvents(mMainWindow);
 
 			// Update Entities     |
-			em->updateEntities(gameClock.getElapsedTime());
-			gameClock.restart();
+			em->updateEntities(gameClock.restart());
+			;
 			cm->detectCollisions();
 
 			// Kill dead Entities  | In EntityManager
