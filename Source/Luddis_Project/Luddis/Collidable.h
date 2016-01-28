@@ -1,10 +1,10 @@
 #ifndef INCLUDED_COLLIDABLE
 #define INCLUDED_COLLIDABLE
 
-#include "Entity.h"
 #include <vector>
+#include <SFML/Graphics/Sprite.hpp>
 
-class Collidable : public Entity{
+class Collidable {
 public:
 
 	enum Category{
@@ -25,6 +25,7 @@ public:
 	virtual Category getCategory() = 0;
 	virtual Type getType() = 0;
 	virtual int collide() = 0;
+	virtual sf::FloatRect getHitBox() = 0;
 };
 
 #endif

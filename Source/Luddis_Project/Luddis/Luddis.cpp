@@ -31,6 +31,7 @@ Luddis::Luddis(std::string textureFilename, sf::Window* window) :
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	mSprite.setPosition((float)mWindow->getSize().x / 2, (float)mWindow->getSize().y / 2);
+
 }
 
 Luddis::~Luddis(){
@@ -131,6 +132,10 @@ Luddis::Type Luddis::getType(){
 
 int Luddis::collide(){
 	return 1;
+}
+
+sf::FloatRect Luddis::getHitBox(){
+	return mSprite.getGlobalBounds();
 }
 
 	/*if (mTestSound1.getStatus() == sf::Sound::Playing){

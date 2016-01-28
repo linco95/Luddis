@@ -3,10 +3,11 @@
 
 #include <string>
 #include "Collidable.h"
+#include "Entity.h"
 #include <SFML/Window.hpp>
 #include <SFML/Audio/Sound.hpp>
 
-class Luddis : public Collidable{
+class Luddis : public Entity, public Collidable{
 public:
 	Luddis(std::string textureFilename, sf::Window* window);
 	~Luddis();
@@ -28,6 +29,7 @@ private:
 	virtual Category getCategory();
 	virtual Type getType();
 	virtual int collide();
+	virtual sf::FloatRect getHitBox();
 };
 
 #endif // !_INCLUDED_LUDDIS_

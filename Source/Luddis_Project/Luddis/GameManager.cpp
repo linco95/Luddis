@@ -2,6 +2,7 @@
 #include <SFML\Graphics.hpp>
 #include "Luddis.h"
 #include "EntityManager.h"
+#include "CollisionManager.h"
 #include "EventObserver.h"
 #include "EventManager.h"
 #include "Level.h"
@@ -39,6 +40,7 @@ struct GameManagerImp : public EventObserver {
 	void initializeGame(){
 		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mPlayer);
+		CollisionManager::getInstance().addCollidable(mPlayer);
 		mLevel.initializeLevel(mMainWindow, mPlayer);
 	}
 	void update(const Event& aEvent) override{
