@@ -2,8 +2,8 @@
 #define INCLUDED_LEVEL
 
 #include <SFML\Graphics.hpp>
-
-class Level : public sf::Drawable {
+#include "Entity.h"
+class Level : public Entity {
 
 public:
 
@@ -12,7 +12,11 @@ public:
 
 
 	void initializeLevel(sf::RenderWindow& aWindow, sf::Transformable* aTarget);
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+	void tick(const sf::Time& deltaTime) override;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	bool isAlive() const override;
+	Entity::RenderLayer getRenderLayer() const override;
 
 private:
 	sf::Transformable* mTarget;

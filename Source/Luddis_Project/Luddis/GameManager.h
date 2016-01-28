@@ -3,6 +3,10 @@
 
 struct GameManagerImp;
 
+namespace sf{
+	class RenderWindow;
+}
+
 class GameManager{
 public:
 	static GameManager& getInstance();

@@ -3,7 +3,7 @@
 
 using namespace sf;
 
-static const char* BGFILEPATH = "resources/images/level1BG.png";
+static const char* BGFILEPATH = "resources/images/leve_l1BG.png";
 Level::Level(){
 
 }
@@ -25,6 +25,16 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget){
 	////aWindow.
 	//mView.setCenter(mVie)
 	aWindow.setView(mView);
+}
+
+void Level::tick(const sf::Time& deltaTime) {
+
+}
+bool Level::isAlive() const {
+	return true;
+}
+Entity::RenderLayer Level::getRenderLayer() const {
+	return Entity::RenderLayer::BACKGROUND;
 }
 
 void Level::draw(RenderTarget& target, RenderStates states) const {
