@@ -26,7 +26,7 @@ void Obstacle::draw(sf::RenderTarget& target, sf::RenderStates states)const{
 }
 
 bool Obstacle::isAlive(){
-	return isAlive;
+	return mIsAlive;
 }
 
 Entity::RenderLayer Obstacle::getRenderLayer() const{
