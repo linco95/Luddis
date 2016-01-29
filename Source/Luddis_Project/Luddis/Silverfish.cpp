@@ -76,10 +76,11 @@ Silverfish::Type Silverfish::getCollisionType(){
 }
 
 
-void Silverfish::collide(){
-	
-	mLife -= 5;
-	if (mLife <= 0) mIsAlive = false;
+void Silverfish::collide(Collidable *collidable){
+	if (collidable->getCollisionCategory() == FRIEND || collidable->getCollisionCategory() == HAIR){
+		mLife -= 5;
+		if (mLife <= 0) mIsAlive = false;
+	}
 }
 
 sf::FloatRect Silverfish::getHitBox(){

@@ -27,7 +27,7 @@ private:
 	sf::Vector2f mDirection;
 	virtual Category getCollisionCategory();
 	virtual Type getCollisionType();
-	virtual void collide();
+	virtual void collide(Collidable *collidable);
 };
 
 #endif // !_INCLUDED_PROJECTILE_

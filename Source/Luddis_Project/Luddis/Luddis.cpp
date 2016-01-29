@@ -137,9 +137,8 @@ Luddis::Type Luddis::getCollisionType(){
 }
 
 
-void Luddis::collide(){
-	LIFE -= 5;
-	//if (LIFE <= 0) mIsAlive = false;
+void Luddis::collide(Collidable *collidable){
+
 }
 
 sf::FloatRect Luddis::getHitBox(){
