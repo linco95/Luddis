@@ -10,6 +10,8 @@ public:
 	enum Category{
 		FRIEND,
 		ENEMY,
+		COLLECT,
+		HAIR,
 		BG
 	};
 
@@ -23,7 +25,7 @@ public:
 	// Funktion för att uppdatera entiteten
 	virtual Category getCollisionCategory() = 0;
 	virtual Type getCollisionType() = 0;
-	virtual void collide() = 0;
+	virtual void collide(Collidable *collidable) = 0;
 	virtual bool isAlive() = 0;
 	virtual sf::FloatRect getHitBox() = 0;
 };

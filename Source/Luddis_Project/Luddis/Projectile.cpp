@@ -52,7 +52,7 @@ Entity::RenderLayer Projectile::getRenderLayer() const{
 }
 
 Projectile::Category Projectile::getCollisionCategory(){
-	return FRIEND;
+	return HAIR;
 }
 
 Projectile::Type Projectile::getCollisionType(){
@@ -60,8 +60,10 @@ Projectile::Type Projectile::getCollisionType(){
 }
 
 
-void Projectile::collide(){
-	mIsAlive = false;
+void Projectile::collide(Collidable *collidable){
+	if (collidable->getCollisionCategory() == ENEMY){
+		mIsAlive = false;
+	}
 }
 
 sf::FloatRect Projectile::getHitBox(){

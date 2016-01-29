@@ -9,6 +9,7 @@
 #include "Level.h"
 #include <vector>
 #include "Silverfish.h"
+#include "Dust.h"
 
 
 #include <iostream>
@@ -22,6 +23,8 @@ static const int HEIGHT = 1080;
 static const float DESIRED_ASPECTRATIO = (float)WIDTH / (float)HEIGHT;
 static const Color BGCOLOR = Color::Black;
 static const std::string TEXTURE_NAME = "Resources/Images/Grafik_Luddis120x80_s1d3v1.png";
+static const std::string TEXTURE_SILVERFISH = "Resources/Images/Grafik_silverfisk_prototyp_s1d3v1.png";
+static const std::string TEXTURE_DUST = "Resources/Images/Grafik_damm1_s1d4v1.png";
 static const std::string FONT_NAME = "arial.ttf";
 
 /*
@@ -55,6 +58,15 @@ struct GameManagerImp : public EventObserver {
 		mEnemy2 = new Silverfish(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mEnemy2);
 		CollisionManager::getInstance().addCollidable(mEnemy2);
+		mDust = new Dust(TEXTURE_DUST, &mMainWindow);
+		EntityManager::getInstance().addEntity(mDust);
+		CollisionManager::getInstance().addCollidable(mDust);
+		mDust2 = new Dust(TEXTURE_DUST, &mMainWindow);
+		EntityManager::getInstance().addEntity(mDust2);
+		CollisionManager::getInstance().addCollidable(mDust2);
+		mDust3 = new Dust(TEXTURE_DUST, &mMainWindow);
+		EntityManager::getInstance().addEntity(mDust3);
+		CollisionManager::getInstance().addCollidable(mDust3);
 		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mPlayer);
 		CollisionManager::getInstance().addCollidable(mPlayer);
@@ -172,7 +184,9 @@ struct GameManagerImp : public EventObserver {
 	Luddis *mPlayer;
 	Silverfish *mEnemy1;
 	Silverfish *mEnemy2;
-
+	Dust *mDust;
+	Dust *mDust2;
+	Dust *mDust3;
 	Level* mLevel; //To be replaced with LevelManager with LevelVector
 };
 

@@ -39,7 +39,7 @@ struct AnimationImp : public Drawable {
 		mSprite.setTextureRect(IntRect(mCurrSprite * mTileSize.x, mCurrSprite / (mSpriteAmt - 1) * 0, mTileSize.x, mTileSize.y));
 	}
 
-	Sprite getSprite() const {
+	const Sprite& getSprite() const {
 		return mSprite;
 	}
 
@@ -69,6 +69,6 @@ void Animation::draw(RenderTarget& target, RenderStates states) const {
 	target.draw(*mAImp, states);
 }
 
-Sprite Animation::getSprite() const{
+const Sprite& Animation::getSprite() const{
 	return mAImp->getSprite();
 }

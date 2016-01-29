@@ -19,7 +19,7 @@ public:
 
 	void tick(const sf::Time& aTimeElapsed);
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-	sf::Sprite getSprite() const;
+	const sf::Sprite& getSprite() const;
 
 
 private:
