@@ -79,6 +79,9 @@
     <ClCompile Include="Obstacle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Debug.cpp">
+      <Filter>DEBUG</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Background.h">
@@ -153,6 +156,9 @@
     <ClInclude Include="Obstacle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>DEBUG</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -163,6 +169,9 @@
     </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{6d7dcde2-ac9a-46ad-90ef-ea550c17929d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DEBUG">
+      <UniqueIdentifier>{9a859073-dce4-41dd-9e73-1cfd1f9738e0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

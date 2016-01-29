@@ -89,6 +89,7 @@
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="Collidable.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
+    <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Dust.cpp" />
     <ClCompile Include="DustCounter.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -116,6 +117,7 @@
     <ClInclude Include="Background.h" />
     <ClInclude Include="Collidable.h" />
     <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="Debug.h" />
     <ClInclude Include="Dust.h" />
     <ClInclude Include="DustCounter.h" />
     <ClInclude Include="Entity.h" />
