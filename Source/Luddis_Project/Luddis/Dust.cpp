@@ -21,8 +21,6 @@ mSprite(ResourceManager::getInstance().getTexture(textureFilename))
 
 }
 
-// TODO
-// Spawn "dead" silverfish
 Dust::~Dust(){
 
 }
