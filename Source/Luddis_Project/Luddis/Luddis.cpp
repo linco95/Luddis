@@ -9,6 +9,7 @@
 #include <math.h>
 #include <string>
 
+static const char* ANIMATION_FILEPATH = "resources/images/spritesheets/Grafik_Luddis_sprite_walkcycle_120x90_s1d4v1.png";
 static const std::string SOUND_FILENAME1 = "Resources/Audio/MGF-99-MULTI-Doepfer Modular - Classic Acid C2.wav";
 
 //This should be dynamic later to determine what texture to use for projectiles
@@ -29,11 +30,11 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	mIsAlive(true), 
 	mWindow(window), 
 	mProjectileCooldown(0), 
-	mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
+	// Magic constants below are just temporary, until the file manager is created and implemented with the animation
+	mAnimation(ANIMATION_FILEPATH, sf::Vector2i(120, 90), 10, 10, sf::seconds(0.1f)),
 	mTestSound1(ResourceManager::getInstance().getSoundBuffer(SOUND_FILENAME1))
 {
-	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
-	mSprite.setPosition(mWindow->getView().getSize().x / 2, mWindow->getView().getSize().y / 2);
+	setPosition(mWindow->getView().getSize().x / 2, mWindow->getView().getSize().y / 2);
 
 }
 
@@ -46,16 +47,18 @@ bool Luddis::isAlive() {
 void Luddis::tick(const sf::Time& deltaTime){
 	mProjectileCooldown -= deltaTime.asSeconds();
 	handleInput(deltaTime);
+	mAnimation.tick(deltaTime);
 	updateRotation();
 }
 
 void Luddis::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	states.transform *= getTransform();
-	target.draw(mSprite, states);
+
+	target.draw(mAnimation, states);
 }
 
 sf::Vector2f Luddis::getVectorMouseToSprite() const{
-	sf::Vector2f playerPosition(mSprite.getPosition());
+	sf::Vector2f playerPosition(getPosition());
 	sf::Vector2f mousePosition(mWindow->mapPixelToCoords(sf::Mouse::getPosition(*mWindow)));
 	return mousePosition - playerPosition;
 }
@@ -65,7 +68,7 @@ void Luddis::updateMovement(const sf::Time& deltaTime){
 	//Only move if not close to the cursor position
 	if (VectorMath::getVectorLengthSq(direction) > GRACEAREA){
 		sf::Vector2f offset(VectorMath::normalizeVector(direction));
-		mSprite.move(offset.x*deltaTime.asSeconds()*MOVESPEED, offset.y*deltaTime.asSeconds()*MOVESPEED);
+		move(offset.x*deltaTime.asSeconds()*MOVESPEED, offset.y*deltaTime.asSeconds()*MOVESPEED);
 	}
 }
 
@@ -76,22 +79,22 @@ void Luddis::updateRotation(){
 	sf::Vector2f direction = getVectorMouseToSprite();
 	//float rotation = std::atan2f(direction.x, -direction.y) * 180 / (float)M_PI;
 	float rotation = VectorMath::getAngle(sf::Vector2f(FRONTVECTOR), direction) * 180 / (float)M_PI;
-	mSprite.setRotation(rotation);
+	setRotation(rotation);
 
 	static bool isFlipped = false;
 	if (direction.x <= 0 && !isFlipped){
-		mSprite.scale(sf::Vector2f(1, -1));
+		scale(sf::Vector2f(1, -1));
 		isFlipped = true;
 	}
 	else if (direction.x > 0 && isFlipped){
-		mSprite.scale(sf::Vector2f(1, -1));
+		scale(sf::Vector2f(1, -1));
 		isFlipped = false;
 	}
 }
 
 void Luddis::attack(){
 	sf::Vector2f direction = VectorMath::normalizeVector( getVectorMouseToSprite()) * PROJECTILE_SPEED;
-	sf::Vector2f muzzlePoint = mSprite.getPosition() + direction * MUZZLEOFFSET / PROJECTILE_SPEED;
+	sf::Vector2f muzzlePoint = getPosition() + direction * MUZZLEOFFSET / PROJECTILE_SPEED;
 	Projectile *proj = new Projectile(PROJECTILE_FILENAME, direction, muzzlePoint, PROJECTILE_TIMER);
 	EntityManager::getInstance().addEntity(proj);
 	mProjectileCooldown = PROJECTILE_RELOAD;
@@ -140,7 +143,7 @@ void Luddis::collide(){
 }
 
 sf::FloatRect Luddis::getHitBox(){
-	return mSprite.getGlobalBounds();
+	return mAnimation.getSprite().getGlobalBounds();
 }
 
 	/*if (mTestSound1.getStatus() == sf::Sound::Playing){

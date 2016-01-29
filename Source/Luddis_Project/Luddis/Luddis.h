@@ -2,10 +2,10 @@
 #define _INCLUDED_LUDDIS_
 
 #include <string>
+#include "Animation.h"
 #include "Collidable.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "Entity.h"
-#include <SFML/Window.hpp>
 #include <SFML/Audio/Sound.hpp>
 
 class Luddis : public Entity, public Collidable{
@@ -24,7 +24,7 @@ private:
 	void updateRotation();
 	void attack();
 	bool mIsAlive;
-	sf::Sprite mSprite;
+	Animation mAnimation;
 	sf::RenderWindow* mWindow;
 	sf::Sound mTestSound1;
 	float mProjectileCooldown;

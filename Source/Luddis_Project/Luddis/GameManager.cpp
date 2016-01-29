@@ -5,6 +5,7 @@
 #include "CollisionManager.h"
 #include "EventObserver.h"
 #include "EventManager.h"
+#include "ResourceManager.h"
 #include "Level.h"
 #include <vector>
 #include "Silverfish.h"
@@ -15,6 +16,7 @@
 using namespace sf;
 
 static const std::string APPNAME = "Luddis";
+static const std::string ICONPATH = "resources/images/luddisicon.png";
 static const int WIDTH = 1920;
 static const int HEIGHT = 1080;
 static const float DESIRED_ASPECTRATIO = (float)WIDTH / (float)HEIGHT;
@@ -63,6 +65,10 @@ struct GameManagerImp : public EventObserver {
 		mMainWindow.create(VideoMode(WIDTH, HEIGHT), APPNAME, Style::Fullscreen);
 		mMainWindow.setVerticalSyncEnabled(true);
 		
+		Image icon;
+		icon.loadFromFile(ICONPATH);
+		mMainWindow.setIcon(32, 32, icon.getPixelsPtr());
+
 		// Set up view
 		View view = mMainWindow.getView();
 		
