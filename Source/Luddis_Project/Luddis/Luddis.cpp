@@ -13,7 +13,7 @@ static const char* ANIMATION_FILEPATH = "resources/images/spritesheets/Grafik_Lu
 static const std::string SOUND_FILENAME1 = "Resources/Audio/MGF-99-MULTI-Doepfer Modular - Classic Acid C2.wav";
 
 //This should be dynamic later to determine what texture to use for projectiles
-static const std::string PROJECTILE_FILENAME = "Resources/Images/Projectile.png";
+static const std::string PROJECTILE_FILENAME = "Resources/Images/Grafik_Attack 2_35x35_s1d3v1.png";
 
 //All float times are in seconds
 static const float PROJECTILE_RELOAD = 0.1f;
