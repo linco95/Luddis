@@ -82,6 +82,9 @@
     <ClCompile Include="Debug.cpp">
       <Filter>DEBUG</Filter>
     </ClCompile>
+    <ClCompile Include="Chips.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Background.h">
@@ -155,9 +158,6 @@
     </ClInclude>
     <ClInclude Include="Obstacle.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Debug.h">
-      <Filter>DEBUG</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

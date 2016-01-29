@@ -1,4 +1,4 @@
-#include "Dust.h"
+#include "Chips.h"
 #include "ResourceManager.h"
 #include "EntityManager.h"
 #include <SFML/System.hpp>
@@ -6,7 +6,7 @@
 
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 
-Dust::Dust(std::string textureFilename, sf::RenderWindow* window) :
+Chips::Chips(std::string textureFilename, sf::RenderWindow* window) :
 mIsAlive(true),
 mWindow(window),
 mSprite(ResourceManager::getInstance().getTexture(textureFilename))
@@ -21,42 +21,42 @@ mSprite(ResourceManager::getInstance().getTexture(textureFilename))
 
 }
 
-Dust::~Dust(){
+Chips::~Chips(){
 
 }
 
-void Dust::tick(const sf::Time& deltaTime){
+void Chips::tick(const sf::Time& deltaTime){
 }
 
 
-void Dust::draw(sf::RenderTarget& target, sf::RenderStates states) const{
+void Chips::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	states.transform *= getTransform();
 	target.draw(mSprite, states);
 }
 
-bool Dust::isAlive(){
+bool Chips::isAlive(){
 	return mIsAlive;
 }
 
-Entity::RenderLayer Dust::getRenderLayer() const{
+Entity::RenderLayer Chips::getRenderLayer() const{
 	return LAYER;
 }
 
-Dust::Category Dust::getCollisionCategory(){
+Chips::Category Chips::getCollisionCategory(){
 	return COLLECT;
 }
 
-Dust::Type Dust::getCollisionType(){
+Chips::Type Chips::getCollisionType(){
 	return REC;
 }
 
 
-void Dust::collide(Collidable *collidable){
+void Chips::collide(Collidable *collidable){
 	if (collidable->getCollisionCategory() == FRIEND){
 		mIsAlive = false;
 	}
 }
 
-sf::FloatRect Dust::getHitBox(){
+sf::FloatRect Chips::getHitBox(){
 	return mSprite.getGlobalBounds();
 }

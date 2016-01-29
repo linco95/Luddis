@@ -45,5 +45,5 @@ Collidable::Type Obstacle::getCollisionType(){
 	return REC;
 }
 
-void Obstacle::collide(){
+void Obstacle::collide(Collidable *collidable){
 }

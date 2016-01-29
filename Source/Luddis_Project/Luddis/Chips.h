@@ -1,17 +1,19 @@
-#ifndef INCLUDED_OBSTACLE
-#define INCLUDED_OBSTACLE
+#ifndef INCLUDED_CHIPS
+#define INCLUDED_CHIPS
 
+#include <string>
 #include "Entity.h"
 #include "Collidable.h"
-#include <SFML\Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/Audio/Sound.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 
-class Obstacle : public Entity, public Collidable{
+class Chips : public Entity, public Collidable {
 public:
-	Obstacle(std::string textureFilename, sf::RenderWindow* window);
-	~Obstacle();
-
+	Chips(std::string textureFilename, sf::RenderWindow* window);
+	~Chips();
 	virtual void tick(const sf::Time& deltaTime);
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states)const;
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	virtual bool isAlive();
 	virtual RenderLayer getRenderLayer() const;
 	virtual sf::FloatRect getHitBox();
@@ -23,6 +25,5 @@ private:
 	virtual Type getCollisionType();
 	virtual void collide(Collidable *collidable);
 };
-
 
 #endif
