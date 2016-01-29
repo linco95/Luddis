@@ -11,6 +11,7 @@
 #include "Silverfish.h"
 #include "Dust.h"
 #include "Chips.h"
+#include "Obstacle.h"
 
 
 #include <iostream>
@@ -53,6 +54,10 @@ struct GameManagerImp : public EventObserver {
 		mLevel = new Level();
 		mLevel->initializeLevel(mMainWindow, mPlayer);
 		EntityManager::getInstance().addEntity(mLevel);
+
+		Obstacle* mStopp = new Obstacle(TEXTURE_NAME, &mMainWindow);
+		EntityManager::getInstance().addEntity(mStopp);
+		CollisionManager::getInstance().addCollidable(mStopp);
 
 		mEnemy1 = new Silverfish(TEXTURE_SILVERFISH, &mMainWindow);
 		EntityManager::getInstance().addEntity(mEnemy1);
