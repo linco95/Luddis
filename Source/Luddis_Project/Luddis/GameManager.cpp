@@ -107,20 +107,17 @@ struct GameManagerImp : public EventObserver {
 		mMainWindow.create(VideoMode(WIDTH, HEIGHT), APPNAME, Style::Fullscreen);
 		mMainWindow.setVerticalSyncEnabled(VSYNCENABLED);
 		
+		// Set up view (Scale to screen size
+		View view(FloatRect(0, 0, (float)WIDTH, (float)HEIGHT));
+		mMainWindow.setView(view);
+
 		// Set up icon
 		Image icon;
 		icon.loadFromFile(ICONPATH);
 		sf::Vector2u iconSize(icon.getSize());
 		mMainWindow.setIcon(iconSize.x, iconSize.y, icon.getPixelsPtr());
 
-		// Set up view
-		View view = mMainWindow.getView();
 		
-		// Make the resolution scale properly to smaller screens.
-		view.reset(FloatRect(0, 0, (float)WIDTH, (float)HEIGHT));
-		view.setCenter(WIDTH / 2.f, HEIGHT / 2.f);
-	
-		mMainWindow.setView(view);
 	}
 
 	void update(const Event& aEvent) override{
@@ -179,6 +176,8 @@ struct GameManagerImp : public EventObserver {
 
 	RenderWindow mMainWindow;
 	Luddis *mPlayer;
+	
+	// Needs to be moved to corresponding level later.
 	Silverfish *mEnemy1;
 	Silverfish *mEnemy2;
 	Dust *mDust;

@@ -1,5 +1,6 @@
 #include "EntityManager.h"
 #include <SFML\Graphics.hpp>
+#include <map>
 
 static const sf::Color BGCOLOR = sf::Color::Black;
 
@@ -58,62 +59,19 @@ void EntityManager::renderEntities(sf::RenderWindow& window){
 	* TODO Fix the quickfix
 	* Make looped sorting dynamic
 	*/
+	std::map<Entity::RenderLayer, EntitiesVector> renderMap;
 
-	EntitiesVector unsorted(mEntities);
-	EntitiesVector unsortedTwo;
-	EntitiesVector sorted;
-	// 0
-	for (auto e : unsorted){
-		if (e->getRenderLayer() == 0)
-			sorted.push_back(e);
-		else
-			unsortedTwo.push_back(e);
+	// sort the entities renderlayer
+	for (auto e : mEntities) {
+		renderMap[e->getRenderLayer()].push_back(e);
 	}
-	unsorted.clear();
-	// 1
-	for (auto e : unsortedTwo){
-		if (e->getRenderLayer() == 1)
-			sorted.push_back(e);
-		else
-			unsorted.push_back(e);
-	}
-	unsortedTwo.clear();
-	// 2
-	for (auto e : unsorted){
-		if (e->getRenderLayer() == 2)
-			sorted.push_back(e);
-		else
-			unsortedTwo.push_back(e);
-	}
-	unsorted.clear();
-	// 3
-	for (auto e : unsortedTwo){
-		if (e->getRenderLayer() == 3)
-			sorted.push_back(e);
-		else
-			unsorted.push_back(e);
-
-	}
-	unsortedTwo.clear();
-	// 4
-	for (auto e : unsorted){
-		if (e->getRenderLayer() == 4)
-			sorted.push_back(e);
-		else
-			unsortedTwo.push_back(e);
-	}
-	unsorted.clear();
-	// 5
-	for (auto e : unsortedTwo){
-		if (e->getRenderLayer() == 5)
-			sorted.push_back(e);
-		else
-			unsorted.push_back(e);
-	}
-	//assert(unsorted.size() == 0);
+	// render the entities
 	window.clear(BGCOLOR);
-	for (auto e : sorted){
-		window.draw(*e);
+
+	for (auto it : renderMap){
+		for (auto e : it.second){
+			window.draw(*e);
+		}
 	}
 	window.display();
 }

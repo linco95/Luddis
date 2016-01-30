@@ -8,7 +8,7 @@
 
 class Debug{
 public:
-	typedef vector<sf::Shape*> ShapeVector;
+	typedef std::vector<sf::Shape*> ShapeVector;
 
 
 
