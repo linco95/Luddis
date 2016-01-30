@@ -29,6 +29,7 @@ static const std::string TEXTURE_SILVERFISH = "Resources/Images/Grafik_silverfis
 static const std::string TEXTURE_DUST = "Resources/Images/Grafik_damm1_s1d4v1.png";
 static const std::string TEXTURE_CHIPS = "Resources/Images/Grafik_smula2_s1d4v1.png";
 static const std::string FONT_NAME = "arial.ttf";
+static const bool VSYNCENABLED = true;
 
 /*
 TODO:
@@ -48,8 +49,9 @@ struct GameManagerImp : public EventObserver {
 	void gameOver(){
 		mMainWindow.close();
 	}
-	void initializeGame(){
-		initializeWindow();
+
+	// Temporary function (might keep luddis init here). Most of this should be handled in the levelmanager/level class instead
+	void initializeEntities(){
 
 		mLevel = new Level();
 		mLevel->initializeLevel(mMainWindow, mPlayer);
@@ -92,51 +94,32 @@ struct GameManagerImp : public EventObserver {
 		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mPlayer);
 		CollisionManager::getInstance().addCollidable(mPlayer);
+	}
+
+	void initializeGame(){
+		initializeWindow();
+		initializeEntities();
 		
 	}
 	// http://acamara.es/blog/2012/02/keep-screen-aspect-ratio-with-different-resolutions-using-libgdx/
 	void initializeWindow(){
+		// Create the window
 		mMainWindow.create(VideoMode(WIDTH, HEIGHT), APPNAME, Style::Fullscreen);
-		mMainWindow.setVerticalSyncEnabled(true);
+		mMainWindow.setVerticalSyncEnabled(VSYNCENABLED);
 		
+		// Set up icon
 		Image icon;
 		icon.loadFromFile(ICONPATH);
-		mMainWindow.setIcon(32, 32, icon.getPixelsPtr());
+		sf::Vector2u iconSize(icon.getSize());
+		mMainWindow.setIcon(iconSize.x, iconSize.y, icon.getPixelsPtr());
 
 		// Set up view
 		View view = mMainWindow.getView();
 		
 		// Make the resolution scale properly to smaller screens.
-		
-		/*Vector2f actualSize(view.getSize());
-		float scale = 1.0f;
-		float aspectRatio = actualSize.y / actualSize.x;
-		Vector2f crop;
-
-		if (aspectRatio > DESIRED_ASPECTRATIO){
-			scale = actualSize.y / HEIGHT;
-			crop.x = (actualSize.x - WIDTH * scale) / 2.f;
-		}
-		else if (aspectRatio < DESIRED_ASPECTRATIO) {
-			scale = actualSize.x / WIDTH;
-			crop.x = (actualSize.y - HEIGHT * scale) / 2.f;
-		}
-		else{
-			scale = actualSize.x / WIDTH;
-		}
-
-		float h = HEIGHT * scale;
-		float w = WIDTH * scale;
-
-		crop.x /= actualSize.x;
-		crop.y /= actualSize.y;
-
-		std::cout << h << " " << w << std::endl;
-		std::cout << crop.x << " " << crop.y << std::endl;
-		std::cout << 1 - 2 * crop.x << " " << 1 - 2 * crop.y << "\n";
-		FloatRect viewport(crop.x, crop.y, 1 - 2 * crop.x, 1 - 2 * crop.y);
-		view.setViewport(viewport);*/
-
+		view.reset(FloatRect(0, 0, (float)WIDTH, (float)HEIGHT));
+		view.setCenter(WIDTH / 2.f, HEIGHT / 2.f);
+	
 		mMainWindow.setView(view);
 	}
 
@@ -156,15 +139,7 @@ struct GameManagerImp : public EventObserver {
 		}
 	}
 	
-	// Temporary renderfunction until we need a rendermanager, mainly to optimize rendering and reducing drawcalls
-	/*void render(RenderWindow& aWindow){
-		aWindow.clear(BGCOLOR);
-		for (auto e : EntityManager::getInstance().getEntities()){
-			aWindow.draw(*e);
-		}
 
-		aWindow.display();
-	}*/
 
 	void handleEvents(RenderWindow& aWindow){
 		Event currEvent;
