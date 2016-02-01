@@ -30,7 +30,7 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget){
 
 	mPointsOfNoReturn.push_back(mWindow->getSize().x / 2 + 1000.f);
 	mCurrentPONR = mWindow->getView().getSize().x / 2;
-	SoundEngine::getInstance().playMusic("resources/music/The_Abyss-4T.ogg");
+	SoundEngine::getInstance().playMusic("resources/music/musik16.wav");
 
 }
 

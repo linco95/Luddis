@@ -9,6 +9,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <string>
+#include <array>
 
 static const char* ANIMATION_FILEPATH = "Resources/images/spritesheets/Grafik_Luddis_sprite_walkcycle_120x90_s1d4v1.png";
 static const std::string SOUND_FILENAME1 = "Resources/Audio/Skott_Blås_Små_01.wav";
@@ -19,9 +20,10 @@ static const std::string MUSIC_FILENAME1 = "Resources/Music/Mists_of_Time-4T.ogg
 static const std::string MUSIC_FILENAME2 = "Resources/Music/The_Abyss-4T.ogg";
 
 //This should be dynamic later to determine what texture to use for projectiles
-static const std::string PROJECTILE_FILENAME1 = "Resources/Images/Grafik_Attack 1_35x35_s1d3v1.png";
-static const std::string PROJECTILE_FILENAME2 = "Resources/Images/Grafik_Attack 2_35x35_s1d3v1.png";
-static const std::string PROJECTILE_FILENAME3 = "Resources/Images/Grafik_Attack 3_35x35_s1d3v1.png";
+static const std::array<std::string, 3> PROJECTILE_FILENAME = { "Resources/Images/Grafik_Attack 1_35x35_s1d3v1.png",
+												   "Resources/Images/Grafik_Attack 2_35x35_s1d3v1.png",
+												   "Resources/Images/Grafik_Attack 3_35x35_s1d3v1.png"
+												 };
 
 //All float times are in seconds
 static const float PROJECTILE_RELOAD = 0.1f;
@@ -142,21 +144,9 @@ void Luddis::attack(){
 	sf::Vector2f direction = VectorMath::normalizeVector(getVectorMouseToSprite()) * PROJECTILE_SPEED;
 	sf::Vector2f muzzlePoint = getPosition() + direction * MUZZLEOFFSET / PROJECTILE_SPEED;
 	mProjectileCooldown = PROJECTILE_RELOAD;
-	int randValue = std::rand() % 3;
-	Projectile *proj = new Projectile(PROJECTILE_FILENAME1, direction, muzzlePoint, PROJECTILE_TIMER);
-	switch (randValue){
-	case 0:
-		//mShotSound1.play();
-		break;
-	case 1:
-		//mShotSound2.play();
-		proj->setTexture(PROJECTILE_FILENAME2);
-		break;
-	case 2:
-		//mShotSound3.play();
-		proj->setTexture(PROJECTILE_FILENAME3);
-		break;
-	}
+	int randValue = std::rand() % PROJECTILE_FILENAME.max_size();
+	Projectile *proj = new Projectile(PROJECTILE_FILENAME[randValue], direction, muzzlePoint, PROJECTILE_TIMER);
+	
 	EntityManager::getInstance().addEntity(proj);
 	CollisionManager::getInstance().addCollidable(proj);
 
