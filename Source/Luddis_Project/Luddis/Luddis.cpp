@@ -149,7 +149,7 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 		&& mProjectileCooldown <= 0){
 		attack();
 	}
-	//Handle keyboard clicks
+	//Handle keyboard presses
 	static bool isPlaying = false;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && !isPlaying){
 		std::cout << "Playing" << std::endl;
