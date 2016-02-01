@@ -12,6 +12,7 @@
 #include "Dust.h"
 #include "Chips.h"
 #include "Obstacle.h"
+#include "ScoreCounter.h"
 
 
 #include <iostream>
@@ -28,6 +29,8 @@ static const std::string TEXTURE_NAME = "Resources/Images/Grafik_Luddis120x80_s1
 static const std::string TEXTURE_SILVERFISH = "Resources/Images/Grafik_silverfisk_prototyp_s1d3v2.png";
 static const std::string TEXTURE_DUST = "Resources/Images/Grafik_damm1_s1d4v1.png";
 static const std::string TEXTURE_CHIPS = "Resources/Images/Grafik_smula2_s1d4v1.png";
+static const std::string TEXTURE_CHIPSCOUNTER = "Resources/Images/ChipsCounter.png";
+static const std::string TEXTURE_LUDDCOUNTER = "Resources/Images/LuddCounter.png";
 static const std::string FONT_NAME = "arial.ttf";
 static const bool VSYNCENABLED = true;
 
@@ -94,6 +97,11 @@ struct GameManagerImp : public EventObserver {
 		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mPlayer);
 		CollisionManager::getInstance().addCollidable(mPlayer);
+
+		mChipsCounter = new ScoreCounter(TEXTURE_CHIPSCOUNTER, sf::Vector2f(400, 50));
+		EntityManager::getInstance().addEntity(mChipsCounter);
+		mLuddCounter = new ScoreCounter(TEXTURE_LUDDCOUNTER, sf::Vector2f(550, 50));
+		EntityManager::getInstance().addEntity(mLuddCounter);
 	}
 
 	void initializeGame(){
@@ -187,6 +195,8 @@ struct GameManagerImp : public EventObserver {
 	Chips *mChips;
 	Chips *mChips2;
 	Chips *mChips3;
+	ScoreCounter *mChipsCounter;
+	ScoreCounter *mLuddCounter;
 
 	Level* mLevel; //To be replaced with LevelManager with LevelVector
 };

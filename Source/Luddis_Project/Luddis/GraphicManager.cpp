@@ -36,6 +36,7 @@ void GraphicManager::loadTexture(std::string filename, sf::IntRect& rect){
 	p1.first = texture;
 	p1.second = filename;
 
+	p1.first->setSmooth(true);
 	mTextures.push_back(p1);
 }
 
