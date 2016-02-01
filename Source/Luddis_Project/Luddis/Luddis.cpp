@@ -178,7 +178,7 @@ sf::FloatRect Luddis::getHitBox(){
 	
 	sf::Transform trans(getTransform());
 
-	trans.translate(rekt.left / -2.f, rekt.top / -2.f);
+	trans.translate(rekt.left * -1, rekt.top * -1);
 
 	rekt = trans.transformRect(rekt);
 	
