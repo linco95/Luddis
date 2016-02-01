@@ -1,5 +1,6 @@
 #include "Level.h"
 #include "ResourceManager.h"
+#include "SoundEngine.h"
 #include <SFML\Audio.hpp>
 
 
@@ -26,15 +27,11 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget){
 
 	ResourceManager::getInstance().loadTexture(BGFILEPATH, IntRect(Vector2<int>(), Vector2<int>(Texture::getMaximumSize(), (int)mWindow->getView().getSize().y)));
 	mBackground.setTexture(ResourceManager::getInstance().getTexture(BGFILEPATH));
-	
-	// QUICKFIX TODO make properiate sound resource management
-	mLevelMusic = &ResourceManager::getInstance().getMusic("resources/audio/musik16.wav");
-	mLevelMusic->play();
-
 
 	mPointsOfNoReturn.push_back(mWindow->getSize().x / 2 + 1000.f);
 	mCurrentPONR = mWindow->getView().getSize().x / 2;
-	
+	SoundEngine::getInstance().playMusic("resources/music/The_Abyss-4T.ogg");
+
 }
 
 

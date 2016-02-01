@@ -2,7 +2,7 @@
 #include <cassert>
 
 SoundManager::SoundManager() :
-mSoundBuffers(), mMusic(){
+mSoundBuffers(){
 
 }
 
@@ -65,6 +65,7 @@ sf::Music& SoundManager::getMusic(std::string filename){
 	}
 	loadMusic(filename);
 	return getMusic(filename);
+
 }
 
 //Loads a music track into memory. !!Cannot store two files with the same filename!!
@@ -75,12 +76,13 @@ void SoundManager::loadMusic(std::string filename){
 
 	sf::Music* music = new sf::Music();
 	assert(music->openFromFile(filename));
-
+	
 	std::pair<sf::Music*, std::string> p1;
 	p1.first = music;
 	p1.second = filename;
-
+	
 	mMusic.push_back(p1);
+	
 }
 
 //Removes the music track associated with the filename from memory.

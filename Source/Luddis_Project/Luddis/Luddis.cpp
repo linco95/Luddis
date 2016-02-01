@@ -2,6 +2,7 @@
 #include "ResourceManager.h"
 #include "EntityManager.h"
 #include "CollisionManager.h"
+#include "SoundEngine.h"
 #include "VectorMath.h"
 #include "Projectile.h"
 #include <SFML/System.hpp>
@@ -9,11 +10,18 @@
 #include <math.h>
 #include <string>
 
-static const char* ANIMATION_FILEPATH = "resources/images/spritesheets/Grafik_Luddis_sprite_walkcycle_120x90_s1d4v1.png";
-static const std::string SOUND_FILENAME1 = "Resources/Audio/Luddis_skott_16bit.wav";
+static const char* ANIMATION_FILEPATH = "Resources/images/spritesheets/Grafik_Luddis_sprite_walkcycle_120x90_s1d4v1.png";
+static const std::string SOUND_FILENAME1 = "Resources/Audio/Skott_Blås_Små_01.wav";
+static const std::string SOUND_FILENAME2 = "Resources/Audio/Skott_Blås_Små_02.wav";
+static const std::string SOUND_FILENAME3 = "Resources/Audio/Skott_Blås_Små_03.wav";
+
+static const std::string MUSIC_FILENAME1 = "Resources/Music/Mists_of_Time-4T.ogg";
+static const std::string MUSIC_FILENAME2 = "Resources/Music/The_Abyss-4T.ogg";
 
 //This should be dynamic later to determine what texture to use for projectiles
-static const std::string PROJECTILE_FILENAME = "Resources/Images/Grafik_Attack 2_35x35_s1d3v1.png";
+static const std::string PROJECTILE_FILENAME1 = "Resources/Images/Grafik_Attack 1_35x35_s1d3v1.png";
+static const std::string PROJECTILE_FILENAME2 = "Resources/Images/Grafik_Attack 2_35x35_s1d3v1.png";
+static const std::string PROJECTILE_FILENAME3 = "Resources/Images/Grafik_Attack 3_35x35_s1d3v1.png";
 
 //All float times are in seconds
 static const float PROJECTILE_RELOAD = 0.1f;
@@ -32,12 +40,10 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	mProjectileCooldown(0), 
 	// Magic constants below are just temporary, until the file manager is created and implemented with the animation
 	mAnimation(ANIMATION_FILEPATH, sf::Vector2i(120, 90), 10, 10, sf::seconds(0.1f)),
-	mTestSound1(ResourceManager::getInstance().getSoundBuffer(SOUND_FILENAME1)),
 	mColliding(false),
 	mPrevPos(0, 0)
 {
 	setPosition(mWindow->getView().getSize().x / 2, mWindow->getView().getSize().y / 2);
-
 }
 
 Luddis::~Luddis(){
@@ -70,7 +76,7 @@ void Luddis::updateMovement(const sf::Time& deltaTime){
 	float moveX(offset.x*deltaTime.asSeconds()*MOVESPEED);
 	float moveY(offset.y*deltaTime.asSeconds()*MOVESPEED);
 	
-	//sf::Vector2f tempPos = this->getPosition();
+	sf::Vector2f tempPos = this->getPosition();
 
 	// Not colliding
 	if (mColliding == false){
@@ -79,31 +85,37 @@ void Luddis::updateMovement(const sf::Time& deltaTime){
 			move(moveX, moveY);
 		}
 	}
+
 	// Colliding
 	else if (mColliding == true){
-		// mCollideBox
+		// mCollideBox - variable to handle the object luddis collides with
 		
-		//this->setPosition(mPrevPos);
+		// Get sides of obstacle as vectors
+		//Top left (1)
+		sf::Vector2f tl(mCollideBox.top, mCollideBox.left);
+		//Top right (2)
+		sf::Vector2f tr(mCollideBox.top, mCollideBox.left + mCollideBox.width);
 
-		// Luddis glider utmed hindret
-		sf::Vector2f tempMove(0, 0);
-		while (!mCollideBox.contains(this->getPosition() + tempMove) && tempMove.x < moveX && tempMove.y < moveY){
-			if (tempMove.x < moveX && !mCollideBox.contains(this->getPosition() + tempMove + sf::Vector2f(1, 0))){
-				tempMove.x++;
+		//Normalize vectors
+		sf::Vector2f temp1 = VectorMath::normalizeVector(tl);
+		sf::Vector2f temp2 = VectorMath::normalizeVector(tr);
+
+		// Check which side luddis is crashing into and move along the other one
+		if (!mCollideBox.contains(mPrevPos + temp1)){
+			// Use temp2
+			moveX = (temp2.x*deltaTime.asSeconds()*MOVESPEED);
+			moveY = (temp2.y*deltaTime.asSeconds()*MOVESPEED);
 			}
-			if (tempMove.y < moveY && !mCollideBox.contains(this->getPosition() + tempMove + sf::Vector2f(0, 1))){
-				tempMove.y++;
-			}
+		else if (!mCollideBox.contains(mPrevPos + temp2)){
+			// Use temp1
+			moveX = (temp1.x*deltaTime.asSeconds()*MOVESPEED);
+			moveY = (temp1.y*deltaTime.asSeconds()*MOVESPEED);
 		}
-
-		move(tempMove);
-
-		// Move backwards
-		//move(-(offset.x*deltaTime.asSeconds()*MOVESPEED), -(offset.y*deltaTime.asSeconds()*MOVESPEED));
+		move(moveX, moveY);
 	}
 	mColliding = false;
 
-	//mPrevPos = tempPos;
+	mPrevPos = tempPos;
 }
 
 #include <iostream>
@@ -127,12 +139,27 @@ void Luddis::updateRotation(){
 }
 
 void Luddis::attack(){
-	sf::Vector2f direction = VectorMath::normalizeVector( getVectorMouseToSprite()) * PROJECTILE_SPEED;
+	sf::Vector2f direction = VectorMath::normalizeVector(getVectorMouseToSprite()) * PROJECTILE_SPEED;
 	sf::Vector2f muzzlePoint = getPosition() + direction * MUZZLEOFFSET / PROJECTILE_SPEED;
-	Projectile *proj = new Projectile(PROJECTILE_FILENAME, direction, muzzlePoint, PROJECTILE_TIMER);
-	EntityManager::getInstance().addEntity(proj);
 	mProjectileCooldown = PROJECTILE_RELOAD;
+	int randValue = std::rand() % 3;
+	Projectile *proj = new Projectile(PROJECTILE_FILENAME1, direction, muzzlePoint, PROJECTILE_TIMER);
+	switch (randValue){
+	case 0:
+		//mShotSound1.play();
+		break;
+	case 1:
+		//mShotSound2.play();
+		proj->setTexture(PROJECTILE_FILENAME2);
+		break;
+	case 2:
+		//mShotSound3.play();
+		proj->setTexture(PROJECTILE_FILENAME3);
+		break;
+	}
+	EntityManager::getInstance().addEntity(proj);
 	CollisionManager::getInstance().addCollidable(proj);
+
 }
 
 void Luddis::handleInput(const sf::Time& deltaTime){
@@ -144,15 +171,13 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 		&& mProjectileCooldown <= 0){
 		attack();
 	}
-	//Handle keyboard clicks
+	//Handle keyboard presses
 	static bool isPlaying = false;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && !isPlaying){
-		std::cout << "Playing" << std::endl;
-		mTestSound1.play();
-		isPlaying = true;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
+		SoundEngine::getInstance().fadeToNewMusic(MUSIC_FILENAME1, 2.0f);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
-
+		SoundEngine::getInstance().fadeToNewMusic(MUSIC_FILENAME2, 2.0f);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)){
 
@@ -170,7 +195,6 @@ Luddis::Type Luddis::getCollisionType(){
 	return REC;
 }
 
-
 void Luddis::collide(Collidable *collidable){
 	if (collidable->getCollisionCategory() == BG){
 		mColliding = true;
@@ -181,10 +205,6 @@ void Luddis::collide(Collidable *collidable){
 sf::FloatRect Luddis::getHitBox(){
 	return getTransform().transformRect(mAnimation.getSprite().getGlobalBounds());
 }
-
-	/*if (mTestSound1.getStatus() == sf::Sound::Playing){
-		mTestSound1.stop();
-	}*/
 
 Entity::RenderLayer Luddis::getRenderLayer() const {
 	return LAYER;
