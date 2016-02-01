@@ -83,7 +83,7 @@ void Luddis::updateMovement(const sf::Time& deltaTime){
 		//w102 h80 
 		// 91 110   x	y
 		//	x	y	201 190
-		
+
 		this->setPosition(mPrevPos);
 		//sf::Vector2f toMove(moveX, moveY);
 		sf::Vector2f tempMove(0, 0);
@@ -136,7 +136,7 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 		&& mProjectileCooldown <= 0){
 		attack();
 	}
-	//Handle keyboard clicks
+	//Handle keyboard presses
 	static bool isPlaying = false;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && !isPlaying){
 		std::cout << "Playing" << std::endl;
@@ -156,7 +156,7 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 
 Luddis::Category Luddis::getCollisionCategory(){
 	return FRIEND;
-	}
+}
 
 Luddis::Type Luddis::getCollisionType(){
 	return REC;
