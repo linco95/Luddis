@@ -10,10 +10,14 @@
 #include <string>
 
 static const char* ANIMATION_FILEPATH = "resources/images/spritesheets/Grafik_Luddis_sprite_walkcycle_120x90_s1d4v1.png";
-static const std::string SOUND_FILENAME1 = "Resources/Audio/MGF-99-MULTI-Doepfer Modular - Classic Acid C2.wav";
+static const std::string SOUND_FILENAME1 = "Resources/Audio/Skott_Blås_Små_01.wav";
+static const std::string SOUND_FILENAME2 = "Resources/Audio/Skott_Blås_Små_02.wav";
+static const std::string SOUND_FILENAME3 = "Resources/Audio/Skott_Blås_Små_03.wav";
 
 //This should be dynamic later to determine what texture to use for projectiles
-static const std::string PROJECTILE_FILENAME = "Resources/Images/Grafik_Attack 2_35x35_s1d3v1.png";
+static const std::string PROJECTILE_FILENAME1 = "Resources/Images/Grafik_Attack 1_35x35_s1d3v1.png";
+static const std::string PROJECTILE_FILENAME2 = "Resources/Images/Grafik_Attack 2_35x35_s1d3v1.png";
+static const std::string PROJECTILE_FILENAME3 = "Resources/Images/Grafik_Attack 3_35x35_s1d3v1.png";
 
 //All float times are in seconds
 static const float PROJECTILE_RELOAD = 0.1f;
@@ -32,12 +36,13 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	mProjectileCooldown(0), 
 	// Magic constants below are just temporary, until the file manager is created and implemented with the animation
 	mAnimation(ANIMATION_FILEPATH, sf::Vector2i(120, 90), 10, 10, sf::seconds(0.1f)),
-	mTestSound1(ResourceManager::getInstance().getSoundBuffer(SOUND_FILENAME1)),
+	mShotSound1(ResourceManager::getInstance().getSoundBuffer(SOUND_FILENAME1)),
+	mShotSound2(ResourceManager::getInstance().getSoundBuffer(SOUND_FILENAME2)),
+	mShotSound3(ResourceManager::getInstance().getSoundBuffer(SOUND_FILENAME3)),
 	mColliding(false),
 	mPrevPos(0, 0)
 {
 	setPosition(mWindow->getView().getSize().x / 2, mWindow->getView().getSize().y / 2);
-
 }
 
 Luddis::~Luddis(){
@@ -127,12 +132,27 @@ void Luddis::updateRotation(){
 }
 
 void Luddis::attack(){
-	sf::Vector2f direction = VectorMath::normalizeVector( getVectorMouseToSprite()) * PROJECTILE_SPEED;
+	sf::Vector2f direction = VectorMath::normalizeVector(getVectorMouseToSprite()) * PROJECTILE_SPEED;
 	sf::Vector2f muzzlePoint = getPosition() + direction * MUZZLEOFFSET / PROJECTILE_SPEED;
-	Projectile *proj = new Projectile(PROJECTILE_FILENAME, direction, muzzlePoint, PROJECTILE_TIMER);
-	EntityManager::getInstance().addEntity(proj);
 	mProjectileCooldown = PROJECTILE_RELOAD;
+	int randValue = std::rand() % 3;
+	Projectile *proj = new Projectile(PROJECTILE_FILENAME1, direction, muzzlePoint, PROJECTILE_TIMER);
+	switch (randValue){
+	case 0:
+		mShotSound1.play();
+		break;
+	case 1:
+		mShotSound2.play();
+		proj->setTexture(PROJECTILE_FILENAME2);
+		break;
+	case 2:
+		mShotSound3.play();
+		proj->setTexture(PROJECTILE_FILENAME3);
+		break;
+	}
+	EntityManager::getInstance().addEntity(proj);
 	CollisionManager::getInstance().addCollidable(proj);
+
 }
 
 void Luddis::handleInput(const sf::Time& deltaTime){
@@ -146,10 +166,8 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 	}
 	//Handle keyboard presses
 	static bool isPlaying = false;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && !isPlaying){
-		std::cout << "Playing" << std::endl;
-		mTestSound1.play();
-		isPlaying = true;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
+		
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
 

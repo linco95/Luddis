@@ -69,3 +69,7 @@ void Projectile::collide(Collidable *collidable){
 sf::FloatRect Projectile::getHitBox(){
 	return mSprite.getGlobalBounds();
 }
+
+void Projectile::setTexture(std::string filename){
+	mSprite.setTexture(ResourceManager::getInstance().getTexture(filename), true);
+}

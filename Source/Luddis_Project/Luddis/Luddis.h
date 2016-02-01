@@ -26,7 +26,9 @@ private:
 	bool mIsAlive;
 	Animation mAnimation;
 	sf::RenderWindow* mWindow;
-	sf::Sound mTestSound1;
+	sf::Sound mShotSound1;
+	sf::Sound mShotSound2;
+	sf::Sound mShotSound3;
 	float mProjectileCooldown;
 	virtual Category getCollisionCategory();
 	virtual Type getCollisionType();

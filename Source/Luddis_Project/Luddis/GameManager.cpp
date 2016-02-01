@@ -154,6 +154,8 @@ struct GameManagerImp : public EventObserver {
 	}
 
 	void gameLoop(){
+		//Initialize RNG seed
+		std::srand((unsigned int)std::time(0));
 		Clock gameClock;
 		// To avoid multiple functioncalls every iteration of gameloop
 		EntityManager* em = &EntityManager::getInstance();
