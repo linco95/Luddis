@@ -15,11 +15,19 @@ public:
 	void loadSoundBuffer(std::string filename);
 	void clearSoundBuffer(std::string filename);
 	void clearAllSoundBuffers();
+
+	//Music related functions
+	sf::Music& getMusic(std::string filename);
+	void loadMusic(std::string filename);
+	void clearMusic(std::string filename);
+	void clearAllMusic();
 protected:
 	SoundManager();
 private:
 	typedef std::vector<std::pair<sf::SoundBuffer*, std::string>> SoundBufferPairVector;
 	SoundBufferPairVector mSoundBuffers;
+	typedef std::vector<std::pair<sf::Music*, std::string>> MusicPairVector;
+	MusicPairVector mMusic;
 };
 
 #endif // !_INCLUDED_SOUNDMANAGER_

@@ -55,3 +55,50 @@ void SoundManager::clearAllSoundBuffers(){
 		mSoundBuffers.pop_back();
 	}
 }
+
+//Returns a music track associated with the filename. If there is none, it will create one
+sf::Music& SoundManager::getMusic(std::string filename){
+	for (MusicPairVector::size_type i = 0; i < mMusic.size(); i++){
+		if (mMusic.at(i).second == filename){
+			return *mMusic.at(i).first;
+		}
+	}
+	loadMusic(filename);
+	return getMusic(filename);
+
+}
+
+//Loads a music track into memory. !!Cannot store two files with the same filename!!
+void SoundManager::loadMusic(std::string filename){
+	for (MusicPairVector::size_type i = 0; i < mMusic.size(); i++){
+		assert(mMusic.at(i).second != filename);
+	}
+
+	sf::Music* music = new sf::Music();
+	assert(music->openFromFile(filename));
+	
+	std::pair<sf::Music*, std::string> p1;
+	p1.first = music;
+	p1.second = filename;
+	
+	mMusic.push_back(p1);
+	
+}
+
+//Removes the music track associated with the filename from memory.
+void SoundManager::clearMusic(std::string filename){
+	for (MusicPairVector::size_type i = 0; i < mMusic.size(); i++){
+		if (mMusic.at(i).second == filename){
+			delete mMusic.at(i).first;
+			mMusic.erase(mMusic.begin() + i);
+		}
+	}
+}
+
+//Removes all currently allocated music tracks from memory
+void SoundManager::clearAllMusic(){
+	while (!mMusic.empty()){
+		delete mMusic.back().first;
+		mMusic.pop_back();
+	}
+}
