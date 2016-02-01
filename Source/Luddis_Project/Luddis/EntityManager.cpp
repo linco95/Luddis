@@ -55,13 +55,8 @@ void EntityManager::removeDeadEntities(){
 
 void EntityManager::renderEntities(sf::RenderWindow& window){
 
-	/*
-	* TODO Fix the quickfix
-	* Make looped sorting dynamic
-	*/
-	std::map<Entity::RenderLayer, EntitiesVector> renderMap;
-
 	// sort the entities renderlayer
+	std::map<Entity::RenderLayer, EntitiesVector> renderMap;
 	for (auto e : mEntities) {
 		renderMap[e->getRenderLayer()].push_back(e);
 	}
