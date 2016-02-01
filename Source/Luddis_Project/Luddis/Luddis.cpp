@@ -75,7 +75,7 @@ void Luddis::updateMovement(const sf::Time& deltaTime){
 	float moveX(offset.x*deltaTime.asSeconds()*MOVESPEED);
 	float moveY(offset.y*deltaTime.asSeconds()*MOVESPEED);
 	
-	//sf::Vector2f tempPos = this->getPosition();
+	sf::Vector2f tempPos = this->getPosition();
 
 	// Not colliding
 	if (mColliding == false){
@@ -84,31 +84,37 @@ void Luddis::updateMovement(const sf::Time& deltaTime){
 			move(moveX, moveY);
 		}
 	}
+
 	// Colliding
 	else if (mColliding == true){
-		// mCollideBox
-		
-		//this->setPosition(mPrevPos);
+		// mCollideBox - variable to handle the object luddis collides with
 
-		// Luddis glider utmed hindret
-		sf::Vector2f tempMove(0, 0);
-		while (!mCollideBox.contains(this->getPosition() + tempMove) && tempMove.x < moveX && tempMove.y < moveY){
-			if (tempMove.x < moveX && !mCollideBox.contains(this->getPosition() + tempMove + sf::Vector2f(1, 0))){
-				tempMove.x++;
-			}
-			if (tempMove.y < moveY && !mCollideBox.contains(this->getPosition() + tempMove + sf::Vector2f(0, 1))){
-				tempMove.y++;
-			}
+		// Get sides of obstacle as vectors
+		//Top left (1)
+		sf::Vector2f tl(mCollideBox.top, mCollideBox.left);
+		//Top right (2)
+		sf::Vector2f tr(mCollideBox.top, mCollideBox.left + mCollideBox.width);
+
+		//Normalize vectors
+		sf::Vector2f temp1 = VectorMath::normalizeVector(tl);
+		sf::Vector2f temp2 = VectorMath::normalizeVector(tr);
+
+		// Check which side luddis is crashing into and move along the other one
+		if (!mCollideBox.contains(mPrevPos + temp1)){
+			// Use temp2
+			moveX = (temp2.x*deltaTime.asSeconds()*MOVESPEED);
+			moveY = (temp2.y*deltaTime.asSeconds()*MOVESPEED);
 		}
-
-		move(tempMove);
-
-		// Move backwards
-		//move(-(offset.x*deltaTime.asSeconds()*MOVESPEED), -(offset.y*deltaTime.asSeconds()*MOVESPEED));
+		else if (!mCollideBox.contains(mPrevPos + temp2)){
+			// Use temp1
+			moveX = (temp1.x*deltaTime.asSeconds()*MOVESPEED);
+			moveY = (temp1.y*deltaTime.asSeconds()*MOVESPEED);
+		}
+		move(moveX, moveY);
 	}
 	mColliding = false;
 
-	//mPrevPos = tempPos;
+	mPrevPos = tempPos;
 }
 
 #include <iostream>
