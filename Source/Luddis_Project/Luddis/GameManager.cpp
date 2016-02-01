@@ -6,6 +6,7 @@
 #include "EventObserver.h"
 #include "EventManager.h"
 #include "ResourceManager.h"
+#include "SoundEngine.h"
 #include "Level.h"
 #include <vector>
 #include "Silverfish.h"
@@ -115,7 +116,7 @@ struct GameManagerImp : public EventObserver {
 		mMainWindow.create(VideoMode(WIDTH, HEIGHT), APPNAME, Style::Fullscreen);
 		mMainWindow.setVerticalSyncEnabled(VSYNCENABLED);
 		
-		// Set up view (Scale to screen size
+		// Set up view (Scale to screen size)
 		View view(FloatRect(0, 0, (float)WIDTH, (float)HEIGHT));
 		mMainWindow.setView(view);
 
@@ -160,14 +161,15 @@ struct GameManagerImp : public EventObserver {
 		// To avoid multiple functioncalls every iteration of gameloop
 		EntityManager* em = &EntityManager::getInstance();
 		CollisionManager* cm = &CollisionManager::getInstance();
+		SoundEngine* se = &SoundEngine::getInstance();
 		while (mMainWindow.isOpen()){
 
 			// Handle Events         In  EventManager
 			handleEvents(mMainWindow);
 
 			// Update Entities     |
-			em->updateEntities(gameClock.restart());
-			;
+			em->updateEntities(gameClock.getElapsedTime());
+			se->update(gameClock.restart());
 			cm->detectCollisions();
 
 			// Kill dead Entities  | In EntityManager

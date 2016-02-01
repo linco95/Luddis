@@ -2,6 +2,7 @@
 #include "ResourceManager.h"
 #include "EntityManager.h"
 #include "CollisionManager.h"
+#include "SoundEngine.h"
 #include "VectorMath.h"
 #include "Projectile.h"
 #include <SFML/System.hpp>
@@ -9,10 +10,13 @@
 #include <math.h>
 #include <string>
 
-static const char* ANIMATION_FILEPATH = "resources/images/spritesheets/Grafik_Luddis_sprite_walkcycle_120x90_s1d4v1.png";
+static const char* ANIMATION_FILEPATH = "Resources/images/spritesheets/Grafik_Luddis_sprite_walkcycle_120x90_s1d4v1.png";
 static const std::string SOUND_FILENAME1 = "Resources/Audio/Skott_Blås_Små_01.wav";
 static const std::string SOUND_FILENAME2 = "Resources/Audio/Skott_Blås_Små_02.wav";
 static const std::string SOUND_FILENAME3 = "Resources/Audio/Skott_Blås_Små_03.wav";
+
+static const std::string MUSIC_FILENAME1 = "Resources/Music/Mists_of_Time-4T.ogg";
+static const std::string MUSIC_FILENAME2 = "Resources/Music/The_Abyss-4T.ogg";
 
 //This should be dynamic later to determine what texture to use for projectiles
 static const std::string PROJECTILE_FILENAME1 = "Resources/Images/Grafik_Attack 1_35x35_s1d3v1.png";
@@ -36,9 +40,6 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	mProjectileCooldown(0), 
 	// Magic constants below are just temporary, until the file manager is created and implemented with the animation
 	mAnimation(ANIMATION_FILEPATH, sf::Vector2i(120, 90), 10, 10, sf::seconds(0.1f)),
-	mShotSound1(ResourceManager::getInstance().getSoundBuffer(SOUND_FILENAME1)),
-	mShotSound2(ResourceManager::getInstance().getSoundBuffer(SOUND_FILENAME2)),
-	mShotSound3(ResourceManager::getInstance().getSoundBuffer(SOUND_FILENAME3)),
 	mColliding(false),
 	mPrevPos(0, 0)
 {
@@ -145,14 +146,14 @@ void Luddis::attack(){
 	Projectile *proj = new Projectile(PROJECTILE_FILENAME1, direction, muzzlePoint, PROJECTILE_TIMER);
 	switch (randValue){
 	case 0:
-		mShotSound1.play();
+		//mShotSound1.play();
 		break;
 	case 1:
-		mShotSound2.play();
+		//mShotSound2.play();
 		proj->setTexture(PROJECTILE_FILENAME2);
 		break;
 	case 2:
-		mShotSound3.play();
+		//mShotSound3.play();
 		proj->setTexture(PROJECTILE_FILENAME3);
 		break;
 	}
@@ -173,10 +174,10 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 	//Handle keyboard presses
 	static bool isPlaying = false;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
-		
+		SoundEngine::getInstance().fadeToNewMusic(MUSIC_FILENAME1, 2.0f);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
-
+		SoundEngine::getInstance().fadeToNewMusic(MUSIC_FILENAME2, 2.0f);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)){
 
@@ -188,12 +189,11 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 
 Luddis::Category Luddis::getCollisionCategory(){
 	return FRIEND;
-	}
+}
 
 Luddis::Type Luddis::getCollisionType(){
 	return REC;
 }
-
 
 void Luddis::collide(Collidable *collidable){
 	if (collidable->getCollisionCategory() == BG){
@@ -215,10 +215,6 @@ sf::FloatRect Luddis::getHitBox(){
 	
 	return rekt;
 }
-
-	/*if (mTestSound1.getStatus() == sf::Sound::Playing){
-		mTestSound1.stop();
-	}*/
 
 Entity::RenderLayer Luddis::getRenderLayer() const {
 	return LAYER;
