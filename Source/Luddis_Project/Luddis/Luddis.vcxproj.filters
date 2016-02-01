@@ -58,16 +58,10 @@
     <ClCompile Include="GraphicalUserInterface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="InterfaceElement.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CollisionManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Dust.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DustCounter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Animation.cpp">
@@ -80,6 +74,9 @@
       <Filter>DEBUG</Filter>
     </ClCompile>
     <ClCompile Include="Chips.cpp" />
+    <ClCompile Include="ScoreCounter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionManager.h">
@@ -133,16 +130,10 @@
     <ClInclude Include="GraphicalUserInterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="InterfaceElement.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Collidable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dust.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DustCounter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Animation.h">
@@ -155,6 +146,9 @@
       <Filter>DEBUG</Filter>
     </ClInclude>
     <ClInclude Include="Chips.h" />
+    <ClInclude Include="ScoreCounter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
