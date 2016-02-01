@@ -1,6 +1,6 @@
 #include "Level.h"
 #include "ResourceManager.h"
-
+#include <SFML\Audio.hpp>
 using namespace sf;
 
 
@@ -20,7 +20,9 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget){
 	mTarget = aTarget;
 	ResourceManager::getInstance().loadTexture(BGFILEPATH, IntRect(Vector2<int>(), Vector2<int>(Texture::getMaximumSize(), (int)aWindow.getView().getSize().y)));
 	mBackground.setTexture(ResourceManager::getInstance().getTexture(BGFILEPATH));
-	// assert(mBackground.getTextureRect().height() >= aWindow.getSize().y);
+	
+	Music *music = &ResourceManager::getInstance().getMusic("resources/audio/musik16.wav");
+	music->play();
 
 }
 

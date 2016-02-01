@@ -10,7 +10,7 @@ namespace sf{
 	class Shape;
 }
 
-class Debug : public sf::Drawable {
+class Debug /*: public sf::Drawable*/ {
 public:
 	enum ERRORLEVEL{
 		DEFAULT,
@@ -22,14 +22,15 @@ public:
 	typedef std::vector<sf::Shape*> ShapeVector;
 
 
-	void draw(const sf::RenderTarget& target, sf::RenderStates states) override;
+	//void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 	static void log(const std::string& aMsg, const ERRORLEVEL& aLvl);
 
-	Debug() = delete;
-	~Debug() = delete;
+	Debug(const Debug&) = delete;
+	//Debug& Debug(const Debug&) = delete;
 private:
-	
+	Debug();
+
 	static ShapeVector mShapes;
 
 };
