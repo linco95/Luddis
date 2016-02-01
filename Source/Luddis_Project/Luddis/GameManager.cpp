@@ -57,9 +57,6 @@ struct GameManagerImp : public EventObserver {
 	// Temporary function (might keep luddis init here). Most of this should be handled in the levelmanager/level class instead
 	void initializeEntities(){
 
-		mLevel = new Level();
-		mLevel->initializeLevel(mMainWindow, mPlayer);
-		EntityManager::getInstance().addEntity(mLevel);
 
 		Obstacle* mStopp = new Obstacle(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mStopp);
@@ -103,6 +100,11 @@ struct GameManagerImp : public EventObserver {
 		EntityManager::getInstance().addEntity(mChipsCounter);
 		mLuddCounter = new ScoreCounter(TEXTURE_LUDDCOUNTER, sf::Vector2f(550, 50));
 		EntityManager::getInstance().addEntity(mLuddCounter);
+
+
+		mLevel = new Level();
+		mLevel->initializeLevel(mMainWindow, mPlayer);
+		EntityManager::getInstance().addEntity(mLevel);
 	}
 
 	void initializeGame(){

@@ -21,7 +21,7 @@ mSprite(ResourceManager::getInstance().getTexture(textureFilename))
 	sf::Vector2f size = mWindow->getView().getSize();
 	int r1 = rand() % (int)size.y + 1;
 	// Set spawn position
-	mSprite.setPosition((float)size.x, (float)r1);
+	setPosition((float)size.x, (float)r1);
 
 
 	// Chose direction (towards the left)
@@ -51,7 +51,7 @@ void Silverfish::tick(const sf::Time& deltaTime){
 }
 
 void Silverfish::updateMovement(const sf::Time& deltaTime){
-	mSprite.move(mDirection * SPEED * deltaTime.asSeconds());
+	move(mDirection * SPEED * deltaTime.asSeconds());
 }
 
 void Silverfish::draw(sf::RenderTarget& target, sf::RenderStates states) const{
@@ -84,5 +84,5 @@ void Silverfish::collide(Collidable *collidable){
 }
 
 sf::FloatRect Silverfish::getHitBox(){
-	return mSprite.getGlobalBounds();
+	return getTransform().transformRect(mSprite.getGlobalBounds());
 }

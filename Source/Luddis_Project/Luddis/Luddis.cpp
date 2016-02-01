@@ -89,7 +89,7 @@ void Luddis::updateMovement(const sf::Time& deltaTime){
 	// Colliding
 	else if (mColliding == true){
 		// mCollideBox - variable to handle the object luddis collides with
-
+		
 		// Get sides of obstacle as vectors
 		//Top left (1)
 		sf::Vector2f tl(mCollideBox.top, mCollideBox.left);
@@ -105,7 +105,7 @@ void Luddis::updateMovement(const sf::Time& deltaTime){
 			// Use temp2
 			moveX = (temp2.x*deltaTime.asSeconds()*MOVESPEED);
 			moveY = (temp2.y*deltaTime.asSeconds()*MOVESPEED);
-		}
+			}
 		else if (!mCollideBox.contains(mPrevPos + temp2)){
 			// Use temp1
 			moveX = (temp1.x*deltaTime.asSeconds()*MOVESPEED);
@@ -189,7 +189,7 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 
 Luddis::Category Luddis::getCollisionCategory(){
 	return FRIEND;
-}
+	}
 
 Luddis::Type Luddis::getCollisionType(){
 	return REC;
@@ -203,17 +203,7 @@ void Luddis::collide(Collidable *collidable){
 }
 
 sf::FloatRect Luddis::getHitBox(){
-	sf::Sprite temp = mAnimation.getSprite();
-	
-	sf::FloatRect rekt = temp.getLocalBounds();
-	
-	sf::Transform trans(getTransform());
-
-	trans.translate(rekt.left * -1, rekt.top * -1);
-
-	rekt = trans.transformRect(rekt);
-	
-	return rekt;
+	return getTransform().transformRect(mAnimation.getSprite().getGlobalBounds());
 }
 
 Entity::RenderLayer Luddis::getRenderLayer() const {
