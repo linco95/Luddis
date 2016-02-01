@@ -22,6 +22,7 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget){
 	mBackground.setTexture(ResourceManager::getInstance().getTexture(BGFILEPATH));
 	
 	Music *music = &ResourceManager::getInstance().getMusic("resources/audio/musik16.wav");
+	music->play();
 
 }
 
