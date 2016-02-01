@@ -37,7 +37,6 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	mPrevPos(0, 0)
 {
 	setPosition(mWindow->getView().getSize().x / 2, mWindow->getView().getSize().y / 2);
-
 }
 
 Luddis::~Luddis(){
@@ -105,29 +104,7 @@ void Luddis::updateMovement(const sf::Time& deltaTime){
 			moveX = (temp1.x*deltaTime.asSeconds()*MOVESPEED);
 			moveY = (temp1.y*deltaTime.asSeconds()*MOVESPEED);
 		}
-
 		move(moveX, moveY);
-
-
-		//this->setPosition(mPrevPos);
-
-		// Luddis glider utmed hindret
-		/*
-		sf::Vector2f tempMove(0, 0);
-		while (!mCollideBox.contains(this->getPosition() + tempMove) && tempMove.x < moveX && tempMove.y < moveY){
-			if (tempMove.x < moveX && !mCollideBox.contains(this->getPosition() + tempMove + sf::Vector2f(1, 0))){
-				tempMove.x++;
-			}
-			if (tempMove.y < moveY && !mCollideBox.contains(this->getPosition() + tempMove + sf::Vector2f(0, 1))){
-				tempMove.y++;
-			}
-		}
-
-		//move(tempMove);
-		*/
-
-		// Move backwards
-		//move(-(offset.x*deltaTime.asSeconds()*MOVESPEED), -(offset.y*deltaTime.asSeconds()*MOVESPEED));
 	}
 	mColliding = false;
 
