@@ -70,7 +70,9 @@ void Luddis::updateMovement(const sf::Time& deltaTime){
 	sf::Vector2f offset(VectorMath::normalizeVector(direction));
 	float moveX(offset.x*deltaTime.asSeconds()*MOVESPEED);
 	float moveY(offset.y*deltaTime.asSeconds()*MOVESPEED);
-	sf::Vector2f tempPos = this->getPosition();
+	
+	//sf::Vector2f tempPos = this->getPosition();
+
 	// Not colliding
 	if (mColliding == false){
 		//Only move if not close to the cursor position
@@ -81,22 +83,28 @@ void Luddis::updateMovement(const sf::Time& deltaTime){
 	// Colliding
 	else if (mColliding == true){
 		// mCollideBox
-		//w102 h80 
-		// 91 110   x	y
-		//	x	y	201 190
 		
-		this->setPosition(mPrevPos);
-		//sf::Vector2f toMove(moveX, moveY);
-		sf::Vector2f tempMove(0, 0);
-		//while (!mCollideBox.contains(mPrevPos + tempMove) && tempMove.x <= moveX && tempMove.y <= moveY){}
+		//this->setPosition(mPrevPos);
 
 		// Luddis glider utmed hindret
+		sf::Vector2f tempMove(0, 0);
+		while (!mCollideBox.contains(this->getPosition() + tempMove) && tempMove.x < moveX && tempMove.y < moveY){
+			if (tempMove.x < moveX && !mCollideBox.contains(this->getPosition() + tempMove + sf::Vector2f(1, 0))){
+				tempMove.x++;
+			}
+			if (tempMove.y < moveY && !mCollideBox.contains(this->getPosition() + tempMove + sf::Vector2f(0, 1))){
+				tempMove.y++;
+			}
+		}
+
+		move(tempMove);
 
 		// Move backwards
 		//move(-(offset.x*deltaTime.asSeconds()*MOVESPEED), -(offset.y*deltaTime.asSeconds()*MOVESPEED));
 	}
 	mColliding = false;
-	mPrevPos = tempPos;
+
+	//mPrevPos = tempPos;
 }
 
 #include <iostream>
