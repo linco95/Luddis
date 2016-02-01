@@ -31,6 +31,10 @@ private:
 	virtual Category getCollisionCategory();
 	virtual Type getCollisionType();
 	virtual void collide(Collidable *collidable);
+	
+	bool mColliding;
+	sf::FloatRect mCollideBox;
+	sf::Vector2f mPrevPos;
 };
 
 #endif // !_INCLUDED_LUDDIS_
