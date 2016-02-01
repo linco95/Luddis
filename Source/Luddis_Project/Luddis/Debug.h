@@ -2,17 +2,29 @@
 #ifndef INCLUDED_DEBUG
 #define INCLUDED_DEBUG
 
-#include <SFML\Graphics\Shape.hpp>
+#include <SFML\Graphics\Drawable.hpp>
 #include <vector>
-#include <ostream>
+#include <string>
 
-class Debug{
+namespace sf{
+	class Shape;
+}
+
+class Debug : public sf::Drawable {
 public:
+	enum ERRORLEVEL{
+		DEFAULT,
+		INFO,
+		WARNING,
+		ERROR,
+		FATAL
+	};
 	typedef std::vector<sf::Shape*> ShapeVector;
 
 
+	void draw(const sf::RenderTarget& target, sf::RenderStates states) override;
 
-	static void log(const std::ostream& aMsg);
+	static void log(const std::string& aMsg, const ERRORLEVEL& aLvl);
 
 	Debug() = delete;
 	~Debug() = delete;
