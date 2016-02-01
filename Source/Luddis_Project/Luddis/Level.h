@@ -1,8 +1,14 @@
 #ifndef INCLUDED_LEVEL
 #define INCLUDED_LEVEL
 
-#include <SFML\Graphics.hpp>
 #include "Entity.h"
+#include <SFML\Graphics.hpp>
+#include <vector>
+
+namespace sf{
+	class Music;
+}
+
 class Level : public Entity {
 
 public:
@@ -19,9 +25,17 @@ public:
 	Entity::RenderLayer getRenderLayer() const override;
 
 private:
+	void updateView(const sf::Time& deltaTime);
+
 	sf::Transformable* mTarget;
-	sf::View mView;
+	sf::RenderWindow *mWindow;
 	sf::Sprite mBackground;
+	sf::Music *mLevelMusic;
+	std::vector<float> mPointsOfNoReturn;
+	// PONR = Point Of No Return
+	float mCurrentPONR;
+
+
 };
 
 #endif

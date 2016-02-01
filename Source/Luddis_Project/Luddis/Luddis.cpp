@@ -179,15 +179,7 @@ void Luddis::collide(Collidable *collidable){
 }
 
 sf::FloatRect Luddis::getHitBox(){
-	sf::Sprite temp = mAnimation.getSprite();
-	
-	sf::FloatRect rekt = temp.getLocalBounds();
-	
-	sf::Transform trans(getTransform());
-	trans.translate(rekt.width / -2.f, rekt.height / -2.f);
-	rekt = trans.transformRect(rekt);
-	
-	return rekt;
+	return getTransform().transformRect(mAnimation.getSprite().getGlobalBounds());
 }
 
 	/*if (mTestSound1.getStatus() == sf::Sound::Playing){

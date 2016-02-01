@@ -84,12 +84,5 @@ void Silverfish::collide(Collidable *collidable){
 }
 
 sf::FloatRect Silverfish::getHitBox(){
-
-	sf::FloatRect rekt = mSprite.getLocalBounds();
-
-	sf::Transform trans(getTransform());
-	trans.translate(rekt.width / -2.f, rekt.height / -2.f);
-	rekt = trans.transformRect(rekt);
-
-	return rekt;
+	return getTransform().transformRect(mSprite.getGlobalBounds());
 }
