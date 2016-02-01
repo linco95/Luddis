@@ -32,7 +32,9 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	mProjectileCooldown(0), 
 	// Magic constants below are just temporary, until the file manager is created and implemented with the animation
 	mAnimation(ANIMATION_FILEPATH, sf::Vector2i(120, 90), 10, 10, sf::seconds(0.1f)),
-	mTestSound1(ResourceManager::getInstance().getSoundBuffer(SOUND_FILENAME1))
+	mTestSound1(ResourceManager::getInstance().getSoundBuffer(SOUND_FILENAME1)),
+	mColliding(false),
+	mPrevPos(0, 0)
 {
 	setPosition(mWindow->getView().getSize().x / 2, mWindow->getView().getSize().y / 2);
 
@@ -53,7 +55,6 @@ void Luddis::tick(const sf::Time& deltaTime){
 
 void Luddis::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	states.transform *= getTransform();
-
 	target.draw(mAnimation, states);
 }
 
@@ -65,11 +66,36 @@ sf::Vector2f Luddis::getVectorMouseToSprite() const{
 
 void Luddis::updateMovement(const sf::Time& deltaTime){
 	sf::Vector2f direction = getVectorMouseToSprite();
-	//Only move if not close to the cursor position
-	if (VectorMath::getVectorLengthSq(direction) > GRACEAREA){
-		sf::Vector2f offset(VectorMath::normalizeVector(direction));
-		move(offset.x*deltaTime.asSeconds()*MOVESPEED, offset.y*deltaTime.asSeconds()*MOVESPEED);
+	sf::Vector2f offset(VectorMath::normalizeVector(direction));
+	float moveX(offset.x*deltaTime.asSeconds()*MOVESPEED);
+	float moveY(offset.y*deltaTime.asSeconds()*MOVESPEED);
+	sf::Vector2f tempPos = this->getPosition();
+	// Not colliding
+	if (mColliding == false){
+		//Only move if not close to the cursor position
+		if (VectorMath::getVectorLengthSq(direction) > GRACEAREA){
+			move(moveX, moveY);
+		}
 	}
+	// Colliding
+	else if (mColliding == true){
+		// mCollideBox
+		//w102 h80 
+		// 91 110   x	y
+		//	x	y	201 190
+		
+		this->setPosition(mPrevPos);
+		//sf::Vector2f toMove(moveX, moveY);
+		sf::Vector2f tempMove(0, 0);
+		//while (!mCollideBox.contains(mPrevPos + tempMove) && tempMove.x <= moveX && tempMove.y <= moveY){}
+
+		// Luddis glider utmed hindret
+
+		// Move backwards
+		//move(-(offset.x*deltaTime.asSeconds()*MOVESPEED), -(offset.y*deltaTime.asSeconds()*MOVESPEED));
+	}
+	mColliding = false;
+	mPrevPos = tempPos;
 }
 
 #include <iostream>
@@ -138,7 +164,10 @@ Luddis::Type Luddis::getCollisionType(){
 
 
 void Luddis::collide(Collidable *collidable){
-
+	if (collidable->getCollisionCategory() == BG){
+		mColliding = true;
+		mCollideBox = collidable->getHitBox();
+	}
 }
 
 sf::FloatRect Luddis::getHitBox(){

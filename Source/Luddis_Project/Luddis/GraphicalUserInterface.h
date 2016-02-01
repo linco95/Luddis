@@ -1,15 +1,15 @@
 #ifndef _INCLUDED_GRAPHICALUSERINTERFACE_
 #define _INCLUDED_GRAPHICALUSERINTERFACE_
 
-#include "InterfaceElement.h"
 #include <vector>
+#include "Entity.h"
 
 class GraphicalUserInterface{
 public:
 	//Since GUI elements will be limited, it might
 	//be useful to change from vector to array at some point
 
-	typedef std::vector<InterfaceElement*> InterfaceElementVector;
+	typedef std::vector<Entity*> InterfaceElementVector;
 	GraphicalUserInterface();
 	~GraphicalUserInterface();
 
