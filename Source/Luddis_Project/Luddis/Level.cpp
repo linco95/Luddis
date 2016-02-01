@@ -21,6 +21,7 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget){
 	ResourceManager::getInstance().loadTexture(BGFILEPATH, IntRect(Vector2<int>(), Vector2<int>(Texture::getMaximumSize(), (int)aWindow.getView().getSize().y)));
 	mBackground.setTexture(ResourceManager::getInstance().getTexture(BGFILEPATH));
 	
+	// QUICKFIX TODO make properiate sound resource management
 	Music *music = &ResourceManager::getInstance().getMusic("resources/audio/musik16.wav");
 	music->play();
 

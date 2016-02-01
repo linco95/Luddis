@@ -10,7 +10,7 @@
 #include <string>
 
 static const char* ANIMATION_FILEPATH = "resources/images/spritesheets/Grafik_Luddis_sprite_walkcycle_120x90_s1d4v1.png";
-static const std::string SOUND_FILENAME1 = "Resources/Audio/MGF-99-MULTI-Doepfer Modular - Classic Acid C2.wav";
+static const std::string SOUND_FILENAME1 = "Resources/Audio/Luddis_skott_16bit.wav";
 
 //This should be dynamic later to determine what texture to use for projectiles
 static const std::string PROJECTILE_FILENAME = "Resources/Images/Grafik_Attack 2_35x35_s1d3v1.png";
@@ -184,9 +184,7 @@ sf::FloatRect Luddis::getHitBox(){
 	sf::FloatRect rekt = temp.getLocalBounds();
 	
 	sf::Transform trans(getTransform());
-
-	trans.translate(rekt.left * -1, rekt.top * -1);
-
+	trans.translate(rekt.width / -2.f, rekt.height / -2.f);
 	rekt = trans.transformRect(rekt);
 	
 	return rekt;
