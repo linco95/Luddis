@@ -162,7 +162,6 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 		attack();
 	}
 	//Handle keyboard presses
-	static bool isPlaying = false;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
 		SoundEngine::getInstance().fadeToNewMusic(MUSIC_FILENAME1, 2.0f);
 	}
