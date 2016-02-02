@@ -2,7 +2,7 @@
 #define _INCLUDED_LUDDIS_
 
 #include <string>
-#include "Animation.h"
+#include "AnimationQueue.h"
 #include "Collidable.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "Entity.h"
@@ -14,7 +14,7 @@ public:
 	~Luddis();
 	virtual void tick(const sf::Time& deltaTime);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-	virtual bool isAlive() ;
+	virtual bool isAlive();
 	virtual RenderLayer getRenderLayer() const;
 	virtual sf::FloatRect getHitBox();
 private:
@@ -24,7 +24,7 @@ private:
 	void updateRotation();
 	void attack();
 	bool mIsAlive;
-	Animation mAnimation;
+	AnimationQueue mAnimation;
 	sf::RenderWindow* mWindow;
 	float mProjectileCooldown;
 	virtual Category getCollisionCategory();

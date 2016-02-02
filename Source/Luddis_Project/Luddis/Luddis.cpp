@@ -11,7 +11,7 @@
 #include <string>
 #include <array>
 
-static const char* ANIMATION_FILEPATH = "Resources/images/spritesheets/Grafik_Luddis_sprite_walkcycle_120x90_s1d4v1.png";
+static const char* ANIMATION_FILEPATH = "Resources/images/spritesheets/walkcykle_104x90_12_frames.png";
 static const std::string SOUND_FILENAME1 = "Resources/Audio/Skott_Blås_Små_01.wav";
 static const std::string SOUND_FILENAME2 = "Resources/Audio/Skott_Blås_Små_02.wav";
 static const std::string SOUND_FILENAME3 = "Resources/Audio/Skott_Blås_Små_03.wav";
@@ -41,7 +41,7 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	mWindow(window), 
 	mProjectileCooldown(0), 
 	// Magic constants below are just temporary, until the file manager is created and implemented with the animation
-	mAnimation(ANIMATION_FILEPATH, sf::Vector2i(120, 90), 10, 10, sf::seconds(0.1f)),
+	mAnimation(Animation(ANIMATION_FILEPATH, sf::Vector2i(104, 90), 12, 12, sf::seconds(0.1f))),
 	mColliding(false),
 	mPrevPos(0, 0)
 {
@@ -196,12 +196,12 @@ void Luddis::collide(Collidable *collidable){
 		// Get hurt
 	}
 	if (collidable->getCollisionCategory() == COLLECT){
-		SoundEngine::getInstance().playSound("resources/audio/Luddis_skott_16bit.wav");
+		
 	}
 }
 
 sf::FloatRect Luddis::getHitBox(){
-	return getTransform().transformRect(mAnimation.getSprite().getGlobalBounds());
+	return getTransform().transformRect(mAnimation.getCurrAnimation().getSprite().getGlobalBounds());
 }
 
 Entity::RenderLayer Luddis::getRenderLayer() const {

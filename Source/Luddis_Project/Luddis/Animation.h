@@ -19,9 +19,14 @@ public:
 
 	void tick(const sf::Time& aTimeElapsed);
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-	const sf::Sprite& getSprite() const;
-
-
+	const sf::Sprite& getSprite() const; 
+	// Step the animation relative to its current frame
+	void stepAnimation(const int& aStep);
+	int getCurrentFrame() const;
+	void setFrame(const int& aFrame);
+	bool hasLooped() const;
+	Animation(const Animation& aAnim);
+	Animation& operator=(const Animation& aAnim);
 private:
 	AnimationImp* mAImp;
 };

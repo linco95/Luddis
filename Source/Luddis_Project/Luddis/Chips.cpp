@@ -3,6 +3,7 @@
 #include "EntityManager.h"
 #include <SFML/System.hpp>
 #include <stdlib.h>
+#include "SoundEngine.h"
 
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 
@@ -54,6 +55,9 @@ Chips::Type Chips::getCollisionType(){
 void Chips::collide(Collidable *collidable){
 	if (collidable->getCollisionCategory() == FRIEND){
 		mIsAlive = false;
+		// TODO
+		// Add to chips counter
+		SoundEngine::getInstance().playSound("resources/audio/luddis_crumbgather_s1d2v1.wav");
 	}
 }
 
