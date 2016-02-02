@@ -7,6 +7,7 @@
 #include "EventManager.h"
 #include "ResourceManager.h"
 #include "SoundEngine.h"
+#include "Dialogue.h"
 #include "Level.h"
 #include <vector>
 #include "Silverfish.h"
@@ -34,6 +35,8 @@ static const std::string TEXTURE_CHIPSCOUNTER = "Resources/Images/ChipsCounter.p
 static const std::string TEXTURE_LUDDCOUNTER = "Resources/Images/LuddCounter.png";
 static const std::string FONT_NAME = "arial.ttf";
 static const bool VSYNCENABLED = true;
+
+static const std::string TEST_TEXT = "Resources/Dreary/Test.txt";
 
 /*
 TODO:
@@ -164,6 +167,8 @@ struct GameManagerImp : public EventObserver {
 		EntityManager* em = &EntityManager::getInstance();
 		CollisionManager* cm = &CollisionManager::getInstance();
 		SoundEngine* se = &SoundEngine::getInstance();
+		Dialogue dialogue(TEST_TEXT);
+		std::cout << dialogue.getText();
 		while (mMainWindow.isOpen()){
 
 			// Handle Events         In  EventManager
