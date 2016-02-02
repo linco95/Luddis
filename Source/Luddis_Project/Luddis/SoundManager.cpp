@@ -29,7 +29,8 @@ void SoundManager::loadSoundBuffer(std::string filename){
 	}
 
 	sf::SoundBuffer* soundBuffer = new sf::SoundBuffer();
-	assert(soundBuffer->loadFromFile(filename));
+	bool isLoaded = soundBuffer->loadFromFile(filename);
+	assert(isLoaded);
 
 	std::pair<sf::SoundBuffer*, std::string> p1;
 	p1.first = soundBuffer;
@@ -75,7 +76,8 @@ void SoundManager::loadMusic(std::string filename){
 	}
 
 	sf::Music* music = new sf::Music();
-	assert(music->openFromFile(filename));
+	bool isLoaded = music->openFromFile(filename);
+	assert(isLoaded);
 	
 	std::pair<sf::Music*, std::string> p1;
 	p1.first = music;

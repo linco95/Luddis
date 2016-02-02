@@ -149,6 +149,8 @@ void Luddis::attack(){
 	
 	EntityManager::getInstance().addEntity(proj);
 	CollisionManager::getInstance().addCollidable(proj);
+	// Pull out constant variable
+	SoundEngine::getInstance().playSound("resources/audio/Luddis_skott_16bit.wav");
 
 }
 
