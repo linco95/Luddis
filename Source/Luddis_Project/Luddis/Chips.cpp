@@ -3,6 +3,7 @@
 #include "EntityManager.h"
 #include <SFML/System.hpp>
 #include <stdlib.h>
+#include "SoundEngine.h"
 
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 
@@ -56,8 +57,7 @@ void Chips::collide(Collidable *collidable){
 		mIsAlive = false;
 		// TODO
 		// Add to chips counter
-		// Fix file and path
-		// SoundEngine::getInstance().playSound("resources/audio/...");
+		SoundEngine::getInstance().playSound("resources/audio/luddis_crumbgather_s1d2v1.wav");
 	}
 }
 
