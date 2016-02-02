@@ -92,12 +92,13 @@ struct GameManagerImp : public EventObserver {
 		EntityManager::getInstance().addEntity(mChips3);
 		CollisionManager::getInstance().addCollidable(mChips3);
 
+		mChipsCounter = new ScoreCounter(TEXTURE_CHIPSCOUNTER, sf::Vector2f(400, 50));
+		EntityManager::getInstance().addEntity(mChipsCounter);
+
 		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mPlayer);
 		CollisionManager::getInstance().addCollidable(mPlayer);
 
-		mChipsCounter = new ScoreCounter(TEXTURE_CHIPSCOUNTER, sf::Vector2f(400, 50));
-		EntityManager::getInstance().addEntity(mChipsCounter);
 		mLuddCounter = new ScoreCounter(TEXTURE_LUDDCOUNTER, sf::Vector2f(550, 50));
 		EntityManager::getInstance().addEntity(mLuddCounter);
 

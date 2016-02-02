@@ -62,6 +62,21 @@ struct AnimationImp : public Drawable {
 	bool hasLooped(){
 		return mHasLooped;
 	}
+
+	AnimationImp(const AnimationImp& aAnim) : 
+		mSpriteSheet(aAnim.mSpriteSheet),
+		mTileSize(aAnim.mTileSize),
+		mSprite(aAnim.mSprite),
+		mColumns(aAnim.mColumns),
+		mSpriteAmt(aAnim.mSpriteAmt),
+		mCurrSprite(aAnim.mCurrSprite),
+		mFrameTime(aAnim.mFrameTime),
+		mCurrentTime(aAnim.mCurrentTime),
+		mHasLooped(aAnim.mHasLooped)
+	{
+		mSprite.setTexture(mSpriteSheet);
+	}
+
 	// Variables
 	Texture mSpriteSheet;
 	Vector2i mTileSize;
@@ -93,8 +108,10 @@ const Sprite& Animation::getSprite() const{
 	return mAImp->getSprite();
 }
 
-Animation::Animation(const Animation& aAnim){
-	mAImp = new AnimationImp(*aAnim.mAImp);
+Animation::Animation(const Animation& aAnim) :
+	mAImp(new AnimationImp(*aAnim.mAImp))
+{
+	
 }
 void Animation::stepAnimation(const int& aStep){
 	mAImp->stepAnimation(aStep);
