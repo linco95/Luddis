@@ -41,7 +41,7 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	mIsAlive(true), 
 	mWindow(window), 
 	mProjectileCooldown(0), 
-	mStunDuration(0),
+	mStunDuration(1),
 	// Magic constants below are just temporary, until the file manager is created and implemented with the animation
 	mAnimation(Animation(ANIMATION_FILEPATH, sf::Vector2i(104, 90), 16, 16, sf::seconds(0.1f))),
 	mColliding(false),
@@ -57,13 +57,13 @@ bool Luddis::isAlive() {
 	return mIsAlive;
 }
 void Luddis::tick(const sf::Time& deltaTime){
-	if (mProjectileCooldown <= 0){
+	if (mProjectileCooldown >= 0){
 		mProjectileCooldown -= deltaTime.asSeconds();
 	}
-	if (mStunDuration <= 0){
+	if (mStunDuration >= 0){
 		mStunDuration -= deltaTime.asSeconds();
 	}
-	else{
+	else if(mStunDuration<0){
 		handleInput(deltaTime);
 		updateRotation();
 	}
@@ -201,11 +201,11 @@ void Luddis::collide(Collidable *collidable){
 		mCollideBox = collidable->getHitBox();
 	}
 	if (collidable->getCollisionCategory() == BG_DAMAGE){
-		// TODO
-		// Get hurt
+		LIFE -= 1;
 	}
 	if (collidable->getCollisionCategory() == ENEMY) {
 		mAnimation.addAnimation(Animation(ANIMATION_HIT, sf::Vector2i(120, 90), 4, 4, sf::seconds(0.1f)));
+		LIFE -= 1;
 	}
 	if (collidable->getCollisionCategory() == COLLECT){
 		
