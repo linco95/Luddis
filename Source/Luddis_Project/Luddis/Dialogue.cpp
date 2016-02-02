@@ -1,6 +1,10 @@
 #include "Dialogue.h"
+#include "ResourceManager.h"
 
-Dialogue::Dialogue(std::string textfile){
+static const std::string FONTTYPE = "Resources/Fonts/arial.ttf";
+
+Dialogue::Dialogue(std::string text):
+mDialogueText(text, ResourceManager::getInstance().getFont(FONTTYPE)){
 	
 }
 
@@ -27,5 +31,5 @@ Dialogue::RenderLayer Dialogue::getRenderLayer() const{
 }
 
 void Dialogue::updateText(const sf::Time& deltaTime){
-
+	
 }

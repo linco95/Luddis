@@ -23,14 +23,15 @@ private:
 	void updateMovement(const sf::Time& deltaTime);
 	void updateRotation();
 	void attack();
-	bool mIsAlive;
-	AnimationQueue mAnimation;
-	sf::RenderWindow* mWindow;
-	float mProjectileCooldown;
 	virtual Category getCollisionCategory();
 	virtual Type getCollisionType();
 	virtual void collide(Collidable *collidable);
 	
+	AnimationQueue mAnimation;
+	sf::RenderWindow* mWindow;
+	float mProjectileCooldown;
+	float mStunDuration;
+	bool mIsAlive;
 	bool mColliding;
 	sf::FloatRect mCollideBox;
 	sf::Vector2f mPrevPos;
