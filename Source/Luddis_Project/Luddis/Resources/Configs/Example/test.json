@@ -1,0 +1,14 @@
+{
+	"first name": "Luddis",
+	"last name": "McFluff",
+	"coordinates": [100, 200],
+	"Silverfish spawns": [{
+		"x": 150,
+		"y": 250,
+		"angle": 174
+	}, {
+		"x": 170,
+		"y": 270,
+		"angle": 774
+	}]
+}

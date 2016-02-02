@@ -109,6 +109,7 @@ struct GameManagerImp : public EventObserver {
 	}
 
 	void initializeGame(){
+		srand((unsigned int)time(NULL));
 		initializeWindow();
 		initializeEntities();
 		
@@ -158,13 +159,11 @@ struct GameManagerImp : public EventObserver {
 	}
 
 	void gameLoop(){
-		//Initialize RNG seed
-		std::srand((unsigned int)std::time(0));
-		Clock gameClock;
 		// To avoid multiple functioncalls every iteration of gameloop
 		EntityManager* em = &EntityManager::getInstance();
 		CollisionManager* cm = &CollisionManager::getInstance();
 		SoundEngine* se = &SoundEngine::getInstance();
+		Clock gameClock;
 		while (mMainWindow.isOpen()){
 
 			// Handle Events         In  EventManager
@@ -184,7 +183,6 @@ struct GameManagerImp : public EventObserver {
 
 			// Render			     (In rendermanager in the future)
 			em->renderEntities(mMainWindow);
-			//render(mMainWindow);
 		}
 	}
 
