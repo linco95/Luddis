@@ -196,9 +196,7 @@ void Luddis::collide(Collidable *collidable){
 		// Get hurt
 	}
 	if (collidable->getCollisionCategory() == COLLECT){
-		// TODO
-		// Fix file and path
-		// SoundEngine::getInstance().playSound("resources/audio/...");
+		
 	}
 }
 
