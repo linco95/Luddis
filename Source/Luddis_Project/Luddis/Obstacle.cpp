@@ -38,7 +38,7 @@ sf::FloatRect Obstacle::getHitBox(){
 }
 
 Collidable::Category Obstacle::getCollisionCategory(){
-	return BG;
+	return BG_SOLID;
 }
 
 Collidable::Type Obstacle::getCollisionType(){

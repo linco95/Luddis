@@ -196,7 +196,9 @@ void Luddis::collide(Collidable *collidable){
 		// Get hurt
 	}
 	if (collidable->getCollisionCategory() == COLLECT){
-		SoundEngine::getInstance().playSound("resources/audio/Luddis_skott_16bit.wav");
+		// TODO
+		// Fix file and path
+		// SoundEngine::getInstance().playSound("resources/audio/...");
 	}
 }
 

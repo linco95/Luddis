@@ -54,6 +54,8 @@ Chips::Type Chips::getCollisionType(){
 void Chips::collide(Collidable *collidable){
 	if (collidable->getCollisionCategory() == FRIEND){
 		mIsAlive = false;
+		// TODO
+		// Add to chips counter
 	}
 }
 
