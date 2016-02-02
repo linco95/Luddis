@@ -2,7 +2,7 @@
 #define _INCLUDED_LUDDIS_
 
 #include <string>
-#include "Animation.h"
+#include "AnimationQueue.h"
 #include "Collidable.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "Entity.h"
@@ -24,7 +24,7 @@ private:
 	void updateRotation();
 	void attack();
 	bool mIsAlive;
-	Animation mAnimation;
+	AnimationQueue mAnimation;
 	sf::RenderWindow* mWindow;
 	float mProjectileCooldown;
 	virtual Category getCollisionCategory();

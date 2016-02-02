@@ -15,16 +15,18 @@ namespace sf{
 class Animation : public sf::Drawable {
 public:
 	Animation(const std::string& aFilePath, const sf::Vector2i& aTileSize, const int& aColumns, const int& aSpriteAmt, const sf::Time& aFrameTime);
-	virtual ~Animation();
+	~Animation();
 
-	virtual void tick(const sf::Time& aTimeElapsed);
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-	virtual const sf::Sprite& getSprite() const;
-	virtual void stepAnimation(const int& aStep);
-	virtual int getCurrentFrame() const;
-	virtual void setFrame(const int& aFrame);
+	void tick(const sf::Time& aTimeElapsed);
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	const sf::Sprite& getSprite() const; 
+	// Step the animation relative to its current frame
+	void stepAnimation(const int& aStep);
+	int getCurrentFrame() const;
+	void setFrame(const int& aFrame);
+	bool hasLooped() const;
 	Animation(const Animation& aAnim);
-	virtual Animation& operator=(const Animation& aAnim);
+	Animation& operator=(const Animation& aAnim);
 private:
 	AnimationImp* mAImp;
 };
