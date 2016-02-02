@@ -48,6 +48,9 @@ Silverfish::~Silverfish(){
 
 void Silverfish::tick(const sf::Time& deltaTime){
 	updateMovement(deltaTime);
+	if (getPosition().x < 0 || getPosition().y<0 || getPosition().y > mWindow->getSize().y){
+		mIsAlive = false;
+	}
 }
 
 void Silverfish::updateMovement(const sf::Time& deltaTime){

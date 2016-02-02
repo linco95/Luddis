@@ -4,7 +4,7 @@
 SoundEngine::SoundEngine():
 mMainVolume(100), mSoundVolume(100), mMusicVolume(100), mFading(false)
 {
-
+	mMusic.setLoop(true);
 }
 
 SoundEngine& SoundEngine::getInstance(){
@@ -33,6 +33,7 @@ void SoundEngine::setMusicVolume(float volume){
 }
 
 void SoundEngine::playSound(std::string filename){
+	//Might have to change this around to disallow the same buffert from playing two different sounds
 	for (int i = 0; i < MAX_SOUND_CHANNELS; i++){
 		if (mSoundChannels[i].getStatus() != sf::Sound::Playing){
 			mSoundChannels[i].setBuffer(ResourceManager::getInstance().getSoundBuffer(filename));
@@ -44,7 +45,9 @@ void SoundEngine::playSound(std::string filename){
 
 void SoundEngine::playMusic(std::string filename){
 	mCurrentMusicFile = filename;
-	ResourceManager::getInstance().getMusic(filename).play();
+	sf::Music* temp = &ResourceManager::getInstance().getMusic(filename);
+	temp->setLoop(true);
+	temp->play();
 }
 
 void SoundEngine::update(const sf::Time& deltaTime){
