@@ -16,6 +16,7 @@ public:
 	void tick(const sf::Time& deltaTime);
 
 	Animation& getCurrAnimation();
+	const Animation& getCurrAnimation() const;
 	void addAnimation(const Animation& aAnim);
 
 	AnimationQueue(const AnimationQueue&) = delete;

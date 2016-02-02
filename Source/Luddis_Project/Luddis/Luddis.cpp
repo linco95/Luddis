@@ -11,7 +11,8 @@
 #include <string>
 #include <array>
 
-static const char* ANIMATION_FILEPATH = "Resources/images/spritesheets/walkcykle_104x90_12_frames.png";
+static const char* ANIMATION_FILEPATH = "resources/images/spritesheets/Grafik_Luddis_walkcykle_sprite_longer_version_s2d2v3.png";
+static const char* ANIMATION_HIT = "resources/images/spritesheets/Grafik_Luddis_hit_sprite_s2d2v1.png";
 static const std::string SOUND_FILENAME1 = "Resources/Audio/Skott_Blås_Små_01.wav";
 static const std::string SOUND_FILENAME2 = "Resources/Audio/Skott_Blås_Små_02.wav";
 static const std::string SOUND_FILENAME3 = "Resources/Audio/Skott_Blås_Små_03.wav";
@@ -42,7 +43,7 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	mProjectileCooldown(0), 
 	mStunDuration(0),
 	// Magic constants below are just temporary, until the file manager is created and implemented with the animation
-	mAnimation(Animation(ANIMATION_FILEPATH, sf::Vector2i(104, 90), 12, 12, sf::seconds(0.1f))),
+	mAnimation(Animation(ANIMATION_FILEPATH, sf::Vector2i(104, 90), 16, 16, sf::seconds(0.1f))),
 	mColliding(false),
 	mPrevPos(0, 0)
 {
@@ -71,7 +72,7 @@ void Luddis::tick(const sf::Time& deltaTime){
 
 void Luddis::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	states.transform *= getTransform();
-	target.draw(mAnimation, states);
+	target.draw(mAnimation.getCurrAnimation(), states);
 }
 
 sf::Vector2f Luddis::getVectorMouseToSprite() const{
@@ -202,6 +203,9 @@ void Luddis::collide(Collidable *collidable){
 	if (collidable->getCollisionCategory() == BG_DAMAGE){
 		// TODO
 		// Get hurt
+	}
+	if (collidable->getCollisionCategory() == ENEMY) {
+		mAnimation.addAnimation(Animation(ANIMATION_HIT, sf::Vector2i(120, 90), 4, 4, sf::seconds(0.1f)));
 	}
 	if (collidable->getCollisionCategory() == COLLECT){
 		
