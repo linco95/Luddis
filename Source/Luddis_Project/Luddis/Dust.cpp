@@ -56,6 +56,8 @@ void Dust::collide(Collidable *collidable){
 		mIsAlive = false;
 		// TODO
 		// Add to dust counter
+		// Fix file and path
+		// SoundEngine::getInstance().playSound("resources/audio/...");
 	}
 }
 

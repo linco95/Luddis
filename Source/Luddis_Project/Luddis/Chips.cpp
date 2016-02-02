@@ -56,6 +56,8 @@ void Chips::collide(Collidable *collidable){
 		mIsAlive = false;
 		// TODO
 		// Add to chips counter
+		// Fix file and path
+		// SoundEngine::getInstance().playSound("resources/audio/...");
 	}
 }
 
