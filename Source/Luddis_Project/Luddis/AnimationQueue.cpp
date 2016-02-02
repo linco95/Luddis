@@ -24,7 +24,9 @@ void AnimationQueue::tick(const sf::Time& deltaTime){
 Animation& AnimationQueue::getCurrAnimation(){
 	return mAnimations.empty() ? mDefaultAnim : mAnimations.front();
 }
-
+void AnimationQueue::setDefaultAnimation(const Animation& aAnim){
+	mDefaultAnim = aAnim;
+}
 const Animation& AnimationQueue::getCurrAnimation() const{
 	return mAnimations.empty() ? mDefaultAnim : mAnimations.front();
 }

@@ -47,6 +47,7 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	mPrevPos(0, 0)
 {
 	setPosition(mWindow->getView().getSize().x / 2, mWindow->getView().getSize().y / 2);
+	
 }
 
 Luddis::~Luddis(){

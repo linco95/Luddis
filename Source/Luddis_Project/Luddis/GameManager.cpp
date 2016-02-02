@@ -169,7 +169,7 @@ struct GameManagerImp : public EventObserver {
 		CollisionManager* cm = &CollisionManager::getInstance();
 		SoundEngine* se = &SoundEngine::getInstance();
 		Dialogue dialogue(TEST_TEXT);
-		std::cout << dialogue.getText();
+		//std::cout << dialogue.getText();
 		while (mMainWindow.isOpen()){
 
 			// Handle Events         In  EventManager
