@@ -12,7 +12,8 @@ struct AnimationImp : public Drawable {
 		mColumns(aColumns),
 		mFrameTime(aFrameTime),
 		mSpriteAmt(aSpriteAmt),
-		mCurrSprite(0) 
+		mCurrSprite(0),
+		mHasLooped(false)
 	{ 
 		mSpriteSheet = ResourceManager::getInstance().getTexture(aFilePath);
 		mSprite.setTexture(mSpriteSheet);
@@ -48,9 +49,18 @@ struct AnimationImp : public Drawable {
 		return mCurrSprite;
 	}
 	void setFrame(const int& aFrame){
-		mCurrSprite = aFrame >= mSpriteAmt - 1 ? 0 : aFrame;
+		if (aFrame >= mSpriteAmt - 1){
+			mCurrSprite = 0;
+			mHasLooped = true;
+		}
+		else{
+			mCurrSprite = aFrame;
+		}
 		mSprite.setTextureRect(IntRect(mCurrSprite * mTileSize.x, mCurrSprite / (mSpriteAmt - 1) * 0, mTileSize.x, mTileSize.y));
+	}
 
+	bool hasLooped(){
+		return mHasLooped;
 	}
 	// Variables
 	Texture mSpriteSheet;
@@ -61,6 +71,7 @@ struct AnimationImp : public Drawable {
 		mCurrSprite;
 	Time mFrameTime,
 		 mCurrentTime;
+	bool mHasLooped;
 };
 
 Animation::Animation(const std::string& aFilePath, const Vector2i& aTileSize, const int& aColumns, const int& aSpriteAmt, const Time& aFrameTime) :
@@ -94,7 +105,9 @@ int Animation::getCurrentFrame() const{
 void Animation::setFrame(const int& aFrame){
 	mAImp->setFrame(aFrame);
 }
-
+bool Animation::hasLooped() const{
+	return mAImp->hasLooped();
+}
 Animation& Animation::operator=(const Animation& aAnim){
 	delete mAImp;
 	mAImp = new AnimationImp(*aAnim.mAImp);

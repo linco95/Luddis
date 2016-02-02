@@ -4,20 +4,26 @@
 #include <queue>
 #include "Animation.h"
 
-class AnimationQueue : public Animation {
+namespace sf{
+	class Time;
+}
+
+class AnimationQueue {
 public:
 	AnimationQueue(const Animation& aDefaultAnimation);
-	~AnimationQueue() override;
+	~AnimationQueue() ;
 
-	void tick(const sf::Time& aTimeElapsed) override;
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-	const sf::Sprite& getSprite() const override;
+	void tick(const sf::Time& deltaTime);
 
+	Animation& getCurrAnimation();
+	void addAnimation(const Animation& aAnim);
+
+	AnimationQueue(const AnimationQueue&) = delete;
+	AnimationQueue& operator=(const AnimationQueue&) = delete;
 
 private:
 	Animation mDefaultAnim;
 	std::queue<Animation> mAnimations;
-
 };
 
 
