@@ -15,13 +15,16 @@ namespace sf{
 class Animation : public sf::Drawable {
 public:
 	Animation(const std::string& aFilePath, const sf::Vector2i& aTileSize, const int& aColumns, const int& aSpriteAmt, const sf::Time& aFrameTime);
-	~Animation();
+	virtual ~Animation();
 
-	void tick(const sf::Time& aTimeElapsed);
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-	const sf::Sprite& getSprite() const;
-
-
+	virtual void tick(const sf::Time& aTimeElapsed);
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	virtual const sf::Sprite& getSprite() const;
+	virtual void stepAnimation(const int& aStep);
+	virtual int getCurrentFrame() const;
+	virtual void setFrame(const int& aFrame);
+	Animation(const Animation& aAnim);
+	virtual Animation& operator=(const Animation& aAnim);
 private:
 	AnimationImp* mAImp;
 };
