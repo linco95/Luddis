@@ -12,7 +12,8 @@ public:
 		ENEMY,
 		COLLECT,
 		HAIR,
-		BG
+		BG_SOLID,
+		BG_DAMAGE
 	};
 
 	enum Type{

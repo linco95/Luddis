@@ -187,9 +187,16 @@ Luddis::Type Luddis::getCollisionType(){
 }
 
 void Luddis::collide(Collidable *collidable){
-	if (collidable->getCollisionCategory() == BG){
+	if (collidable->getCollisionCategory() == BG_SOLID){
 		mColliding = true;
 		mCollideBox = collidable->getHitBox();
+	}
+	if (collidable->getCollisionCategory() == BG_DAMAGE){
+		// TODO
+		// Get hurt
+	}
+	if (collidable->getCollisionCategory() == COLLECT){
+		SoundEngine::getInstance().playSound("resources/audio/Luddis_skott_16bit.wav");
 	}
 }
 
