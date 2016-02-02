@@ -6,7 +6,7 @@
 
 class Dialogue : public Entity{
 public:
-	Dialogue(std::string textfile);
+	Dialogue(std::string text);
 	~Dialogue();
 	virtual void tick(const sf::Time& deltaTime);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;

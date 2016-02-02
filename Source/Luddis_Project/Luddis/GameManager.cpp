@@ -36,8 +36,6 @@ static const std::string TEXTURE_LUDDCOUNTER = "Resources/Images/LuddCounter.png
 static const std::string FONT_NAME = "arial.ttf";
 static const bool VSYNCENABLED = true;
 
-static const std::string TEST_TEXT = "Resources/Dreary/Test.txt";
-
 /*
 TODO:
 Implement states
@@ -104,7 +102,6 @@ struct GameManagerImp : public EventObserver {
 		mLuddCounter = new ScoreCounter(TEXTURE_LUDDCOUNTER, sf::Vector2f(550, 50));
 		EntityManager::getInstance().addEntity(mLuddCounter);
 
-
 		mLevel = new Level();
 		mLevel->initializeLevel(mMainWindow, mPlayer);
 		EntityManager::getInstance().addEntity(mLevel);
@@ -167,8 +164,6 @@ struct GameManagerImp : public EventObserver {
 		EntityManager* em = &EntityManager::getInstance();
 		CollisionManager* cm = &CollisionManager::getInstance();
 		SoundEngine* se = &SoundEngine::getInstance();
-		Dialogue dialogue(TEST_TEXT);
-		std::cout << dialogue.getText();
 		while (mMainWindow.isOpen()){
 
 			// Handle Events         In  EventManager

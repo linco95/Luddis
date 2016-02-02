@@ -40,6 +40,7 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	mIsAlive(true), 
 	mWindow(window), 
 	mProjectileCooldown(0), 
+	mStunDuration(0),
 	// Magic constants below are just temporary, until the file manager is created and implemented with the animation
 	mAnimation(Animation(ANIMATION_FILEPATH, sf::Vector2i(104, 90), 12, 12, sf::seconds(0.1f))),
 	mColliding(false),
@@ -55,10 +56,17 @@ bool Luddis::isAlive() {
 	return mIsAlive;
 }
 void Luddis::tick(const sf::Time& deltaTime){
-	mProjectileCooldown -= deltaTime.asSeconds();
-	handleInput(deltaTime);
+	if (mProjectileCooldown <= 0){
+		mProjectileCooldown -= deltaTime.asSeconds();
+	}
+	if (mStunDuration <= 0){
+		mStunDuration -= deltaTime.asSeconds();
+	}
+	else{
+		handleInput(deltaTime);
+		updateRotation();
+	}
 	mAnimation.tick(deltaTime);
-	updateRotation();
 }
 
 void Luddis::draw(sf::RenderTarget& target, sf::RenderStates states) const{
