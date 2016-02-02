@@ -35,14 +35,23 @@ struct AnimationImp : public Drawable {
 	}
 
 	void stepAnimation(){
-		mCurrSprite == mSpriteAmt - 1 ? mCurrSprite = 0 : mCurrSprite++;
-		mSprite.setTextureRect(IntRect(mCurrSprite * mTileSize.x, mCurrSprite / (mSpriteAmt - 1) * 0, mTileSize.x, mTileSize.y));
+		setFrame(++mCurrSprite);
 	}
 
 	const Sprite& getSprite() const {
 		return mSprite;
 	}
+	void stepAnimation(const int& aStep){
+		setFrame(mCurrSprite + aStep);
+	}
+	int getCurrentFrame() const{
+		return mCurrSprite;
+	}
+	void setFrame(const int& aFrame){
+		mCurrSprite = aFrame >= mSpriteAmt - 1 ? 0 : aFrame;
+		mSprite.setTextureRect(IntRect(mCurrSprite * mTileSize.x, mCurrSprite / (mSpriteAmt - 1) * 0, mTileSize.x, mTileSize.y));
 
+	}
 	// Variables
 	Texture mSpriteSheet;
 	Vector2i mTileSize;
@@ -71,4 +80,23 @@ void Animation::draw(RenderTarget& target, RenderStates states) const {
 
 const Sprite& Animation::getSprite() const{
 	return mAImp->getSprite();
+}
+
+Animation::Animation(const Animation& aAnim){
+	mAImp = new AnimationImp(*aAnim.mAImp);
+}
+void Animation::stepAnimation(const int& aStep){
+	mAImp->stepAnimation(aStep);
+}
+int Animation::getCurrentFrame() const{
+	return mAImp->getCurrentFrame();
+}
+void Animation::setFrame(const int& aFrame){
+	mAImp->setFrame(aFrame);
+}
+
+Animation& Animation::operator=(const Animation& aAnim){
+	delete mAImp;
+	mAImp = new AnimationImp(*aAnim.mAImp);
+	return *this;
 }
