@@ -73,6 +73,7 @@ struct GameManagerImp : public EventObserver {
 
 		mBoss = new BossDishCloth(&mMainWindow);
 		EntityManager::getInstance().addEntity(mBoss);
+		CollisionManager::getInstance().addCollidable(mBoss);
 
 		mDust = new Dust(TEXTURE_DUST, &mMainWindow);
 		EntityManager::getInstance().addEntity(mDust);
@@ -217,6 +218,7 @@ GameManager::GameManager() :
 	mGMImp(new GameManagerImp()){
 
 }
+
 GameManager::~GameManager(){
 	delete mGMImp;
 }
@@ -228,6 +230,7 @@ void GameManager::run(){
 void GameManager::gameOver(){
 	mGMImp->gameOver();
 }
+
 GameManager& GameManager::getInstance(){
 	static GameManager gm;
 	return gm;

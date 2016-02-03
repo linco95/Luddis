@@ -12,7 +12,7 @@ using namespace sf;
 
 static const float X_OFFSET = 200.f,
 				   Y_OFFSET = 50.f,
-				   SCROLLSPEED = 100.f;
+				   SCROLLSPEED = 120.f;
 
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::BACKGROUND;
 static std::string BGFILEPATH = "resources/images/Grafik_Bana1,1Final_S2D3V1.png";
