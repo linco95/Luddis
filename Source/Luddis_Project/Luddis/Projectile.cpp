@@ -62,7 +62,10 @@ Projectile::Type Projectile::getCollisionType(){
 
 
 void Projectile::collide(Collidable *collidable){
-	if (collidable->getCollisionCategory() == ENEMY){
+	if (collidable->getCollisionCategory() == ENEMY && mCollisionCategory == HAIR){
+		mIsAlive = false;
+	}
+	if (collidable->getCollisionCategory() == HAIR && mCollisionCategory == ENEMY){
 		mIsAlive = false;
 	}
 }

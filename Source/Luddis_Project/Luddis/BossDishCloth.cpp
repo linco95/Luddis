@@ -7,17 +7,19 @@
 static const std::string ANIMATION_FILEPATH = "Resources/Images/BAWS.png";
 static const std::string PROJECTILE_FILEPATH = "Resources/Images/BAWS1projectile.png";
 
+static const int MAX_LIFE = 100;
 static const float ATTACK_INTERVAL = 1.3f;
 static const float PROJECTILE_LIFETIME = 2.5f;
-static const float PROJECTILE_SPEED = 400;
+static const float PROJECTILE_SPEED = 300;
 
 BossDishCloth::BossDishCloth(sf::RenderWindow* window) :
 mIsAlive(true),
 mWindow(window),
+mLife(MAX_LIFE),
 mAttackInterval(ATTACK_INTERVAL),
 mDirection(0, 1.0f),
 mAnimation(Animation(ANIMATION_FILEPATH, sf::Vector2i(200, 200), 4, 4, sf::seconds(0.3f))){
-	setPosition(2000, 500);
+	setPosition(3000, 500);
 }
 
 BossDishCloth::~BossDishCloth(){
@@ -25,6 +27,9 @@ BossDishCloth::~BossDishCloth(){
 }
 
 void BossDishCloth::tick(const sf::Time& deltaTime){
+	if (mLife <= 0){
+		mIsAlive = false;
+	}
 	mAttackInterval -= deltaTime.asSeconds();
 	updateMovement(deltaTime);
 	mAnimation.tick(deltaTime);
@@ -36,7 +41,7 @@ void BossDishCloth::tick(const sf::Time& deltaTime){
 
 void BossDishCloth::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	states.transform *= getTransform();
-	target.draw(mAnimation.getCurrAnimation(), states);
+	target.draw(mAnimation, states);
 }
 
 bool BossDishCloth::isAlive(){
@@ -48,7 +53,7 @@ BossDishCloth::RenderLayer BossDishCloth::getRenderLayer() const {
 }
 
 void BossDishCloth::updateMovement(const sf::Time& deltaTime){
-	int spriteHeight = mAnimation.getCurrAnimation().getSprite().getTextureRect().height;
+	int spriteHeight = mAnimation.getSprite().getTextureRect().height;
 	if (getPosition().y < 0 + spriteHeight
 		|| getPosition().y> mWindow->getSize().y - spriteHeight)
 	{
@@ -78,9 +83,11 @@ BossDishCloth::Type BossDishCloth::getCollisionType(){
 }
 
 void BossDishCloth::collide(Collidable* collidable){
-
+	if (collidable->getCollisionCategory() == HAIR){
+		mLife -= 15;
+	}
 }
 
 sf::FloatRect BossDishCloth::getHitBox(){
-	return getTransform().transformRect(mAnimation.getCurrAnimation().getSprite().getGlobalBounds());
+	return getTransform().transformRect(mAnimation.getSprite().getGlobalBounds());
 }

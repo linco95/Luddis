@@ -17,9 +17,6 @@ static const std::string SOUND_FILENAME1 = "Resources/Audio/Skott_Blås_Små_01.wa
 static const std::string SOUND_FILENAME2 = "Resources/Audio/Skott_Blås_Små_02.wav";
 static const std::string SOUND_FILENAME3 = "Resources/Audio/Skott_Blås_Små_03.wav";
 
-static const std::string MUSIC_FILENAME1 = "Resources/Music/Mists_of_Time-4T.ogg";
-static const std::string MUSIC_FILENAME2 = "Resources/Music/The_Abyss-4T.ogg";
-
 //This should be dynamic later to determine what texture to use for projectiles
 static const std::array<std::string, 3> PROJECTILE_FILENAME = { "Resources/Images/Grafik_Attack 1_35x35_s1d3v1.png",
 												   "Resources/Images/Grafik_Attack 2_35x35_s1d3v1.png",
@@ -175,10 +172,10 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 	}
 	//Handle keyboard presses
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
-		SoundEngine::getInstance().fadeToNewMusic(MUSIC_FILENAME1, 2.0f);
+		
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
-		SoundEngine::getInstance().fadeToNewMusic(MUSIC_FILENAME2, 2.0f);
+		
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)){
 
@@ -190,7 +187,7 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 
 Luddis::Category Luddis::getCollisionCategory(){
 	return FRIEND;
-	}
+}
 
 Luddis::Type Luddis::getCollisionType(){
 	return REC;
@@ -210,6 +207,12 @@ void Luddis::collide(Collidable *collidable){
 	}
 	if (collidable->getCollisionCategory() == COLLECT){
 		
+	}
+	if (collidable->getCollisionCategory() == ENEMY_STUN){
+		if (mStunDuration <= 0){
+			mStunDuration = 1.0f;
+			mAnimation.addAnimation(Animation(ANIMATION_HIT, sf::Vector2i(120, 90), 4, 4, sf::seconds(0.1f)));
+		}
 	}
 }
 
