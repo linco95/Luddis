@@ -18,7 +18,7 @@ public:
 	Animation& getCurrAnimation();
 	const Animation& getCurrAnimation() const;
 	void addAnimation(const Animation& aAnim);
-
+	void setDefaultAnimation(const Animation& aAnim);
 	AnimationQueue(const AnimationQueue&) = delete;
 	AnimationQueue& operator=(const AnimationQueue&) = delete;
 

@@ -1,0 +1,237 @@
+[33mcommit 50be2367a3dafb13f4285005bbb773b33ae12a33[m
+Merge: d62be63 8d96d19
+Author: Andreas Kjellqvist <a15andkj@student.his.se>
+Date:   Tue Feb 2 14:08:05 2016 +0100
+
+    merge
+
+[33mcommit d62be639d6d76ec46fd3ed46f7f387b5201664a7[m
+Author: Andreas Kjellqvist <a15andkj@student.his.se>
+Date:   Tue Feb 2 14:07:06 2016 +0100
+
+    Fixed silverfish bounds check.
+    
+    Added function to change default animation on animationqueue (walking/idle etc)
+
+[33mcommit 8d96d1987b0610fcf6647fbe214022af67cd3722[m
+Author: TheBearmachine <wahlberg.bjorn@hotmail.com>
+Date:   Tue Feb 2 14:03:21 2016 +0100
+
+    Added a 1 sec stun to Luddis at the start of the game, fixes the probblem with nothing rendering.
+
+[33mcommit 6d1adfb188040204fc98e9baf33d9f1453c3130b[m
+Merge: 19afa2b 8d93dc4
+Author: TheBearmachine <wahlberg.bjorn@hotmail.com>
+Date:   Tue Feb 2 13:52:14 2016 +0100
+
+    Merge branch 'master' of https://github.com/linco95/Luddis.git
+
+[33mcommit 19afa2beadc38c64436bf1d89a405ec59bf6774a[m
+Author: TheBearmachine <wahlberg.bjorn@hotmail.com>
+Date:   Tue Feb 2 13:48:49 2016 +0100
+
+    Some tweaks to Luddis
+
+[33mcommit 8d93dc4d550444f73ec58e1b53e456d15790eaae[m
+Merge: 5cd0668 ed439c0
+Author: Andreas Kjellqvist <a15andkj@student.his.se>
+Date:   Tue Feb 2 13:48:09 2016 +0100
+
+    Merge branch 'master' of https://github.com/linco95/Luddis
+
+[33mcommit 5cd06680382c045c8f9e81a11522c9e99630f5b8[m
+Author: Andreas Kjellqvist <a15andkj@student.his.se>
+Date:   Tue Feb 2 13:48:00 2016 +0100
+
+    Fixed animation, had to rewrite animationimplementations copy constructor to set the texture on the sprite (used in animationqueue). Swapped luddis animation again.
+    
+    Implemented first version of hit animation.
+
+[33mcommit ed439c066dcee5219ad36c8b314455f53046cca3[m
+Merge: 90d9a32 4107c44
+Author: TheBearmachine <wahlberg.bjorn@hotmail.com>
+Date:   Tue Feb 2 12:30:06 2016 +0100
+
+    Merge branch 'master' of https://github.com/linco95/Luddis.git
+
+[33mcommit 90d9a32252a119d14bd238593f8b69c7bc50849d[m
+Author: TheBearmachine <wahlberg.bjorn@hotmail.com>
+Date:   Tue Feb 2 12:29:40 2016 +0100
+
+    Dialogue class
+
+[33mcommit 4107c4419ec3185defa07c7aa52933a86d3aef9c[m
+Merge: 8fd6579 af32e9f
+Author: gb22 <blackdom20@gmail.com>
+Date:   Tue Feb 2 12:02:57 2016 +0100
+
+    Merge branch 'master' of https://github.com/linco95/Luddis
+
+[33mcommit 8fd657966d8686c4714d924c674cf6069b38bc18[m
+Author: gb22 <blackdom20@gmail.com>
+Date:   Tue Feb 2 12:02:53 2016 +0100
+
+    Implemented silverfish deallocation when exiting the game bounds. (not forward)
+
+[33mcommit af32e9f6053dc4a26a98aa4aa1ed809ffa1a17c7[m
+Merge: 04889dd 33613a2
+Author: Andreas Kjellqvist <a15andkj@student.his.se>
+Date:   Tue Feb 2 12:01:43 2016 +0100
+
+    Merge branch 'master' of https://github.com/linco95/Luddis
+
+[33mcommit 04889ddd858d25ce40a67954fe1fb3acea9e4bd4[m
+Author: Andreas Kjellqvist <a15andkj@student.his.se>
+Date:   Tue Feb 2 12:01:38 2016 +0100
+
+    Added function to check if animation has looped.
+    
+    Implemented animationqueue
+
+[33mcommit 33613a21b054e03687aa3d35f7f45e3a900662b8[m
+Author: gb22 <blackdom20@gmail.com>
+Date:   Tue Feb 2 11:48:29 2016 +0100
+
+    Implemented sound for Dust and Chips pick-up.
+
+[33mcommit 715f963d00ade97334f7cfe5e9259f8a3294a61d[m
+Author: gb22 <blackdom20@gmail.com>
+Date:   Tue Feb 2 11:39:45 2016 +0100
+
+    Changed some TODO comments. Removed obsolete sound file. Added "Managers" and "Entities" filters
+
+[33mcommit e062c6a3706a57a329e7d098f6eb2e688260e849[m
+Merge: 04832ff 70dc0f9
+Author: gb22 <blackdom20@gmail.com>
+Date:   Tue Feb 2 11:25:04 2016 +0100
+
+    Merge branch 'master' of https://github.com/linco95/Luddis
+
+[33mcommit 04832ff2b95a441e0d7e8d0e06b01b8b820f36e4[m
+Author: gb22 <blackdom20@gmail.com>
+Date:   Tue Feb 2 11:24:59 2016 +0100
+
+    Added TODO comments for some collisions and fixed a incorrect enum in Obstacle
+
+[33mcommit 70dc0f9d956c9a5a0eb4270a84a93e8f11ada67c[m
+Merge: 63a2f35 00354f8
+Author: Andreas Kjellqvist <a15andkj@student.his.se>
+Date:   Tue Feb 2 11:23:46 2016 +0100
+
+    Merge branch 'master' of https://github.com/linco95/Luddis
+
+[33mcommit 63a2f357acc5bc9d5fcc22b6f2cb05cb910f8595[m
+Author: Andreas Kjellqvist <a15andkj@student.his.se>
+Date:   Tue Feb 2 11:23:36 2016 +0100
+
+    Swapped out luddis walking animation.
+    
+    Implemented function to manually step, and set frame on animation.
+    
+    Started implementing an animation queue (not done)
+
+[33mcommit 00354f8df3c6093c1daf34a63f18f8c29684e8d0[m
+Author: gb22 <blackdom20@gmail.com>
+Date:   Tue Feb 2 10:52:17 2016 +0100
+
+    Added further collision possibilities to luddis.
+
+[33mcommit 6d5b62d1152663088fe2ae959c00d73831d3c15f[m
+Author: Andreas Kjellqvist <a15andkj@student.his.se>
+Date:   Tue Feb 2 09:11:23 2016 +0100
+
+    Fixed issue where sound didn't load properly, because loading were done inside the assert macro. Moved it out to a bool.
+    
+    Implemented shooting sound for luddis, just to test.
+
+[33mcommit 7f40e165bffb432494daa65dfb4a904d562317cb[m
+Author: Andreas Kjellqvist <a15andkj@student.his.se>
+Date:   Mon Feb 1 20:06:40 2016 +0100
+
+    Removed unused variable.
+
+[33mcommit fb758a8799c3aab0d2257fd44b4aeac95485c024[m
+Author: Andreas Kjellqvist <a15andkj@student.his.se>
+Date:   Mon Feb 1 19:17:21 2016 +0100
+
+    Cleaned up projectile filename choosing, should be done with all arrays of strings to randomize from. Replaced the ogg file temporarily with a wav file that should actually be used. Will be swapped out again tomorrow with the correct file.
+
+[33mcommit 4b93191715a7046316beeb0d082bb7a104b2d941[m
+Merge: 63c3fcb bc7f78a
+Author: TheBearmachine <wahlberg.bjorn@hotmail.com>
+Date:   Mon Feb 1 19:03:52 2016 +0100
+
+    Merge branch 'master' of https://github.com/linco95/Luddis.git
+
+[33mcommit 63c3fcbb14dd6beb6301b0f56fa771a0ba7db065[m
+Author: TheBearmachine <wahlberg.bjorn@hotmail.com>
+Date:   Mon Feb 1 19:02:45 2016 +0100
+
+    Added resource files
+
+[33mcommit bc7f78a21887ffb31eff461709ae3d0cb5f131da[m
+Merge: c638fe4 58a84f4
+Author: Andreas Kjellqvist <a15andkj@student.his.se>
+Date:   Mon Feb 1 18:38:28 2016 +0100
+
+    Merge
+
+[33mcommit c638fe49f8017f32b7c3dc24daf04c483a3695d0[m
+Author: Andreas Kjellqvist <a15andkj@student.his.se>
+Date:   Mon Feb 1 18:36:53 2016 +0100
+
+    Fixed scrolling the view
+
+[33mcommit 58a84f4654b6e53cc60b0fb69f85dee06e9d9aa1[m
+Author: TheBearmachine <wahlberg.bjorn@hotmail.com>
+Date:   Mon Feb 1 16:55:57 2016 +0100
+
+    I fucked up, heres to fix that.
+
+[33mcommit 6b3c4781965e4cfbeac2f504696c1f3a645ac8c7[m
+Author: TheBearmachine <wahlberg.bjorn@hotmail.com>
+Date:   Mon Feb 1 16:41:21 2016 +0100
+
+    Further implemented the Sound Engine. It can now play many sounds simulteneously, aswell as fade between music. Also removed the redundant music part of the resource handler.
+
+[33mcommit 18aa73cde797f80a72468dfae5597b2c81ae46bd[m
+Merge: d39408d dc5b60a
+Author: TheBearmachine <wahlberg.bjorn@hotmail.com>
+Date:   Mon Feb 1 14:03:09 2016 +0100
+
+    Merge branch 'master' of https://github.com/linco95/Luddis.git
+
+[33mcommit d39408d4eb9adc36921deda220c3150d83fee786[m
+Author: TheBearmachine <wahlberg.bjorn@hotmail.com>
+Date:   Mon Feb 1 14:03:03 2016 +0100
+
+    Added variation to fired projectiles, aswell as sound effects.
+
+[33mcommit dc5b60a83051114b411c7ff4d903f2be53367f54[m
+Merge: 77e9605 0d17743
+Author: gb22 <blackdom20@gmail.com>
+Date:   Mon Feb 1 13:53:29 2016 +0100
+
+    Merge branch 'master' of https://github.com/linco95/Luddis
+
+[33mcommit 77e960517991d68f8fe82235ca83e18a5ce31ebf[m
+Author: gb22 <blackdom20@gmail.com>
+Date:   Mon Feb 1 13:53:26 2016 +0100
+
+    Removed commented old unused code.
+
+[33mcommit 06a9e1408b53cfd5a0bd18c4fb0000712c1c1ece[m
+Author: gb22 <blackdom20@gmail.com>
+Date:   Mon Feb 1 13:51:54 2016 +0100
+
+    Kinda working "sliding" collision. Slightly glitchy and could probably use optimization.
+
+[33mcommit 2757bb574ac9ac8737f2ae589372845e2f3950bf[m
+Author: Andreas Kjellqvist <a15andkj@student.his.se>
+Date:   Mon Feb 1 13:44:41 2016 +0100
+
+    Fixed hitboxes on luddis and silverfish
+
+[33mcommit 0d177431f99d3a68ca5c888c7547b634a439697f[m
+Merge: 407641c 47bec3a
+Author: TheBearmachine <wahlberg.b

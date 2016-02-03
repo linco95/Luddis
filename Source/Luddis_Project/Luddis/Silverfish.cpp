@@ -85,7 +85,7 @@ Silverfish::Type Silverfish::getCollisionType(){
 void Silverfish::collide(Collidable *collidable){
 	if (collidable->getCollisionCategory() == FRIEND || collidable->getCollisionCategory() == HAIR){
 		if (mSwimAway== false){
-			mLife -= 5;
+		mLife -= 5;
 			if (mLife <= 0){
 				mSwimAway = true;
 				mDirection = sf::Vector2f(0, -1);
