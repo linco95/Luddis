@@ -85,9 +85,6 @@
     <ClCompile Include="BossDishCloth.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="Dishrag.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -168,8 +165,8 @@
     <ClInclude Include="BossDishCloth.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="Dishrag.h">
-      <Filter>Header Files\Entities</Filter>
+    <ClInclude Include="Utils.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -50,7 +50,7 @@ Silverfish::~Silverfish(){
 
 void Silverfish::tick(const sf::Time& deltaTime){
 	updateMovement(deltaTime);
-	if (getPosition().y<(0 - mSprite.getTextureRect().height / 2) || getPosition().y > mWindow->getSize().y + mSprite.getTextureRect().height / 2){ // mWindow->getSize().y seems to return a value FAR off the expected value
+	if (getPosition().y<(-mSprite.getGlobalBounds().height / 2) || getPosition().y > mWindow->getView().getSize().y + mSprite.getGlobalBounds().height / 2){ 
 		mIsAlive = false;
 	}
 }

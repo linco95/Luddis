@@ -93,7 +93,6 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Dialogue.cpp" />
-    <ClCompile Include="Dishrag.cpp" />
     <ClCompile Include="Dust.cpp" />
     <ClCompile Include="ScoreCounter.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -123,7 +122,6 @@
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Dialogue.h" />
-    <ClInclude Include="Dishrag.h" />
     <ClInclude Include="Dust.h" />
     <ClInclude Include="ScoreCounter.h" />
     <ClInclude Include="Entity.h" />
@@ -141,6 +139,7 @@
     <ClInclude Include="Silverfish.h" />
     <ClInclude Include="SoundEngine.h" />
     <ClInclude Include="SoundManager.h" />
+    <ClInclude Include="Utils.h" />
     <ClInclude Include="VectorMath.h" />
   </ItemGroup>
   <ItemGroup>
