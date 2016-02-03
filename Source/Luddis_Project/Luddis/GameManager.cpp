@@ -168,7 +168,7 @@ struct GameManagerImp : public EventObserver {
 		EntityManager* em = &EntityManager::getInstance();
 		CollisionManager* cm = &CollisionManager::getInstance();
 		SoundEngine* se = &SoundEngine::getInstance();
-		se->setMainVolume(0);
+		se->setMainVolume(10);
 		Clock gameClock;
 		while (mMainWindow.isOpen()){
 
