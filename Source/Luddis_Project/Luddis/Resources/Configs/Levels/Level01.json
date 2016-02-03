@@ -1,0 +1,13 @@
+{
+	"Background_file": "resources/images/Grafik_Bana1,1Final_S2D3V1.png",
+	"Silverfish_spawns": [{
+		"x": 1500,
+		"y": 780,
+		"angle": 155.00
+	}, {
+		"x": 1200,
+		"y": 580,
+		"angle": 195.00
+	}],
+	"Boss_config": "resources/configs/bosses/XXX.json"
+}
