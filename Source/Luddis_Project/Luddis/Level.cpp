@@ -48,6 +48,9 @@ void Level::initializeEntities(){
 		cm->addCollidable(fish);
 		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
 	}
+	assert(configDoc["Background_file"].IsString());
+	std::cout << configDoc["Background_file"].GetString();
+	BGFILEPATH = configDoc["Background_file"].GetString();
 
 
 
@@ -58,6 +61,8 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget){
 	mTarget = aTarget;
 	mWindow = &aWindow;
 
+	initializeEntities();
+
 	ResourceManager::getInstance().loadTexture(BGFILEPATH, IntRect(Vector2<int>(), Vector2<int>(Texture::getMaximumSize(), Texture::getMaximumSize())));
 	mBackground.setTexture(ResourceManager::getInstance().getTexture(BGFILEPATH));
 
@@ -65,7 +70,6 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget){
 	mCurrentPONR = mWindow->getView().getSize().x / 2;
 	SoundEngine::getInstance().playMusic("resources/music/musik16.wav");
 
-	initializeEntities();
 }
 
 

@@ -16,6 +16,7 @@ struct LuddisUtilFuncs{
 			inputText += temp + "\n";
 		}
 		return inputText;
+		input.close();
 	}
 };
 

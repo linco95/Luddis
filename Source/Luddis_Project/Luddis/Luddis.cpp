@@ -13,6 +13,7 @@
 
 static const char* ANIMATION_FILEPATH = "resources/images/spritesheets/Grafik_Luddis_walkcykle_sprite_longer_version_s2d2v3.png";
 static const char* ANIMATION_HIT = "resources/images/spritesheets/Grafik_Luddis_hit_sprite_s2d2v1.png";
+static const char* ANIMATION_SHOT = "resources/images/spritesheets/Grafik_Luddis shot120x90treframes_s2d3v1";
 static const std::string SOUND_FILENAME1 = "Resources/Audio/Skott_Blås_Små_01.wav";
 static const std::string SOUND_FILENAME2 = "Resources/Audio/Skott_Blås_Små_02.wav";
 static const std::string SOUND_FILENAME3 = "Resources/Audio/Skott_Blås_Små_03.wav";
@@ -158,6 +159,7 @@ void Luddis::attack(){
 	CollisionManager::getInstance().addCollidable(proj);
 	// Pull out constant variable
 	SoundEngine::getInstance().playSound("resources/audio/Luddis_skott_16bit.wav");
+	mAnimation.replaceAnimation(Animation(ANIMATION_SHOT));
 
 }
 
