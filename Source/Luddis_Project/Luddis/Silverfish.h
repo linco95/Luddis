@@ -8,9 +8,11 @@
 #include <SFML/Audio/Sound.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
+static const char* DEFAULTIMAGE = "Resources/Images/Grafik_silverfisk_prototyp_s1d3v2.png";
+
 class Silverfish : public Entity, public Collidable {
 public:
-	Silverfish(std::string textureFilename, sf::RenderWindow* window);
+	Silverfish(sf::RenderWindow* window, const sf::Vector2f& position, std::string textureFilename = DEFAULTIMAGE);
 	~Silverfish();
 	virtual void tick(const sf::Time& deltaTime);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;

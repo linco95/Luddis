@@ -64,12 +64,12 @@ struct GameManagerImp : public EventObserver {
 		EntityManager::getInstance().addEntity(mStopp);
 		CollisionManager::getInstance().addCollidable(mStopp);
 
-		mEnemy1 = new Silverfish(TEXTURE_SILVERFISH, &mMainWindow);
+		/*mEnemy1 = new Silverfish(TEXTURE_SILVERFISH, &mMainWindow);
 		EntityManager::getInstance().addEntity(mEnemy1);
 		CollisionManager::getInstance().addCollidable(mEnemy1);
 		mEnemy2 = new Silverfish(TEXTURE_SILVERFISH, &mMainWindow);
 		EntityManager::getInstance().addEntity(mEnemy2);
-		CollisionManager::getInstance().addCollidable(mEnemy2);
+		CollisionManager::getInstance().addCollidable(mEnemy2);*/
 
 		mBoss = new BossDishCloth(&mMainWindow);
 		EntityManager::getInstance().addEntity(mBoss);

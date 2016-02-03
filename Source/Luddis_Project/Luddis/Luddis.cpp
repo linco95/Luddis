@@ -211,7 +211,7 @@ void Luddis::collide(Collidable *collidable){
 	if (collidable->getCollisionCategory() == ENEMY_STUN){
 		if (mStunDuration <= 0){
 			mStunDuration = 1.0f;
-			mAnimation.addAnimation(Animation(ANIMATION_HIT, sf::Vector2i(120, 90), 4, 4, sf::seconds(0.1f)));
+			mAnimation.replaceAnimation(Animation(ANIMATION_HIT, sf::Vector2i(120, 90), 4, 4, sf::seconds(0.1f)));
 		}
 	}
 }

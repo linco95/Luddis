@@ -13,7 +13,7 @@ static const int DAMAGE = 10;
 static const int LIFE = 15;
 static const sf::Vector2f FRONTVECTOR(-1, 0);
 
-Silverfish::Silverfish(std::string textureFilename, sf::RenderWindow* window) :
+Silverfish::Silverfish(sf::RenderWindow* window, const sf::Vector2f& position, std::string textureFilename) :
 mIsAlive(true),
 mSwimAway(false),
 mLife(LIFE),
@@ -25,7 +25,7 @@ mSprite(ResourceManager::getInstance().getTexture(textureFilename))
 	sf::Vector2f size = mWindow->getView().getSize();
 	int r1 = rand() % (int)size.y + 1;
 	// Set spawn position
-	setPosition((float)size.x, (float)r1);
+	setPosition(position);
 
 
 	// Chose direction (towards the left)
