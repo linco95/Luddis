@@ -4,14 +4,18 @@
 #include <SFML/System.hpp>
 #include <stdlib.h>
 #include "VectorMath.h"
+#define _USE_MATH_DEFINES
+#include <math.h>
 
-static const float SPEED = 50;
+static float SPEED = 80;
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 static const int DAMAGE = 10;
 static const int LIFE = 15;
+static const sf::Vector2f FRONTVECTOR(-1, 0);
 
 Silverfish::Silverfish(std::string textureFilename, sf::RenderWindow* window) :
 mIsAlive(true),
+mSwimAway(false),
 mLife(LIFE),
 mWindow(window),
 mSprite(ResourceManager::getInstance().getTexture(textureFilename))
@@ -40,20 +44,20 @@ mSprite(ResourceManager::getInstance().getTexture(textureFilename))
 
 }
 
-// TODO
-// Spawn "dead" silverfish
 Silverfish::~Silverfish(){
 	
 }
 
 void Silverfish::tick(const sf::Time& deltaTime){
 	updateMovement(deltaTime);
-	if (getPosition().x < -mSprite.getTextureRect().width || getPosition().y < -mSprite.getTextureRect().height || getPosition().y > mWindow->getView().getSize().y){
+	if (getPosition().y<(-mSprite.getGlobalBounds().height / 2) || getPosition().y > mWindow->getView().getSize().y + mSprite.getGlobalBounds().height / 2){ 
 		mIsAlive = false;
 	}
 }
 
 void Silverfish::updateMovement(const sf::Time& deltaTime){
+	float rotation = VectorMath::getAngle(sf::Vector2f(FRONTVECTOR), mDirection) * 180 / (float)M_PI;
+	setRotation(rotation);
 	move(mDirection * SPEED * deltaTime.asSeconds());
 }
 
@@ -78,11 +82,16 @@ Silverfish::Type Silverfish::getCollisionType(){
 	return REC;
 }
 
-
 void Silverfish::collide(Collidable *collidable){
 	if (collidable->getCollisionCategory() == FRIEND || collidable->getCollisionCategory() == HAIR){
+		if (mSwimAway== false){
 		mLife -= 5;
-		if (mLife <= 0) mIsAlive = false;
+			if (mLife <= 0){
+				mSwimAway = true;
+				mDirection = sf::Vector2f(0, -1);
+				SPEED = 120;
+			}
+		}
 	}
 }
 

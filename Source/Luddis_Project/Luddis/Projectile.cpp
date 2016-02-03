@@ -6,10 +6,11 @@
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 
 //The max life time should be entered in milliseconds
-Projectile::Projectile(std::string textureFilename, sf::Vector2f direction, sf::Vector2f position, float maxLifeTimeMS):
+Projectile::Projectile(std::string textureFilename, sf::Vector2f direction, sf::Vector2f position, float maxLifeTimeMS, Collidable::Category collisionCategory):
 	mIsAlive(true),
 	mDirection(direction),
 	mLifeTime(maxLifeTimeMS),
+	mCollisionCategory(collisionCategory),
 	mSprite(ResourceManager::getInstance().getTexture(textureFilename))
 {
 	float rotation = std::atan2f(direction.x, -direction.y) * 180 / (float)M_PI;
@@ -52,7 +53,7 @@ Entity::RenderLayer Projectile::getRenderLayer() const{
 }
 
 Projectile::Category Projectile::getCollisionCategory(){
-	return HAIR;
+	return mCollisionCategory;
 }
 
 Projectile::Type Projectile::getCollisionType(){
