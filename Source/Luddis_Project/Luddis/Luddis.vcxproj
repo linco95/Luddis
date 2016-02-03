@@ -139,6 +139,7 @@
     <ClInclude Include="Silverfish.h" />
     <ClInclude Include="SoundEngine.h" />
     <ClInclude Include="SoundManager.h" />
+    <ClInclude Include="Utils.h" />
     <ClInclude Include="VectorMath.h" />
   </ItemGroup>
   <ItemGroup>

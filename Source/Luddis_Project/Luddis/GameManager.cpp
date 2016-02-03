@@ -166,22 +166,23 @@ struct GameManagerImp : public EventObserver {
 		Clock gameClock;
 		while (mMainWindow.isOpen()){
 
-			// Handle Events         In  EventManager
+			// Handle Events       
 			handleEvents(mMainWindow);
 
 			// Update Entities     |
-			em->updateEntities(gameClock.getElapsedTime());
-			se->update(gameClock.restart());
+			se->update(gameClock.getElapsedTime());
+			em->updateEntities(gameClock.restart());
 			cm->detectCollisions();
 
-			// Kill dead Entities  | In EntityManager
+			
+			// Kill dead Entities  
 			if (!mPlayer->isAlive()){
 				gameOver();
 			}
 			cm->removeDeadCollidables();
 			em->removeDeadEntities();
 
-			// Render			     (In rendermanager in the future)
+			// Render			    
 			em->renderEntities(mMainWindow);
 		}
 	}
