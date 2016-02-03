@@ -87,6 +87,7 @@
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AnimationQueue.cpp" />
+    <ClCompile Include="BossDishCloth.cpp" />
     <ClCompile Include="Chips.cpp" />
     <ClCompile Include="Collidable.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
@@ -115,6 +116,7 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="AnimationQueue.h" />
+    <ClInclude Include="BossDishCloth.h" />
     <ClInclude Include="Chips.h" />
     <ClInclude Include="Collidable.h" />
     <ClInclude Include="CollisionManager.h" />

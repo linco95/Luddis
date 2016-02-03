@@ -82,6 +82,9 @@
     <ClCompile Include="Dialogue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BossDishCloth.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -158,6 +161,9 @@
     </ClInclude>
     <ClInclude Include="Dialogue.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BossDishCloth.h">
+      <Filter>Header Files\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

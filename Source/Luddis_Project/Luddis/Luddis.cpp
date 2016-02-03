@@ -154,7 +154,7 @@ void Luddis::attack(){
 	sf::Vector2f muzzlePoint = getPosition() + direction * MUZZLEOFFSET / PROJECTILE_SPEED;
 	mProjectileCooldown = PROJECTILE_RELOAD;
 	int randValue = std::rand() % PROJECTILE_FILENAME.max_size();
-	Projectile *proj = new Projectile(PROJECTILE_FILENAME[randValue], direction, muzzlePoint, PROJECTILE_TIMER);
+	Projectile *proj = new Projectile(PROJECTILE_FILENAME[randValue], direction, muzzlePoint, PROJECTILE_TIMER, HAIR);
 	
 	EntityManager::getInstance().addEntity(proj);
 	CollisionManager::getInstance().addCollidable(proj);

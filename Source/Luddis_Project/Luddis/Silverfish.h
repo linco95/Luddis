@@ -20,6 +20,7 @@ public:
 private:
 	void updateMovement(const sf::Time& deltaTime);
 	bool mIsAlive;
+	bool mSwimAway;
 	sf::Sprite mSprite;
 	sf::RenderWindow* mWindow;
 	sf::Vector2f mDirection;

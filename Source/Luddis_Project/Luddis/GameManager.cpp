@@ -10,6 +10,7 @@
 #include "Dialogue.h"
 #include "Level.h"
 #include <vector>
+#include "BossDishCloth.h"
 #include "Silverfish.h"
 #include "Dust.h"
 #include "Chips.h"
@@ -69,6 +70,9 @@ struct GameManagerImp : public EventObserver {
 		mEnemy2 = new Silverfish(TEXTURE_SILVERFISH, &mMainWindow);
 		EntityManager::getInstance().addEntity(mEnemy2);
 		CollisionManager::getInstance().addCollidable(mEnemy2);
+
+		mBoss = new BossDishCloth(&mMainWindow);
+		EntityManager::getInstance().addEntity(mBoss);
 
 		mDust = new Dust(TEXTURE_DUST, &mMainWindow);
 		EntityManager::getInstance().addEntity(mDust);
@@ -195,6 +199,8 @@ struct GameManagerImp : public EventObserver {
 	// Needs to be moved to corresponding level later.
 	Silverfish *mEnemy1;
 	Silverfish *mEnemy2;
+	BossDishCloth* mBoss;
+
 	Dust *mDust;
 	Dust *mDust2;
 	Dust *mDust3;

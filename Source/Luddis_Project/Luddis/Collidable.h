@@ -12,6 +12,8 @@ public:
 		ENEMY,
 		COLLECT,
 		HAIR,
+		ENEMY_PROJECTILE,
+		ENEMY_STUN,
 		BG_SOLID,
 		BG_DAMAGE
 	};
