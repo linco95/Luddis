@@ -205,7 +205,7 @@ void Luddis::collide(Collidable *collidable){
 		LIFE -= 1;
 	}
 	if (collidable->getCollisionCategory() == ENEMY) {
-		mAnimation.addAnimation(Animation(ANIMATION_HIT, sf::Vector2i(120, 90), 4, 4, sf::seconds(0.1f)));
+		mAnimation.replaceAnimation(Animation(ANIMATION_HIT, sf::Vector2i(120, 90), 4, 4, sf::seconds(0.1f)));
 		LIFE -= 1;
 	}
 	if (collidable->getCollisionCategory() == COLLECT){

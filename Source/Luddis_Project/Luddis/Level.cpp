@@ -9,11 +9,10 @@ using namespace sf;
 
 static const float X_OFFSET = 200.f,
 				   Y_OFFSET = 50.f,
-				   Y_INSET = 250.f,
 				   SCROLLSPEED = 100.f;
 
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::BACKGROUND;
-static const char* BGFILEPATH = "resources/images/Grafik_Bana1PrototypBakg_S1D2V4.png";
+static const char* BGFILEPATH = "resources/images/Grafik_Bana1,1Final_S2D3V1.png";
 Level::Level(){
 
 }
@@ -28,7 +27,7 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget){
 	mTarget = aTarget;
 	mWindow = &aWindow;
 
-	ResourceManager::getInstance().loadTexture(BGFILEPATH, IntRect(Vector2<int>(), Vector2<int>(Texture::getMaximumSize(), (int)mWindow->getView().getSize().y)));
+	ResourceManager::getInstance().loadTexture(BGFILEPATH, IntRect(Vector2<int>(), Vector2<int>(Texture::getMaximumSize(), Texture::getMaximumSize())));
 	mBackground.setTexture(ResourceManager::getInstance().getTexture(BGFILEPATH));
 
 	mPointsOfNoReturn.push_back(mWindow->getSize().x / 2 + 1000.f);
@@ -53,8 +52,8 @@ void Level::updateView(const Time& deltaTime){
 	deltaMove *= deltaTime.asSeconds();
 	float minX = mCurrentPONR;
 	float maxX = mBackground.getTextureRect().width - view.getSize().x / 2;
-	float minY = view.getSize().y / 2 + Y_INSET;
-	float maxY = mBackground.getTextureRect().height - view.getSize().y / 2 -Y_INSET;
+	float minY = view.getSize().y / 2;
+	float maxY = mBackground.getTextureRect().height - view.getSize().y / 2;
 	
 	if (xPos < screenXPos - X_OFFSET / 2){
 		deltaMove.x *= -1;

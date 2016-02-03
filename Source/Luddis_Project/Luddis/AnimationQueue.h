@@ -1,7 +1,6 @@
 #ifndef INCLUDED_ANIMATIONQUEUE
 #define INCLUDED_ANIMATIONQUEUE
 
-#include <queue>
 #include "Animation.h"
 
 namespace sf{
@@ -17,14 +16,16 @@ public:
 
 	Animation& getCurrAnimation();
 	const Animation& getCurrAnimation() const;
-	void addAnimation(const Animation& aAnim);
+	void replaceAnimation(const Animation& aAnim);
 	void setDefaultAnimation(const Animation& aAnim);
+
 	AnimationQueue(const AnimationQueue&) = delete;
 	AnimationQueue& operator=(const AnimationQueue&) = delete;
 
 private:
+	bool mIsReplaced;
 	Animation mDefaultAnim;
-	std::queue<Animation> mAnimations;
+	Animation mReplacingAnim;
 };
 
 
