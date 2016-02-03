@@ -98,3 +98,8 @@ void Silverfish::collide(Collidable *collidable){
 sf::FloatRect Silverfish::getHitBox(){
 	return getTransform().transformRect(mSprite.getGlobalBounds());
 }
+sf::Shape Silverfish::getNarrowHitbox() const{
+	sf::CircleShape shape(10);
+	shape.setPosition(getPosition());
+	return shape;
+}

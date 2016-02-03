@@ -17,6 +17,7 @@ public:
 	virtual bool isAlive();
 	virtual RenderLayer getRenderLayer() const;
 	virtual sf::FloatRect getHitBox();
+	sf::Shape getNarrowHitbox() const override;
 private:
 	bool mIsAlive;
 	sf::Sprite mSprite;

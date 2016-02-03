@@ -17,7 +17,6 @@
 #include "Obstacle.h"
 #include "ScoreCounter.h"
 
-
 #include <iostream>
 
 using namespace sf;
@@ -190,6 +189,10 @@ struct GameManagerImp : public EventObserver {
 
 			// Render			    
 			em->renderEntities(mMainWindow);
+#ifdef LUDDIS_DEBUG_DRAW_HITBOXES
+			cm->drawHitboxes(mMainWindow);
+#endif
+
 		}
 	}
 

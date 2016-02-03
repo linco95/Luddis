@@ -37,6 +37,12 @@ sf::FloatRect Obstacle::getHitBox(){
 	return mSprite.getGlobalBounds();
 }
 
+sf::Shape Obstacle::getNarrowHitbox() const{
+	sf::CircleShape shape(10);
+	shape.setPosition(getPosition());
+	return shape;
+}
+
 Collidable::Category Obstacle::getCollisionCategory(){
 	return BG_SOLID;
 }

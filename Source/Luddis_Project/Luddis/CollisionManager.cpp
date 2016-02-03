@@ -1,5 +1,8 @@
 #include "CollisionManager.h"
-
+#ifdef LUDDIS_DEBUG_DRAW_HITBOXES
+#include <SFML\Graphics\RenderWindow.hpp>
+#include <SFML\Graphics\Shape.hpp>
+#endif
 CollisionManager::CollisionManager() :
 mCollidables(){
 }
@@ -28,6 +31,13 @@ void CollisionManager::removeDeadCollidables(){
 	return;
 }
 
+#ifdef LUDDIS_DEBUG_DRAW_HITBOXES
+void CollisionManager::drawHitboxes(sf::RenderWindow& aWindow) const {
+	for(auto c : mCollidables){
+		aWindow.draw(c->getNarrowHitbox());
+	}
+}
+#endif
 void CollisionManager::detectCollisions(){
 	
 	CollidableVector collidables(mCollidables);

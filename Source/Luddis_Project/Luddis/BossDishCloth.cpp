@@ -3,6 +3,7 @@
 #include "EntityManager.h"
 #include "CollisionManager.h"
 #include "VectorMath.h"
+#include <SFML\Graphics\Shape.hpp>
 
 static const std::string ANIMATION_FILEPATH = "Resources/Images/BAWS.png";
 static const std::string PROJECTILE_FILEPATH = "Resources/Images/BAWS1projectile.png";
@@ -96,4 +97,9 @@ void BossDishCloth::collide(Collidable* collidable){
 
 sf::FloatRect BossDishCloth::getHitBox(){
 	return getTransform().transformRect(mAnimation.getSprite().getGlobalBounds());
+}
+sf::Shape BossDishCloth::getNarrowHitbox() const{
+	sf::CircleShape shape(10);
+	shape.setPosition(getPosition());
+	return shape;
 }

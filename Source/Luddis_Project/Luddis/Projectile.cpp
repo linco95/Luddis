@@ -77,3 +77,8 @@ sf::FloatRect Projectile::getHitBox(){
 void Projectile::setTexture(std::string filename){
 	mSprite.setTexture(ResourceManager::getInstance().getTexture(filename), true);
 }
+sf::Shape* Projectile::getNarrowHitbox() const{
+	sf::CircleShape shape(10);
+	shape.setPosition(getPosition());
+	return shape;
+}

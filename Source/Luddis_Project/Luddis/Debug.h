@@ -6,9 +6,8 @@
 #include <vector>
 #include <string>
 
-namespace sf{
-	class Shape;
-}
+#include <SFML/Graphics/Shape.hpp>
+
 
 class Debug /*: public sf::Drawable*/ {
 public:

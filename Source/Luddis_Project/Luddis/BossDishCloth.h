@@ -19,6 +19,8 @@ public:
 	virtual Type getCollisionType();
 	virtual void collide(Collidable *collidable);
 	virtual sf::FloatRect getHitBox();
+	sf::Shape* getNarrowHitbox() const override;
+
 
 private:
 	void updateMovement(const sf::Time& deltaTime);

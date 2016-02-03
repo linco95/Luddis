@@ -64,3 +64,9 @@ void Chips::collide(Collidable *collidable){
 sf::FloatRect Chips::getHitBox(){
 	return mSprite.getGlobalBounds();
 }
+
+sf::Shape Chips::getNarrowHitbox() const{
+	sf::CircleShape shape(10);
+	shape.setPosition(getPosition());
+	return shape;
+}

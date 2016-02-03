@@ -64,3 +64,8 @@ void Dust::collide(Collidable *collidable){
 sf::FloatRect Dust::getHitBox(){
 	return mSprite.getGlobalBounds();
 }
+sf::Shape Dust::getNarrowHitbox() const{
+	sf::CircleShape shape(10);
+	shape.setPosition(getPosition());
+	return shape;
+}

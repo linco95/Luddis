@@ -221,7 +221,11 @@ void Luddis::collide(Collidable *collidable){
 sf::FloatRect Luddis::getHitBox(){
 	return getTransform().transformRect(mAnimation.getCurrAnimation().getSprite().getGlobalBounds());
 }
-
+sf::Shape Luddis::getNarrowHitbox() const{
+	sf::CircleShape shape(10);
+	shape.setPosition(getPosition());
+	return shape;
+}
 Entity::RenderLayer Luddis::getRenderLayer() const {
 	return LAYER;
 }

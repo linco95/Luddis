@@ -4,6 +4,8 @@
 #include <vector>
 #include <SFML/Graphics/Sprite.hpp>
 
+#include <SFML/Graphics/Shape.hpp>
+
 class Collidable {
 public:
 
@@ -31,6 +33,7 @@ public:
 	virtual void collide(Collidable *collidable) = 0;
 	virtual bool isAlive() = 0;
 	virtual sf::FloatRect getHitBox() = 0;
+	virtual sf::Shape* getNarrowHitbox() const = 0;
 };
 
 #endif

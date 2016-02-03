@@ -17,6 +17,7 @@ public:
 	virtual bool isAlive();
 	virtual RenderLayer getRenderLayer() const;
 	virtual sf::FloatRect getHitBox();
+	sf::Shape getNarrowHitbox() const override;
 	void setTexture(std::string filename);
 private:
 	void updateMovement(const sf::Time& deltaTime);
