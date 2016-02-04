@@ -2,7 +2,8 @@
 
 Inventory::Inventory():
 mChips(0),
-mDust(0)
+mDust(0),
+mEggs(0)
 {
 
 }
@@ -39,4 +40,16 @@ void Inventory::setDust(int dust){
 
 void Inventory::changeDust(int dust){
 	mDust += dust;
+}
+
+int Inventory::getEggs(){
+	return mEggs;
+}
+
+void Inventory::setEggs(int eggs){
+	mEggs = eggs;
+}
+
+void Inventory::changeEggs(int eggs){
+	mEggs += eggs;
 }
