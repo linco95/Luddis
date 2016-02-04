@@ -16,9 +16,9 @@ float VectorMath::getVectorLengthSq(sf::Vector2f& vector){
 }
 
 sf::Vector2f VectorMath::normalizeVector(sf::Vector2f& vector){
+	if (getVectorLengthSq(vector) == 1) return vector;
 	float factor = 1 / getVectorLength(vector);
-	sf::Vector2f vect(vector.x*factor, vector.y*factor);
-	return vect;
+	 return sf::Vector2f(vector.x*factor, vector.y*factor);
 }
 
 // Returns the angle between two vectors.

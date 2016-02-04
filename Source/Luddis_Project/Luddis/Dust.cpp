@@ -7,11 +7,13 @@
 #include "Inventory.h"
 
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
+static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 
 Dust::Dust(std::string textureFilename, sf::RenderWindow* window) :
 mIsAlive(true),
 mWindow(window),
-mSprite(ResourceManager::getInstance().getTexture(textureFilename))
+mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
+mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	// Get a y-spawn position
@@ -24,7 +26,9 @@ mSprite(ResourceManager::getInstance().getTexture(textureFilename))
 }
 
 Dust::~Dust(){
+	// Samma som på äggen
 	Inventory::getInstance().changeDust(1);
+	delete mHitbox;
 }
 
 void Dust::tick(const sf::Time& deltaTime){
@@ -56,12 +60,15 @@ Dust::Type Dust::getCollisionType(){
 void Dust::collide(Collidable *collidable){
 	if (collidable->getCollisionCategory() == FRIEND){
 		mIsAlive = false;
-		// TODO
-		// Add to dust counter
+		
 		SoundEngine::getInstance().playSound("resources/audio/Damm_Slurp_01.wav");
 	}
 }
 
 sf::FloatRect Dust::getHitBox(){
 	return mSprite.getGlobalBounds();
+}
+sf::Shape* Dust::getNarrowHitbox() const{
+	return mHitbox;
+
 }

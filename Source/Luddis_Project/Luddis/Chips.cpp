@@ -7,11 +7,13 @@
 #include "Inventory.h"
 
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
+static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 
 Chips::Chips(std::string textureFilename, sf::RenderWindow* window) :
 mIsAlive(true),
 mWindow(window),
-mSprite(ResourceManager::getInstance().getTexture(textureFilename))
+mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
+mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	// Get a y-spawn position
@@ -24,7 +26,9 @@ mSprite(ResourceManager::getInstance().getTexture(textureFilename))
 }
 
 Chips::~Chips(){
+	// Samma som på äggen
 	Inventory::getInstance().changeChips(1);
+	delete mHitbox;
 }
 
 void Chips::tick(const sf::Time& deltaTime){
@@ -56,12 +60,15 @@ Chips::Type Chips::getCollisionType(){
 void Chips::collide(Collidable *collidable){
 	if (collidable->getCollisionCategory() == FRIEND){
 		mIsAlive = false;
-		// TODO
-		// Add to chips counter
+		
 		SoundEngine::getInstance().playSound("resources/audio/luddis_crumbgather_s1d2v1.wav");
 	}
 }
 
 sf::FloatRect Chips::getHitBox(){
 	return mSprite.getGlobalBounds();
+}
+
+sf::Shape* Chips::getNarrowHitbox() const{
+	return mHitbox;
 }

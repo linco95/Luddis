@@ -34,6 +34,7 @@ static const float MUZZLEOFFSET = 50.0f;
 static const sf::Vector2f FRONTVECTOR(1, 0);
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 static int LIFE = 10;
+static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 
 Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) : 
 	mIsAlive(true), 
@@ -43,14 +44,15 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	// Magic constants below are just temporary, until the file manager is created and implemented with the animation
 	mAnimation(Animation(ANIMATION_FILEPATH, sf::Vector2i(104, 90), 16, 16, sf::seconds(0.1f))),
 	mColliding(false),
-	mPrevPos(0, 0)
+	mPrevPos(0, 0),
+	mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 {
 	setPosition(mWindow->getView().getSize().x / 2, mWindow->getView().getSize().y / 2);
 	
 }
 
 Luddis::~Luddis(){
-
+	delete mHitbox;
 }
 bool Luddis::isAlive() {
 	return mIsAlive;
@@ -222,7 +224,9 @@ void Luddis::collide(Collidable *collidable){
 sf::FloatRect Luddis::getHitBox(){
 	return getTransform().transformRect(mAnimation.getCurrAnimation().getSprite().getGlobalBounds());
 }
-
+sf::Shape* Luddis::getNarrowHitbox() const{
+	return mHitbox;
+}
 Entity::RenderLayer Luddis::getRenderLayer() const {
 	return LAYER;
 }

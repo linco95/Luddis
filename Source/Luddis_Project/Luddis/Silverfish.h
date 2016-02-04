@@ -19,6 +19,8 @@ public:
 	virtual bool isAlive();
 	virtual RenderLayer getRenderLayer() const;
 	virtual sf::FloatRect getHitBox();
+	sf::Shape* getNarrowHitbox() const override; 
+
 private:
 	void updateMovement(const sf::Time& deltaTime);
 	bool mIsAlive;
@@ -30,6 +32,7 @@ private:
 	virtual Type getCollisionType();
 	virtual void collide(Collidable *collidable);
 	int mLife;
+	sf::Shape* mHitbox;
 };
 
 #endif

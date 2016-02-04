@@ -12,6 +12,7 @@ struct AnimationImp : public Drawable {
 	
 	AnimationImp(const std::string& aFilePathNoExtension) :
 		mCurrSprite(0),
+		mCurrTile(0,0),
 		mHasLooped(false)
 	{
 		std::string config = LuddisUtilFuncs::loadJsonFile(aFilePathNoExtension + ".json");
@@ -44,6 +45,7 @@ struct AnimationImp : public Drawable {
 		mFrameTime(aFrameTime),
 		mSpriteAmt(aSpriteAmt),
 		mCurrSprite(0),
+		mCurrTile(0, 0),
 		mHasLooped(false)
 	{ 
 		mSpriteSheet = ResourceManager::getInstance().getTexture(aFilePath);
@@ -79,15 +81,22 @@ struct AnimationImp : public Drawable {
 	int getCurrentFrame() const{
 		return mCurrSprite;
 	}
+
 	void setFrame(const int& aFrame){
-		if (aFrame >= mSpriteAmt - 1){
+		// Increment the current sprite index
+		if (aFrame > mSpriteAmt - 1){
 			mCurrSprite = 0;
 			mHasLooped = true;
 		}
 		else{
 			mCurrSprite = aFrame;
 		}
-		mSprite.setTextureRect(IntRect(mCurrSprite * mTileSize.x, mCurrSprite / (mSpriteAmt - 1) * 0, mTileSize.x, mTileSize.y));
+
+		// Set the current tile in the spritesheet
+		mCurrTile.y = mCurrSprite / mColumns;
+		mCurrTile.x = mCurrSprite % (mColumns);
+
+		mSprite.setTextureRect(IntRect(mCurrTile.x * mTileSize.x, mCurrTile.y * mTileSize.y, mTileSize.x, mTileSize.y));
 	}
 
 	bool hasLooped(){
@@ -110,7 +119,8 @@ struct AnimationImp : public Drawable {
 
 	// Variables
 	Texture mSpriteSheet;
-	Vector2i mTileSize;
+	Vector2i mTileSize,
+			 mCurrTile;
 	Sprite mSprite;
 	int mColumns,
 		mSpriteAmt,

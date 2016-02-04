@@ -20,6 +20,10 @@ public:
 	void setDust(int dust);
 	void changeDust(int dust);
 
+	int getEggs();
+	void setEggs(int eggs);
+	void changeEggs(int eggs);
+
 	//void addItem(Entity* item);
 	// Check mIsAlive
 	//void loseItems();
@@ -30,7 +34,7 @@ private:
 
 	int mChips;
 	int mDust;
-	
+	int mEggs;
 };
 
 #endif

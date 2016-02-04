@@ -17,6 +17,8 @@ public:
 	virtual bool isAlive();
 	virtual RenderLayer getRenderLayer() const;
 	virtual sf::FloatRect getHitBox();
+	sf::Shape* getNarrowHitbox() const override;
+
 private:
 	sf::Vector2f getVectorMouseToSprite() const;
 	void handleInput(const sf::Time& deltaTime);
@@ -36,6 +38,7 @@ private:
 	sf::FloatRect mCollideBox;
 	sf::Vector2f mDirectionVector;
 	sf::Vector2f mPrevPos;
+	sf::Shape* mHitbox;
 };
 
 #endif // !_INCLUDED_LUDDIS_

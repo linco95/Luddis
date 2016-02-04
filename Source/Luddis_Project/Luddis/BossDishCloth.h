@@ -19,6 +19,8 @@ public:
 	virtual Type getCollisionType();
 	virtual void collide(Collidable *collidable);
 	virtual sf::FloatRect getHitBox();
+	sf::Shape* getNarrowHitbox() const override;
+
 
 private:
 	void updateMovement(const sf::Time& deltaTime);
@@ -31,6 +33,8 @@ private:
 	float mAttackInterval;
 	sf::Vector2f mDirection;
 	int mLife;
+	sf::Shape* mHitbox;
+
 };
 
 #endif // !_INCLUDED_BOSSDISHCLOTH

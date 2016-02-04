@@ -3,6 +3,7 @@
 #include "EntityManager.h"
 #include "CollisionManager.h"
 #include "VectorMath.h"
+#include <SFML\Graphics\Shape.hpp>
 
 static const std::string ANIMATION_IDLE_FILEPATH = "Resources/Images/Spritesheets/Grafik_Trasan300x300_S2D3V1";
 static const std::string ANIMATION_SHOT_FILEPATH = "Resources/Images/Spritesheets/Grafik_TrasanAttack300x300_S2D4V1";
@@ -12,6 +13,7 @@ static const int MAX_LIFE = 100;
 static const float ATTACK_INTERVAL = 3.5f;
 static const float PROJECTILE_LIFETIME = 2.5f;
 static const float PROJECTILE_SPEED = 300;
+static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 
 BossDishCloth::BossDishCloth(sf::RenderWindow* window) :
 mIsAlive(true),
@@ -20,12 +22,14 @@ mShooting(false),
 mLife(MAX_LIFE),
 mAttackInterval(ATTACK_INTERVAL),
 mDirection(0, 1.0f),
-mAnimation(Animation(ANIMATION_IDLE_FILEPATH)){
+mAnimation(Animation(ANIMATION_IDLE_FILEPATH)),
+mHitbox(new sf::CircleShape(HITBOX_SHAPE))
+{
 	setPosition(3000, 500);
 }
 
 BossDishCloth::~BossDishCloth(){
-
+	delete mHitbox;
 }
 
 void BossDishCloth::tick(const sf::Time& deltaTime){
@@ -110,4 +114,7 @@ void BossDishCloth::collide(Collidable* collidable){
 
 sf::FloatRect BossDishCloth::getHitBox(){
 	return getTransform().transformRect(mAnimation.getCurrAnimation().getSprite().getGlobalBounds());
+}
+sf::Shape* BossDishCloth::getNarrowHitbox() const{
+	return mHitbox;
 }
