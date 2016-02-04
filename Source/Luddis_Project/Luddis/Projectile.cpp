@@ -22,7 +22,7 @@ Projectile::Projectile(std::string textureFilename, sf::Vector2f direction, sf::
 }
 
 Projectile::~Projectile(){
-	
+	delete mHitbox;
 }
 
 void Projectile::tick(const sf::Time& deltaTime){

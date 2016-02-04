@@ -17,6 +17,7 @@ mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 }
 
 Obstacle::~Obstacle(){
+	delete mHitbox;
 }
 
 void Obstacle::tick(const sf::Time& deltaTime){

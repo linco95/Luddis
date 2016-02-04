@@ -52,7 +52,7 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 }
 
 Luddis::~Luddis(){
-
+	delete mHitbox;
 }
 bool Luddis::isAlive() {
 	return mIsAlive;

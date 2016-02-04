@@ -26,7 +26,9 @@ mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 }
 
 Dust::~Dust(){
+	// Samma som på äggen
 	Inventory::getInstance().changeDust(1);
+	delete mHitbox;
 }
 
 void Dust::tick(const sf::Time& deltaTime){

@@ -48,7 +48,7 @@ mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 }
 
 Silverfish::~Silverfish(){
-	
+	delete mHitbox;
 }
 
 void Silverfish::tick(const sf::Time& deltaTime){

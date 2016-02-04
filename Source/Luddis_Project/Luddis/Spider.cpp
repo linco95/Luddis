@@ -32,7 +32,7 @@ mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 }
 
 Spider::~Spider(){
-
+	delete mHitbox;
 }
 
 void Spider::tick(const sf::Time& deltaTime){

@@ -27,7 +27,7 @@ mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 }
 
 BossDishCloth::~BossDishCloth(){
-
+	delete mHitbox;
 }
 
 void BossDishCloth::tick(const sf::Time& deltaTime){

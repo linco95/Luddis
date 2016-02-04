@@ -3,17 +3,21 @@
 #include "Inventory.h"
 
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::ITEM;
+static const sf::CircleShape HITBOX_SHAPE(10, 8);
 
-SpiderEgg::SpiderEgg(std::string textureFilename, sf::RenderWindow* window):
+SpiderEgg::SpiderEgg(std::string textureFilename, sf::RenderWindow* window) :
 mIsAlive(true),
 mWindow(window),
-mSprite(ResourceManager::getInstance().getTexture(textureFilename))
+mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
+mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 }
 
 SpiderEgg::~SpiderEgg(){
+	// Inte bra att ha här => 100% chans att plocka up dem (ie när banan avallokerar alla entiteter)
 	Inventory::getInstance().changeEggs(1);
+	delete mHitbox;
 }
 
 void SpiderEgg::tick(const sf::Time& deltaTime){
@@ -37,6 +41,9 @@ sf::FloatRect SpiderEgg::getHitBox(){
 	return getTransform().transformRect(mSprite.getGlobalBounds());
 }
 
+sf::Shape* SpiderEgg::getNarrowHitbox() const{
+	return mHitbox;
+}
 Collidable::Category SpiderEgg::getCollisionCategory(){
 	return COLLECT;
 }

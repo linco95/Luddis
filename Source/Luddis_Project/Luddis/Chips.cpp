@@ -26,7 +26,9 @@ mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 }
 
 Chips::~Chips(){
+	// Samma som på äggen
 	Inventory::getInstance().changeChips(1);
+	delete mHitbox;
 }
 
 void Chips::tick(const sf::Time& deltaTime){
