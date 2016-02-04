@@ -13,12 +13,15 @@ static const int DAMAGE = 10;
 static const int LIFE = 15;
 static const sf::Vector2f FRONTVECTOR(-1, 0);
 
+static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
+
 Silverfish::Silverfish(sf::RenderWindow* window, const sf::Vector2f& position, std::string textureFilename) :
 mIsAlive(true),
 mSwimAway(false),
 mLife(LIFE),
 mWindow(window),
-mSprite(ResourceManager::getInstance().getTexture(textureFilename))
+mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
+mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	// Get a y-spawn position
@@ -98,8 +101,6 @@ void Silverfish::collide(Collidable *collidable){
 sf::FloatRect Silverfish::getHitBox(){
 	return getTransform().transformRect(mSprite.getGlobalBounds());
 }
-sf::Shape Silverfish::getNarrowHitbox() const{
-	sf::CircleShape shape(10);
-	shape.setPosition(getPosition());
-	return shape;
+sf::Shape* Silverfish::getNarrowHitbox() const{
+	return mHitbox;
 }

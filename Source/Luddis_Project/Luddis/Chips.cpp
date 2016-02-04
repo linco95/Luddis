@@ -4,13 +4,16 @@
 #include <SFML/System.hpp>
 #include <stdlib.h>
 #include "SoundEngine.h"
+#include "Inventory.h"
 
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
+static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 
 Chips::Chips(std::string textureFilename, sf::RenderWindow* window) :
 mIsAlive(true),
 mWindow(window),
-mSprite(ResourceManager::getInstance().getTexture(textureFilename))
+mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
+mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	// Get a y-spawn position
@@ -23,7 +26,7 @@ mSprite(ResourceManager::getInstance().getTexture(textureFilename))
 }
 
 Chips::~Chips(){
-
+	Inventory::getInstance().changeChips(1);
 }
 
 void Chips::tick(const sf::Time& deltaTime){
@@ -65,8 +68,6 @@ sf::FloatRect Chips::getHitBox(){
 	return mSprite.getGlobalBounds();
 }
 
-sf::Shape Chips::getNarrowHitbox() const{
-	sf::CircleShape shape(10);
-	shape.setPosition(getPosition());
-	return shape;
+sf::Shape* Chips::getNarrowHitbox() const{
+	return mHitbox;
 }

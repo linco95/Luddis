@@ -17,7 +17,7 @@ public:
 	virtual bool isAlive();
 	virtual RenderLayer getRenderLayer() const;
 	virtual sf::FloatRect getHitBox();
-	sf::Shape getNarrowHitbox() const override;
+	sf::Shape* getNarrowHitbox() const override;
 	void setTexture(std::string filename);
 private:
 	void updateMovement(const sf::Time& deltaTime);
@@ -31,6 +31,7 @@ private:
 	virtual Category getCollisionCategory();
 	virtual Type getCollisionType();
 	virtual void collide(Collidable *collidable);
+	sf::Shape* mHitbox;
 };
 
 #endif // !_INCLUDED_PROJECTILE_

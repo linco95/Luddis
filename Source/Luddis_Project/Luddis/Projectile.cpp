@@ -4,6 +4,7 @@
 #include <math.h>
 
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
+static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 
 //The max life time should be entered in milliseconds
 Projectile::Projectile(std::string textureFilename, sf::Vector2f direction, sf::Vector2f position, float maxLifeTimeMS, Collidable::Category collisionCategory):
@@ -11,7 +12,8 @@ Projectile::Projectile(std::string textureFilename, sf::Vector2f direction, sf::
 	mDirection(direction),
 	mLifeTime(maxLifeTimeMS),
 	mCollisionCategory(collisionCategory),
-	mSprite(ResourceManager::getInstance().getTexture(textureFilename))
+	mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
+	mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 {
 	float rotation = std::atan2f(direction.x, -direction.y) * 180 / (float)M_PI;
 	mSprite.setRotation(rotation);
@@ -68,6 +70,13 @@ void Projectile::collide(Collidable *collidable){
 	if (collidable->getCollisionCategory() == HAIR && mCollisionCategory == ENEMY){
 		mIsAlive = false;
 	}
+	if (collidable->getCollisionCategory() == ENEMY_STUN && mCollisionCategory == HAIR){
+		mIsAlive = false;
+	}
+	if (collidable->getCollisionCategory() == FRIEND && mCollisionCategory == ENEMY_STUN){
+		mIsAlive = false;
+	}
+
 }
 
 sf::FloatRect Projectile::getHitBox(){
@@ -78,7 +87,5 @@ void Projectile::setTexture(std::string filename){
 	mSprite.setTexture(ResourceManager::getInstance().getTexture(filename), true);
 }
 sf::Shape* Projectile::getNarrowHitbox() const{
-	sf::CircleShape shape(10);
-	shape.setPosition(getPosition());
-	return shape;
+	return mHitbox;
 }

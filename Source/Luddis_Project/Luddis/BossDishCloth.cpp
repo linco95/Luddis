@@ -5,13 +5,14 @@
 #include "VectorMath.h"
 #include <SFML\Graphics\Shape.hpp>
 
-static const std::string ANIMATION_FILEPATH = "Resources/Images/BAWS.png";
+static const std::string ANIMATION_FILEPATH = "Resources/Images/spritesheets/Grafik_Trasan300x300_S2D3V1";
 static const std::string PROJECTILE_FILEPATH = "Resources/Images/BAWS1projectile.png";
 
 static const int MAX_LIFE = 100;
-static const float ATTACK_INTERVAL = 1.3f;
+static const float ATTACK_INTERVAL = 3.5f;
 static const float PROJECTILE_LIFETIME = 2.5f;
 static const float PROJECTILE_SPEED = 300;
+static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 
 BossDishCloth::BossDishCloth(sf::RenderWindow* window) :
 mIsAlive(true),
@@ -19,7 +20,9 @@ mWindow(window),
 mLife(MAX_LIFE),
 mAttackInterval(ATTACK_INTERVAL),
 mDirection(0, 1.0f),
-mAnimation(Animation(ANIMATION_FILEPATH, sf::Vector2i(200, 200), 4, 4, sf::seconds(0.3f))){
+mAnimation(Animation(ANIMATION_FILEPATH)),
+mHitbox(new sf::CircleShape(HITBOX_SHAPE))
+{
 	setPosition(3000, 500);
 }
 
@@ -61,7 +64,11 @@ void BossDishCloth::updateMovement(const sf::Time& deltaTime){
 	{
 		mDirection = mDirection*-1.0f;
 	}
-	move(mDirection);
+	if (mAttackInterval > 0.6f &&
+		mAttackInterval <= ATTACK_INTERVAL - 0.3f)
+	{
+		move(mDirection);
+	}
 }
 
 void BossDishCloth::attack(){
@@ -98,8 +105,6 @@ void BossDishCloth::collide(Collidable* collidable){
 sf::FloatRect BossDishCloth::getHitBox(){
 	return getTransform().transformRect(mAnimation.getSprite().getGlobalBounds());
 }
-sf::Shape BossDishCloth::getNarrowHitbox() const{
-	sf::CircleShape shape(10);
-	shape.setPosition(getPosition());
-	return shape;
+sf::Shape* BossDishCloth::getNarrowHitbox() const{
+	return mHitbox;
 }

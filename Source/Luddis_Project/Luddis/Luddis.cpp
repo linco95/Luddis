@@ -25,7 +25,7 @@ static const std::array<std::string, 3> PROJECTILE_FILENAME = { "Resources/Image
 												 };
 
 //All float times are in seconds
-static const float PROJECTILE_RELOAD = 0.1f;
+static const float PROJECTILE_RELOAD = 0.4f;
 static const float PROJECTILE_TIMER = 3.0f;
 static const float GRACEAREA = 12;
 static const float MOVESPEED = 200;
@@ -34,6 +34,7 @@ static const float MUZZLEOFFSET = 50.0f;
 static const sf::Vector2f FRONTVECTOR(1, 0);
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 static int LIFE = 10;
+static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 
 Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) : 
 	mIsAlive(true), 
@@ -43,7 +44,8 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	// Magic constants below are just temporary, until the file manager is created and implemented with the animation
 	mAnimation(Animation(ANIMATION_FILEPATH, sf::Vector2i(104, 90), 16, 16, sf::seconds(0.1f))),
 	mColliding(false),
-	mPrevPos(0, 0)
+	mPrevPos(0, 0),
+	mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 {
 	setPosition(mWindow->getView().getSize().x / 2, mWindow->getView().getSize().y / 2);
 	
@@ -159,7 +161,6 @@ void Luddis::attack(){
 	CollisionManager::getInstance().addCollidable(proj);
 	// Pull out constant variable
 	SoundEngine::getInstance().playSound("resources/audio/Luddis_skott_16bit.wav");
-	mAnimation.replaceAnimation(Animation(ANIMATION_SHOT));
 
 }
 
@@ -171,6 +172,7 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right) == true
 		&& mProjectileCooldown <= 0){
 		attack();
+		mAnimation.replaceAnimation(Animation(ANIMATION_SHOT));
 	}
 	//Handle keyboard presses
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
@@ -201,6 +203,7 @@ void Luddis::collide(Collidable *collidable){
 		mCollideBox = collidable->getHitBox();
 	}
 	if (collidable->getCollisionCategory() == BG_DAMAGE){
+		mAnimation.replaceAnimation(Animation(ANIMATION_HIT, sf::Vector2i(120, 90), 4, 4, sf::seconds(0.1f)));
 		LIFE -= 1;
 	}
 	if (collidable->getCollisionCategory() == ENEMY) {
@@ -221,10 +224,8 @@ void Luddis::collide(Collidable *collidable){
 sf::FloatRect Luddis::getHitBox(){
 	return getTransform().transformRect(mAnimation.getCurrAnimation().getSprite().getGlobalBounds());
 }
-sf::Shape Luddis::getNarrowHitbox() const{
-	sf::CircleShape shape(10);
-	shape.setPosition(getPosition());
-	return shape;
+sf::Shape* Luddis::getNarrowHitbox() const{
+	return mHitbox;
 }
 Entity::RenderLayer Luddis::getRenderLayer() const {
 	return LAYER;

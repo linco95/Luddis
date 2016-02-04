@@ -4,13 +4,16 @@
 #include <SFML/System.hpp>
 #include <stdlib.h>
 #include "SoundEngine.h"
+#include "Inventory.h"
 
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
+static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 
 Dust::Dust(std::string textureFilename, sf::RenderWindow* window) :
 mIsAlive(true),
 mWindow(window),
-mSprite(ResourceManager::getInstance().getTexture(textureFilename))
+mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
+mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	// Get a y-spawn position
@@ -23,7 +26,7 @@ mSprite(ResourceManager::getInstance().getTexture(textureFilename))
 }
 
 Dust::~Dust(){
-
+	Inventory::getInstance().changeDust(1);
 }
 
 void Dust::tick(const sf::Time& deltaTime){
@@ -64,8 +67,7 @@ void Dust::collide(Collidable *collidable){
 sf::FloatRect Dust::getHitBox(){
 	return mSprite.getGlobalBounds();
 }
-sf::Shape Dust::getNarrowHitbox() const{
-	sf::CircleShape shape(10);
-	shape.setPosition(getPosition());
-	return shape;
+sf::Shape* Dust::getNarrowHitbox() const{
+	return mHitbox;
+
 }

@@ -32,6 +32,8 @@ private:
 	float mAttackInterval;
 	sf::Vector2f mDirection;
 	int mLife;
+	sf::Shape* mHitbox;
+
 };
 
 #endif // !_INCLUDED_BOSSDISHCLOTH

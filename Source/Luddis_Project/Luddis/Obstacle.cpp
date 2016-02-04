@@ -3,14 +3,17 @@
 
 const Entity::RenderLayer LAYER = Entity::RenderLayer::OBSTACLES;
 const int DAMAGE = 0;
+static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 
-Obstacle::Obstacle(std::string textureFilename, sf::RenderWindow* window):
+Obstacle::Obstacle(std::string textureFilename, sf::RenderWindow* window, ObstacleType type):
 mIsAlive(true),
 mWindow(window),
-mSprite(ResourceManager::getInstance().getTexture(textureFilename))
+mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
+mType(type),
+mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
-	mSprite.setPosition(150, 150);
+	setPosition(150, 150);
 }
 
 Obstacle::~Obstacle(){
@@ -34,17 +37,20 @@ Entity::RenderLayer Obstacle::getRenderLayer() const{
 }
 
 sf::FloatRect Obstacle::getHitBox(){
-	return mSprite.getGlobalBounds();
+	return getTransform().transformRect(mSprite.getGlobalBounds());
 }
 
-sf::Shape Obstacle::getNarrowHitbox() const{
-	sf::CircleShape shape(10);
-	shape.setPosition(getPosition());
-	return shape;
+sf::Shape* Obstacle::getNarrowHitbox() const{
+	return mHitbox;
 }
 
 Collidable::Category Obstacle::getCollisionCategory(){
-	return BG_SOLID;
+	if (mType == DAMAGE){
+		return BG_DAMAGE;
+	}
+	else /*if (mType == SOLID)*/{
+		return BG_SOLID;
+	}
 }
 
 Collidable::Type Obstacle::getCollisionType(){

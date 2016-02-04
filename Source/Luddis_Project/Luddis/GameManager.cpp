@@ -9,11 +9,13 @@
 #include "SoundEngine.h"
 #include "Dialogue.h"
 #include "Level.h"
+#include "Button.h"
 #include <vector>
 #include "BossDishCloth.h"
 #include "Silverfish.h"
 #include "Dust.h"
 #include "Chips.h"
+#include "Spider.h"
 #include "Obstacle.h"
 #include "ScoreCounter.h"
 
@@ -31,10 +33,13 @@ static const std::string TEXTURE_NAME = "Resources/Images/Grafik_Luddis120x80_s1
 static const std::string TEXTURE_SILVERFISH = "Resources/Images/Grafik_silverfisk_prototyp_s1d3v2.png";
 static const std::string TEXTURE_DUST = "Resources/Images/Grafik_damm1_s1d4v1.png";
 static const std::string TEXTURE_CHIPS = "Resources/Images/Grafik_smula2_s1d4v1.png";
+static const std::string TEXTURE_BUTTON = "Resources/Images/Button";
 static const std::string TEXTURE_CHIPSCOUNTER = "Resources/Images/ChipsCounter.png";
 static const std::string TEXTURE_LUDDCOUNTER = "Resources/Images/LuddCounter.png";
 static const std::string FONT_NAME = "arial.ttf";
 static const bool VSYNCENABLED = true;
+
+static const std::string FUCKING_ESSAY = "I just want a long string to see how sf::Text objects act with things like wrapping words etc around the screen so I just need to have thing long text. Anyways I am running out of things to say so I'm just going to leave it at this. Hopefully its long enough to satisfy my needs. Also thats what she said.";
 
 /*
 TODO:
@@ -59,7 +64,7 @@ struct GameManagerImp : public EventObserver {
 	void initializeEntities(){
 
 
-		Obstacle* mStopp = new Obstacle(TEXTURE_NAME, &mMainWindow);
+		Obstacle* mStopp = new Obstacle(TEXTURE_NAME, &mMainWindow, Obstacle::SOLID);
 		EntityManager::getInstance().addEntity(mStopp);
 		CollisionManager::getInstance().addCollidable(mStopp);
 
@@ -69,6 +74,10 @@ struct GameManagerImp : public EventObserver {
 		mEnemy2 = new Silverfish(TEXTURE_SILVERFISH, &mMainWindow);
 		EntityManager::getInstance().addEntity(mEnemy2);
 		CollisionManager::getInstance().addCollidable(mEnemy2);*/
+
+		mSpider = new Spider(TEXTURE_SILVERFISH, &mMainWindow);
+		EntityManager::getInstance().addEntity(mSpider);
+		CollisionManager::getInstance().addCollidable(mSpider); 
 
 		mBoss = new BossDishCloth(&mMainWindow);
 		EntityManager::getInstance().addEntity(mBoss);
@@ -97,15 +106,18 @@ struct GameManagerImp : public EventObserver {
 		EntityManager::getInstance().addEntity(mChips3);
 		CollisionManager::getInstance().addCollidable(mChips3);
 
-		mChipsCounter = new ScoreCounter(&mMainWindow, TEXTURE_CHIPSCOUNTER, sf::Vector2i(400, 50));
+		mChipsCounter = new ScoreCounter(&mMainWindow, TEXTURE_CHIPSCOUNTER, sf::Vector2i(400, 50), ScoreCounter::ScoreType::CHIPS);
 		EntityManager::getInstance().addEntity(mChipsCounter);
 
 		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mPlayer);
 		CollisionManager::getInstance().addCollidable(mPlayer);
 
-		mLuddCounter = new ScoreCounter(&mMainWindow, TEXTURE_LUDDCOUNTER, sf::Vector2i(550, 50));
+		mLuddCounter = new ScoreCounter(&mMainWindow, TEXTURE_LUDDCOUNTER, sf::Vector2i(550, 50), ScoreCounter::ScoreType::DUST);
 		EntityManager::getInstance().addEntity(mLuddCounter);
+
+		mDialogue = new Dialogue(FUCKING_ESSAY, &mMainWindow);
+		EntityManager::getInstance().addEntity(mDialogue);
 
 		mLevel = new Level();
 		mLevel->initializeLevel(mMainWindow, mPlayer);
@@ -205,6 +217,8 @@ struct GameManagerImp : public EventObserver {
 	Silverfish *mEnemy2;
 	BossDishCloth* mBoss;
 
+	Spider *mSpider;
+
 	Dust *mDust;
 	Dust *mDust2;
 	Dust *mDust3;
@@ -214,6 +228,7 @@ struct GameManagerImp : public EventObserver {
 	Chips *mChips3;
 	ScoreCounter *mChipsCounter;
 	ScoreCounter *mLuddCounter;
+	Dialogue* mDialogue;
 
 	Level* mLevel; //To be replaced with LevelManager with LevelVector
 };

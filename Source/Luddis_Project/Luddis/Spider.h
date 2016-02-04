@@ -1,17 +1,16 @@
-#ifndef INCLUDED_CHIPS
-#define INCLUDED_CHIPS
+#ifndef INCLUDED_SPIDER
+#define INCLUDED_SPIDER
 
-#include <string>
 #include "Entity.h"
 #include "Collidable.h"
 #include <SFML/Window.hpp>
-#include <SFML/Audio/Sound.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
-class Chips : public Entity, public Collidable {
+class Spider : public Entity, public Collidable {
 public:
-	Chips(std::string textureFilename, sf::RenderWindow* window);
-	~Chips();
+	Spider(std::string textureFilename, sf::RenderWindow* window);
+	~Spider();
+
 	virtual void tick(const sf::Time& deltaTime);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	virtual bool isAlive();
@@ -19,9 +18,13 @@ public:
 	virtual sf::FloatRect getHitBox();
 	sf::Shape* getNarrowHitbox() const override;
 private:
+	void updateMovement(const sf::Time& deltaTime);
 	bool mIsAlive;
+	float mWait;
 	sf::Sprite mSprite;
 	sf::RenderWindow* mWindow;
+	sf::Vector2f mDirection;
+	sf::Vector2f mDirection2;
 	virtual Category getCollisionCategory();
 	virtual Type getCollisionType();
 	virtual void collide(Collidable *collidable);
