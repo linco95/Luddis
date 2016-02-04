@@ -4,7 +4,6 @@
 SoundEngine::SoundEngine():
 mMainVolume(100), mSoundVolume(100), mMusicVolume(100), mFading(false)
 {
-	mMusic.setLoop(true);
 }
 
 SoundEngine& SoundEngine::getInstance(){
@@ -17,7 +16,7 @@ void SoundEngine::setMainVolume(float volume){
 	for (int i = 0; i < MAX_SOUND_CHANNELS; i++){
 		mSoundChannels[i].setVolume(mMainVolume*mSoundVolume / 100);
 	}
-	mMusic.setVolume(mMainVolume*mMusicVolume / 100);
+	mCurrentMusic->setVolume(mMainVolume*mMusicVolume / 100);
 }
 
 void SoundEngine::setSoundVolume(float volume){
@@ -29,7 +28,7 @@ void SoundEngine::setSoundVolume(float volume){
 
 void SoundEngine::setMusicVolume(float volume){
 	mMusicVolume = volume;
-	mMusic.setVolume(mMainVolume*mMusicVolume / 100);
+	mCurrentMusic->setVolume(mMainVolume*mMusicVolume / 100);
 }
 
 void SoundEngine::playSound(std::string filename){
@@ -45,9 +44,12 @@ void SoundEngine::playSound(std::string filename){
 
 void SoundEngine::playMusic(std::string filename){
 	mCurrentMusicFile = filename;
-	sf::Music* temp = &ResourceManager::getInstance().getMusic(filename);
-	temp->setLoop(true);
-	temp->play();
+	if (mCurrentMusic != 0) {
+		mCurrentMusic->stop();
+	}
+	mCurrentMusic = &ResourceManager::getInstance().getMusic(filename);
+	mCurrentMusic->setLoop(true);
+	mCurrentMusic->play();
 }
 
 void SoundEngine::update(const sf::Time& deltaTime){
@@ -59,13 +61,13 @@ void SoundEngine::update(const sf::Time& deltaTime){
 void SoundEngine::fadeTransition(const sf::Time& deltaTime){
 	mFadeTimeLeft -= deltaTime.asSeconds();
 	if (mFadeTimeLeft > 0){
-		ResourceManager::getInstance().getMusic(mFadingMusicFile).setVolume(mMainVolume*mMusicVolume*(mFadeTimeLeft / mFadeTime) / 100);
-		ResourceManager::getInstance().getMusic(mCurrentMusicFile).setVolume(mMainVolume*mMusicVolume*((mFadeTime - mFadeTimeLeft) / mFadeTime) / 100);
+		mFadingMusic->setVolume(mMainVolume*mMusicVolume*(mFadeTimeLeft / mFadeTime) / 100);
+		mCurrentMusic->setVolume(mMainVolume*mMusicVolume*((mFadeTime - mFadeTimeLeft) / mFadeTime) / 100);
 	}
 	else{
 		mFading = false;
-		ResourceManager::getInstance().getMusic(mCurrentMusicFile).setVolume(mMainVolume*mMusicVolume / 100);
-		ResourceManager::getInstance().getMusic(mFadingMusicFile).stop();
+		mCurrentMusic->setVolume(mMainVolume*mMusicVolume / 100);
+		mFadingMusic->stop();
 	}
 }
 
@@ -76,6 +78,6 @@ void SoundEngine::fadeToNewMusic(std::string filename, float fadeTime){
 		mFadeTimeLeft = fadeTime;
 		mFadingMusicFile = mCurrentMusicFile;
 		playMusic(filename);
-		ResourceManager::getInstance().getMusic(mFadingMusicFile).setVolume(0.0f);
+		mFadingMusic->setVolume(0.0f);
 	}
 }

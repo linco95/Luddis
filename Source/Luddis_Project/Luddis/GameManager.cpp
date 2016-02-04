@@ -65,12 +65,12 @@ struct GameManagerImp : public EventObserver {
 		EntityManager::getInstance().addEntity(mStopp);
 		CollisionManager::getInstance().addCollidable(mStopp);
 
-		mEnemy1 = new Silverfish(TEXTURE_SILVERFISH, &mMainWindow);
+		/*mEnemy1 = new Silverfish(TEXTURE_SILVERFISH, &mMainWindow);
 		EntityManager::getInstance().addEntity(mEnemy1);
 		CollisionManager::getInstance().addCollidable(mEnemy1);
 		mEnemy2 = new Silverfish(TEXTURE_SILVERFISH, &mMainWindow);
 		EntityManager::getInstance().addEntity(mEnemy2);
-		CollisionManager::getInstance().addCollidable(mEnemy2);
+		CollisionManager::getInstance().addCollidable(mEnemy2);*/
 
 		mBoss = new BossDishCloth(&mMainWindow);
 		EntityManager::getInstance().addEntity(mBoss);
@@ -99,14 +99,14 @@ struct GameManagerImp : public EventObserver {
 		EntityManager::getInstance().addEntity(mChips3);
 		CollisionManager::getInstance().addCollidable(mChips3);
 
-		mChipsCounter = new ScoreCounter(TEXTURE_CHIPSCOUNTER, sf::Vector2f(400, 50));
+		mChipsCounter = new ScoreCounter(&mMainWindow, TEXTURE_CHIPSCOUNTER, sf::Vector2i(400, 50));
 		EntityManager::getInstance().addEntity(mChipsCounter);
 
 		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mPlayer);
 		CollisionManager::getInstance().addCollidable(mPlayer);
 
-		mLuddCounter = new ScoreCounter(TEXTURE_LUDDCOUNTER, sf::Vector2f(550, 50));
+		mLuddCounter = new ScoreCounter(&mMainWindow, TEXTURE_LUDDCOUNTER, sf::Vector2i(550, 50));
 		EntityManager::getInstance().addEntity(mLuddCounter);
 
 		mLevel = new Level();
@@ -169,6 +169,7 @@ struct GameManagerImp : public EventObserver {
 		EntityManager* em = &EntityManager::getInstance();
 		CollisionManager* cm = &CollisionManager::getInstance();
 		SoundEngine* se = &SoundEngine::getInstance();
+		se->setMainVolume(10);
 		Clock gameClock;
 		while (mMainWindow.isOpen()){
 

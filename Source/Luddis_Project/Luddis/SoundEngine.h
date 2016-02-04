@@ -37,7 +37,8 @@ private:
 	std::string mCurrentMusicFile;
 	std::string mFadingMusicFile;
 	sf::Sound mSoundChannels[MAX_SOUND_CHANNELS];
-	sf::Music mMusic;
+	sf::Music* mCurrentMusic;
+	sf::Music* mFadingMusic;
 };
 
 #endif // !_INCLUDED_SOUNDENGINE_

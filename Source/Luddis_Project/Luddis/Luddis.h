@@ -34,6 +34,7 @@ private:
 	bool mIsAlive;
 	bool mColliding;
 	sf::FloatRect mCollideBox;
+	sf::Vector2f mDirectionVector;
 	sf::Vector2f mPrevPos;
 };
 

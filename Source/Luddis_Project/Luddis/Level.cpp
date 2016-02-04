@@ -1,10 +1,13 @@
 #include "Level.h"
 #include "ResourceManager.h"
 #include "SoundEngine.h"
+#include "Silverfish.h"
+#include "EntityManager.h"
+#include "CollisionManager.h"
 #include "Utils.h"
 #include <SFML\Audio.hpp>
-
-
+#include <rapidjson\document.h>
+#include <array>
 using namespace sf;
 
 static const float X_OFFSET = 200.f,
@@ -12,7 +15,8 @@ static const float X_OFFSET = 200.f,
 				   SCROLLSPEED = 120.f;
 
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::BACKGROUND;
-static const char* BGFILEPATH = "resources/images/Grafik_Bana1,1Final_S2D3V1.png";
+static std::string BGFILEPATH = "resources/images/Grafik_Bana1,1Final_S2D3V1.png";
+static const std::array<std::string, 3> CONFIGMEMBERS = { "Background_file", "Silverfish_spawns", "Boss_config" };
 Level::Level(){
 
 }
@@ -20,12 +24,44 @@ Level::Level(){
 Level::~Level(){
 
 }
+#include <iostream>
+void Level::initializeEntities(){
+	EntityManager* em = &EntityManager::getInstance();
+	CollisionManager* cm = &CollisionManager::getInstance();
 
+	std::string configText = LuddisUtilFuncs::loadJsonFile("resources/configs/levels/level01.json");
+	rapidjson::Document configDoc;
+	configDoc.Parse(configText.c_str());
+	assert(configDoc.IsObject());
+	for (std::size_t i = 0; i < CONFIGMEMBERS.size(); i++){
+		assert(configDoc.HasMember(CONFIGMEMBERS[i].c_str()));
+	}
+	const rapidjson::Value& fishSpawns = configDoc["Silverfish_spawns"];
+	assert(fishSpawns.IsArray());
+	for (rapidjson::Value::ConstValueIterator itr = fishSpawns.Begin(); itr != fishSpawns.End(); itr++){
+		assert(itr->IsObject());
+		assert(itr->HasMember("x") && (*itr)["x"].IsInt());
+		assert(itr->HasMember("y") && (*itr)["y"].IsInt());
+		assert(itr->HasMember("angle") && (*itr)["angle"].IsDouble());
+		Silverfish* fish = new Silverfish(mWindow, sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()));
+		em->addEntity(fish);
+		cm->addCollidable(fish);
+		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
+	}
+	assert(configDoc["Background_file"].IsString());
+	std::cout << configDoc["Background_file"].GetString();
+	BGFILEPATH = configDoc["Background_file"].GetString();
+
+
+
+}
 void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget){
 	//assert(aTarget != 0);
 
 	mTarget = aTarget;
 	mWindow = &aWindow;
+
+	initializeEntities();
 
 	ResourceManager::getInstance().loadTexture(BGFILEPATH, IntRect(Vector2<int>(), Vector2<int>(Texture::getMaximumSize(), Texture::getMaximumSize())));
 	mBackground.setTexture(ResourceManager::getInstance().getTexture(BGFILEPATH));
