@@ -7,7 +7,12 @@
 
 class Obstacle : public Entity, public Collidable{
 public:
-	Obstacle(std::string textureFilename, sf::RenderWindow* window);
+	enum ObstacleType{
+		SOLID,
+		DAMAGE
+	};
+
+	Obstacle(std::string textureFilename, sf::RenderWindow* window, ObstacleType type);
 	~Obstacle();
 
 	virtual void tick(const sf::Time& deltaTime);
@@ -22,6 +27,8 @@ private:
 	virtual Category getCollisionCategory();
 	virtual Type getCollisionType();
 	virtual void collide(Collidable *collidable);
+
+	ObstacleType mType;
 };
 
 

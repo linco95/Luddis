@@ -4,10 +4,11 @@
 const Entity::RenderLayer LAYER = Entity::RenderLayer::OBSTACLES;
 const int DAMAGE = 0;
 
-Obstacle::Obstacle(std::string textureFilename, sf::RenderWindow* window):
+Obstacle::Obstacle(std::string textureFilename, sf::RenderWindow* window, ObstacleType type):
 mIsAlive(true),
 mWindow(window),
-mSprite(ResourceManager::getInstance().getTexture(textureFilename))
+mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
+mType(type)
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	setPosition(150, 150);
@@ -38,7 +39,12 @@ sf::FloatRect Obstacle::getHitBox(){
 }
 
 Collidable::Category Obstacle::getCollisionCategory(){
-	return BG_SOLID;
+	if (mType == DAMAGE){
+		return BG_DAMAGE;
+	}
+	else /*if (mType == SOLID)*/{
+		return BG_SOLID;
+	}
 }
 
 Collidable::Type Obstacle::getCollisionType(){

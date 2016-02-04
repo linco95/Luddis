@@ -64,7 +64,7 @@ struct GameManagerImp : public EventObserver {
 	void initializeEntities(){
 
 
-		Obstacle* mStopp = new Obstacle(TEXTURE_NAME, &mMainWindow);
+		Obstacle* mStopp = new Obstacle(TEXTURE_NAME, &mMainWindow, Obstacle::SOLID);
 		EntityManager::getInstance().addEntity(mStopp);
 		CollisionManager::getInstance().addCollidable(mStopp);
 
