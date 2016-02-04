@@ -1,13 +1,15 @@
 #include "Dialogue.h"
 #include "ResourceManager.h"
-
-static const std::string FONTTYPE = "Resources/Fonts/arial.ttf";
+//
+static const std::string DIALOGUE_TEXTURE = "Resources/Images/Parchment.png";
 
 Dialogue::Dialogue(std::string text, sf::RenderWindow* window):
 mButtonCount(0),
+mIsAlive(true),
 mWindow(window),
-mDialogueText(text, ResourceManager::getInstance().getFont(FONTTYPE)){
-	mDialogueText.setPosition(sf::Vector2f(100, 100));
+mSprite(ResourceManager::getInstance().getTexture(DIALOGUE_TEXTURE)),
+mDialogueText(sf::IntRect(35, 35, 390, 100), text, 24){
+	setPosition(sf::Vector2f(1000, 500));
 }
 
 Dialogue::~Dialogue(){
@@ -38,7 +40,8 @@ Dialogue::RenderLayer Dialogue::getRenderLayer() const{
 }
 
 void Dialogue::updateText(const sf::Time& deltaTime){
-	
+	//Temp fix
+	//mButtonCount = 0;
 }
 
 void Dialogue::addButton(std::string buttonFile, sf::Vector2f pos){

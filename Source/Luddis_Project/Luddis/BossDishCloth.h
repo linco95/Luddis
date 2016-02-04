@@ -24,8 +24,9 @@ private:
 	void updateMovement(const sf::Time& deltaTime);
 	void attack();
 
-	Animation mAnimation;
+	AnimationQueue mAnimation;
 	sf::RenderWindow* mWindow;
+	bool mShooting;
 	bool mIsAlive;
 	float mAttackInterval;
 	sf::Vector2f mDirection;

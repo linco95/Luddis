@@ -4,7 +4,8 @@
 #include "CollisionManager.h"
 #include "VectorMath.h"
 
-static const std::string ANIMATION_FILEPATH = "Resources/Images/BAWS.png";
+static const std::string ANIMATION_IDLE_FILEPATH = "Resources/Images/Spritesheets/Grafik_Trasan300x300_S2D3V1";
+static const std::string ANIMATION_SHOT_FILEPATH = "Resources/Images/Spritesheets/Grafik_TrasanAttack300x300_S2D4V1";
 static const std::string PROJECTILE_FILEPATH = "Resources/Images/BAWS1projectile.png";
 
 static const int MAX_LIFE = 100;
@@ -15,10 +16,11 @@ static const float PROJECTILE_SPEED = 300;
 BossDishCloth::BossDishCloth(sf::RenderWindow* window) :
 mIsAlive(true),
 mWindow(window),
+mShooting(false),
 mLife(MAX_LIFE),
 mAttackInterval(ATTACK_INTERVAL),
 mDirection(0, 1.0f),
-mAnimation(Animation(ANIMATION_FILEPATH, sf::Vector2i(200, 200), 4, 4, sf::seconds(0.3f))){
+mAnimation(Animation(ANIMATION_IDLE_FILEPATH)){
 	setPosition(3000, 500);
 }
 
@@ -42,7 +44,7 @@ void BossDishCloth::tick(const sf::Time& deltaTime){
 
 void BossDishCloth::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	states.transform *= getTransform();
-	target.draw(mAnimation, states);
+	target.draw(mAnimation.getCurrAnimation(), states);
 }
 
 bool BossDishCloth::isAlive(){
@@ -54,16 +56,24 @@ BossDishCloth::RenderLayer BossDishCloth::getRenderLayer() const {
 }
 
 void BossDishCloth::updateMovement(const sf::Time& deltaTime){
-	int spriteHeight = mAnimation.getSprite().getTextureRect().height;
+	int spriteHeight = mAnimation.getCurrAnimation().getSprite().getTextureRect().height;
 	if (getPosition().y < 0 + spriteHeight
 		|| getPosition().y> mWindow->getView().getSize().y - spriteHeight)
 	{
 		mDirection = mDirection*-1.0f;
 	}
 	if (mAttackInterval > 0.6f &&
-		mAttackInterval <= ATTACK_INTERVAL - 0.3f)
+		mAttackInterval <= ATTACK_INTERVAL - 0.4f)
 	{
+		mShooting = false;
 		move(mDirection);
+	}
+	else{
+		if (!mShooting){
+			//Seem to cause a few frames of lagg
+			mShooting = true;
+			mAnimation.replaceAnimation(ANIMATION_SHOT_FILEPATH);
+		}
 	}
 }
 
@@ -99,5 +109,5 @@ void BossDishCloth::collide(Collidable* collidable){
 }
 
 sf::FloatRect BossDishCloth::getHitBox(){
-	return getTransform().transformRect(mAnimation.getSprite().getGlobalBounds());
+	return getTransform().transformRect(mAnimation.getCurrAnimation().getSprite().getGlobalBounds());
 }

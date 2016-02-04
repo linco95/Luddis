@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
 #include "Button.h"
+#include "TextBox.h"
 
 class Dialogue : public Entity{
 public:
@@ -20,7 +21,7 @@ private:
 	bool mIsAlive;
 	int mButtonCount;
 	sf::Sprite mSprite;
-	sf::Text mDialogueText;
+	TextBox mDialogueText;
 	Button* mButtons[4];
 };
 
