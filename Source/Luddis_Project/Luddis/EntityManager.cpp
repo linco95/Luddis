@@ -1,6 +1,5 @@
 #include "EntityManager.h"
 #include <SFML\Graphics.hpp>
-#include <map>
 
 static const sf::Color BGCOLOR = sf::Color::Black;
 

@@ -10,7 +10,7 @@ mWindow(window),
 mSprite(ResourceManager::getInstance().getTexture(textureFilename))
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
-	mSprite.setPosition(150, 150);
+	setPosition(150, 150);
 }
 
 Obstacle::~Obstacle(){
@@ -34,7 +34,7 @@ Entity::RenderLayer Obstacle::getRenderLayer() const{
 }
 
 sf::FloatRect Obstacle::getHitBox(){
-	return mSprite.getGlobalBounds();
+	return getTransform().transformRect(mSprite.getGlobalBounds());
 }
 
 Collidable::Category Obstacle::getCollisionCategory(){
