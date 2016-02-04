@@ -4,6 +4,7 @@
 #include <SFML/System.hpp>
 #include <stdlib.h>
 #include "SoundEngine.h"
+#include "Inventory.h"
 
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 
@@ -23,7 +24,7 @@ mSprite(ResourceManager::getInstance().getTexture(textureFilename))
 }
 
 Dust::~Dust(){
-
+	Inventory::getInstance().changeDust(1);
 }
 
 void Dust::tick(const sf::Time& deltaTime){

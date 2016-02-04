@@ -11,7 +11,12 @@ namespace sf{
 
 class ScoreCounter : public Entity{
 public:
-	ScoreCounter(sf::RenderWindow* aWindow, std::string filename, sf::Vector2i screenPos);
+	enum ScoreType{
+		CHIPS,
+		DUST
+	};
+
+	ScoreCounter(sf::RenderWindow* aWindow, std::string filename, sf::Vector2i screenPos, ScoreType type);
 	~ScoreCounter();
 
 	virtual void tick(const sf::Time& deltaTime);
@@ -27,6 +32,7 @@ private:
 	Animation mAnimation;
 	sf::Text mCounter;
 	int mScore;
+	ScoreType mType;
 };
 
 #endif // !_INCLUDED_SCORECOUNTER_

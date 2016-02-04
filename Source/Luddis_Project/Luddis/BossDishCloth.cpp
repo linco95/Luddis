@@ -8,7 +8,7 @@ static const std::string ANIMATION_FILEPATH = "Resources/Images/BAWS.png";
 static const std::string PROJECTILE_FILEPATH = "Resources/Images/BAWS1projectile.png";
 
 static const int MAX_LIFE = 100;
-static const float ATTACK_INTERVAL = 1.3f;
+static const float ATTACK_INTERVAL = 3.5f;
 static const float PROJECTILE_LIFETIME = 2.5f;
 static const float PROJECTILE_SPEED = 300;
 
@@ -60,7 +60,11 @@ void BossDishCloth::updateMovement(const sf::Time& deltaTime){
 	{
 		mDirection = mDirection*-1.0f;
 	}
-	move(mDirection);
+	if (mAttackInterval > 0.6f &&
+		mAttackInterval <= ATTACK_INTERVAL - 0.3f)
+	{
+		move(mDirection);
+	}
 }
 
 void BossDishCloth::attack(){

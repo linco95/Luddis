@@ -25,7 +25,7 @@ static const std::array<std::string, 3> PROJECTILE_FILENAME = { "Resources/Image
 												 };
 
 //All float times are in seconds
-static const float PROJECTILE_RELOAD = 0.1f;
+static const float PROJECTILE_RELOAD = 0.4f;
 static const float PROJECTILE_TIMER = 3.0f;
 static const float GRACEAREA = 12;
 static const float MOVESPEED = 200;
@@ -159,7 +159,6 @@ void Luddis::attack(){
 	CollisionManager::getInstance().addCollidable(proj);
 	// Pull out constant variable
 	SoundEngine::getInstance().playSound("resources/audio/Luddis_skott_16bit.wav");
-	mAnimation.replaceAnimation(Animation(ANIMATION_SHOT));
 
 }
 
@@ -171,6 +170,7 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right) == true
 		&& mProjectileCooldown <= 0){
 		attack();
+		mAnimation.replaceAnimation(Animation(ANIMATION_SHOT));
 	}
 	//Handle keyboard presses
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
@@ -201,6 +201,7 @@ void Luddis::collide(Collidable *collidable){
 		mCollideBox = collidable->getHitBox();
 	}
 	if (collidable->getCollisionCategory() == BG_DAMAGE){
+		mAnimation.replaceAnimation(Animation(ANIMATION_HIT, sf::Vector2i(120, 90), 4, 4, sf::seconds(0.1f)));
 		LIFE -= 1;
 	}
 	if (collidable->getCollisionCategory() == ENEMY) {
