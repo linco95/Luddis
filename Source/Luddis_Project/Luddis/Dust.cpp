@@ -26,8 +26,8 @@ mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 }
 
 Dust::~Dust(){
-	// Samma som pÂ ‰ggen
-	Inventory::getInstance().changeDust(1);
+	// Samma som pÅE‰ggen
+	Inventory::getInstance().addDust(1);
 	delete mHitbox;
 }
 

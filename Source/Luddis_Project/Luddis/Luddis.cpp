@@ -1,4 +1,5 @@
 #include "Luddis.h"
+#include "Inventory.h"
 #include "ResourceManager.h"
 #include "EntityManager.h"
 #include "CollisionManager.h"
@@ -33,7 +34,6 @@ static const float PROJECTILE_SPEED = 300;
 static const float MUZZLEOFFSET = 50.0f;
 static const sf::Vector2f FRONTVECTOR(1, 0);
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
-static int LIFE = 10;
 static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 
 Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) : 
@@ -204,11 +204,11 @@ void Luddis::collide(Collidable *collidable){
 	}
 	if (collidable->getCollisionCategory() == BG_DAMAGE){
 		mAnimation.replaceAnimation(Animation(ANIMATION_HIT, sf::Vector2i(120, 90), 4, 4, sf::seconds(0.1f)));
-		LIFE -= 1;
+		Inventory::getInstance().removeDust(1);
 	}
 	if (collidable->getCollisionCategory() == ENEMY) {
 		mAnimation.replaceAnimation(Animation(ANIMATION_HIT, sf::Vector2i(120, 90), 4, 4, sf::seconds(0.1f)));
-		LIFE -= 1;
+		Inventory::getInstance().removeDust(1);
 	}
 	if (collidable->getCollisionCategory() == COLLECT){
 		
@@ -218,6 +218,7 @@ void Luddis::collide(Collidable *collidable){
 			mStunDuration = 1.0f;
 			mAnimation.replaceAnimation(Animation(ANIMATION_HIT, sf::Vector2i(120, 90), 4, 4, sf::seconds(0.1f)));
 		}
+		Inventory::getInstance().removeDust(1);
 	}
 }
 

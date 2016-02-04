@@ -18,7 +18,8 @@ public:
 
 	int getDust();
 	void setDust(int dust);
-	void changeDust(int dust);
+	void addDust(int dust);
+	void removeDust(int dust);
 
 	int getEggs();
 	void setEggs(int eggs);

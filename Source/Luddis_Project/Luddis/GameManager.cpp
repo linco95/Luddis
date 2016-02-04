@@ -77,7 +77,6 @@ struct GameManagerImp : public EventObserver {
 
 		mSpider = new Spider(TEXTURE_SILVERFISH, &mMainWindow);
 		EntityManager::getInstance().addEntity(mSpider);
-		CollisionManager::getInstance().addCollidable(mSpider); 
 
 		mBoss = new BossDishCloth(&mMainWindow);
 		EntityManager::getInstance().addEntity(mBoss);

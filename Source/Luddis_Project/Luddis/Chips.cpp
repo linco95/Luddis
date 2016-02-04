@@ -26,7 +26,7 @@ mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 }
 
 Chips::~Chips(){
-	// Samma som pÂ ‰ggen
+	// Samma som pÅE‰ggen
 	Inventory::getInstance().changeChips(1);
 	delete mHitbox;
 }

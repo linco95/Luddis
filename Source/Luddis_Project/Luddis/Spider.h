@@ -6,7 +6,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
-class Spider : public Entity, public Collidable {
+class Spider : public Entity {
 public:
 	Spider(std::string textureFilename, sf::RenderWindow* window);
 	~Spider();
@@ -15,8 +15,6 @@ public:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	virtual bool isAlive();
 	virtual RenderLayer getRenderLayer() const;
-	virtual sf::FloatRect getHitBox();
-	sf::Shape* getNarrowHitbox() const override;
 private:
 	void updateMovement(const sf::Time& deltaTime);
 	bool mIsAlive;
@@ -25,10 +23,6 @@ private:
 	sf::RenderWindow* mWindow;
 	sf::Vector2f mDirection;
 	sf::Vector2f mDirection2;
-	virtual Category getCollisionCategory();
-	virtual Type getCollisionType();
-	virtual void collide(Collidable *collidable);
-	sf::Shape* mHitbox;
 
 };
 
