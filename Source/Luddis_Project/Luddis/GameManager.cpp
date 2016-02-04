@@ -102,14 +102,14 @@ struct GameManagerImp : public EventObserver {
 		EntityManager::getInstance().addEntity(mChips3);
 		CollisionManager::getInstance().addCollidable(mChips3);
 
-		mChipsCounter = new ScoreCounter(&mMainWindow, TEXTURE_CHIPSCOUNTER, sf::Vector2i(400, 50));
+		mChipsCounter = new ScoreCounter(&mMainWindow, TEXTURE_CHIPSCOUNTER, sf::Vector2i(400, 50), ScoreCounter::ScoreType::CHIPS);
 		EntityManager::getInstance().addEntity(mChipsCounter);
 
 		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mPlayer);
 		CollisionManager::getInstance().addCollidable(mPlayer);
 
-		mLuddCounter = new ScoreCounter(&mMainWindow, TEXTURE_LUDDCOUNTER, sf::Vector2i(550, 50));
+		mLuddCounter = new ScoreCounter(&mMainWindow, TEXTURE_LUDDCOUNTER, sf::Vector2i(550, 50), ScoreCounter::ScoreType::DUST);
 		EntityManager::getInstance().addEntity(mLuddCounter);
 
 		mDialogue = new Dialogue(FUCKING_ESSAY, &mMainWindow);
