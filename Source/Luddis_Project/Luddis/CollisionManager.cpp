@@ -36,11 +36,8 @@ void CollisionManager::removeDeadCollidables(){
 void CollisionManager::drawHitboxes(sf::RenderWindow& aWindow) const {
 	for(auto c : mCollidables){
 		sf::Shape* temp = c->getNarrowHitbox();
-		temp->setFillColor(sf::Color::Green);
+		//temp->setFillColor(sf::Color::Green);
 		aWindow.draw(*temp);
-		sf::CircleShape shape = sf::CircleShape(1000);
-		shape.setPosition(500, 500);
-		aWindow.draw(shape);
 	}
 }
 #endif

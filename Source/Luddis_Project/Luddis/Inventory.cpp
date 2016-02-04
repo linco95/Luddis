@@ -38,8 +38,12 @@ void Inventory::setDust(int dust){
 	mDust = dust;
 }
 
-void Inventory::changeDust(int dust){
+void Inventory::addDust(int dust){
 	mDust += dust;
+}
+
+void Inventory::removeDust(int dust){
+	mDust -= dust;
 }
 
 int Inventory::getEggs(){

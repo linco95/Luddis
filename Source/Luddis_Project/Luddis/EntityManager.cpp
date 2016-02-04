@@ -67,7 +67,7 @@ void EntityManager::renderEntities(sf::RenderWindow& window){
 			window.draw(*e);
 		}
 	}
-	window.display();
+	//window.display();
 }
 
 // Function that gets used to read all entities. (Added to be used by rendering)
