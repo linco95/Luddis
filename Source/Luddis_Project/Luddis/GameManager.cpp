@@ -9,6 +9,7 @@
 #include "SoundEngine.h"
 #include "Dialogue.h"
 #include "Level.h"
+#include "Button.h"
 #include <vector>
 #include "BossDishCloth.h"
 #include "Silverfish.h"
@@ -189,6 +190,7 @@ struct GameManagerImp : public EventObserver {
 
 			// Render			    
 			em->renderEntities(mMainWindow);
+			
 		}
 	}
 
@@ -210,6 +212,7 @@ struct GameManagerImp : public EventObserver {
 	Chips *mChips3;
 	ScoreCounter *mChipsCounter;
 	ScoreCounter *mLuddCounter;
+	Button* mButton;
 
 	Level* mLevel; //To be replaced with LevelManager with LevelVector
 };

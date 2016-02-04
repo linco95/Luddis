@@ -68,6 +68,13 @@ void Projectile::collide(Collidable *collidable){
 	if (collidable->getCollisionCategory() == HAIR && mCollisionCategory == ENEMY){
 		mIsAlive = false;
 	}
+	if (collidable->getCollisionCategory() == ENEMY_STUN && mCollisionCategory == HAIR){
+		mIsAlive = false;
+	}
+	if (collidable->getCollisionCategory() == FRIEND && mCollisionCategory == ENEMY_STUN){
+		mIsAlive = false;
+	}
+
 }
 
 sf::FloatRect Projectile::getHitBox(){

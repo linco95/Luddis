@@ -13,6 +13,8 @@
 
 static const char* ANIMATION_FILEPATH = "resources/images/spritesheets/Grafik_Luddis_walkcykle_sprite_longer_version_s2d2v3.png";
 static const char* ANIMATION_HIT = "resources/images/spritesheets/Grafik_Luddis_hit_sprite_s2d2v1.png";
+static const char* ANIMATION_SHOOT = "resources/images/spritesheets/Grafik_Luddis skjut sprite 120x90 tre frames_s2d3v1.png";
+
 static const std::string SOUND_FILENAME1 = "Resources/Audio/Skott_Blås_Små_01.wav";
 static const std::string SOUND_FILENAME2 = "Resources/Audio/Skott_Blås_Små_02.wav";
 static const std::string SOUND_FILENAME3 = "Resources/Audio/Skott_Blås_Små_03.wav";
@@ -24,7 +26,7 @@ static const std::array<std::string, 3> PROJECTILE_FILENAME = { "Resources/Image
 												 };
 
 //All float times are in seconds
-static const float PROJECTILE_RELOAD = 0.1f;
+static const float PROJECTILE_RELOAD = 0.4f;
 static const float PROJECTILE_TIMER = 3.0f;
 static const float GRACEAREA = 12;
 static const float MOVESPEED = 200;
@@ -169,6 +171,7 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right) == true
 		&& mProjectileCooldown <= 0){
 		attack();
+		mAnimation.replaceAnimation(Animation(ANIMATION_SHOOT, sf::Vector2i(120, 90), 3, 3, sf::seconds(0.1f)));
 	}
 	//Handle keyboard presses
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
