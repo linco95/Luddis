@@ -202,8 +202,9 @@ struct GameManagerImp : public EventObserver {
 			em->renderEntities(mMainWindow);
 #ifdef LUDDIS_DEBUG_DRAW_HITBOXES
 			cm->drawHitboxes(mMainWindow);
-			mMainWindow.display();
 #endif
+			mMainWindow.display();
+
 
 		}
 	}
