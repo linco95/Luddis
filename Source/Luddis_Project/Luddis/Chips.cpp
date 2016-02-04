@@ -58,8 +58,7 @@ Chips::Type Chips::getCollisionType(){
 void Chips::collide(Collidable *collidable){
 	if (collidable->getCollisionCategory() == FRIEND){
 		mIsAlive = false;
-		// TODO
-		// Add to chips counter
+		
 		SoundEngine::getInstance().playSound("resources/audio/luddis_crumbgather_s1d2v1.wav");
 	}
 }

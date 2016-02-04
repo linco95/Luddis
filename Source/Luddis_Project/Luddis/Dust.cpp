@@ -58,8 +58,7 @@ Dust::Type Dust::getCollisionType(){
 void Dust::collide(Collidable *collidable){
 	if (collidable->getCollisionCategory() == FRIEND){
 		mIsAlive = false;
-		// TODO
-		// Add to dust counter
+		
 		SoundEngine::getInstance().playSound("resources/audio/Damm_Slurp_01.wav");
 	}
 }
