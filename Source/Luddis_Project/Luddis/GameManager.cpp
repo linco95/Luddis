@@ -14,6 +14,7 @@
 #include "Silverfish.h"
 #include "Dust.h"
 #include "Chips.h"
+#include "Spider.h"
 #include "Obstacle.h"
 #include "ScoreCounter.h"
 
@@ -70,6 +71,10 @@ struct GameManagerImp : public EventObserver {
 		mEnemy2 = new Silverfish(TEXTURE_SILVERFISH, &mMainWindow);
 		EntityManager::getInstance().addEntity(mEnemy2);
 		CollisionManager::getInstance().addCollidable(mEnemy2);*/
+
+		mSpider = new Spider(TEXTURE_SILVERFISH, &mMainWindow);
+		EntityManager::getInstance().addEntity(mSpider);
+		CollisionManager::getInstance().addCollidable(mSpider); 
 
 		mBoss = new BossDishCloth(&mMainWindow);
 		EntityManager::getInstance().addEntity(mBoss);
@@ -201,6 +206,8 @@ struct GameManagerImp : public EventObserver {
 	Silverfish *mEnemy1;
 	Silverfish *mEnemy2;
 	BossDishCloth* mBoss;
+
+	Spider *mSpider;
 
 	Dust *mDust;
 	Dust *mDust2;
