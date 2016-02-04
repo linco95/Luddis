@@ -12,8 +12,8 @@
 #include <array>
 
 static const char* ANIMATION_FILEPATH = "resources/images/spritesheets/Grafik_Luddis_walkcykle_sprite_longer_version_s2d2v3.png";
-static const char* ANIMATION_HIT = "resources/images/spritesheets/Grafik_Luddis_hit_sprite_s2d2v1.png";
-static const char* ANIMATION_SHOT = "resources/images/spritesheets/Grafik_Luddis shot120x90treframes_s2d3v1";
+static const Animation HIT_ANIMATION = Animation("resources/images/spritesheets/Grafik_Luddis_hit_sprite_s2d2v1");
+static const Animation SHOT_ANIMATION = Animation("resources/images/spritesheets/Grafik_Luddis shot120x90treframes_s2d3v1");
 static const std::string SOUND_FILENAME1 = "Resources/Audio/Skott_Blås_Små_01.wav";
 static const std::string SOUND_FILENAME2 = "Resources/Audio/Skott_Blås_Små_02.wav";
 static const std::string SOUND_FILENAME3 = "Resources/Audio/Skott_Blås_Små_03.wav";
@@ -172,7 +172,7 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right) == true
 		&& mProjectileCooldown <= 0){
 		attack();
-		mAnimation.replaceAnimation(Animation(ANIMATION_SHOT));
+		mAnimation.replaceAnimation(SHOT_ANIMATION);
 	}
 	//Handle keyboard presses
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
@@ -203,11 +203,11 @@ void Luddis::collide(Collidable *collidable){
 		mCollideBox = collidable->getHitBox();
 	}
 	if (collidable->getCollisionCategory() == BG_DAMAGE){
-		mAnimation.replaceAnimation(Animation(ANIMATION_HIT, sf::Vector2i(120, 90), 4, 4, sf::seconds(0.1f)));
+		mAnimation.replaceAnimation(HIT_ANIMATION);
 		LIFE -= 1;
 	}
 	if (collidable->getCollisionCategory() == ENEMY) {
-		mAnimation.replaceAnimation(Animation(ANIMATION_HIT, sf::Vector2i(120, 90), 4, 4, sf::seconds(0.1f)));
+		mAnimation.replaceAnimation(HIT_ANIMATION);
 		LIFE -= 1;
 	}
 	if (collidable->getCollisionCategory() == COLLECT){
@@ -216,7 +216,7 @@ void Luddis::collide(Collidable *collidable){
 	if (collidable->getCollisionCategory() == ENEMY_STUN){
 		if (mStunDuration <= 0){
 			mStunDuration = 1.0f;
-			mAnimation.replaceAnimation(Animation(ANIMATION_HIT, sf::Vector2i(120, 90), 4, 4, sf::seconds(0.1f)));
+			mAnimation.replaceAnimation(HIT_ANIMATION);
 		}
 	}
 }

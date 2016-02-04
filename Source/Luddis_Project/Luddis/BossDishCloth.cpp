@@ -6,7 +6,6 @@
 #include <SFML\Graphics\Shape.hpp>
 
 static const std::string ANIMATION_IDLE_FILEPATH = "Resources/Images/Spritesheets/Grafik_Trasan300x300_S2D3V1";
-static const std::string ANIMATION_SHOT_FILEPATH = "Resources/Images/Spritesheets/Grafik_TrasanAttack300x300_S2D4V1";
 static const std::string PROJECTILE_FILEPATH = "Resources/Images/BAWS1projectile.png";
 static const Animation SHOOTING_ANIMATION = Animation("Resources/Images/Spritesheets/Grafik_TrasanAttack300x300_S2D4V1");
 static const int MAX_LIFE = 100;
