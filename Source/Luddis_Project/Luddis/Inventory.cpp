@@ -12,7 +12,8 @@ Inventory::~Inventory(){
 }
 
 Inventory& Inventory::getInstance(){
-
+	static Inventory I;
+	return I;
 }
 
 int Inventory::getChips(){
