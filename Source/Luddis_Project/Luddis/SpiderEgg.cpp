@@ -15,8 +15,6 @@ mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 }
 
 SpiderEgg::~SpiderEgg(){
-	// Inte bra att ha här => 100% chans att plocka up dem (ie när banan avallokerar alla entiteter)
-	Inventory::getInstance().changeEggs(1);
 	delete mHitbox;
 }
 
@@ -55,5 +53,6 @@ Collidable::Type SpiderEgg::getCollisionType(){
 void SpiderEgg::collide(Collidable *collidable){
 	if (collidable->getCollisionCategory() == FRIEND){
 		mIsAlive = false;
+		Inventory::getInstance().changeEggs(1);
 	}
 }

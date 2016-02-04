@@ -26,8 +26,6 @@ mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 }
 
 Chips::~Chips(){
-	// Samma som pEäggen
-	Inventory::getInstance().changeChips(1);
 	delete mHitbox;
 }
 
@@ -60,7 +58,7 @@ Chips::Type Chips::getCollisionType(){
 void Chips::collide(Collidable *collidable){
 	if (collidable->getCollisionCategory() == FRIEND){
 		mIsAlive = false;
-		
+		Inventory::getInstance().changeChips(1);
 		SoundEngine::getInstance().playSound("resources/audio/luddis_crumbgather_s1d2v1.wav");
 	}
 }
