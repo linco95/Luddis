@@ -170,7 +170,7 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right) == true
 		&& mProjectileCooldown <= 0){
 		attack();
-		mAnimation.replaceAnimation(Animation(ANIMATION_SHOT, sf::Vector2i(120, 90), 3, 3, sf::seconds(0.1f)));
+		mAnimation.replaceAnimation(Animation(ANIMATION_SHOT));
 	}
 	//Handle keyboard presses
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){

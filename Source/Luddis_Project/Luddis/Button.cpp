@@ -27,8 +27,8 @@ void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	target.draw(mSprite, states);
 }
 
-void Button::setPosition(sf::Vector2f pos){
-	setPosition(pos);
+void Button::setButtonPosition(sf::Vector2f pos){
+	mSprite.setPosition(pos);
 }
 
 void Button::updateInput(){

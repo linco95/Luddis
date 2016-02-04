@@ -7,19 +7,21 @@
 
 class Dialogue : public Entity{
 public:
-	Dialogue(std::string text);
+	Dialogue(std::string text, sf::RenderWindow* window);
 	~Dialogue();
 	virtual void tick(const sf::Time& deltaTime);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	virtual bool isAlive();
 	virtual RenderLayer getRenderLayer() const;
 	void updateText(const sf::Time& deltaTime);
+	void addButton(std::string buttonFile, sf::Vector2f pos);
 private:
+	sf::RenderWindow* mWindow;
 	bool mIsAlive;
+	int mButtonCount;
 	sf::Sprite mSprite;
 	sf::Text mDialogueText;
-	Button mButton1;
-	Button mButton2;
+	Button* mButtons[4];
 };
 
 #endif // !_INCLUDED_DIALOGUE_
