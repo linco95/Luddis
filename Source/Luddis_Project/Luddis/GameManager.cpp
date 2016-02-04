@@ -9,6 +9,7 @@
 #include "SoundEngine.h"
 #include "Dialogue.h"
 #include "Level.h"
+#include "Button.h"
 #include <vector>
 #include "BossDishCloth.h"
 #include "Silverfish.h"
@@ -64,15 +65,16 @@ struct GameManagerImp : public EventObserver {
 		EntityManager::getInstance().addEntity(mStopp);
 		CollisionManager::getInstance().addCollidable(mStopp);
 
-		mEnemy1 = new Silverfish(TEXTURE_SILVERFISH, &mMainWindow);
+		/*mEnemy1 = new Silverfish(TEXTURE_SILVERFISH, &mMainWindow);
 		EntityManager::getInstance().addEntity(mEnemy1);
 		CollisionManager::getInstance().addCollidable(mEnemy1);
 		mEnemy2 = new Silverfish(TEXTURE_SILVERFISH, &mMainWindow);
 		EntityManager::getInstance().addEntity(mEnemy2);
-		CollisionManager::getInstance().addCollidable(mEnemy2);
+		CollisionManager::getInstance().addCollidable(mEnemy2);*/
 
 		mBoss = new BossDishCloth(&mMainWindow);
 		EntityManager::getInstance().addEntity(mBoss);
+		CollisionManager::getInstance().addCollidable(mBoss);
 
 		mDust = new Dust(TEXTURE_DUST, &mMainWindow);
 		EntityManager::getInstance().addEntity(mDust);
@@ -97,14 +99,14 @@ struct GameManagerImp : public EventObserver {
 		EntityManager::getInstance().addEntity(mChips3);
 		CollisionManager::getInstance().addCollidable(mChips3);
 
-		mChipsCounter = new ScoreCounter(TEXTURE_CHIPSCOUNTER, sf::Vector2f(400, 50));
+		mChipsCounter = new ScoreCounter(&mMainWindow, TEXTURE_CHIPSCOUNTER, sf::Vector2i(400, 50));
 		EntityManager::getInstance().addEntity(mChipsCounter);
 
 		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mPlayer);
 		CollisionManager::getInstance().addCollidable(mPlayer);
 
-		mLuddCounter = new ScoreCounter(TEXTURE_LUDDCOUNTER, sf::Vector2f(550, 50));
+		mLuddCounter = new ScoreCounter(&mMainWindow, TEXTURE_LUDDCOUNTER, sf::Vector2i(550, 50));
 		EntityManager::getInstance().addEntity(mLuddCounter);
 
 		mLevel = new Level();
@@ -167,26 +169,29 @@ struct GameManagerImp : public EventObserver {
 		EntityManager* em = &EntityManager::getInstance();
 		CollisionManager* cm = &CollisionManager::getInstance();
 		SoundEngine* se = &SoundEngine::getInstance();
+		se->setMainVolume(10);
 		Clock gameClock;
 		while (mMainWindow.isOpen()){
 
-			// Handle Events         In  EventManager
+			// Handle Events       
 			handleEvents(mMainWindow);
 
 			// Update Entities     |
-			em->updateEntities(gameClock.getElapsedTime());
-			se->update(gameClock.restart());
+			se->update(gameClock.getElapsedTime());
+			em->updateEntities(gameClock.restart());
 			cm->detectCollisions();
 
-			// Kill dead Entities  | In EntityManager
+			
+			// Kill dead Entities  
 			if (!mPlayer->isAlive()){
 				gameOver();
 			}
 			cm->removeDeadCollidables();
 			em->removeDeadEntities();
 
-			// Render			     (In rendermanager in the future)
+			// Render			    
 			em->renderEntities(mMainWindow);
+			
 		}
 	}
 
@@ -208,6 +213,7 @@ struct GameManagerImp : public EventObserver {
 	Chips *mChips3;
 	ScoreCounter *mChipsCounter;
 	ScoreCounter *mLuddCounter;
+	Button* mButton;
 
 	Level* mLevel; //To be replaced with LevelManager with LevelVector
 };
@@ -216,6 +222,7 @@ GameManager::GameManager() :
 	mGMImp(new GameManagerImp()){
 
 }
+
 GameManager::~GameManager(){
 	delete mGMImp;
 }
@@ -227,6 +234,7 @@ void GameManager::run(){
 void GameManager::gameOver(){
 	mGMImp->gameOver();
 }
+
 GameManager& GameManager::getInstance(){
 	static GameManager gm;
 	return gm;

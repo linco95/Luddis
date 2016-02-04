@@ -24,11 +24,12 @@ private:
 	void updateMovement(const sf::Time& deltaTime);
 	void attack();
 
-	AnimationQueue mAnimation;
+	Animation mAnimation;
 	sf::RenderWindow* mWindow;
 	bool mIsAlive;
 	float mAttackInterval;
 	sf::Vector2f mDirection;
+	int mLife;
 };
 
 #endif // !_INCLUDED_BOSSDISHCLOTH

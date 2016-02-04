@@ -2,10 +2,41 @@
 #include "ResourceManager.h"
 //#include <SFML\System\Vector2.hpp>
 #include <cmath>
+#include "Utils.h"
+#include <rapidjson\document.h>
+#include <cassert>
 
 using namespace sf;
 
 struct AnimationImp : public Drawable {
+	
+	AnimationImp(const std::string& aFilePathNoExtension) :
+		mCurrSprite(0),
+		mHasLooped(false)
+	{
+		std::string config = LuddisUtilFuncs::loadJsonFile(aFilePathNoExtension + ".json");
+		rapidjson::Document configDoc;
+		configDoc.Parse(config.c_str());
+		assert(configDoc.IsObject());
+
+		assert(configDoc.HasMember("Tile_width") && configDoc["Tile_width"].IsInt());
+		assert(configDoc.HasMember("Tile_height") && configDoc["Tile_height"].IsInt());
+		assert(configDoc.HasMember("Number_of_tiles") && configDoc["Number_of_tiles"].IsInt());
+		assert(configDoc.HasMember("Number_of_columns") && configDoc["Number_of_columns"].IsInt());
+		assert(configDoc.HasMember("Frame_time_seconds") && configDoc["Frame_time_seconds"].IsDouble());
+		mTileSize = sf::Vector2i(configDoc["Tile_width"].GetInt(), configDoc["Tile_height"].GetInt());
+
+		mSpriteAmt = configDoc["Number_of_tiles"].GetInt();
+		mColumns = configDoc["Number_of_columns"].GetInt();
+		mFrameTime = sf::seconds((float)configDoc["Frame_time_seconds"].GetDouble());
+
+		mSpriteSheet = ResourceManager::getInstance().getTexture(aFilePathNoExtension + ".png");
+		mSprite.setTexture(mSpriteSheet);
+		mSprite.setTextureRect(IntRect(0, 0, mTileSize.x, mTileSize.y));
+		mSprite.setOrigin(Vector2f(mTileSize.x / 2.0f, mTileSize.y / 2.0f));
+	}
+
+	
 	// The idea is to only send a parameter string with the file name, and the animation class will load the spritesheet file, and its meta data, from the animation folder
 	AnimationImp(const std::string& aFilePath, const Vector2i& aTileSize, const int& aColumns, const int& aSpriteAmt, const Time& aFrameTime) :
 		mTileSize(aTileSize),
@@ -90,8 +121,10 @@ struct AnimationImp : public Drawable {
 };
 
 Animation::Animation(const std::string& aFilePath, const Vector2i& aTileSize, const int& aColumns, const int& aSpriteAmt, const Time& aFrameTime) :
-	mAImp(new AnimationImp(aFilePath, aTileSize, aColumns, aSpriteAmt, aFrameTime)) {
-	
+	mAImp(new AnimationImp(aFilePath, aTileSize, aColumns, aSpriteAmt, aFrameTime)) {	
+}
+Animation::Animation(const std::string& aFilePath) : 
+	mAImp(new AnimationImp(aFilePath)) {
 }
 Animation::~Animation(){
 	delete mAImp;

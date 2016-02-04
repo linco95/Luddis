@@ -1,0 +1,7 @@
+{
+	"Tile_width": 120,
+	"Tile_height": 90,
+	"Number_of_tiles": 3,
+	"Number_of_columns": 3,
+	"Frame_time_seconds": 0.1
+}

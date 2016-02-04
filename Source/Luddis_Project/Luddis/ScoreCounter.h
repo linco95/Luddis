@@ -5,9 +5,13 @@
 #include "Animation.h"
 #include <SFML/Graphics/Text.hpp>
 
+namespace sf{
+	class RenderWindow;
+}
+
 class ScoreCounter : public Entity{
 public:
-	ScoreCounter(std::string filename, sf::Vector2f screenPos);
+	ScoreCounter(sf::RenderWindow* aWindow, std::string filename, sf::Vector2i screenPos);
 	~ScoreCounter();
 
 	virtual void tick(const sf::Time& deltaTime);
@@ -18,6 +22,8 @@ public:
 	void addToScore(int score);
 private:
 	bool mAlive;
+	sf::RenderWindow* mWindow;
+	sf::Vector2i mPosition;
 	Animation mAnimation;
 	sf::Text mCounter;
 	int mScore;

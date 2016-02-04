@@ -13,12 +13,10 @@
 
 static const char* ANIMATION_FILEPATH = "resources/images/spritesheets/Grafik_Luddis_walkcykle_sprite_longer_version_s2d2v3.png";
 static const char* ANIMATION_HIT = "resources/images/spritesheets/Grafik_Luddis_hit_sprite_s2d2v1.png";
+static const char* ANIMATION_SHOT = "resources/images/spritesheets/Grafik_Luddis shot120x90treframes_s2d3v1";
 static const std::string SOUND_FILENAME1 = "Resources/Audio/Skott_Blås_Små_01.wav";
 static const std::string SOUND_FILENAME2 = "Resources/Audio/Skott_Blås_Små_02.wav";
 static const std::string SOUND_FILENAME3 = "Resources/Audio/Skott_Blås_Små_03.wav";
-
-static const std::string MUSIC_FILENAME1 = "Resources/Music/Mists_of_Time-4T.ogg";
-static const std::string MUSIC_FILENAME2 = "Resources/Music/The_Abyss-4T.ogg";
 
 //This should be dynamic later to determine what texture to use for projectiles
 static const std::array<std::string, 3> PROJECTILE_FILENAME = { "Resources/Images/Grafik_Attack 1_35x35_s1d3v1.png",
@@ -27,7 +25,7 @@ static const std::array<std::string, 3> PROJECTILE_FILENAME = { "Resources/Image
 												 };
 
 //All float times are in seconds
-static const float PROJECTILE_RELOAD = 0.1f;
+static const float PROJECTILE_RELOAD = 0.4f;
 static const float PROJECTILE_TIMER = 3.0f;
 static const float GRACEAREA = 12;
 static const float MOVESPEED = 200;
@@ -172,13 +170,14 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right) == true
 		&& mProjectileCooldown <= 0){
 		attack();
+		mAnimation.replaceAnimation(Animation(ANIMATION_SHOT, sf::Vector2i(120, 90), 3, 3, sf::seconds(0.1f)));
 	}
 	//Handle keyboard presses
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
-		SoundEngine::getInstance().fadeToNewMusic(MUSIC_FILENAME1, 2.0f);
+		
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
-		SoundEngine::getInstance().fadeToNewMusic(MUSIC_FILENAME2, 2.0f);
+		
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)){
 
@@ -190,7 +189,7 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 
 Luddis::Category Luddis::getCollisionCategory(){
 	return FRIEND;
-	}
+}
 
 Luddis::Type Luddis::getCollisionType(){
 	return REC;
@@ -206,11 +205,17 @@ void Luddis::collide(Collidable *collidable){
 		LIFE -= 1;
 	}
 	if (collidable->getCollisionCategory() == ENEMY) {
-		mAnimation.addAnimation(Animation(ANIMATION_HIT, sf::Vector2i(120, 90), 4, 4, sf::seconds(0.1f)));
+		mAnimation.replaceAnimation(Animation(ANIMATION_HIT, sf::Vector2i(120, 90), 4, 4, sf::seconds(0.1f)));
 		LIFE -= 1;
 	}
 	if (collidable->getCollisionCategory() == COLLECT){
 		
+	}
+	if (collidable->getCollisionCategory() == ENEMY_STUN){
+		if (mStunDuration <= 0){
+			mStunDuration = 1.0f;
+			mAnimation.replaceAnimation(Animation(ANIMATION_HIT, sf::Vector2i(120, 90), 4, 4, sf::seconds(0.1f)));
+		}
 	}
 }
 

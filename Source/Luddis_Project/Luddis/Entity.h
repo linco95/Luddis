@@ -6,10 +6,9 @@
 #include <SFML/Graphics/Sprite.hpp>
 
 
-// Framåtdeklaration
+// Forwarddeclaration
 namespace sf{
 	class Time;
-//	class Sprite;
 }
 
 class Entity : public sf::Transformable, public sf::Drawable {
