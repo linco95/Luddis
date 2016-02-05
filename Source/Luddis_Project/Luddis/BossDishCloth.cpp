@@ -7,19 +7,18 @@
 
 //Different states depending on how damaged the boss is.
 //State 1
-static const std::string ANIMATION_IDLE_FILEPATH = "Resources/Images/Spritesheets/Grafik_Trasan_S2D3V2";
-static const Animation SHOOTING_ANIMATION = Animation("Resources/Images/Spritesheets/Grafik_TrasanAttack_S2D4V3");
-/*
+static const std::string ANIMATION_IDLE_FILEPATH = "Resources/Images/Spritesheets/Grafik_TrasanFas1_S2D3V2";
+static const Animation SHOOTING_ANIMATION = Animation("Resources/Images/Spritesheets/Grafik_TrasanAttackFas1_S2D4V3");
 //State 2
-static const std::string ANIMATION_IDLE_FILEPATH_2 = "Resources/Images/Spritesheets/Grafik_Trasan_S2D3V2";
-static const Animation SHOOTING_ANIMATION_2 = Animation("Resources/Images/Spritesheets/Grafik_TrasanAttack_S2D4V3");
+static const std::string ANIMATION_IDLE_FILEPATH_2 = "Resources/Images/Spritesheets/Grafik_TrasanFas2_S2D3V2";
+static const Animation SHOOTING_ANIMATION_2 = Animation("Resources/Images/Spritesheets/Grafik_TrasanAttackFas2_S2D4V3");
 //State 3
-static const std::string ANIMATION_IDLE_FILEPATH_3 = "Resources/Images/Spritesheets/Grafik_Trasan_S2D3V2";
-static const Animation SHOOTING_ANIMATION_3 = Animation("Resources/Images/Spritesheets/Grafik_TrasanAttack_S2D4V3");
+static const std::string ANIMATION_IDLE_FILEPATH_3 = "Resources/Images/Spritesheets/Grafik_TrasanFas3_S2D3V1";
+static const Animation SHOOTING_ANIMATION_3 = Animation("Resources/Images/Spritesheets/Grafik_TrasanAttackFas3_S2D4V1");
 //State 4
-static const std::string ANIMATION_IDLE_FILEPATH_4 = "Resources/Images/Spritesheets/Grafik_Trasan_S2D3V2";
-static const Animation SHOOTING_ANIMATION_4 = Animation("Resources/Images/Spritesheets/Grafik_TrasanAttack_S2D4V3");
-*/
+static const std::string ANIMATION_IDLE_FILEPATH_4 = "Resources/Images/Spritesheets/Grafik_TrasanFas4_S2D3V2";
+static const Animation SHOOTING_ANIMATION_4 = Animation("Resources/Images/Spritesheets/Grafik_TrasanAttackFas4_S2D4V1");
+
 static const std::string PROJECTILE_FILEPATH = "Resources/Images/BAWS1projectile.png";
 static const int MAX_LIFE = 100;
 static const float ATTACK_INTERVAL = 3.5f;
@@ -51,7 +50,7 @@ void BossDishCloth::tick(const sf::Time& deltaTime){
 	mAttackInterval -= deltaTime.asSeconds();
 	updateMovement(deltaTime);
 	mAnimation.tick(deltaTime);
-	setScale((float)mLife / 100, (float)mLife / 100);
+	//setScale((float)mLife / 100, (float)mLife / 100);
 	if (mAttackInterval <= 0){
 		attack();
 		mAttackInterval = ATTACK_INTERVAL;
@@ -88,25 +87,33 @@ void BossDishCloth::updateMovement(const sf::Time& deltaTime){
 		if (!mShooting){
 			//Seem to cause a few frames of lagg
 			mShooting = true;
-			/* For different states of damage (changes happen next shot if hit when shooting)
+			//For different states of damage (changes happen next shot if hit when shooting)
 			//State 1
 			if (mLife < 26){
-				mAnimation.replaceAnimation(SHOOTING_ANIMATION);
+				int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
+				mAnimation.replaceAnimation(SHOOTING_ANIMATION_4);
+				mAnimation.getCurrAnimation().setFrame(frame);
 			}
 			//State 2
 			if (25 < mLife && mLife < 51){
-				mAnimation.replaceAnimation(SHOOTING_ANIMATION_2);
+				int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
+				mAnimation.replaceAnimation(SHOOTING_ANIMATION_3);
+				mAnimation.getCurrAnimation().setFrame(frame);
 			}
 			//State 3
 			if (50 < mLife && mLife < 76){
-				mAnimation.replaceAnimation(SHOOTING_ANIMATION_3);
+				int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
+				mAnimation.replaceAnimation(SHOOTING_ANIMATION_2);
+				mAnimation.getCurrAnimation().setFrame(frame);
 			}
 			//State 4
 			if (75 < mLife){
-				mAnimation.replaceAnimation(SHOOTING_ANIMATION_4);
+				int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
+				mAnimation.replaceAnimation(SHOOTING_ANIMATION);
+				mAnimation.getCurrAnimation().setFrame(frame);
 			}
-			*/
-			mAnimation.replaceAnimation(SHOOTING_ANIMATION);
+			
+			//mAnimation.replaceAnimation(SHOOTING_ANIMATION);
 		}
 	}
 }
@@ -139,24 +146,32 @@ BossDishCloth::Type BossDishCloth::getCollisionType(){
 void BossDishCloth::collide(Collidable* collidable){
 	if (collidable->getCollisionCategory() == HAIR){
 		mLife -= 15;
-		/* For different states of damages (causes animation to "start over")
+		// For different states of damages (causes animation to "start over")
 		//State 1
 		if (mLife < 26){
-			mAnimation.setDefaultAnimation(Animation(ANIMATION_IDLE_FILEPATH));
+			int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
+			mAnimation.setDefaultAnimation(Animation(ANIMATION_IDLE_FILEPATH_4));
+			mAnimation.getCurrAnimation().setFrame(frame);
 		}
 		//State 2
 		if (25 < mLife && mLife < 51){
-			mAnimation.setDefaultAnimation(Animation(ANIMATION_IDLE_FILEPATH_2));
+			int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
+			mAnimation.setDefaultAnimation(Animation(ANIMATION_IDLE_FILEPATH_3));
+			mAnimation.getCurrAnimation().setFrame(frame);
 		}
 		//State 3
 		if (50 < mLife && mLife < 76){
-			mAnimation.setDefaultAnimation(Animation(ANIMATION_IDLE_FILEPATH_3));
+			int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
+			mAnimation.setDefaultAnimation(Animation(ANIMATION_IDLE_FILEPATH_2));
+			mAnimation.getCurrAnimation().setFrame(frame);
 		}
 		//State 4
 		if (75 < mLife){
-			mAnimation.setDefaultAnimation(Animation(ANIMATION_IDLE_FILEPATH_4));
+			int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
+			mAnimation.setDefaultAnimation(Animation(ANIMATION_IDLE_FILEPATH));
+			mAnimation.getCurrAnimation().setFrame(frame);
 		}
-		*/
+		
 	}
 }
 
