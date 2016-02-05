@@ -29,7 +29,6 @@ void ScoreCounter::tick(const sf::Time& deltaTime){
 	if (mType == DUST){
 		mCounter.setString(std::to_string(Inventory::getInstance().getDust()));
 	}
-	//setPosition(mWindow->mapPixelToCoords(mPosition));
 }
 
 void ScoreCounter::draw(sf::RenderTarget& target, sf::RenderStates states) const{

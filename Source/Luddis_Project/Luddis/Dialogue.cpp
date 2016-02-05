@@ -20,6 +20,9 @@ Dialogue::~Dialogue(){
 
 void Dialogue::tick(const sf::Time& deltaTime){
 	updateText(deltaTime);
+	for (int i = 0; i < mButtonCount; i++){
+		mButtons[i]->tick(deltaTime);
+	}
 }
 
 void Dialogue::draw(sf::RenderTarget& target, sf::RenderStates states) const{
@@ -47,6 +50,6 @@ void Dialogue::updateText(const sf::Time& deltaTime){
 void Dialogue::addButton(std::string buttonFile, sf::Vector2f pos){
 	if (mButtonCount < 4){
 		mButtonCount++;
-		mButtons[mButtonCount] = new Button(buttonFile, mWindow, pos);
+		mButtons[mButtonCount-1] = new Button(buttonFile, mWindow, pos);
 	}
 }
