@@ -26,8 +26,6 @@ mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 }
 
 Dust::~Dust(){
-	// Samma som på äggen
-	Inventory::getInstance().changeDust(1);
 	delete mHitbox;
 }
 
@@ -60,7 +58,7 @@ Dust::Type Dust::getCollisionType(){
 void Dust::collide(Collidable *collidable){
 	if (collidable->getCollisionCategory() == FRIEND){
 		mIsAlive = false;
-		
+		Inventory::getInstance().addDust(1);
 		SoundEngine::getInstance().playSound("resources/audio/Damm_Slurp_01.wav");
 	}
 }

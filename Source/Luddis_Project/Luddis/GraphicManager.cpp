@@ -76,7 +76,8 @@ void GraphicManager::loadFont(std::string filename){
 	}
 
 	sf::Font* font = new sf::Font();
-	assert(font->loadFromFile(filename));
+	bool isLoaded = font->loadFromFile(filename);
+	assert(isLoaded);
 
 	std::pair<sf::Font*, std::string> p1;
 	p1.first = font;

@@ -32,10 +32,11 @@ void CollisionManager::removeDeadCollidables(){
 }
 
 #ifdef LUDDIS_DEBUG_DRAW_HITBOXES
+#include "SFML\Graphics\CircleShape.hpp"
 void CollisionManager::drawHitboxes(sf::RenderWindow& aWindow) const {
 	for(auto c : mCollidables){
 		sf::Shape* temp = c->getNarrowHitbox();
-		temp->setFillColor(sf::Color::Green);
+		//temp->setFillColor(sf::Color::Green);
 		aWindow.draw(*temp);
 	}
 }

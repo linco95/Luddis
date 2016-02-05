@@ -11,15 +11,12 @@ static float SPEED = 180;
 static const float WAIT_INTERVAL = 1.8f;
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 
-static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
-
 
 Spider::Spider(std::string textureFilename, sf::RenderWindow* window) :
 mIsAlive(true),
 mWindow(window),
 mWait(WAIT_INTERVAL),
-mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
-mHitbox(new sf::CircleShape(HITBOX_SHAPE))
+mSprite(ResourceManager::getInstance().getTexture(textureFilename))
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 
@@ -32,7 +29,6 @@ mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 }
 
 Spider::~Spider(){
-	delete mHitbox;
 }
 
 void Spider::tick(const sf::Time& deltaTime){
@@ -67,23 +63,4 @@ bool Spider::isAlive(){
 
 Entity::RenderLayer Spider::getRenderLayer() const{
 	return LAYER;
-}
-
-Spider::Category Spider::getCollisionCategory(){
-	return BG_SOLID;
-}
-
-Spider::Type Spider::getCollisionType(){
-	return REC;
-}
-
-void Spider::collide(Collidable *collidable){
-
-}
-
-sf::FloatRect Spider::getHitBox(){
-	return getTransform().transformRect(mSprite.getGlobalBounds());
-}
-sf::Shape* Spider::getNarrowHitbox() const{
-	return mHitbox;
 }
