@@ -1,57 +1,59 @@
 #include "TextBox.h"
 #include "ResourceManager.h"
+#include <iostream>
 
 TextBox::TextBox(sf::IntRect box, std::string text, int fontSize, std::string fontName):
 mTextString(text),
 mBox(box),
 mFontSize(fontSize),
 mFontName(fontName){
-	makeSuperFly();
+	setFont(fontName);
+	mText.setString(wrapText(mTextString, mBox.width, ResourceManager::getInstance().getFont(mFontName), mFontSize));
+	mText.setPosition((float)mBox.left, (float)mBox.top);
 }
-
 TextBox::~TextBox(){
 
 }
 
 void TextBox::setFont(std::string fontName){
-	mFontName = fontName;
-	for (TextVector::size_type i = 0; i < mTexts.size(); i++)
-	{
-		mTexts.at(i).setFont(ResourceManager::getInstance().getFont(mFontName));
-	}
-	makeSuperFly();
+	mText.setFont(ResourceManager::getInstance().getFont(fontName));
+	mText.setCharacterSize(mFontSize);
+	mText.setColor(sf::Color::Black);
+	mText.setString(wrapText(mTextString, mBox.width, ResourceManager::getInstance().getFont(mFontName), mFontSize));
 }
 
 void TextBox::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	states.transform *= getTransform();
-	for (TextVector::size_type i = 0; i < mTexts.size(); i++){
-		target.draw(mTexts.at(i), states);
-	}
+	target.draw(mText, states);
 }
 
-void TextBox::makeSuperFly(){
-	mTexts.clear();
-	std::string tempString;
-	int height = mBox.height;
-	int width = mBox.width;
-	int xPos = mBox.top;
-	int yPos = mBox.left;
-	addText(xPos, yPos);
-	for (std::string::size_type i = 0; i < mTextString.length(); i++){
-		tempString.push_back(mTextString.at(i));
-		mTexts.back().setString(tempString);
-		if (mTexts.back().getGlobalBounds().width >= width && tempString.back() == ' '){
-			yPos += height/2;
-			addText(xPos, yPos);
-			tempString.clear();
+sf::String TextBox::wrapText(sf::String string, unsigned width, const sf::Font &font, unsigned charicterSize, bool bold){
+	unsigned currentOffset = 0;
+	bool firstWord = true;
+	std::size_t wordBegining = 0;
+
+	for (std::size_t pos(0); pos < string.getSize(); ++pos) {
+		char currentChar = string[pos];
+		if (currentChar == '\n'){
+			currentOffset = 0;
+			firstWord = true;
+			continue;
+		}
+		else if (currentChar == ' ') {
+			wordBegining = pos;
+			firstWord = false;
+		}
+
+		sf::Glyph glyph = font.getGlyph(currentChar, charicterSize, bold);
+		currentOffset += (unsigned int)glyph.advance;
+
+		if (!firstWord && currentOffset > width) {
+			pos = wordBegining;
+			string[pos] = '\n';
+			firstWord = true;
+			currentOffset = 0;
 		}
 	}
-}
 
-void TextBox::addText(int xPos, int yPos){
-	mTexts.push_back(sf::Text());
-	mTexts.back().setFont(ResourceManager::getInstance().getFont(mFontName));
-	mTexts.back().setCharacterSize(mFontSize);
-	mTexts.back().setPosition((float)xPos, (float)yPos);
-	mTexts.back().setColor(sf::Color::Black);
+	return string;
 }
