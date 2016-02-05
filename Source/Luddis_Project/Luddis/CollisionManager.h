@@ -2,6 +2,7 @@
 #ifndef INCLUDED_COLLISIONMANAGER
 #define INCLUDED_COLLISIONMANAGER
 
+#include <stack>
 #include "Collidable.h"
 #include <vector>
 #ifdef LUDDIS_DEBUG_DRAW_HITBOXES
@@ -25,8 +26,12 @@ public:
 	CollisionManager(const CollisionManager&) = delete;
 	CollisionManager& operator=(CollisionManager&) = delete;
 private:
+	typedef std::pair<Collidable*, Collidable*> CollisionPair;
+
+	void narrowCollision();
 	CollidableVector mCollidables;
 	CollisionManager();
+	std::stack<CollisionPair> mColliding;
 };
 
 #endif

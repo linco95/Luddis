@@ -14,6 +14,9 @@ float VectorMath::getVectorLength(sf::Vector2f& vector){
 float VectorMath::getVectorLengthSq(sf::Vector2f& vector){
 	return dotProduct(vector, vector);
 }
+sf::Vector2f VectorMath::projectVector(sf::Vector2f& aVector, sf::Vector2f& aProjectOn){
+	return (dotProduct(aProjectOn, aVector) / dotProduct(aProjectOn, aProjectOn)) * aProjectOn;
+}
 
 sf::Vector2f VectorMath::normalizeVector(sf::Vector2f& vector){
 	if (getVectorLengthSq(vector) == 1) return vector;
