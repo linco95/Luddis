@@ -63,8 +63,16 @@ void EntityManager::renderEntities(sf::RenderWindow& window){
 	window.clear(BGCOLOR);
 
 	for (auto it : renderMap){
+		//Special case for the GUI layer
+		sf::View currentView = window.getView();
+		if (it.first == Entity::GUI){
+			window.setView(window.getDefaultView());
+		}
 		for (auto e : it.second){
 			window.draw(*e);
+		}
+		if (it.first == Entity::GUI){
+			window.setView(currentView);
 		}
 	}
 	//window.display();

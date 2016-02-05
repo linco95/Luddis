@@ -15,11 +15,9 @@ public:
 	void setFont(std::string fontName);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 private:
-	void makeSuperFly();
-	void addText(int xPos, int yPos);
+	sf::String wrapText(sf::String string, unsigned width, const sf::Font &font, unsigned characterSize, bool bold = false);
 
-	typedef std::vector<sf::Text> TextVector;
-	TextVector mTexts;
+	sf::Text mText;
 	sf::IntRect mBox;
 	int mFontSize;
 	std::string mTextString;

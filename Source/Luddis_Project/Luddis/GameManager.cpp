@@ -115,9 +115,6 @@ struct GameManagerImp : public EventObserver {
 		mLuddCounter = new ScoreCounter(&mMainWindow, TEXTURE_LUDDCOUNTER, sf::Vector2i(550, 50), ScoreCounter::ScoreType::DUST);
 		EntityManager::getInstance().addEntity(mLuddCounter);
 
-		mDialogue = new Dialogue(FUCKING_ESSAY, &mMainWindow);
-		EntityManager::getInstance().addEntity(mDialogue);
-
 		mLevel = new Level();
 		mLevel->initializeLevel(mMainWindow, mPlayer);
 		EntityManager::getInstance().addEntity(mLevel);
@@ -200,6 +197,11 @@ struct GameManagerImp : public EventObserver {
 
 			// Render			    
 			em->renderEntities(mMainWindow);
+			View currentView = mMainWindow.getView();
+			mMainWindow.setView(mMainWindow.getDefaultView());
+			//Draw GUI stuff here
+
+			mMainWindow.setView(currentView);
 #ifdef LUDDIS_DEBUG_DRAW_HITBOXES
 			cm->drawHitboxes(mMainWindow);
 #endif
@@ -229,7 +231,6 @@ struct GameManagerImp : public EventObserver {
 	Chips *mChips3;
 	ScoreCounter *mChipsCounter;
 	ScoreCounter *mLuddCounter;
-	Dialogue* mDialogue;
 
 	Level* mLevel; //To be replaced with LevelManager with LevelVector
 };
