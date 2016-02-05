@@ -15,7 +15,7 @@ public:
 	void setFont(std::string fontName);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 private:
-	sf::String wrapText(sf::String string, unsigned width, const sf::Font &font, unsigned charicterSize, bool bold = false);
+	sf::String wrapText(sf::String string, unsigned width, const sf::Font &font, unsigned characterSize, bool bold = false);
 
 	sf::Text mText;
 	sf::IntRect mBox;

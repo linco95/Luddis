@@ -3,13 +3,13 @@
 //
 static const std::string DIALOGUE_TEXTURE = "Resources/Images/Parchment.png";
 
-Dialogue::Dialogue(std::string text, sf::RenderWindow* window):
+Dialogue::Dialogue(std::string text, sf::RenderWindow* window, sf::Vector2f pos):
 mButtonCount(0),
 mIsAlive(true),
 mWindow(window),
 mSprite(ResourceManager::getInstance().getTexture(DIALOGUE_TEXTURE)),
 mDialogueText(sf::IntRect(35, 35, 390, 100), text, 24){
-	setPosition(sf::Vector2f(1000, 500));
+	setPosition(pos);
 }
 
 Dialogue::~Dialogue(){

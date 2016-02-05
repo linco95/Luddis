@@ -64,7 +64,16 @@ void EntityManager::renderEntities(sf::RenderWindow& window){
 
 	for (auto it : renderMap){
 		for (auto e : it.second){
-			window.draw(*e);
+			if (it.first == Entity::GUI){
+				sf::View currentView = window.getView();
+				window.setView(window.getDefaultView());
+				//Draw GUI stuff here
+				window.draw(*e);
+				window.setView(currentView);
+			}
+			else{
+				window.draw(*e);
+			}
 		}
 	}
 	//window.display();

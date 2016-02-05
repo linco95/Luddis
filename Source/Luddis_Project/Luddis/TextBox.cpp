@@ -27,7 +27,7 @@ void TextBox::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	target.draw(mText, states);
 }
 
-sf::String TextBox::wrapText(sf::String string, unsigned width, const sf::Font &font, unsigned charicterSize, bool bold){
+sf::String TextBox::wrapText(sf::String string, unsigned width, const sf::Font &font, unsigned characterSize, bool bold){
 	unsigned currentOffset = 0;
 	bool firstWord = true;
 	std::size_t wordBegining = 0;
@@ -44,7 +44,7 @@ sf::String TextBox::wrapText(sf::String string, unsigned width, const sf::Font &
 			firstWord = false;
 		}
 
-		sf::Glyph glyph = font.getGlyph(currentChar, charicterSize, bold);
+		sf::Glyph glyph = font.getGlyph(currentChar, characterSize, bold);
 		currentOffset += (unsigned int)glyph.advance;
 
 		if (!firstWord && currentOffset > width) {
