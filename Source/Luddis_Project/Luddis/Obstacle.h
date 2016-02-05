@@ -7,6 +7,10 @@
 
 class Obstacle : public Entity, public Collidable{
 public:
+	/*
+	* 0 - SOLID
+	* 1 - DAMAGE
+	*/
 	enum ObstacleType{
 		SOLID,
 		DAMAGE
