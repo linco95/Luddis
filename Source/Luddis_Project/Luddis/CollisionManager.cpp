@@ -72,17 +72,23 @@ void CollisionManager::narrowCollision(){
 		auto firstShape = pair.first->getNarrowHitbox();
 		auto secondShape = pair.second->getNarrowHitbox();
 
-		for (std::size_t i = 0; i < firstShape->getPointCount() - 1; i++){
-			sf::Vector2f side = firstShape->getPoint(i + 1) - firstShape->getPoint(i);
+		const std::size_t firstPointCount = firstShape->getPointCount();
+
+		for (std::size_t i = 0; i < firstPointCount; i++) {
+
+			sf::Vector2f side = firstShape->getPoint(i < firstPointCount ? i + 1 : 0) - firstShape->getPoint(i);
 
 			sf::Vector2f axis = VectorMath::rotateVector(side, 90.f);
+			sf::Vector2f minFirst, maxFirst, minSecond, maxSecond;
 			// TODO transform point position, project both shapes all points on axis to get both shapes shadow on the axis vector. 
 			//if they overlap the shapes collide, tell both collidables and return function. (http://www.sevenson.com.au/actionscript/sat/)
-			for (std::size_t j = 0; j < firstShape->getPointCount(); j++){
+			for (std::size_t j = 0; j < firstPointCount; j++){
 				sf::Vector2f vecToPoint = firstShape->getPoint(j);
-				VectorMath::projectVector(vecToPoint, axis);
+				sf::Vector2f firstProjected = VectorMath::projectVector(vecToPoint, axis);
+				if (VectorMath::getVectorLengthSq(firstProjected) > VectorMath::getVectorLengthSq(maxFirst)){
+					
+				}
 			}
-
 		}
 
 	}

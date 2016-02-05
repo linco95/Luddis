@@ -18,6 +18,7 @@ void AnimationQueue::tick(const sf::Time& deltaTime){
 		mReplacingAnim.tick(deltaTime);
 		if (mReplacingAnim.hasLooped()){
 			mIsReplaced = false;
+			mDefaultAnim.setFrame(0);
 			tick(deltaTime);
 		}
 	}

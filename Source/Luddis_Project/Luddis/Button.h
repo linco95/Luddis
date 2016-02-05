@@ -6,13 +6,13 @@
 #include <SFML/System/Time.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
-class Button: public sf::Drawable{
+class Button : public sf::Drawable{
 public:
 	//This class goes by the assumption that the texture will
 	//have three horizontal frames of equal size.
 	//The first will be the default, the second the mouseover
 	//and the third the click frame
-	Button(std::string graphicFilename, sf::RenderWindow* window, sf::Vector2f pos);
+	Button(std::string graphicFilename, sf::RenderWindow* window, sf::Vector2f pos, void(*action)(int, double) = 0);
 	~Button();
 
 	virtual void tick(const sf::Time& deltaTime);

@@ -68,14 +68,7 @@ struct GameManagerImp : public EventObserver {
 		EntityManager::getInstance().addEntity(mStopp);
 		CollisionManager::getInstance().addCollidable(mStopp);
 
-		/*mEnemy1 = new Silverfish(TEXTURE_SILVERFISH, &mMainWindow);
-		EntityManager::getInstance().addEntity(mEnemy1);
-		CollisionManager::getInstance().addCollidable(mEnemy1);
-		mEnemy2 = new Silverfish(TEXTURE_SILVERFISH, &mMainWindow);
-		EntityManager::getInstance().addEntity(mEnemy2);
-		CollisionManager::getInstance().addCollidable(mEnemy2);*/
-
-		mSpider = new Spider(TEXTURE_SILVERFISH, &mMainWindow);
+		mSpider = new Spider("resources/images/Grafik_spindel_Enter_s2d3v1.png", &mMainWindow);
 		EntityManager::getInstance().addEntity(mSpider);
 
 		mBoss = new BossDishCloth(&mMainWindow);
@@ -165,8 +158,9 @@ struct GameManagerImp : public EventObserver {
 
 	void handleEvents(RenderWindow& aWindow){
 		Event currEvent;
+		static EventManager* em = &EventManager::getInstance();
 		while (aWindow.pollEvent(currEvent)){
-			EventManager::getInstance().notify(currEvent);
+			em->notify(currEvent);
 		}
 	}
 
@@ -175,13 +169,13 @@ struct GameManagerImp : public EventObserver {
 		EntityManager* em = &EntityManager::getInstance();
 		CollisionManager* cm = &CollisionManager::getInstance();
 		SoundEngine* se = &SoundEngine::getInstance();
-		se->setMainVolume(10);
+		se->setMainVolume(100);
 		Clock gameClock;
 		while (mMainWindow.isOpen()){
 
 			// Handle Events       
 			handleEvents(mMainWindow);
-
+			
 			// Update Entities     |
 			se->update(gameClock.getElapsedTime());
 			em->updateEntities(gameClock.restart());

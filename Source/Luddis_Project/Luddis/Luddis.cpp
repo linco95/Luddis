@@ -40,7 +40,7 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	mIsAlive(true), 
 	mWindow(window), 
 	mProjectileCooldown(0), 
-	mStunDuration(1),
+	mStunDuration(0),
 	mLoseDust(1),
 	// Magic constants below are just temporary, until the file manager is created and implemented with the animation
 	mAnimation(Animation(ANIMATION_FILEPATH, sf::Vector2i(104, 90), 16, 16, sf::seconds(0.1f))),
@@ -82,6 +82,7 @@ void Luddis::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 
 sf::Vector2f Luddis::getVectorMouseToSprite() const{
 	sf::Vector2f playerPosition(getPosition());
+	sf::Vector2i terst = sf::Mouse::getPosition(*mWindow);
 	sf::Vector2f mousePosition(mWindow->mapPixelToCoords(sf::Mouse::getPosition(*mWindow)));
 	return mousePosition - playerPosition;
 }

@@ -43,6 +43,7 @@ void Level::initializeEntities(){
 		assert(itr->HasMember("x") && (*itr)["x"].IsInt());
 		assert(itr->HasMember("y") && (*itr)["y"].IsInt());
 		assert(itr->HasMember("angle") && (*itr)["angle"].IsDouble());
+
 		Silverfish* fish = new Silverfish(mWindow, sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()));
 		em->addEntity(fish);
 		cm->addCollidable(fish);

@@ -8,6 +8,10 @@
 		"x": 1200,
 		"y": 580,
 		"angle": 195.00
+	}, {
+		"x": 100,
+		"y": 600,
+		"angle": 195.00
 	}],
 	"Boss_config": "resources/configs/bosses/XXX.json"
 }

@@ -1,7 +1,7 @@
 #include "Button.h"
 #include "ResourceManager.h"
 
-Button::Button(std::string graphicFilename, sf::RenderWindow* window, sf::Vector2f pos):
+Button::Button(std::string graphicFilename, sf::RenderWindow* window, sf::Vector2f pos, void (*action)(int, double)) :
 mWindow(window),
 mClicked(false),
 mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
