@@ -33,6 +33,7 @@ private:
 	sf::RenderWindow* mWindow;
 	float mProjectileCooldown;
 	float mStunDuration;
+	float mLoseDust;
 	bool mIsAlive;
 	bool mColliding;
 	sf::FloatRect mCollideBox;

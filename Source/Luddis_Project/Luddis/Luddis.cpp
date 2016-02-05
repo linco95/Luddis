@@ -41,6 +41,7 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	mWindow(window), 
 	mProjectileCooldown(0), 
 	mStunDuration(1),
+	mLoseDust(1),
 	// Magic constants below are just temporary, until the file manager is created and implemented with the animation
 	mAnimation(Animation(ANIMATION_FILEPATH, sf::Vector2i(104, 90), 16, 16, sf::seconds(0.1f))),
 	mColliding(false),
@@ -67,6 +68,9 @@ void Luddis::tick(const sf::Time& deltaTime){
 	else if(mStunDuration<0){
 		handleInput(deltaTime);
 		updateRotation();
+	}
+	if (mLoseDust >= 0){
+		mLoseDust -= deltaTime.asSeconds();
 	}
 	mAnimation.tick(deltaTime);
 }
@@ -204,11 +208,17 @@ void Luddis::collide(Collidable *collidable){
 	}
 	if (collidable->getCollisionCategory() == BG_DAMAGE){
 		mAnimation.replaceAnimation(HIT_ANIMATION);
-		Inventory::getInstance().removeDust(1);
+		if (mLoseDust < 0){
+			Inventory::getInstance().removeDust(1);
+			mLoseDust = 1.0f;
+		}
 	}
 	if (collidable->getCollisionCategory() == ENEMY) {
 		mAnimation.replaceAnimation(HIT_ANIMATION);
-		Inventory::getInstance().removeDust(1);
+		if (mLoseDust < 0){
+			Inventory::getInstance().removeDust(1);
+			mLoseDust = 1.0f;
+		}
 	}
 	if (collidable->getCollisionCategory() == COLLECT){
 		
