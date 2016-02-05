@@ -5,9 +5,9 @@
 #include "VectorMath.h"
 #include <SFML\Graphics\Shape.hpp>
 
-static const std::string ANIMATION_IDLE_FILEPATH = "Resources/Images/Spritesheets/Grafik_Trasan300x300_S2D3V1";
+static const std::string ANIMATION_IDLE_FILEPATH = "Resources/Images/Spritesheets/Grafik_Trasan_S2D3V2";
 static const std::string PROJECTILE_FILEPATH = "Resources/Images/BAWS1projectile.png";
-static const Animation SHOOTING_ANIMATION = Animation("Resources/Images/Spritesheets/Grafik_TrasanAttack300x300_S2D4V1");
+static const Animation SHOOTING_ANIMATION = Animation("Resources/Images/Spritesheets/Grafik_TrasanAttack_S2D4V3");
 static const int MAX_LIFE = 100;
 static const float ATTACK_INTERVAL = 3.5f;
 static const float PROJECTILE_LIFETIME = 2.5f;
