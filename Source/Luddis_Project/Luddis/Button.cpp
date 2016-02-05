@@ -60,4 +60,5 @@ void Button::updateInput(){
 
 void Button::onClick(){
 	//Take action
+
 }

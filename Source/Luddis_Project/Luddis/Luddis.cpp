@@ -6,6 +6,7 @@
 #include "SoundEngine.h"
 #include "VectorMath.h"
 #include "Projectile.h"
+#include "Dialogue.h"
 #include <SFML/System.hpp>
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -18,6 +19,9 @@ static const Animation SHOT_ANIMATION = Animation("resources/images/spritesheets
 static const std::string SOUND_FILENAME1 = "Resources/Audio/Skott_Blås_Små_01.wav";
 static const std::string SOUND_FILENAME2 = "Resources/Audio/Skott_Blås_Små_02.wav";
 static const std::string SOUND_FILENAME3 = "Resources/Audio/Skott_Blås_Små_03.wav";
+
+static const std::string POWER_DISPLAY = "Resources/Images/PowerDisplay.png";
+static const std::string BUTTON_TEXTURE = "Resources/Images/Button.png";
 
 //This should be dynamic later to determine what texture to use for projectiles
 static const std::array<std::string, 3> PROJECTILE_FILENAME = { "Resources/Images/Grafik_Attack 1_35x35_s1d3v1.png",
@@ -40,7 +44,7 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	mIsAlive(true), 
 	mWindow(window), 
 	mProjectileCooldown(0), 
-	mStunDuration(1),
+	mStunDuration(0),
 	mLoseDust(1),
 	// Magic constants below are just temporary, until the file manager is created and implemented with the animation
 	mAnimation(Animation(ANIMATION_FILEPATH, sf::Vector2i(104, 90), 16, 16, sf::seconds(0.1f))),
@@ -50,6 +54,10 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 {
 	setPosition(mWindow->getView().getSize().x / 2, mWindow->getView().getSize().y / 2);
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
+	sf::Mouse::setPosition(sf::Vector2i((int)getPosition().x, (int)getPosition().y));
+	mPowerups[0] = new PowerupDisplay(POWER_DISPLAY, sf::Vector2f((float)mWindow->getSize().x * 2 / 5, (float)mWindow->getSize().y - 80), 15.0f);
+	//Temorary to add a power display. Might go somewhere else
+	EntityManager::getInstance().addEntity(mPowerups[0]);
 }
 
 Luddis::~Luddis(){
@@ -180,7 +188,9 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 	}
 	//Handle keyboard presses
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
-		
+		if (mPowerups[0]->getCooldown() <= 0){
+			mPowerups[0]->activateCooldown();
+		}
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
 		

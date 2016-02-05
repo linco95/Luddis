@@ -6,6 +6,7 @@
 #include "Collidable.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "Entity.h"
+#include "PowerupDisplay.h"
 #include <SFML/Audio/Sound.hpp>
 
 class Luddis : public Entity, public Collidable{
@@ -36,6 +37,7 @@ private:
 	float mLoseDust;
 	bool mIsAlive;
 	bool mColliding;
+	PowerupDisplay* mPowerups[4];
 	sf::FloatRect mCollideBox;
 	sf::Vector2f mDirectionVector;
 	sf::Vector2f mPrevPos;

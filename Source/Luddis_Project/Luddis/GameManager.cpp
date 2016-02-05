@@ -188,20 +188,15 @@ struct GameManagerImp : public EventObserver {
 			cm->detectCollisions();
 
 			
-			// Kill dead Entities  
+			// Kill dead Entities
 			if (!mPlayer->isAlive()){
 				gameOver();
 			}
 			cm->removeDeadCollidables();
 			em->removeDeadEntities();
 
-			// Render			    
+			// Render
 			em->renderEntities(mMainWindow);
-			View currentView = mMainWindow.getView();
-			mMainWindow.setView(mMainWindow.getDefaultView());
-			//Draw GUI stuff here
-
-			mMainWindow.setView(currentView);
 #ifdef LUDDIS_DEBUG_DRAW_HITBOXES
 			cm->drawHitboxes(mMainWindow);
 #endif
