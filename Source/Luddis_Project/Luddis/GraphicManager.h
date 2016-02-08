@@ -24,6 +24,10 @@ public:
 	void clearAllFonts();
 
 	//Animation related functions
+	Animation& getAnimation(std::string filename);
+	void loadAnimation(std::string filename);
+	void clearAnimation(std::string filename);
+	void clearAllAnimations();
 protected:
 	GraphicManager();
 private:
@@ -32,7 +36,7 @@ private:
 	typedef std::vector<std::pair<sf::Font*, std::string>> FontPairVector;
 	FontPairVector mFonts;
 	typedef std::vector<std::pair<Animation*, std::string>> AnimationPairVector;
-	FontPairVector mAnimations;
+	AnimationPairVector mAnimations;
 };
 
 #endif // !_INCLUDED_GRAPHICMANAGER_
