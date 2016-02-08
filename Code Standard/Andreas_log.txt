@@ -91,6 +91,16 @@ Created projection function to vectormath
 
 5/2/16
 Continued working on collision
+Writing plan for project
+
+6/2/16
+Helg / Lagat bilen
+
+7/2/16
+
+8/2/16
+Hjälpte björn med JSON.
+Fortsatte med SAT, löste en nöt med projektionen.
 
 BRAINSTORM
 

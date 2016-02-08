@@ -13,7 +13,9 @@
 #include <string>
 #include <array>
 
-static const char* ANIMATION_FILEPATH = "resources/images/spritesheets/Grafik_Luddis_walkcykle_sprite_longer_version_s2d2v3.png";
+//static const Animation ANIMATION_FILEPATH = Animation("resources/images/spritesheets/Grafik_Luddis walkcykle_longer");
+static const Animation ANIMATION_FILEPATH = Animation("resources/images/spritesheets/Sprite_Debug_480x205");
+
 static const Animation HIT_ANIMATION = Animation("resources/images/spritesheets/Grafik_Luddis_hit_sprite_s2d2v1");
 static const Animation SHOT_ANIMATION = Animation("resources/images/spritesheets/Grafik_Luddis shot120x90treframes_s2d3v1");
 static const std::string SOUND_FILENAME1 = "Resources/Audio/Skott_Blås_Små_01.wav";
@@ -48,7 +50,7 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	mStunDuration(0),
 	mLoseDust(1),
 	// Magic constants below are just temporary, until the file manager is created and implemented with the animation
-	mAnimation(Animation(ANIMATION_FILEPATH, sf::Vector2i(104, 90), 16, 16, sf::seconds(0.1f))),
+	mAnimation(ANIMATION_FILEPATH),
 	mColliding(false),
 	mPrevPos(0, 0),
 	mHitbox(new sf::CircleShape(HITBOX_SHAPE))
