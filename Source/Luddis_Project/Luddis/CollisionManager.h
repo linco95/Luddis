@@ -26,12 +26,9 @@ public:
 	CollisionManager(const CollisionManager&) = delete;
 	CollisionManager& operator=(CollisionManager&) = delete;
 private:
-	typedef std::pair<Collidable*, Collidable*> CollisionPair;
 
-	void narrowCollision();
 	CollidableVector mCollidables;
 	CollisionManager();
-	std::stack<CollisionPair> mColliding;
 };
 
 #endif

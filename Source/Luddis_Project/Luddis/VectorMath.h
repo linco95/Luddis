@@ -8,15 +8,15 @@ struct VectorMath{
 
 	VectorMath() = delete;
 	~VectorMath();
-	VectorMath& operator=(VectorMath&) = delete;
+	VectorMath& operator=(const VectorMath&) = delete;
 	VectorMath(const VectorMath&) = delete;
-	static float dotProduct(sf::Vector2f& a, sf::Vector2f& b);
-	static float getVectorLength(sf::Vector2f& vector);
-	static float getVectorLengthSq(sf::Vector2f& vector);
-	static sf::Vector2f normalizeVector(sf::Vector2f& vector);
-	static float getAngle(sf::Vector2f& v1, sf::Vector2f& v2);
-	static sf::Vector2f rotateVector(sf::Vector2f& vector, float degrees);
-	static sf::Vector2f projectVector(sf::Vector2f& aVector, sf::Vector2f& aProjectOn);
+	static float dotProduct(const  sf::Vector2f& a, const sf::Vector2f& b);
+	static float getVectorLength(const sf::Vector2f& vector);
+	static float getVectorLengthSq(const sf::Vector2f& vector);
+	static sf::Vector2f normalizeVector(const sf::Vector2f& vector);
+	static float getAngle(const sf::Vector2f& v1, const sf::Vector2f& v2);
+	static sf::Vector2f rotateVector(const sf::Vector2f& vector, const float& degrees);
+	static sf::Vector2f projectVector(const sf::Vector2f& aVector, const sf::Vector2f& aProjectOn);
 
 };
 
