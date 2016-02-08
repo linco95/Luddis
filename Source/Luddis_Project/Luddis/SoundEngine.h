@@ -1,9 +1,10 @@
 #ifndef _INCLUDED_SOUNDENGINE_
 #define _INCLUDED_SOUNDENGINE_
 
-static const int MAX_SOUND_CHANNELS = 128;
+#include <SFML/Audio/Sound.hpp>
+#include <SFML/Audio/Music.hpp>
 
-#include <SFML/Audio.hpp>
+static const int MAX_SOUND_CHANNELS = 256;
 
 class SoundEngine{
 public:

@@ -17,6 +17,7 @@ static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 
 Silverfish::Silverfish(sf::RenderWindow* window, const sf::Vector2f& position, std::string textureFilename) :
 mIsAlive(true),
+mIsActive(true),
 mSwimAway(false),
 mLife(LIFE),
 mWindow(window),
@@ -69,8 +70,16 @@ void Silverfish::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	target.draw(mSprite, states);
 }
 
-bool Silverfish::isAlive(){
+bool Silverfish::isAlive() const{
 	return mIsAlive;
+}
+
+bool Silverfish::isActive() const{
+	return mIsActive;
+}
+
+void Silverfish::setActive(const bool& active){
+	mIsActive = active;
 }
 
 Entity::RenderLayer Silverfish::getRenderLayer() const{
@@ -85,7 +94,7 @@ Silverfish::Type Silverfish::getCollisionType(){
 	return REC;
 }
 
-void Silverfish::collide(Collidable *collidable){
+void Silverfish::collide(CollidableEntity *collidable){
 	if (collidable->getCollisionCategory() == FRIEND || collidable->getCollisionCategory() == HAIR){
 		if (mSwimAway== false){
 		mLife -= 5;

@@ -28,8 +28,10 @@ public:
 	// Funktion för att uppdatera entiteten
 	virtual void tick(const sf::Time& deltaTime) = 0;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
-	virtual bool isAlive() = 0;
+	virtual bool isAlive() const = 0;
 	virtual RenderLayer getRenderLayer() const = 0;
+	virtual bool isActive() const = 0;
+	virtual void setActive(const bool& active) = 0;
 };
 
 #endif

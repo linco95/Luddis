@@ -19,7 +19,7 @@ CollisionManager& CollisionManager::getInstance(){
 	return cM;
 }
 
-void CollisionManager::addCollidable(Collidable* collidable){
+void CollisionManager::addCollidable(CollidableEntity* collidable){
 	mCollidables.push_back(collidable);
 }
 
@@ -59,14 +59,14 @@ std::pair<float, float> getProjection(const sf::Shape& shape, const sf::Vector2f
 		float scalar = VectorMath::dotProduct(axis, vecToPoint) / axisSq;
 		if (scalar < minFirst){
 			minFirst = scalar;
-		}
+			}
 		else if (scalar > maxFirst){
 			maxFirst = scalar;
 		}
 	}
 	return std::make_pair(1.0f, 1.0f);
-}
-void narrowCollision(std::stack<std::pair<Collidable*, Collidable*>>& colliding){
+	}
+void narrowCollision(std::stack<std::pair<CollidableEntity*, CollidableEntity*>>& colliding){
 	while (!colliding.empty()){
 		auto pair = colliding.top();
 		colliding.pop();
@@ -84,20 +84,20 @@ void narrowCollision(std::stack<std::pair<Collidable*, Collidable*>>& colliding)
 			sf::Vector2f axis = VectorMath::rotateVector(side, 90.f);
 
 
-			
+					
+				}
+			}
 		}
-	}
-}
 #pragma endregion Helper functions handeling the narrow collision using Separating Axis Theorem
 
 void CollisionManager::detectCollisions(){
-	std::stack<std::pair<Collidable*, Collidable*>> colliding;
+	std::stack<std::pair<CollidableEntity*, CollidableEntity*>> colliding;
 	assert(colliding.empty());
 	CollidableVector collidables(mCollidables);
 	for (CollidableVector::size_type i = 0; i < collidables.size(); i++){
-		Collidable *collidable0 = collidables.at(i);
+		CollidableEntity *collidable0 = collidables.at(i);
 		for (CollidableVector::size_type j = i + 1; j < collidables.size(); j++){
-			Collidable *collidable1 = collidables.at(j);
+			CollidableEntity *collidable1 = collidables.at(j);
 			if (collidable0->getHitBox().intersects(collidable1->getHitBox()) && (collidable0->getCollisionCategory() != collidable1->getCollisionCategory())){
 					/*collidable0->collide(collidable1);
 					collidable1->collide(collidable0);*/

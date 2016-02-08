@@ -7,8 +7,9 @@ static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 
 //The max life time should be entered in milliseconds
-Projectile::Projectile(std::string textureFilename, sf::Vector2f direction, sf::Vector2f position, float maxLifeTimeMS, Collidable::Category collisionCategory):
+Projectile::Projectile(std::string textureFilename, sf::Vector2f direction, sf::Vector2f position, float maxLifeTimeMS, Projectile::Category collisionCategory):
 	mIsAlive(true),
+	mIsActive(true),
 	mDirection(direction),
 	mLifeTime(maxLifeTimeMS),
 	mCollisionCategory(collisionCategory),
@@ -36,8 +37,16 @@ void Projectile::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	target.draw(mSprite, states);
 }
 
-bool Projectile::isAlive() {
+bool Projectile::isAlive() const{
 	return mIsAlive;
+}
+
+bool Projectile::isActive() const{
+	return mIsActive;
+}
+
+void Projectile::setActive(const bool& active){
+	mIsActive = active;
 }
 
 void Projectile::updateMovement(const sf::Time& deltaTime){
@@ -63,7 +72,7 @@ Projectile::Type Projectile::getCollisionType(){
 }
 
 
-void Projectile::collide(Collidable *collidable){
+void Projectile::collide(CollidableEntity *collidable){
 	if (collidable->getCollisionCategory() == ENEMY && mCollisionCategory == HAIR){
 		mIsAlive = false;
 	}

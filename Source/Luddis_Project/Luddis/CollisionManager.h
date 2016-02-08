@@ -3,7 +3,7 @@
 #define INCLUDED_COLLISIONMANAGER
 
 #include <stack>
-#include "Collidable.h"
+#include "CollidableEntity.h"
 #include <vector>
 #ifdef LUDDIS_DEBUG_DRAW_HITBOXES
 namespace sf{
@@ -12,10 +12,10 @@ namespace sf{
 #endif
 class CollisionManager {
 public:
-	typedef std::vector<Collidable*> CollidableVector;
+	typedef std::vector<CollidableEntity*> CollidableVector;
 	~CollisionManager();
 	static CollisionManager& getInstance();
-	void addCollidable(Collidable* collidable);
+	void addCollidable(CollidableEntity* collidable);
 	void detectCollisions();
 	void removeDeadCollidables();
 

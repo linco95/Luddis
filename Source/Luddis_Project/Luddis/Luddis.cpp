@@ -44,6 +44,7 @@ static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(35, 8);
 
 Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) : 
 	mIsAlive(true), 
+	mIsActive(true),
 	mWindow(window), 
 	mProjectileCooldown(0), 
 	mStunDuration(0),
@@ -58,16 +59,30 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
 	sf::Mouse::setPosition(sf::Vector2i((int)getPosition().x, (int)getPosition().y));
 	mPowerups[0] = new PowerupDisplay(POWER_DISPLAY, sf::Vector2f((float)mWindow->getSize().x * 2 / 5, (float)mWindow->getSize().y - 80), 15.0f);
-	//Temorary to add a power display. Might go somewhere else
+	
+	//Adds a display of the first power that luddis has
 	EntityManager::getInstance().addEntity(mPowerups[0]);
+	Dialogue* dialogue = new Dialogue("This is a dialogue. If the text is too long it will wrap around! It can also have buttons attached to it.", mWindow, sf::Vector2f(100, 100));
+	EntityManager::getInstance().addEntity(dialogue);
+	dialogue->addButton(BUTTON_TEXTURE, sf::Vector2f(200, 300));
 }
 
 Luddis::~Luddis(){
 	delete mHitbox;
 }
-bool Luddis::isAlive() {
+
+bool Luddis::isAlive() const{
 	return mIsAlive;
 }
+
+bool Luddis::isActive() const{
+	return mIsActive;
+}
+
+void Luddis::setActive(const bool& active){
+	mIsActive = active;
+}
+
 void Luddis::tick(const sf::Time& deltaTime){
 	if (mProjectileCooldown >= 0){
 		mProjectileCooldown -= deltaTime.asSeconds();
@@ -103,7 +118,7 @@ void Luddis::updateMovement(const sf::Time& deltaTime){
 	float moveX(offset.x*deltaTime.asSeconds()*MOVESPEED);
 	float moveY(offset.y*deltaTime.asSeconds()*MOVESPEED);
 	
-	sf::Vector2f tempPos = this->getPosition();
+	sf::Vector2f tempPos = getPosition();
 
 	// Not colliding
 	if (mColliding == false){
@@ -214,7 +229,7 @@ Luddis::Type Luddis::getCollisionType(){
 	return REC;
 }
 
-void Luddis::collide(Collidable *collidable){
+void Luddis::collide(CollidableEntity *collidable){
 	if (collidable->getCollisionCategory() == BG_SOLID){
 		mColliding = true;
 		mCollideBox = collidable->getHitBox();
@@ -241,7 +256,6 @@ void Luddis::collide(Collidable *collidable){
 			mStunDuration = 1.0f;
 			mAnimation.replaceAnimation(HIT_ANIMATION);
 		}
-		Inventory::getInstance().removeDust(1);
 	}
 }
 

@@ -51,7 +51,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>LUDDIS_DEBUG_DRAW_HITBOXES;WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\Rapidjson\include;..\SFML-2.3.2\include</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
@@ -90,7 +90,7 @@
     <ClCompile Include="BossDishCloth.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Chips.cpp" />
-    <ClCompile Include="Collidable.cpp" />
+    <ClCompile Include="CollidableEntity.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Dialogue.cpp" />
@@ -125,7 +125,7 @@
     <ClInclude Include="BossDishCloth.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Chips.h" />
-    <ClInclude Include="Collidable.h" />
+    <ClInclude Include="CollidableEntity.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Dialogue.h" />

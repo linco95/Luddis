@@ -3,6 +3,10 @@
 
 static const sf::Color BGCOLOR = sf::Color::Black;
 
+//Temp, shuld move this to a more appropriate function
+static const int WIDTH = 1920;
+static const int HEIGHT = 1080;
+
 // Constructor for the entity manager
 EntityManager::EntityManager():
 mEntities(){
@@ -66,7 +70,8 @@ void EntityManager::renderEntities(sf::RenderWindow& window){
 		//Special case for the GUI layer
 		sf::View currentView = window.getView();
 		if (it.first == Entity::GUI){
-			window.setView(window.getDefaultView());
+			sf::View view(sf::FloatRect(0, 0, (float)WIDTH, (float)HEIGHT));
+			window.setView(view);
 		}
 		for (auto e : it.second){
 			window.draw(*e);

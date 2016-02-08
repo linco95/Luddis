@@ -6,7 +6,6 @@
 #include "CollisionManager.h"
 #include "Utils.h"
 #include <SFML\Audio.hpp>
-#include <rapidjson\document.h>
 #include <array>
 using namespace sf;
 
@@ -15,8 +14,10 @@ static const float X_OFFSET = 200.f,
 				   SCROLLSPEED = 120.f;
 
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::BACKGROUND;
-static std::string BGFILEPATH = "resources/images/Grafik_Bana1,1Final_S2D3V1.png";
-static const std::array<std::string, 3> CONFIGMEMBERS = { "Background_file", "Silverfish_spawns", "Boss_config" };
+Level::Level():
+mIsActive(true)
+{
+static const std::array<std::string, 3> CONFIGMEMBERS = { "Background", "Silverfish_spawns", "Boss_config" };
 Level::Level(){
 
 }
@@ -25,14 +26,11 @@ Level::~Level(){
 
 }
 #include <iostream>
-void Level::initializeEntities(){
+void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Document& configDoc){
 	EntityManager* em = &EntityManager::getInstance();
 	CollisionManager* cm = &CollisionManager::getInstance();
+	ResourceManager* rm = &ResourceManager::getInstance();
 
-	std::string configText = LuddisUtilFuncs::loadJsonFile("resources/configs/levels/level01.json");
-	rapidjson::Document configDoc;
-	configDoc.Parse(configText.c_str());
-	assert(configDoc.IsObject());
 	for (std::size_t i = 0; i < CONFIGMEMBERS.size(); i++){
 		assert(configDoc.HasMember(CONFIGMEMBERS[i].c_str()));
 	}
@@ -49,27 +47,48 @@ void Level::initializeEntities(){
 		cm->addCollidable(fish);
 		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
 	}
-	assert(configDoc["Background_file"].IsString());
-	std::cout << configDoc["Background_file"].GetString();
-	BGFILEPATH = configDoc["Background_file"].GetString();
 
-
+	const rapidjson::Value& background = configDoc["Background"];
+	assert(background.IsObject());
+	const rapidjson::Value& segments = background["segments"];
+	assert(segments.IsInt());
+	assert(background["filename"].IsString());
+	for (int i = 0; i < segments.GetInt(); i++){
+		std::string BGFILEPATH = background["filename"].GetString();
+		int position = background["filename"].GetStringLength() - 4;
+		BGFILEPATH.insert(position, std::to_string(i+1));
+		std::cout << "Filepath: "<< BGFILEPATH <<"\n";
+		rm->loadTexture(BGFILEPATH, IntRect(Vector2<int>(), Vector2<int>(Texture::getMaximumSize(), Texture::getMaximumSize())));
+		sf::IntRect rect(0, 0, (int)rm->getTexture(BGFILEPATH).getSize().x, (int)rm->getTexture(BGFILEPATH).getSize().y);
+		mMapBounds.height = rect.height;
+		sf::Sprite sprite(rm->getTexture(BGFILEPATH));
+		sprite.setPosition((float)mMapBounds.width, 0.0f);
+		mBackgroundImages.push_back(sprite);
+		increaseMapBounds(rect);
+	}
 
 }
+
+void Level::increaseMapBounds(sf::IntRect size){
+	mMapBounds.width += size.width;
+}
+
 void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget){
 	//assert(aTarget != 0);
 
 	mTarget = aTarget;
 	mWindow = &aWindow;
 
-	initializeEntities();
+	std::string configText = LuddisUtilFuncs::loadJsonFile("resources/configs/levels/level01.json");
+	rapidjson::Document configDoc;
+	configDoc.Parse(configText.c_str());
+	assert(configDoc.IsObject());
 
-	ResourceManager::getInstance().loadTexture(BGFILEPATH, IntRect(Vector2<int>(), Vector2<int>(Texture::getMaximumSize(), Texture::getMaximumSize())));
-	mBackground.setTexture(ResourceManager::getInstance().getTexture(BGFILEPATH));
+	initializeEntities(mWindow, configDoc);
 
 	mPointsOfNoReturn.push_back(mWindow->getSize().x / 2 + 1000.f);
 	mCurrentPONR = mWindow->getView().getSize().x / 2;
-	SoundEngine::getInstance().playMusic("resources/music/musik16.wav");
+	//SoundEngine::getInstance().playMusic("resources/music/musik16.wav");
 
 }
 
@@ -88,9 +107,9 @@ void Level::updateView(const Time& deltaTime){
 	Vector2f deltaMove(SCROLLSPEED, SCROLLSPEED);
 	deltaMove *= deltaTime.asSeconds();
 	float minX = mCurrentPONR;
-	float maxX = mBackground.getTextureRect().width - view.getSize().x / 2;
+	float maxX = mMapBounds.width - view.getSize().x / 2;
 	float minY = view.getSize().y / 2;
-	float maxY = mBackground.getTextureRect().height - view.getSize().y / 2;
+	float maxY = mMapBounds.height - view.getSize().y / 2;
 	
 	if (xPos < screenXPos - X_OFFSET / 2){
 		deltaMove.x *= -1;
@@ -122,13 +141,32 @@ void Level::updateView(const Time& deltaTime){
 	}
 	mWindow->setView(view);
 }
-bool Level::isAlive() {
+bool Level::isAlive() const{
 	return true;
 }
+
+bool Level::isActive() const{
+	return mIsActive;
+}
+
+void Level::setActive(const bool& active){
+	mIsActive = active;
+}
+
 Entity::RenderLayer Level::getRenderLayer() const {
 	return LAYER;
 }
 
 void Level::draw(RenderTarget& target, RenderStates states) const {
-	target.draw(mBackground);
+	int max = mBackgroundImages.size();
+	for (int i = 0; i < max; i++)
+	{
+		float x = mWindow->getView().getCenter().x;
+		float xMin = (mMapBounds.width / max) * (i + 1) - mWindow->getView().getSize().x*3;
+		float xMax = (mMapBounds.width / max) * (i + 1) + mWindow->getView().getSize().x*3;
+
+		if (x < xMax && x >= xMin){
+			target.draw(mBackgroundImages[i]);
+		}
+	}
 }

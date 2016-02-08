@@ -11,6 +11,7 @@ static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 
 Dust::Dust(std::string textureFilename, sf::RenderWindow* window) :
 mIsAlive(true),
+mIsActive(true),
 mWindow(window),
 mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
 mHitbox(new sf::CircleShape(HITBOX_SHAPE))
@@ -44,8 +45,16 @@ void Dust::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	target.draw(mSprite, states);
 }
 
-bool Dust::isAlive(){
+bool Dust::isAlive() const{
 	return mIsAlive;
+}
+
+bool Dust::isActive() const{
+	return mIsActive;
+}
+
+void Dust::setActive(const bool& active){
+	mIsActive = active;
 }
 
 Entity::RenderLayer Dust::getRenderLayer() const{
@@ -61,7 +70,7 @@ Dust::Type Dust::getCollisionType(){
 }
 
 
-void Dust::collide(Collidable *collidable){
+void Dust::collide(CollidableEntity *collidable){
 	if (collidable->getCollisionCategory() == FRIEND){
 		mIsAlive = false;
 		Inventory::getInstance().addDust(1);
