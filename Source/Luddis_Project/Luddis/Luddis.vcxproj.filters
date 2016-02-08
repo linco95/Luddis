@@ -212,9 +212,6 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{a6254654-ee0d-44e2-a9b9-8a70ca381880}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{6d7dcde2-ac9a-46ad-90ef-ea550c17929d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="DEBUG">
       <UniqueIdentifier>{9a859073-dce4-41dd-9e73-1cfd1f9738e0}</UniqueIdentifier>
     </Filter>
@@ -236,10 +233,5 @@
     <Filter Include="Header Files\Entities\GUI">
       <UniqueIdentifier>{552173e4-367d-4e60-a497-9cde76ca1fcb}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Resources\Images\Silverfisk_prototyp.png">
-      <Filter>Resource Files</Filter>
-    </Image>
   </ItemGroup>
 </Project>
