@@ -17,7 +17,9 @@ static const float X_OFFSET = 200.f,
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::BACKGROUND;
 static std::string BGFILEPATH = "resources/images/Grafik_Bana1,1Final_S2D3V1.png";
 static const std::array<std::string, 3> CONFIGMEMBERS = { "Background_file", "Silverfish_spawns", "Boss_config" };
-Level::Level(){
+Level::Level():
+mIsActive(true)
+{
 
 }
 
@@ -122,9 +124,18 @@ void Level::updateView(const Time& deltaTime){
 	}
 	mWindow->setView(view);
 }
-bool Level::isAlive() {
+bool Level::isAlive() const{
 	return true;
 }
+
+bool Level::isActive() const{
+	return mIsActive;
+}
+
+void Level::setActive(const bool& active){
+	mIsActive = active;
+}
+
 Entity::RenderLayer Level::getRenderLayer() const {
 	return LAYER;
 }

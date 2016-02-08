@@ -19,19 +19,22 @@ public:
 	Obstacle(std::string textureFilename, sf::RenderWindow* window, ObstacleType type, sf::Vector2f direction, const sf::Vector2f& position);
 	~Obstacle();
 
-	virtual void tick(const sf::Time& deltaTime);
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states)const;
-	virtual bool isAlive();
-	virtual RenderLayer getRenderLayer() const;
-	virtual sf::FloatRect getHitBox();
+	void tick(const sf::Time& deltaTime) override;
+	void draw(sf::RenderTarget& target, sf::RenderStates states)const override;
+	bool isAlive() const override;
+	bool isActive() const override;
+	void setActive(const bool& active) override;
+	RenderLayer getRenderLayer() const override;
+	sf::FloatRect getHitBox() override;
 	sf::Shape* getNarrowHitbox() const override;
 private:
 	bool mIsAlive;
+	bool mIsActive;
 	sf::Sprite mSprite;
 	sf::RenderWindow* mWindow;
-	virtual Category getCollisionCategory();
-	virtual Type getCollisionType();
-	virtual void collide(CollidableEntity *collidable);
+	Category getCollisionCategory() override;
+	Type getCollisionType() override;
+	void collide(CollidableEntity *collidable) override;
 
 	sf::Shape* mHitbox;
 	ObstacleType mType;

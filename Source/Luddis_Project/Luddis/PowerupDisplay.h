@@ -10,10 +10,12 @@ public:
 	PowerupDisplay(std::string textureFilename, sf::Vector2f pos, float cooldown);
 	~PowerupDisplay();
 
-	virtual void tick(const sf::Time& deltaTime);
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-	virtual bool isAlive();
-	virtual RenderLayer getRenderLayer() const;
+	void tick(const sf::Time& deltaTime) override;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	bool isAlive() const override;
+	bool isActive() const  override;
+	void setActive(const bool& active) override;
+	RenderLayer getRenderLayer() const override;
 
 	void activateCooldown();
 	float getCooldown() const;
@@ -22,6 +24,7 @@ private:
 
 	sf::Sprite mSprite;
 	bool mIsAlive;
+	bool mIsActive;
 	sf::RectangleShape mRectShape;
 	float mCooldown;
 	const float MAX_COOLDOWN;

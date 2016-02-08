@@ -7,6 +7,7 @@ static const sf::CircleShape HITBOX_SHAPE(10, 8);
 
 SpiderEgg::SpiderEgg(std::string textureFilename, sf::RenderWindow* window) :
 mIsAlive(true),
+mIsActive(true),
 mWindow(window),
 mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
 mHitbox(new sf::CircleShape(HITBOX_SHAPE))
@@ -27,8 +28,16 @@ void SpiderEgg::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	target.draw(mSprite, states);
 }
 
-bool SpiderEgg::isAlive(){
+bool SpiderEgg::isAlive() const{
 	return mIsAlive;
+}
+
+bool SpiderEgg::isActive() const{
+	return mIsActive;
+}
+
+void SpiderEgg::setActive(const bool& active){
+	mIsActive = active;
 }
 
 Entity::RenderLayer SpiderEgg::getRenderLayer() const{

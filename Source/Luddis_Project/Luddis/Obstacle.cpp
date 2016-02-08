@@ -9,6 +9,7 @@ static const float ACTIVE_TIME = 2;
 
 Obstacle::Obstacle(std::string textureFilename, sf::RenderWindow* window, ObstacleType type, sf::Vector2f direction, const sf::Vector2f& position) :
 mIsAlive(true),
+mIsActive(true),
 mWindow(window),
 mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
 mType(type),
@@ -53,8 +54,16 @@ void Obstacle::draw(sf::RenderTarget& target, sf::RenderStates states)const{
 	target.draw(mSprite, states);
 }
 
-bool Obstacle::isAlive(){
+bool Obstacle::isAlive() const{
 	return mIsAlive;
+}
+
+bool Obstacle::isActive() const{
+	return mIsActive;
+}
+
+void Obstacle::setActive(const bool& active){
+	mIsActive = active;
 }
 
 Entity::RenderLayer Obstacle::getRenderLayer() const{

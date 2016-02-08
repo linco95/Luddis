@@ -41,7 +41,8 @@ static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(35, 8);
 
 Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) : 
-	mIsAlive(true), 
+	mIsAlive(true),
+	mIsActive(true),
 	mWindow(window), 
 	mProjectileCooldown(0), 
 	mStunDuration(0),
@@ -63,9 +64,19 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 Luddis::~Luddis(){
 	delete mHitbox;
 }
-bool Luddis::isAlive() {
+
+bool Luddis::isAlive() const{
 	return mIsAlive;
 }
+
+bool Luddis::isActive() const{
+	return mIsActive;
+}
+
+void Luddis::setActive(const bool& active){
+	mIsActive = active;
+}
+
 void Luddis::tick(const sf::Time& deltaTime){
 	if (mProjectileCooldown >= 0){
 		mProjectileCooldown -= deltaTime.asSeconds();

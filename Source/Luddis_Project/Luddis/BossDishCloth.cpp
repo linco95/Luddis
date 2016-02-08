@@ -28,6 +28,7 @@ static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 
 BossDishCloth::BossDishCloth(sf::RenderWindow* window) :
 mIsAlive(true),
+mIsActive(true),
 mWindow(window),
 mShooting(false),
 mLife(MAX_LIFE),
@@ -62,8 +63,16 @@ void BossDishCloth::draw(sf::RenderTarget& target, sf::RenderStates states) cons
 	target.draw(mAnimation.getCurrAnimation(), states);
 }
 
-bool BossDishCloth::isAlive(){
+bool BossDishCloth::isAlive() const{
 	return mIsAlive;
+}
+
+bool BossDishCloth::isActive() const{
+	return mIsActive;
+}
+
+void BossDishCloth::setActive(const bool& active){
+	mIsActive = active;
 }
 
 BossDishCloth::RenderLayer BossDishCloth::getRenderLayer() const {

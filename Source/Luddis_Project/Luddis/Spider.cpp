@@ -14,6 +14,7 @@ static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 
 Spider::Spider(std::string textureFilename, sf::RenderWindow* window) :
 mIsAlive(true),
+mIsActive(true),
 mWindow(window),
 mWait(WAIT_INTERVAL),
 mSprite(ResourceManager::getInstance().getTexture(textureFilename))
@@ -57,8 +58,16 @@ void Spider::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	target.draw(mSprite, states);
 }
 
-bool Spider::isAlive(){
+bool Spider::isAlive() const{
 	return mIsAlive;
+}
+
+bool Spider::isActive() const{
+	return mIsActive;
+}
+
+void Spider::setActive(const bool& active){
+	mIsActive = active;
 }
 
 Entity::RenderLayer Spider::getRenderLayer() const{

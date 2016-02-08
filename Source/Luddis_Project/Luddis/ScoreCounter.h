@@ -19,14 +19,17 @@ public:
 	ScoreCounter(sf::RenderWindow* aWindow, std::string filename, sf::Vector2i screenPos, ScoreType type);
 	~ScoreCounter();
 
-	virtual void tick(const sf::Time& deltaTime);
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-	virtual bool isAlive();
-	virtual RenderLayer getRenderLayer() const;
+	void tick(const sf::Time& deltaTime) override;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	bool isAlive() const override;
+	bool isActive() const override;
+	void setActive(const bool& active) override;
+	RenderLayer getRenderLayer() const override;
 	void setScore(int score);
 	void addToScore(int score);
 private:
 	bool mAlive;
+	bool mIsActive;
 	sf::RenderWindow* mWindow;
 	sf::Vector2i mPosition;
 	Animation mAnimation;

@@ -76,19 +76,10 @@
     <ClCompile Include="AnimationQueue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Dialogue.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BossDishCloth.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="Inventory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Button.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="TextBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Spider.cpp">
@@ -97,11 +88,20 @@
     <ClCompile Include="SpiderEgg.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="PowerupDisplay.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CollidableEntity.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextBox.cpp">
+      <Filter>Source Files\Entities\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="PowerupDisplay.cpp">
+      <Filter>Source Files\Entities\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Dialogue.cpp">
+      <Filter>Source Files\Entities\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source Files\Entities\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -174,9 +174,6 @@
     <ClInclude Include="Chips.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="Dialogue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BossDishCloth.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
@@ -186,23 +183,26 @@
     <ClInclude Include="Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Button.h">
-      <Filter>Header Files\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="TextBox.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Spider.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="SpiderEgg.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="PowerupDisplay.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CollidableEntity.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Header Files\Entities\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Dialogue.h">
+      <Filter>Header Files\Entities\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="PowerupDisplay.h">
+      <Filter>Header Files\Entities\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="TextBox.h">
+      <Filter>Header Files\Entities\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -229,6 +229,12 @@
     </Filter>
     <Filter Include="Header Files\Entities">
       <UniqueIdentifier>{562db5d3-9fd4-4a6a-a85b-b8ca6086fe9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\GUI">
+      <UniqueIdentifier>{6ee98c1a-26c2-4f91-afc7-30602071b91b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entities\GUI">
+      <UniqueIdentifier>{552173e4-367d-4e60-a497-9cde76ca1fcb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

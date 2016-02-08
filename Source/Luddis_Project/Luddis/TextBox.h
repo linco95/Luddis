@@ -13,7 +13,7 @@ public:
 	~TextBox();
 
 	void setFont(std::string fontName);
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 private:
 	sf::String wrapText(sf::String string, unsigned width, const sf::Font &font, unsigned characterSize, bool bold = false);
 

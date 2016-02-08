@@ -13,11 +13,13 @@ class Luddis : public CollidableEntity{
 public:
 	Luddis(std::string textureFilename, sf::RenderWindow* window);
 	~Luddis();
-	virtual void tick(const sf::Time& deltaTime);
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-	virtual bool isAlive();
-	virtual RenderLayer getRenderLayer() const;
-	virtual sf::FloatRect getHitBox();
+	void tick(const sf::Time& deltaTime) override;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	bool isAlive() const override;
+	bool isActive() const override;
+	void setActive(const bool& active) override;
+	RenderLayer getRenderLayer() const override;
+	sf::FloatRect getHitBox() override;
 	sf::Shape* getNarrowHitbox() const override;
 
 private:
@@ -26,9 +28,9 @@ private:
 	void updateMovement(const sf::Time& deltaTime);
 	void updateRotation();
 	void attack();
-	virtual Category getCollisionCategory();
-	virtual Type getCollisionType();
-	virtual void collide(CollidableEntity *collidable);
+	Category getCollisionCategory() override;
+	Type getCollisionType() override;
+	void collide(CollidableEntity *collidable) override;
 	
 	AnimationQueue mAnimation;
 	sf::RenderWindow* mWindow;
@@ -36,6 +38,7 @@ private:
 	float mStunDuration;
 	float mLoseDust;
 	bool mIsAlive;
+	bool mIsActive;
 	bool mColliding;
 	PowerupDisplay* mPowerups[4];
 	sf::FloatRect mCollideBox;
