@@ -13,15 +13,13 @@ static const float X_OFFSET = 200.f,
 				   Y_OFFSET = 50.f,
 				   SCROLLSPEED = 120.f;
 
+static const std::array<std::string, 3> CONFIGMEMBERS = { "Background", "Silverfish_spawns", "Boss_config" };
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::BACKGROUND;
-Level::Level():
+Level::Level() :
 mIsActive(true)
 {
-static const std::array<std::string, 3> CONFIGMEMBERS = { "Background", "Silverfish_spawns", "Boss_config" };
-Level::Level(){
 
 }
-
 Level::~Level(){
 
 }
