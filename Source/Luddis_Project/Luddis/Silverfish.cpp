@@ -85,7 +85,7 @@ Silverfish::Type Silverfish::getCollisionType(){
 	return REC;
 }
 
-void Silverfish::collide(Collidable *collidable){
+void Silverfish::collide(CollidableEntity *collidable){
 	if (collidable->getCollisionCategory() == FRIEND || collidable->getCollisionCategory() == HAIR){
 		if (mSwimAway== false){
 		mLife -= 5;

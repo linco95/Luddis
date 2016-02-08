@@ -143,7 +143,7 @@ BossDishCloth::Type BossDishCloth::getCollisionType(){
 	return REC;
 }
 
-void BossDishCloth::collide(Collidable* collidable){
+void BossDishCloth::collide(CollidableEntity* collidable){
 	if (collidable->getCollisionCategory() == HAIR){
 		mLife -= 15;
 		// For different states of damages (causes animation to "start over")

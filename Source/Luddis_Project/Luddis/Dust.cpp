@@ -61,7 +61,7 @@ Dust::Type Dust::getCollisionType(){
 }
 
 
-void Dust::collide(Collidable *collidable){
+void Dust::collide(CollidableEntity *collidable){
 	if (collidable->getCollisionCategory() == FRIEND){
 		mIsAlive = false;
 		Inventory::getInstance().addDust(1);

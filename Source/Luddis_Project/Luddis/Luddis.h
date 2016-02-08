@@ -3,13 +3,13 @@
 
 #include <string>
 #include "AnimationQueue.h"
-#include "Collidable.h"
+#include "CollidableEntity.h"
 #include <SFML/Graphics/RenderWindow.hpp>
-#include "Entity.h"
+
 #include "PowerupDisplay.h"
 #include <SFML/Audio/Sound.hpp>
 
-class Luddis : public Entity, public Collidable{
+class Luddis : public CollidableEntity{
 public:
 	Luddis(std::string textureFilename, sf::RenderWindow* window);
 	~Luddis();
@@ -28,7 +28,7 @@ private:
 	void attack();
 	virtual Category getCollisionCategory();
 	virtual Type getCollisionType();
-	virtual void collide(Collidable *collidable);
+	virtual void collide(CollidableEntity *collidable);
 	
 	AnimationQueue mAnimation;
 	sf::RenderWindow* mWindow;

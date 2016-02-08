@@ -2,11 +2,10 @@
 #define _INCLUDED_BOSSDISHCLOTH_
 
 #include "AnimationQueue.h"
-#include "Entity.h"
-#include "Collidable.h"
+#include "CollidableEntity.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 
-class BossDishCloth: public Entity, public Collidable{
+class BossDishCloth: public CollidableEntity{
 public:
 	BossDishCloth(sf::RenderWindow* window);
 	~BossDishCloth();
@@ -17,7 +16,7 @@ public:
 	virtual RenderLayer getRenderLayer() const;
 	virtual Category getCollisionCategory();
 	virtual Type getCollisionType();
-	virtual void collide(Collidable *collidable);
+	virtual void collide(CollidableEntity *collidable);
 	virtual sf::FloatRect getHitBox();
 	sf::Shape* getNarrowHitbox() const override;
 

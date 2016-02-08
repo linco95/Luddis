@@ -1,11 +1,11 @@
 #ifndef INCLUDED_OBSTACLE
 #define INCLUDED_OBSTACLE
 
-#include "Entity.h"
-#include "Collidable.h"
+
+#include "CollidableEntity.h"
 #include <SFML\Graphics.hpp>
 
-class Obstacle : public Entity, public Collidable{
+class Obstacle : public CollidableEntity{
 public:
 	/*
 	* 0 - SOLID
@@ -16,7 +16,7 @@ public:
 		DAMAGE
 	};
 
-	Obstacle(std::string textureFilename, sf::RenderWindow* window, ObstacleType type);
+	Obstacle(std::string textureFilename, sf::RenderWindow* window, ObstacleType type, sf::Vector2f direction, const sf::Vector2f& position);
 	~Obstacle();
 
 	virtual void tick(const sf::Time& deltaTime);
@@ -31,10 +31,13 @@ private:
 	sf::RenderWindow* mWindow;
 	virtual Category getCollisionCategory();
 	virtual Type getCollisionType();
-	virtual void collide(Collidable *collidable);
+	virtual void collide(CollidableEntity *collidable);
 
 	sf::Shape* mHitbox;
 	ObstacleType mType;
+	bool mActive;
+	float mActiveTime;
+	float mIdleTime;
 };
 
 

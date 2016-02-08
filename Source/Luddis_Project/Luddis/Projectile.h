@@ -1,12 +1,12 @@
 #ifndef _INCLUDED_PROJECTILE_
 #define _INCLUDED_PROJECTILE_
 
-#include "Entity.h"
-#include "Collidable.h"
+
+#include "CollidableEntity.h"
 #include <SFML/Window.hpp>
 #include <string>
 
-class Projectile : public Entity, public Collidable{
+class Projectile : public CollidableEntity{
 public:
 	//The max life time should be entered in seconds
 	Projectile(std::string textureFilename, sf::Vector2f direction,sf::Vector2f position, float maxLifeTimeMS, Category collisionCategory);
@@ -30,7 +30,7 @@ private:
 	sf::Vector2f mDirection;
 	virtual Category getCollisionCategory();
 	virtual Type getCollisionType();
-	virtual void collide(Collidable *collidable);
+	virtual void collide(CollidableEntity *collidable);
 	sf::Shape* mHitbox;
 };
 

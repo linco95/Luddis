@@ -22,9 +22,6 @@
     <ClCompile Include="VectorMath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Collidable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CollisionManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -103,6 +100,9 @@
     <ClCompile Include="PowerupDisplay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CollidableEntity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -118,9 +118,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="VectorMath.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Collidable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Animation.h">
@@ -202,6 +199,9 @@
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="PowerupDisplay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CollidableEntity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

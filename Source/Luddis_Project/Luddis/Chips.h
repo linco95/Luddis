@@ -2,13 +2,13 @@
 #define INCLUDED_CHIPS
 
 #include <string>
-#include "Entity.h"
-#include "Collidable.h"
+
+#include "CollidableEntity.h"
 #include <SFML/Window.hpp>
 #include <SFML/Audio/Sound.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
-class Chips : public Entity, public Collidable {
+class Chips : public CollidableEntity {
 public:
 	Chips(std::string textureFilename, sf::RenderWindow* window);
 	~Chips();
@@ -24,7 +24,7 @@ private:
 	sf::RenderWindow* mWindow;
 	virtual Category getCollisionCategory();
 	virtual Type getCollisionType();
-	virtual void collide(Collidable *collidable);
+	virtual void collide(CollidableEntity *collidable);
 	sf::Shape* mHitbox;
 
 };

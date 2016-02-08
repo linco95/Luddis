@@ -1,9 +1,9 @@
-#include "Entity.h"
-#include "Collidable.h"
+
+#include "CollidableEntity.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <string>
 
-class SpiderEgg : public Entity, public Collidable{
+class SpiderEgg : public CollidableEntity{
 public:
 	SpiderEgg(std::string textureFilename, sf::RenderWindow* window);
 	~SpiderEgg();
@@ -17,7 +17,7 @@ public:
 private:
 	virtual Category getCollisionCategory();
 	virtual Type getCollisionType();
-	virtual void collide(Collidable *collidable);
+	virtual void collide(CollidableEntity *collidable);
 
 	bool mIsAlive;
 	sf::Sprite mSprite;

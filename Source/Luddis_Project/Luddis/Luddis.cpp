@@ -212,7 +212,7 @@ Luddis::Type Luddis::getCollisionType(){
 	return REC;
 }
 
-void Luddis::collide(Collidable *collidable){
+void Luddis::collide(CollidableEntity *collidable){
 	if (collidable->getCollisionCategory() == BG_SOLID){
 		mColliding = true;
 		mCollideBox = collidable->getHitBox();

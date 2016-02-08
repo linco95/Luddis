@@ -42,15 +42,15 @@ sf::FloatRect SpiderEgg::getHitBox(){
 sf::Shape* SpiderEgg::getNarrowHitbox() const{
 	return mHitbox;
 }
-Collidable::Category SpiderEgg::getCollisionCategory(){
+SpiderEgg::Category SpiderEgg::getCollisionCategory(){
 	return COLLECT;
 }
 
-Collidable::Type SpiderEgg::getCollisionType(){
+SpiderEgg::Type SpiderEgg::getCollisionType(){
 	return CIRCLE;
 }
 
-void SpiderEgg::collide(Collidable *collidable){
+void SpiderEgg::collide(CollidableEntity *collidable){
 	if (collidable->getCollisionCategory() == FRIEND){
 		mIsAlive = false;
 		Inventory::getInstance().changeEggs(1);

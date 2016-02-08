@@ -1,8 +1,8 @@
 #ifndef INCLUDED_SPIDER
 #define INCLUDED_SPIDER
 
-#include "Entity.h"
-#include "Collidable.h"
+
+#include "CollidableEntity.h"
 #include <SFML/Window.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
