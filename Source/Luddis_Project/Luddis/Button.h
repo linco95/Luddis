@@ -1,12 +1,12 @@
 #ifndef _INCLUDED_BUTTON_
 #define _INCLUDED_BUTTON_
 
-#include <SFML/Graphics/Drawable.hpp>
+#include "Entity.h"
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Time.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
-class Button: public sf::Drawable{
+class Button: public Entity{
 public:
 	//This class goes by the assumption that the texture will
 	//have three horizontal frames of equal size.
@@ -17,13 +17,14 @@ public:
 
 	virtual void tick(const sf::Time& deltaTime);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-
-	void setButtonPosition(sf::Vector2f pos);
+	virtual bool isAlive();
+	virtual RenderLayer getRenderLayer() const;
 
 private:
 	void updateInput();
 	void onClick();
 
+	bool mIsAlive;
 	bool mClicked;
 	sf::RenderWindow* mWindow;
 	sf::Sprite mSprite;

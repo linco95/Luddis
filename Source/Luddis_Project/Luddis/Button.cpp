@@ -1,8 +1,10 @@
 #include "Button.h"
 #include "ResourceManager.h"
+#include <iostream>
 
 Button::Button(std::string graphicFilename, sf::RenderWindow* window, sf::Vector2f pos):
 mWindow(window),
+mIsAlive(true),
 mClicked(false),
 mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 	sf::IntRect rect(mSprite.getTextureRect());
@@ -12,6 +14,7 @@ mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 		mRects[i] = rect;
 		mRects[i].left += i*rect.width;
 	}
+	
 	mSprite.setPosition(pos);
 }
 
@@ -24,22 +27,27 @@ void Button::tick(const sf::Time& deltaTime){
 }
 
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const{
+	states.transform *= getTransform();
 	target.draw(mSprite, states);
 }
 
-void Button::setButtonPosition(sf::Vector2f pos){
-	mSprite.setPosition(pos);
+bool Button::isAlive(){
+	return mIsAlive;
+}
+
+Button::RenderLayer Button::getRenderLayer() const{
+	return GUI;
 }
 
 void Button::updateInput(){
-	sf::Vector2f vector = mWindow->mapPixelToCoords(sf::Mouse::getPosition(*mWindow));
+	sf::Vector2f vector(mWindow->mapPixelToCoords(sf::Mouse::getPosition(*mWindow)));
+	//Map pixel to coords does not work when the viewport changes
 	if (mClicked &&
 		!sf::Mouse::isButtonPressed(sf::Mouse::Left) &&
 		mSprite.getGlobalBounds().contains(vector)){
 		//Release click
 		onClick();
 	}
-	
 	if (mSprite.getGlobalBounds().contains(vector)){
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
 			//Click

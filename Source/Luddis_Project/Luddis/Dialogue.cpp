@@ -1,5 +1,6 @@
 #include "Dialogue.h"
 #include "ResourceManager.h"
+#include "EntityManager.h"
 //
 static const std::string DIALOGUE_TEXTURE = "Resources/Images/Parchment.png";
 
@@ -29,9 +30,9 @@ void Dialogue::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	states.transform *= getTransform();
 	target.draw(mSprite, states);
 	target.draw(mDialogueText, states);
-	for (int i = 0; i < mButtonCount; i++){
+	/*for (int i = 0; i < mButtonCount; i++){
 		target.draw(*mButtons[i], states);
-	}
+	}*/
 }
 
 bool Dialogue::isAlive(){
@@ -48,8 +49,6 @@ void Dialogue::updateText(const sf::Time& deltaTime){
 }
 
 void Dialogue::addButton(std::string buttonFile, sf::Vector2f pos){
-	if (mButtonCount < 4){
-		mButtonCount++;
-		mButtons[mButtonCount-1] = new Button(buttonFile, mWindow, pos);
-	}
+	Button* button = new Button(buttonFile, mWindow, pos);
+	EntityManager::getInstance().addEntity(button);
 }

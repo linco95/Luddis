@@ -1,9 +1,11 @@
 #include "SoundEngine.h"
 #include "ResourceManager.h"
+#include <SFML/Audio.hpp>
+#include <SFML/System/Time.hpp>
 
 SoundEngine::SoundEngine():
-mMainVolume(100), mSoundVolume(100), mMusicVolume(100), mFading(false)
-{
+mMainVolume(100), mSoundVolume(100), mMusicVolume(100), mFading(false){
+
 }
 
 SoundEngine& SoundEngine::getInstance(){
@@ -16,7 +18,9 @@ void SoundEngine::setMainVolume(float volume){
 	for (int i = 0; i < MAX_SOUND_CHANNELS; i++){
 		mSoundChannels[i].setVolume(mMainVolume*mSoundVolume / 100);
 	}
-	mCurrentMusic->setVolume(mMainVolume*mMusicVolume / 100);
+	if (mCurrentMusic != nullptr){
+		mCurrentMusic->setVolume(mMainVolume*mMusicVolume / 100);
+	}
 }
 
 void SoundEngine::setSoundVolume(float volume){
@@ -28,7 +32,9 @@ void SoundEngine::setSoundVolume(float volume){
 
 void SoundEngine::setMusicVolume(float volume){
 	mMusicVolume = volume;
-	mCurrentMusic->setVolume(mMainVolume*mMusicVolume / 100);
+	if (mCurrentMusic != nullptr){
+		mCurrentMusic->setVolume(mMainVolume*mMusicVolume / 100);
+	}
 }
 
 void SoundEngine::playSound(std::string filename){
