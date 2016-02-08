@@ -7,6 +7,7 @@ static const std::string DIALOGUE_TEXTURE = "Resources/Images/Parchment.png";
 Dialogue::Dialogue(std::string text, sf::RenderWindow* window, sf::Vector2f pos):
 mButtonCount(0),
 mIsAlive(true),
+mIsActive(true),
 mWindow(window),
 mSprite(ResourceManager::getInstance().getTexture(DIALOGUE_TEXTURE)),
 mDialogueText(sf::IntRect(35, 35, 390, 100), text, 24){
@@ -35,8 +36,16 @@ void Dialogue::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	}*/
 }
 
-bool Dialogue::isAlive(){
+bool Dialogue::isAlive() const{
 	return mIsAlive;
+}
+
+bool Dialogue::isActive() const{
+	return mIsActive;
+}
+
+void Dialogue::setActive(const bool& active){
+	mIsActive = active;
 }
 
 Dialogue::RenderLayer Dialogue::getRenderLayer() const{

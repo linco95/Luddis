@@ -90,7 +90,7 @@
     <ClCompile Include="BossDishCloth.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Chips.cpp" />
-    <ClCompile Include="Collidable.cpp" />
+    <ClCompile Include="CollidableEntity.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Dialogue.cpp" />
@@ -125,7 +125,7 @@
     <ClInclude Include="BossDishCloth.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Chips.h" />
-    <ClInclude Include="Collidable.h" />
+    <ClInclude Include="CollidableEntity.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Dialogue.h" />

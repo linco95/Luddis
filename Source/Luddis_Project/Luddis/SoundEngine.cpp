@@ -49,19 +49,23 @@ void SoundEngine::playSound(std::string filename){
 }
 
 void SoundEngine::playMusic(std::string filename){
-	mCurrentMusicFile = filename;
 	if (mCurrentMusic != 0) {
 		mCurrentMusic->stop();
 	}
 	mCurrentMusic = &ResourceManager::getInstance().getMusic(filename);
 	mCurrentMusic->setLoop(true);
+	setMusicVolume(mMusicVolume);
 	mCurrentMusic->play();
 }
-
+static sf::Clock actualTime;
 void SoundEngine::update(const sf::Time& deltaTime){
+	//sf::Time aDT = actualTime.restart();
+	//float pitch = deltaTime.asSeconds() / aDT.asSeconds();
 	if (mFading == true){
 		fadeTransition(deltaTime);
+		//mFadingMusic->setPitch(1 + pitch);
 	}
+	//mCurrentMusic->setPitch(1 + pitch);
 }
 
 void SoundEngine::fadeTransition(const sf::Time& deltaTime){
@@ -82,7 +86,6 @@ void SoundEngine::fadeToNewMusic(std::string filename, float fadeTime){
 		mFading = true;
 		mFadeTime = fadeTime;
 		mFadeTimeLeft = fadeTime;
-		mFadingMusicFile = mCurrentMusicFile;
 		playMusic(filename);
 		mFadingMusic->setVolume(0.0f);
 	}

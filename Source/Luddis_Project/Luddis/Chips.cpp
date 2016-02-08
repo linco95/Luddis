@@ -11,6 +11,7 @@ static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 
 Chips::Chips(std::string textureFilename, sf::RenderWindow* window) :
 mIsAlive(true),
+mIsActive(true),
 mWindow(window),
 mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
 mHitbox(new sf::CircleShape(HITBOX_SHAPE))
@@ -38,8 +39,16 @@ void Chips::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	target.draw(mSprite, states);
 }
 
-bool Chips::isAlive(){
+bool Chips::isAlive() const{
 	return mIsAlive;
+}
+
+bool Chips::isActive() const{
+	return mIsActive;
+}
+
+void Chips::setActive(const bool& active){
+	mIsActive = active;
 }
 
 Entity::RenderLayer Chips::getRenderLayer() const{
@@ -55,7 +64,7 @@ Chips::Type Chips::getCollisionType(){
 }
 
 
-void Chips::collide(Collidable *collidable){
+void Chips::collide(CollidableEntity *collidable){
 	if (collidable->getCollisionCategory() == FRIEND){
 		mIsAlive = false;
 		Inventory::getInstance().changeChips(1);

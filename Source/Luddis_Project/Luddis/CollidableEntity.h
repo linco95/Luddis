@@ -1,12 +1,12 @@
-#ifndef INCLUDED_COLLIDABLE
-#define INCLUDED_COLLIDABLE
+#ifndef INCLUDED_COLLIDABLE_ENTITY
+#define INCLUDED_COLLIDABLE_ENTITY
 
 #include <vector>
 #include <SFML/Graphics/Sprite.hpp>
-
+#include "Entity.h"
 #include <SFML/Graphics/Shape.hpp>
 
-class Collidable {
+class CollidableEntity : public Entity {
 public:
 
 	enum Category{
@@ -24,14 +24,13 @@ public:
 		REC,
 		CIRCLE
 	};
-	Collidable();
-	virtual ~Collidable();
+	CollidableEntity();
+	virtual ~CollidableEntity();
 
 	// Funktion för att uppdatera entiteten
 	virtual Category getCollisionCategory() = 0;
 	virtual Type getCollisionType() = 0;
-	virtual void collide(Collidable *collidable) = 0;
-	virtual bool isAlive() = 0;
+	virtual void collide(CollidableEntity *collidable) = 0;
 	virtual sf::FloatRect getHitBox() = 0;
 	virtual sf::Shape* getNarrowHitbox() const = 0;
 };

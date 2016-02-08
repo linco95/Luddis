@@ -42,6 +42,7 @@ static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(35, 8);
 
 Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) : 
 	mIsAlive(true), 
+	mIsActive(true),
 	mWindow(window), 
 	mProjectileCooldown(0), 
 	mStunDuration(0),
@@ -68,8 +69,16 @@ Luddis::~Luddis(){
 	delete mHitbox;
 }
 
-bool Luddis::isAlive() {
+bool Luddis::isAlive() const{
 	return mIsAlive;
+}
+
+bool Luddis::isActive() const{
+	return mIsActive;
+}
+
+void Luddis::setActive(const bool& active){
+	mIsActive = active;
 }
 
 void Luddis::tick(const sf::Time& deltaTime){
@@ -96,6 +105,7 @@ void Luddis::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 
 sf::Vector2f Luddis::getVectorMouseToSprite() const{
 	sf::Vector2f playerPosition(getPosition());
+	sf::Vector2i terst = sf::Mouse::getPosition(*mWindow);
 	sf::Vector2f mousePosition(mWindow->mapPixelToCoords(sf::Mouse::getPosition(*mWindow)));
 	return mousePosition - playerPosition;
 }
@@ -217,7 +227,7 @@ Luddis::Type Luddis::getCollisionType(){
 	return REC;
 }
 
-void Luddis::collide(Collidable *collidable){
+void Luddis::collide(CollidableEntity *collidable){
 	if (collidable->getCollisionCategory() == BG_SOLID){
 		mColliding = true;
 		mCollideBox = collidable->getHitBox();

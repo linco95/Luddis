@@ -14,6 +14,9 @@ static const float X_OFFSET = 200.f,
 				   SCROLLSPEED = 120.f;
 
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::BACKGROUND;
+Level::Level():
+mIsActive(true)
+{
 static const std::array<std::string, 3> CONFIGMEMBERS = { "Background", "Silverfish_spawns", "Boss_config" };
 Level::Level(){
 
@@ -38,7 +41,8 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		assert(itr->HasMember("x") && (*itr)["x"].IsInt());
 		assert(itr->HasMember("y") && (*itr)["y"].IsInt());
 		assert(itr->HasMember("angle") && (*itr)["angle"].IsDouble());
-		Silverfish* fish = new Silverfish(window, sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()));
+
+		Silverfish* fish = new Silverfish(mWindow, sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()));
 		em->addEntity(fish);
 		cm->addCollidable(fish);
 		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
@@ -137,9 +141,18 @@ void Level::updateView(const Time& deltaTime){
 	}
 	mWindow->setView(view);
 }
-bool Level::isAlive() {
+bool Level::isAlive() const{
 	return true;
 }
+
+bool Level::isActive() const{
+	return mIsActive;
+}
+
+void Level::setActive(const bool& active){
+	mIsActive = active;
+}
+
 Entity::RenderLayer Level::getRenderLayer() const {
 	return LAYER;
 }

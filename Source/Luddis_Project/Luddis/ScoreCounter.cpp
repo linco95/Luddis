@@ -8,6 +8,7 @@ static const std::string FONT_PATH = "Resources/Fonts/arial.ttf";
 ScoreCounter::ScoreCounter(sf::RenderWindow* aWindow, std::string filename, sf::Vector2i screenPos, ScoreType type) :
 mAnimation(filename, sf::Vector2i(50, 50), 4, 4, sf::seconds(0.2f)),
 mAlive(true),
+mIsActive(true),
 mWindow(aWindow),
 mPosition(screenPos),
 mType(type),
@@ -37,8 +38,16 @@ void ScoreCounter::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(mCounter, states);
 }
 
-bool ScoreCounter::isAlive(){
+bool ScoreCounter::isAlive() const{
 	return mAlive;
+}
+
+bool ScoreCounter::isActive() const{
+	return mIsActive;
+}
+
+void ScoreCounter::setActive(const bool& active){
+	mIsActive = active;
 }
 
 ScoreCounter::RenderLayer ScoreCounter::getRenderLayer() const{

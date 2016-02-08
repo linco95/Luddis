@@ -35,8 +35,6 @@ private:
 	float mFadeTime;
 	float mFadeTimeLeft;
 	bool mFading;
-	std::string mCurrentMusicFile;
-	std::string mFadingMusicFile;
 	sf::Sound mSoundChannels[MAX_SOUND_CHANNELS];
 	sf::Music* mCurrentMusic;
 	sf::Music* mFadingMusic;

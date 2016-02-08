@@ -1,0 +1,142 @@
+TODO
+
+Writing Level class
+
+Implement a music queue for starting with an intro, and moving on to looping music
+
+Writing narrow collision detection
+
+Creating hitboxes using sfml::Shape
+Collidable ==> CollidableEntity?
+
+Writing handler for loading bigger textures and using it as one texture.
+
+	
+Implementing states in gamemanager
+Maybe reading masks/maps by using sf::Image.getPixelPtr()
+
+?? - 	Entity-component-system
+
+Generally assert pre-requirements (zeropointer etc). DbC
+
+What represents me? Moving obstacle in "Städskrub".
+
+Maybe start using doxygen for future sprints/iterations
+Maybe implement some kind of entity component system? Test it on a separate branch?
+
+
+
+LOG
+
+26/1/16
+Started working on EventManager. Implementing Observerpattern.
+Went home
+Implemented states. Finished eventmanager. Moved bears luddis code from main, to the gamemanager. confirmed eventmanager works. Did some small fixes and comments around the code
+
+27/1/16
+Helped debugging projectile and entitymanager. Started working on Level. 
+LUNCH
+Problem with filters occured, had to manually recreate all filters.
+Continued work on Level class. Focusing on implementing sf::View.
+Implemented the Luddis sprite (unfinished) to replace the placeholder sprite. Had to do some changes to the rotation of luddis to make it face the right way according to the sprite. Rotation is now based of a front vector, which is easily changed.
+
+28/1/16
+Fixed scaling of the view, and mouse coords mapping to the new scale. Helped implementing renderlayers, sorting still doesn't work, helped move rendering into entitymanager.
+LUNCH
+Continued working on scaling the resolution. 
+Went home.
+Continued working on scaling, put that away after a while. 
+Started working on animation.
+Finished animation. Added icon to game.
+
+29/1/16
+Fixing luddis hitbox after animation. Not done.
+Started writing simple debug (draw shapes, write to console/log)
+
+30/1/16
+Fixed res scaling problem, just setting the views' initial size solved it.
+Added the ability to listen to a specific event, if you're interested in all its' eventtypes. Scrapped that idea.
+Made rendersorting dynamic (now we just need to add new renderlayers in entity if we need more).
+Trying to fix rendering problem (Issue #9). 
+
+1/2/16
+Tried fixing audio. Audio was using 24 sample format, sfml only supports 16 bit.
+coninued fixing luddis hitbox. We need to transform the entity instead of the sprite
+Went home
+Fixed scrolling the view.
+Started looking at how to set up YAML or JSON library
+
+2/2/16
+Fixed bug where audio didn't work in release mode.
+Avstämning
+Started working on an animationqueue. 
+LUNCH
+Finished animationqueue.
+Went home
+Working on seminar questions. Started looking at json parsing.
+--> Don't forget Seminariefrågor and planering! <--
+
+3/2/16
+Started implementing json configs.
+Implemented vertical scrolling.
+Implemented loading animation from metadata.
+Fixed soundengine not handling musicvolume properly.
+Started implementing narrow collision. Will just make basic hitboxes for now, and implementing draw hitboxes. Not done, continuing tomorrow.
+
+4/2/16
+PLANERING!!!
+Fixed animation.
+Continued on narrow collision
+Created projection function to vectormath
+
+5/2/16
+Continued working on collision
+
+BRAINSTORM
+
+*facepalm*
+just set view(0,0,1920,1080) <.<
+
+Resolution scaling:
+1920 x 1080 standard definition = VIRTUALW, VIRTUALH
+
+
+ScreenW 		VRITUALW
+  /      	=		/
+ScreenH			VIRTUALH
+
+
+if ImageH < VIRTUALH
+	scale down image, keep aspect ratio
+	
+if ImageW < VIRTUALW
+	scale down image, keep aspect ratio
+	
+ if ImageW > VIRTUALW && ImageH != VIRTUALH
+	Scale up image, keep aspect ratio
+ if ImageH > VIRTUALH && ImageW != VIRTUALW
+	Scale up image, keep aspect ratio
+
+	pseudokod
+	void scaleW(){
+		float factor = ScreenH * VIRTUALW/VIRTUALH
+		Image.scale(factor, factor);
+	}
+
+	void scaleH(){
+		float factor = ScreenW * VIRTUALW/VIRTUALH
+		Image.scale(factor, factor);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+ 

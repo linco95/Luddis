@@ -2,10 +2,12 @@
 #include "ResourceManager.h"
 #include <iostream>
 
-Button::Button(std::string graphicFilename, sf::RenderWindow* window, sf::Vector2f pos):
+Button::Button(std::string graphicFilename, sf::RenderWindow* window, sf::Vector2f pos, void (*action)(int, double)) :
 mWindow(window),
 mIsAlive(true),
 mClicked(false),
+mIsAlive(true),
+mIsActive(true),
 mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 	sf::IntRect rect(mSprite.getTextureRect());
 	rect.width  /= 3;
@@ -24,6 +26,18 @@ Button::~Button(){
 
 void Button::tick(const sf::Time& deltaTime){
 	updateInput();
+}
+
+bool Button::isAlive() const{
+	return mIsAlive;
+}
+
+bool Button::isActive() const{
+	return mIsActive;
+}
+
+void Button::setActive(const bool& active){
+	mIsActive = active;
 }
 
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const{
@@ -64,6 +78,10 @@ void Button::updateInput(){
 		//Default
 		mSprite.setTextureRect(mRects[0]);
 	}
+}
+
+Button::RenderLayer Button::getRenderLayer() const{
+	return FOREGROUND;
 }
 
 void Button::onClick(){

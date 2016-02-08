@@ -5,6 +5,7 @@ static const sf::Vector2f RECT_SIZE(36, 36);
 
 PowerupDisplay::PowerupDisplay(std::string textureFilename, sf::Vector2f pos, float cooldown) :
 mIsAlive(true),
+mIsActive(true),
 MAX_COOLDOWN(cooldown),
 mCooldown(0.0f),
 mRectShape(RECT_SIZE),
@@ -34,8 +35,16 @@ void PowerupDisplay::draw(sf::RenderTarget& target, sf::RenderStates states) con
 	target.draw(mRectShape, states);
 }
 
-bool PowerupDisplay::isAlive(){
+bool PowerupDisplay::isAlive() const{
 	return mIsAlive;
+}
+
+bool PowerupDisplay::isActive() const{
+	return mIsActive;
+}
+
+void PowerupDisplay::setActive(const bool& active){
+	mIsActive = active;
 }
 
 PowerupDisplay::RenderLayer PowerupDisplay::getRenderLayer() const{

@@ -1,4 +1,3 @@
-#ifdef _DEBUG
 #ifndef INCLUDED_DEBUG
 #define INCLUDED_DEBUG
 
@@ -15,15 +14,16 @@ public:
 		DEFAULT,
 		INFO,
 		WARNING,
-		ERROR,
+		NONFATAL,
 		FATAL
 	};
+	
 	typedef std::vector<sf::Shape*> ShapeVector;
 
 
 	//void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-	static void log(const std::string& aMsg, const ERRORLEVEL& aLvl);
+	static void log(const std::string& aMsg, const ERRORLEVEL& aLvl = DEFAULT);
 
 	Debug(const Debug&) = delete;
 	//Debug& Debug(const Debug&) = delete;
@@ -35,4 +35,3 @@ private:
 };
 
 #endif //INCLUDED_DEBUG
-#endif // _DEBUG
