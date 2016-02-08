@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <string>
+#include "Animation.h"
 
 class GraphicManager{
 public:
@@ -21,6 +22,8 @@ public:
 	void loadFont(std::string filename);
 	void clearFont(std::string filename);
 	void clearAllFonts();
+
+	//Animation related functions
 protected:
 	GraphicManager();
 private:
@@ -28,6 +31,8 @@ private:
 	TexturePairVector mTextures;
 	typedef std::vector<std::pair<sf::Font*, std::string>> FontPairVector;
 	FontPairVector mFonts;
+	typedef std::vector<std::pair<Animation*, std::string>> AnimationPairVector;
+	FontPairVector mAnimations;
 };
 
 #endif // !_INCLUDED_GRAPHICMANAGER_

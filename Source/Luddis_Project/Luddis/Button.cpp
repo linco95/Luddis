@@ -6,7 +6,6 @@ Button::Button(std::string graphicFilename, sf::RenderWindow* window, sf::Vector
 mWindow(window),
 mIsAlive(true),
 mClicked(false),
-mIsAlive(true),
 mIsActive(true),
 mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 	sf::IntRect rect(mSprite.getTextureRect());
@@ -28,10 +27,6 @@ void Button::tick(const sf::Time& deltaTime){
 	updateInput();
 }
 
-bool Button::isAlive() const{
-	return mIsAlive;
-}
-
 bool Button::isActive() const{
 	return mIsActive;
 }
@@ -45,7 +40,7 @@ void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	target.draw(mSprite, states);
 }
 
-bool Button::isAlive(){
+bool Button::isAlive() const{
 	return mIsAlive;
 }
 
@@ -78,10 +73,6 @@ void Button::updateInput(){
 		//Default
 		mSprite.setTextureRect(mRects[0]);
 	}
-}
-
-Button::RenderLayer Button::getRenderLayer() const{
-	return FOREGROUND;
 }
 
 void Button::onClick(){
