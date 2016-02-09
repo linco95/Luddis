@@ -5,6 +5,7 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Time.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Text.hpp>
 #include "Entity.h"
 
 class Button : public Entity{
@@ -13,7 +14,7 @@ public:
 	//have three horizontal frames of equal size.
 	//The first will be the default, the second the mouseover
 	//and the third the click frame
-	Button(std::string graphicFilename, sf::RenderWindow* window, sf::Vector2f pos, void(*action)(int, double) = 0);
+	Button(std::string graphicFilename, std::string buttonText, sf::RenderWindow* window, sf::Vector2f pos, void(*action)(int, double) = 0);
 	~Button();
 
 	bool isAlive() const override;
@@ -29,11 +30,12 @@ private:
 	void updateInput();
 	void onClick();
 
-	bool mClicked;
 	sf::RenderWindow* mWindow;
 	sf::Sprite mSprite;
 	sf::IntRect mRects[3];
+	sf::Text mButtonText;
 
+	bool mClicked;
 	bool mIsAlive;
 	bool mIsActive;
 };

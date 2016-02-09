@@ -19,7 +19,8 @@ public:
 		ITEM,
 		PLAYER,
 		FOREGROUND,
-		GUI
+		GUI_BACKGROUND,
+		GUI_FOREGROUND
 	};
 
 	Entity();

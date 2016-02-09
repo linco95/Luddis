@@ -8,7 +8,7 @@
 
 class Dialogue : public Entity{
 public:
-	Dialogue(std::string text, sf::RenderWindow* window, sf::Vector2f pos);
+	Dialogue(const std::string& dialogueFile, sf::RenderWindow* window, sf::Vector2f pos);
 	~Dialogue();
 
 	void tick(const sf::Time& deltaTime) override;
@@ -18,15 +18,19 @@ public:
 	void setActive(const bool& active) override;
 	RenderLayer getRenderLayer() const override;
 	void updateText(const sf::Time& deltaTime);
-	void addButton(std::string buttonFile, sf::Vector2f pos);
+	void setText(std::string newTextString);
 private:
+	void addButton(std::string buttonFile, std::string buttonText, sf::Vector2f pos);
+	void initialize(std::string dialogueFile);
+
 	sf::RenderWindow* mWindow;
 	bool mIsAlive;
 	bool mIsActive;
 	int mButtonCount;
+	int mActivePage;
 	sf::Sprite mSprite;
-	TextBox mDialogueText;
-	Button* mButtons[4];
+	typedef std::vector<TextBox> TextBoxVector;
+	TextBoxVector mDialogueTexts;
 };
 
 #endif // !_INCLUDED_DIALOGUE_

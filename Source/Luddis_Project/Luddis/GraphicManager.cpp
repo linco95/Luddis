@@ -141,7 +141,7 @@ void GraphicManager::clearAnimation(std::string filename){
 }
 
 //Removes all currently allocated fonts from memory
-void GraphicManager::clearAllFonts(){
+void GraphicManager::clearAllAnimations(){
 	while (!mAnimations.empty()){
 		delete mAnimations.back().first;
 		mAnimations.pop_back();
