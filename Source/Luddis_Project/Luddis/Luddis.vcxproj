@@ -154,6 +154,76 @@
     <ClInclude Include="Utils.h" />
     <ClInclude Include="VectorMath.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="Resources\Audio\Damm_Slurp_01.wav" />
+    <Media Include="Resources\Audio\luddis_crumbgather_s1d2v1.wav" />
+    <Media Include="Resources\Audio\Luddis_skott_16bit.wav" />
+    <Media Include="Resources\Audio\Skott_Bl+Ñs_Sm+Ñ_01.wav" />
+    <Media Include="Resources\Audio\Skott_Bl+Ñs_Sm+Ñ_02.wav" />
+    <Media Include="Resources\Audio\Skott_Bl+Ñs_Sm+Ñ_03.wav" />
+    <Media Include="Resources\Music\musik16.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Configs\Dialogue\Example_Dialogue.json" />
+    <None Include="Resources\Configs\Example\test.json" />
+    <None Include="Resources\Configs\Levels\Level01.json" />
+    <None Include="Resources\Images\Spritesheets\debug.json" />
+    <None Include="Resources\Images\Spritesheets\Grafik_Luddis shot120x90treframes_s2d3v1.json" />
+    <None Include="Resources\Images\Spritesheets\Grafik_Luddis_hit_sprite_s2d2v1.json" />
+    <None Include="Resources\Images\Spritesheets\Grafik_TrasanAttackFas1_S2D4V3.json" />
+    <None Include="Resources\Images\Spritesheets\Grafik_TrasanAttackFas2_S2D4V3.json" />
+    <None Include="Resources\Images\Spritesheets\Grafik_TrasanAttackFas3_S2D4V1.json" />
+    <None Include="Resources\Images\Spritesheets\Grafik_TrasanAttackFas4_S2D4V1.json" />
+    <None Include="Resources\Images\Spritesheets\Grafik_TrasanFas1_S2D3V2.json" />
+    <None Include="Resources\Images\Spritesheets\Grafik_TrasanFas2_S2D3V2.json" />
+    <None Include="Resources\Images\Spritesheets\Grafik_TrasanFas3_S2D3V1.json" />
+    <None Include="Resources\Images\Spritesheets\Grafik_TrasanFas4_S2D3V2.json" />
+    <None Include="Resources\Images\Spritesheets\Luddis_ walkcykle.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Resources\Fonts\arial.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\Images\BAWS1projectile.png" />
+    <Image Include="Resources\Images\ChipsCounter.png" />
+    <Image Include="Resources\Images\Grafik_Attack 1_35x35_s1d3v1.png" />
+    <Image Include="Resources\Images\Grafik_Attack 2_35x35_s1d3v1.png" />
+    <Image Include="Resources\Images\Grafik_Attack 3_35x35_s1d3v1.png" />
+    <Image Include="Resources\Images\Grafik_Bana1_1Final_S2D3V1.png" />
+    <Image Include="Resources\Images\Grafik_damm1_s1d4v1.png" />
+    <Image Include="Resources\Images\Grafik_Luddis120x80_s1d3v1.png" />
+    <Image Include="Resources\Images\Grafik_silverfisk_prototyp_s1d3v2.png" />
+    <Image Include="Resources\Images\Grafik_smula2_s1d4v1.png" />
+    <Image Include="Resources\Images\Grafik_spindel_Enter_s2d3v1.png" />
+    <Image Include="Resources\Images\Levels\BackgroundLevel1-1.png" />
+    <Image Include="Resources\Images\Levels\BackgroundLevel1-2.png" />
+    <Image Include="Resources\Images\Levels\BackgroundLevel1-3.png" />
+    <Image Include="Resources\Images\Levels\BackgroundLevel1-4.png" />
+    <Image Include="Resources\Images\Levels\BackgroundLevel1-5.png" />
+    <Image Include="Resources\Images\Levels\BackgroundLevel1-6.png" />
+    <Image Include="Resources\Images\Levels\BackgroundLevel1-7.png" />
+    <Image Include="Resources\Images\LuddCounter.png" />
+    <Image Include="Resources\Images\luddisIcon.png" />
+    <Image Include="Resources\Images\Parchment.png" />
+    <Image Include="Resources\Images\PowerDisplay.png" />
+    <Image Include="Resources\Images\samplebutton.png" />
+    <Image Include="Resources\Images\Spritesheets\debug.png" />
+    <Image Include="Resources\Images\Spritesheets\Grafik_Luddis shot120x90treframes_s2d3v1.png" />
+    <Image Include="Resources\Images\Spritesheets\Grafik_Luddis skjut sprite 120x90 tre frames_s2d3v1.png" />
+    <Image Include="Resources\Images\Spritesheets\Grafik_Luddis_hit_sprite_s2d2v1.png" />
+    <Image Include="Resources\Images\Spritesheets\Grafik_Luddis_sprite_walkcycle_120x90_s1d4v1.png" />
+    <Image Include="Resources\Images\Spritesheets\Grafik_Luddis_walkcykle_sprite_longer_version_s2d2v3.png" />
+    <Image Include="Resources\Images\Spritesheets\Grafik_TrasanAttackFas1_S2D4V3.png" />
+    <Image Include="Resources\Images\Spritesheets\Grafik_TrasanAttackFas2_S2D4V3.png" />
+    <Image Include="Resources\Images\Spritesheets\Grafik_TrasanAttackFas3_S2D4V1.png" />
+    <Image Include="Resources\Images\Spritesheets\Grafik_TrasanAttackFas4_S2D4V1.png" />
+    <Image Include="Resources\Images\Spritesheets\Grafik_TrasanFas1_S2D3V2.png" />
+    <Image Include="Resources\Images\Spritesheets\Grafik_TrasanFas2_S2D3V2.png" />
+    <Image Include="Resources\Images\Spritesheets\Grafik_TrasanFas3_S2D3V1.png" />
+    <Image Include="Resources\Images\Spritesheets\Grafik_TrasanFas4_S2D3V2.png" />
+    <Image Include="Resources\Images\Spritesheets\Luddis_ walkcykle.png" />
+    <Image Include="Resources\Images\Spritesheets\walkcykle_104x90_12_frames.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

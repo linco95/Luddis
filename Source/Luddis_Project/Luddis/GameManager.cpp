@@ -30,7 +30,6 @@ static const int HEIGHT = 1080;
 static const float DESIRED_ASPECTRATIO = (float)WIDTH / (float)HEIGHT;
 static const Color BGCOLOR = Color::Black;
 static const std::string TEXTURE_NAME = "Resources/Images/Grafik_Luddis120x80_s1d3v1.png";
-static const std::string TEXTURE_SILVERFISH = "Resources/Images/Grafik_silverfisk_prototyp_s1d3v2.png";
 static const std::string TEXTURE_DUST = "Resources/Images/Grafik_damm1_s1d4v1.png";
 static const std::string TEXTURE_CHIPS = "Resources/Images/Grafik_smula2_s1d4v1.png";
 static const std::string TEXTURE_BUTTON = "Resources/Images/Button";
@@ -66,7 +65,7 @@ struct GameManagerImp : public EventObserver {
 		EntityManager::getInstance().addEntity(mStopp);
 		CollisionManager::getInstance().addCollidable(mStopp);
 
-		mSpider = new Spider("resources/images/Grafik_spindel_Enter_s2d3v1.png", &mMainWindow);
+		mSpider = new Spider(&mMainWindow);
 		EntityManager::getInstance().addEntity(mSpider);
 
 		mBoss = new BossDishCloth(&mMainWindow);

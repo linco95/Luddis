@@ -19,7 +19,7 @@ static const Animation SHOOTING_ANIMATION_3 = Animation("Resources/Images/Sprite
 static const Animation ANIMATION_IDLE_4 = Animation("Resources/Images/Spritesheets/Grafik_TrasanFas4_S2D3V2");
 static const Animation SHOOTING_ANIMATION_4 = Animation("Resources/Images/Spritesheets/Grafik_TrasanAttackFas4_S2D4V1");
 
-static const std::string PROJECTILE_FILEPATH = "Resources/Images/BAWS1projectile.png";
+static const std::string PROJECTILE_FILEPATH = "Resources/Images/Grafik_TrasanProjektil_S2D5V1.png";
 static const int MAX_LIFE = 100;
 static const float ATTACK_INTERVAL = 3.5f;
 static const float PROJECTILE_LIFETIME = 2.5f;
