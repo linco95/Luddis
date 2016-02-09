@@ -53,7 +53,8 @@ void EntityManager::removeDeadEntities(){
 * 2 - ITEM,
 * 3 - PLAYER,
 * 4 - FOREGROUND
-* 5 - GUI
+* 5 - GUI_BACKGROUND
+* 6 - GUI_FOREGROUND
 */
 
 void EntityManager::renderEntities(sf::RenderWindow& window){
@@ -69,14 +70,16 @@ void EntityManager::renderEntities(sf::RenderWindow& window){
 	for (auto it : renderMap){
 		//Special case for the GUI layer
 		sf::View currentView = window.getView();
-		if (it.first == Entity::GUI){
+		if (it.first == Entity::GUI_FOREGROUND ||
+			it.first == Entity::GUI_BACKGROUND){
 			sf::View view(sf::FloatRect(0, 0, (float)WIDTH, (float)HEIGHT));
 			window.setView(view);
 		}
 		for (auto e : it.second){
 			window.draw(*e);
 		}
-		if (it.first == Entity::GUI){
+		if (it.first == Entity::GUI_FOREGROUND ||
+			it.first == Entity::GUI_BACKGROUND){
 			window.setView(currentView);
 		}
 	}

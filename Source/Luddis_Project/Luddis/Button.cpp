@@ -2,11 +2,14 @@
 #include "ResourceManager.h"
 #include <iostream>
 
-Button::Button(std::string graphicFilename, sf::RenderWindow* window, sf::Vector2f pos, void (*action)(int, double)) :
+static const std::string DEFAULT_FONTTYPE = "resources/fonts/arial.ttf";
+
+Button::Button(std::string graphicFilename, std::string buttonText, sf::RenderWindow* window, sf::Vector2f pos, void(*action)(int, double)) :
 mWindow(window),
 mIsAlive(true),
 mClicked(false),
 mIsActive(true),
+mButtonText(buttonText, ResourceManager::getInstance().getFont(DEFAULT_FONTTYPE), 16),
 mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 	sf::IntRect rect(mSprite.getTextureRect());
 	rect.width  /= 3;
@@ -15,8 +18,9 @@ mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 		mRects[i] = rect;
 		mRects[i].left += i*rect.width;
 	}
-	
-	mSprite.setPosition(pos);
+	mButtonText.setColor(sf::Color(0, 0, 0));
+	setPosition(pos);
+	mButtonText.move(mButtonText.getGlobalBounds().width / 2, mButtonText.getGlobalBounds().height / 2);
 }
 
 Button::~Button(){
@@ -38,6 +42,7 @@ void Button::setActive(const bool& active){
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	states.transform *= getTransform();
 	target.draw(mSprite, states);
+	target.draw(mButtonText, states);
 }
 
 bool Button::isAlive() const{
@@ -45,19 +50,19 @@ bool Button::isAlive() const{
 }
 
 Button::RenderLayer Button::getRenderLayer() const{
-	return GUI;
+	return GUI_FOREGROUND;
 }
 
 void Button::updateInput(){
-	sf::Vector2f vector(mWindow->mapPixelToCoords(sf::Mouse::getPosition(*mWindow)));
+	sf::Vector2f vector(sf::Mouse::getPosition(*mWindow));
 	//Map pixel to coords does not work when the viewport changes
 	if (mClicked &&
 		!sf::Mouse::isButtonPressed(sf::Mouse::Left) &&
-		mSprite.getGlobalBounds().contains(vector)){
+		mSprite.getLocalBounds().contains(vector)){
 		//Release click
 		onClick();
 	}
-	if (mSprite.getGlobalBounds().contains(vector)){
+	if (mSprite.getLocalBounds().contains(vector)){
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
 			//Click
 			mSprite.setTextureRect(mRects[2]);
@@ -69,7 +74,7 @@ void Button::updateInput(){
 			mClicked = false;
 		}
 	}
-	else if (!mSprite.getGlobalBounds().contains(vector)){
+	else if (!mSprite.getLocalBounds().contains(vector)){
 		//Default
 		mSprite.setTextureRect(mRects[0]);
 	}

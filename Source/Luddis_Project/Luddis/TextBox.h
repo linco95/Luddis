@@ -12,6 +12,7 @@ public:
 	TextBox(sf::IntRect box, std::string text, int fontSize, std::string fontName = "Resources/Fonts/arial.ttf");
 	~TextBox();
 
+	void setString(const std::string& text);
 	void setFont(std::string fontName);
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 private:

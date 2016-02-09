@@ -39,8 +39,6 @@ static const std::string TEXTURE_LUDDCOUNTER = "Resources/Images/LuddCounter.png
 static const std::string FONT_NAME = "arial.ttf";
 static const bool VSYNCENABLED = true;
 
-static const std::string FUCKING_ESSAY = "I just want a long string to see how sf::Text objects act with things like wrapping words etc around the screen so I just need to have thing long text. Anyways I am running out of things to say so I'm just going to leave it at this. Hopefully its long enough to satisfy my needs. Also thats what she said.";
-
 /*
 TODO:
 Implement states

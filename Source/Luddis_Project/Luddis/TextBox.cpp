@@ -15,6 +15,10 @@ TextBox::~TextBox(){
 
 }
 
+void TextBox::setString(const std::string& text){
+	mText.setString(wrapText(text, mBox.width, ResourceManager::getInstance().getFont(mFontName), mFontSize));
+}
+
 void TextBox::setFont(std::string fontName){
 	mText.setFont(ResourceManager::getInstance().getFont(fontName));
 	mText.setCharacterSize(mFontSize);
