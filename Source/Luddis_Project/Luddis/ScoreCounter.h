@@ -1,7 +1,7 @@
 #ifndef _INCLUDED_SCORECOUNTER_
 #define _INCLUDED_SCORECOUNTER_
 
-#include "Entity.h"
+#include "InterfaceElement.h"
 #include "Animation.h"
 #include <SFML/Graphics/Text.hpp>
 
@@ -9,7 +9,7 @@ namespace sf{
 	class RenderWindow;
 }
 
-class ScoreCounter : public Entity{
+class ScoreCounter : public InterfaceElement{
 public:
 	enum ScoreType{
 		CHIPS,

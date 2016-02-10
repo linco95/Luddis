@@ -103,6 +103,15 @@
     <ClCompile Include="Button.cpp">
       <Filter>Source Files\Entities\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="InterfaceElement.cpp">
+      <Filter>Source Files\Entities\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterPortrait.cpp">
+      <Filter>Source Files\Entities\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -202,6 +211,15 @@
       <Filter>Header Files\Entities\GUI</Filter>
     </ClInclude>
     <ClInclude Include="TextBox.h">
+      <Filter>Header Files\Entities\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="InterfaceElement.h">
+      <Filter>Header Files\Entities\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterPortrait.h">
       <Filter>Header Files\Entities\GUI</Filter>
     </ClInclude>
   </ItemGroup>

@@ -7,6 +7,7 @@
 #include "EventManager.h"
 #include "ResourceManager.h"
 #include "SoundEngine.h"
+#include "GUIManager.h"
 #include "Dialogue.h"
 #include "Level.h"
 #include "Button.h"
@@ -96,14 +97,14 @@ struct GameManagerImp : public EventObserver {
 		CollisionManager::getInstance().addCollidable(mChips3);
 
 		mChipsCounter = new ScoreCounter(&mMainWindow, TEXTURE_CHIPSCOUNTER, sf::Vector2i(400, 50), ScoreCounter::ScoreType::CHIPS);
-		EntityManager::getInstance().addEntity(mChipsCounter);
+		GUIManager::getInstance().addInterfaceElement(mChipsCounter);
 
 		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mPlayer);
 		CollisionManager::getInstance().addCollidable(mPlayer);
 
 		mLuddCounter = new ScoreCounter(&mMainWindow, TEXTURE_LUDDCOUNTER, sf::Vector2i(550, 50), ScoreCounter::ScoreType::DUST);
-		EntityManager::getInstance().addEntity(mLuddCounter);
+		GUIManager::getInstance().addInterfaceElement(mLuddCounter);
 
 		mLevel = new Level();
 		mLevel->initializeLevel(mMainWindow, mPlayer);
@@ -165,7 +166,11 @@ struct GameManagerImp : public EventObserver {
 		// To avoid multiple functioncalls every iteration of gameloop
 		EntityManager* em = &EntityManager::getInstance();
 		CollisionManager* cm = &CollisionManager::getInstance();
+		GUIManager* gm = &GUIManager::getInstance();
 		SoundEngine* se = &SoundEngine::getInstance();
+
+		View view(FloatRect(0, 0, (float)WIDTH, (float)HEIGHT));
+		View mapView;
 		se->setMainVolume(100);
 		Clock gameClock;
 		while (mMainWindow.isOpen()){
@@ -175,6 +180,10 @@ struct GameManagerImp : public EventObserver {
 			
 			// Update Entities     |
 			se->update(gameClock.getElapsedTime());
+			mapView = mMainWindow.getView();
+			mMainWindow.setView(view);
+			gm->updateElements(gameClock.getElapsedTime());
+			mMainWindow.setView(mapView);
 			em->updateEntities(gameClock.restart());
 			cm->detectCollisions();
 
@@ -185,9 +194,18 @@ struct GameManagerImp : public EventObserver {
 			}
 			cm->removeDeadCollidables();
 			em->removeDeadEntities();
+			gm->removeObsoleteElements();
 
 			// Render
+			mMainWindow.clear();
+
 			em->renderEntities(mMainWindow);
+
+			mapView = mMainWindow.getView();
+			mMainWindow.setView(view);
+			gm->renderElements(mMainWindow);
+			mMainWindow.setView(mapView);
+
 #ifdef LUDDIS_DEBUG_DRAW_HITBOXES
 			cm->drawHitboxes(mMainWindow);
 #endif

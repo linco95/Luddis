@@ -2,6 +2,7 @@
 #include "Inventory.h"
 #include "ResourceManager.h"
 #include "EntityManager.h"
+#include "GUIManager.h"
 #include "CollisionManager.h"
 #include "SoundEngine.h"
 #include "VectorMath.h"
@@ -60,12 +61,12 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	setPosition(mWindow->getView().getSize().x / 2, mWindow->getView().getSize().y / 2);
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
 	sf::Mouse::setPosition(sf::Vector2i((int)getPosition().x, (int)getPosition().y));
-	mPowerups[0] = new PowerupDisplay(POWER_DISPLAY, sf::Vector2f((float)mWindow->getSize().x * 2 / 5, (float)mWindow->getSize().y - 80), 15.0f);
+	mPowerups[0] = new PowerupDisplay(POWER_DISPLAY, sf::Vector2f((float)mWindow->getSize().x * 2 / 5, 1000), 15.0f);
 	
 	//Adds a display of the first power that luddis has
-	EntityManager::getInstance().addEntity(mPowerups[0]);
-	Dialogue* dialogue = new Dialogue(TEST_DIALOGUE, mWindow, sf::Vector2f(100, 100));
-	EntityManager::getInstance().addEntity(dialogue);
+	GUIManager::getInstance().addInterfaceElement(mPowerups[0]);
+	Dialogue* dialogue = new Dialogue(TEST_DIALOGUE, mWindow, sf::Vector2f(150, 150));
+	GUIManager::getInstance().addInterfaceElement(dialogue);
 }
 
 Luddis::~Luddis(){

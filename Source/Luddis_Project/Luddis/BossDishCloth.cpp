@@ -129,7 +129,7 @@ void BossDishCloth::updateMovement(const sf::Time& deltaTime){
 
 void BossDishCloth::attack(){
 	sf::Vector2f vec(0, 1);
-	int max = 3;
+	int max = 8;
 	
 	if(mLife < 50){
 		max = 2;
@@ -137,7 +137,7 @@ void BossDishCloth::attack(){
 	for (int i = 0; i < max; i++)
 	{
 
-		vec = VectorMath::rotateVector(vec, 135/(float)max);
+		vec = VectorMath::rotateVector(vec, 360/(float)max);
 		Projectile* proj = new Projectile(PROJECTILE_FILEPATH, vec*PROJECTILE_SPEED, getPosition()+vec*PROJECTILE_SPEED/3.0f, PROJECTILE_LIFETIME, ENEMY_STUN);
 		EntityManager::getInstance().addEntity(proj);
 		CollisionManager::getInstance().addCollidable(proj);
