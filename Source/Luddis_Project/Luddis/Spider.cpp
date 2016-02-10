@@ -25,8 +25,6 @@ mWait(WAIT_INTERVAL)
 	sf::Vector2f dir;
 	dir = { 0, 1 };
 	mDirection = VectorMath::normalizeVector(dir);
-
-
 }
 
 Spider::~Spider(){

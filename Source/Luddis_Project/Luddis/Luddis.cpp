@@ -43,7 +43,7 @@ static const float PROJECTILE_SPEED = 300;
 static const float MUZZLEOFFSET = 50.0f;
 static const sf::Vector2f FRONTVECTOR(1, 0);
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
-static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(35, 8);
+static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(20,20));
 
 Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) : 
 	mIsAlive(true), 
@@ -56,7 +56,7 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	mAnimation(ANIMATION_FILEPATH),
 	mColliding(false),
 	mPrevPos(0, 0),
-	mHitbox(new sf::CircleShape(HITBOX_SHAPE))
+	mHitbox(new sf::RectangleShape(HITBOX_SHAPE))
 {
 	setPosition(mWindow->getView().getSize().x / 2, mWindow->getView().getSize().y / 2);
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);

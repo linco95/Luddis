@@ -75,7 +75,7 @@ void Chips::collide(CollidableEntity *collidable){
 }
 
 sf::FloatRect Chips::getHitBox(){
-	return mSprite.getGlobalBounds();
+	return getTransform().transformRect(mSprite.getGlobalBounds());
 }
 
 sf::Shape* Chips::getNarrowHitbox() const{

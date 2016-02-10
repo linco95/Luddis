@@ -69,6 +69,12 @@ struct GameManagerImp : public EventObserver {
 		mLuddCounter = new ScoreCounter(&mMainWindow, TEXTURE_LUDDCOUNTER, sf::Vector2i(550, 50), ScoreCounter::ScoreType::DUST);
 		GUIManager::getInstance().addInterfaceElement(mLuddCounter);
 
+		// Temporary splash screen
+		sf::RectangleShape splashScreen(sf::Vector2f((float)WIDTH, (float)HEIGHT));
+		splashScreen.setTexture(&ResourceManager::getInstance().getTexture("resources/images/splash.png"));
+		mMainWindow.draw(splashScreen);
+		mMainWindow.display();
+
 		mLevel = new Level();
 		mLevel->initializeLevel(mMainWindow, mPlayer);
 		EntityManager::getInstance().addEntity(mLevel);
