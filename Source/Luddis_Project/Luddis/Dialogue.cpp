@@ -59,7 +59,7 @@ void Dialogue::initialize(std::string dialogueFile){
 			std::string buttonText = buttonInfo["Button_text"].GetString();
 			assert(buttonInfo.HasMember("Button_image") && buttonInfo["Button_image"].IsString());
 			std::string buttonImage = buttonInfo["Button_image"].GetString();
-			addButton(buttonInfo["Button_image"].GetString(), buttonInfo["Button_text"].GetString(), sf::Vector2f(60 + (float)i * 75, 300), (int)itr);
+			addButton(buttonInfo["Button_image"].GetString(), buttonInfo["Button_text"].GetString(), sf::Vector2f(80 + (float)i * 100, 300), (int)itr);
 
 		}
 		TextBox textBox(DEFAULT_RECT, pages[itr]["Text"].GetString(), 24);

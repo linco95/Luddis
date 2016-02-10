@@ -112,6 +112,12 @@
     <ClCompile Include="CharacterPortrait.cpp">
       <Filter>Source Files\Entities\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="PauseMenu.cpp">
+      <Filter>Source Files\Entities\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateLevel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -221,6 +227,15 @@
     </ClInclude>
     <ClInclude Include="CharacterPortrait.h">
       <Filter>Header Files\Entities\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="PauseMenu.h">
+      <Filter>Header Files\Entities\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateLevel.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

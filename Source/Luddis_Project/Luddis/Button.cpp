@@ -13,16 +13,21 @@ mOwner(owner),
 mButtonText(buttonText, ResourceManager::getInstance().getFont(DEFAULT_FONTTYPE), 16),
 mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 	setPosition(pos);
-	sf::IntRect rect(mSprite.getTextureRect());
-	rect.width  /= 3;
-	mSprite.setTextureRect(rect);
+	sf::IntRect spriteRect(mSprite.getTextureRect());
+	spriteRect.width /= 3;
+	mSprite.setTextureRect(spriteRect);
 	for (int i = 0; i < 3; i++){
-		mRects[i] = rect;
-		mRects[i].left += i*rect.width;
+		mRects[i] = spriteRect;
+		mRects[i].left += i*spriteRect.width;
+	}
+	sf::FloatRect textRect = mButtonText.getGlobalBounds();
+	float xScale = (float)textRect.width/spriteRect.width;
+	if ((float)textRect.width> spriteRect.width){
+		mSprite.setScale(xScale+0.5f, 1);
 	}
 	mButtonText.setColor(sf::Color::Black);
-	mButtonText.setOrigin(mButtonText.getGlobalBounds().width / 2, mButtonText.getGlobalBounds().height / 2);
-	mSprite.setOrigin(mSprite.getGlobalBounds().width / 2, mSprite.getGlobalBounds().height / 2);
+	mButtonText.setOrigin(textRect.width / 2, textRect.height / 2);
+	mSprite.setOrigin((float)spriteRect.width / 2, (float)spriteRect.height / 2);
 }
 
 Button::~Button(){
