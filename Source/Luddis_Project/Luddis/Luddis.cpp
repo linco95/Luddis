@@ -260,6 +260,25 @@ void Luddis::collide(CollidableEntity *collidable){
 	}
 }
 
+void Luddis::changeScale(){
+	int dust = Inventory::getInstance().getDust();
+	if (dust < 2){
+		mAnimation.getCurrAnimation().setScale(float(1), float(1));
+	}
+	else if (dust < 4 && dust > 1){
+		mAnimation.getCurrAnimation().setScale(float(1.25), float(1.25));
+	}
+	else if (dust < 6 && dust > 3){
+		mAnimation.getCurrAnimation().setScale(float(1.5), float(1.5));
+	}
+	else if (dust < 8 && dust > 5){
+		mAnimation.getCurrAnimation().setScale(float(1.75), float(1.75));
+	}
+	else if (dust > 7){
+		mAnimation.getCurrAnimation().setScale(float(2), float(2));
+	}
+}
+
 sf::FloatRect Luddis::getHitBox(){
 	return getTransform().transformRect(mAnimation.getCurrAnimation().getSprite().getGlobalBounds());
 }

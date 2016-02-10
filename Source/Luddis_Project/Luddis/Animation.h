@@ -12,7 +12,7 @@ namespace sf{
 	class Sprite;
 }
 
-class Animation : public sf::Drawable {
+class Animation : public sf::Drawable, public sf::Transformable {
 public:
 	Animation(const std::string& aFilePathNoExtension);
 	Animation(const std::string& aFilePath, const sf::Vector2i& aTileSize, const int& aColumns, const int& aSpriteAmt, const sf::Time& aFrameTime);
