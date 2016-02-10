@@ -9,7 +9,7 @@
 
 class Spider : public Entity {
 public:
-	Spider(sf::RenderWindow* window);
+	Spider(sf::RenderWindow* window, const sf::Vector2f& position);
 	~Spider();
 
 	void tick(const sf::Time& deltaTime) override;
@@ -28,7 +28,6 @@ private:
 	sf::Sprite mSprite;
 	sf::RenderWindow* mWindow;
 	sf::Vector2f mDirection;
-	sf::Vector2f mDirection2;
 	AnimationQueue mAnimation;
 };
 

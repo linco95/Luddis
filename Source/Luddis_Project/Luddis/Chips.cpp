@@ -9,7 +9,7 @@
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 
-Chips::Chips(std::string textureFilename, sf::RenderWindow* window) :
+Chips::Chips(sf::RenderWindow* window, std::string textureFilename, const sf::Vector2f& position, const float& angle) :
 mIsAlive(true),
 mIsActive(true),
 mWindow(window),
@@ -17,13 +17,15 @@ mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
 mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
-	// Get a y-spawn position
-	sf::Vector2f size = mWindow->getView().getSize();
-	int r1 = rand() % (int)size.y + 1;
-	int r2 = rand() % (int)size.x + 1;
 	// Set spawn position
-	mSprite.setPosition((float)r2, (float)r1);
+	setPosition(position);
+	rotate(angle);
 
+	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
+
+	mHitbox->setPosition(getPosition());
+	mHitbox->setScale(getScale());
+	mHitbox->setRotation(getRotation());
 }
 
 Chips::~Chips(){
@@ -73,7 +75,7 @@ void Chips::collide(CollidableEntity *collidable){
 }
 
 sf::FloatRect Chips::getHitBox(){
-	return mSprite.getGlobalBounds();
+	return getTransform().transformRect(mSprite.getGlobalBounds());
 }
 
 sf::Shape* Chips::getNarrowHitbox() const{

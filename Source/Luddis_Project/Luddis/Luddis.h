@@ -31,7 +31,8 @@ private:
 	Category getCollisionCategory() override;
 	Type getCollisionType() override;
 	void collide(CollidableEntity *collidable) override;
-	
+	void changeScale();
+
 	AnimationQueue mAnimation;
 	sf::RenderWindow* mWindow;
 	float mProjectileCooldown;
@@ -45,6 +46,9 @@ private:
 	sf::Vector2f mDirectionVector;
 	sf::Vector2f mPrevPos;
 	sf::Shape* mHitbox;
+
+	float mScaleX;
+	float mScaleY;
 };
 
 #endif // !_INCLUDED_LUDDIS_

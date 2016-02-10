@@ -17,16 +17,16 @@ static const int DAMAGE = 10;
 static const int LIFE = 15;
 static const sf::Vector2f FRONTVECTOR(-1, 0);
 
-static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
+static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(55,17));
 
-Silverfish::Silverfish(sf::RenderWindow* window, const sf::Vector2f& position) :
+Silverfish::Silverfish(sf::RenderWindow* window, const sf::Vector2f& position, const float& angle) :
 mIsAlive(true),
 mIsActive(true),
 mSwimAway(false),
 mLife(LIFE),
 mWindow(window),
 mAnimation(Animation(ANIMATION_SWIM)),
-mHitbox(new sf::CircleShape(HITBOX_SHAPE))
+mHitbox(new sf::RectangleShape(HITBOX_SHAPE))
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	// Get a y-spawn position
@@ -35,20 +35,14 @@ mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 	// Set spawn position
 	setPosition(position);
 
-
-	// Chose direction (towards the left)
-	int r2 = rand()%2;
 	sf::Vector2f dir;
-	// Diagonally up
-	if (r2 == 1){
-		dir = { -1, 1 };
-		mDirection = VectorMath::normalizeVector(dir);
-	}
-	// Diagonally down
-	else if (r2 == 0){
-		dir = { -1, -1 };
-		mDirection = VectorMath::normalizeVector(dir);
-	}
+	dir = { 1, 1 };
+	dir = VectorMath::rotateVector(dir, angle);
+	mDirection = VectorMath::normalizeVector(dir);
+
+
+
+	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
 
 }
 
@@ -103,16 +97,12 @@ void Silverfish::collide(CollidableEntity *collidable){
 	if (collidable->getCollisionCategory() == FRIEND || collidable->getCollisionCategory() == HAIR){
 		if (mSwimAway== false){
 		mLife -= 5;
-		int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
-		mAnimation.replaceAnimation(ANIMATION_HIT);
-		mAnimation.getCurrAnimation().setFrame(frame);
-			if (mLife <= 0){
-				int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
-				mAnimation.setDefaultAnimation(ANIMATION_DEAD);
-				mAnimation.getCurrAnimation().setFrame(frame);
-				mSwimAway = true;
-				mDirection = sf::Vector2f(0, -1);
-				SPEED = 120;
+		if (mLife <= 0){
+			mAnimation.replaceAnimation(ANIMATION_HIT);
+			mAnimation.setDefaultAnimation(ANIMATION_DEAD);
+			mSwimAway = true;
+			mDirection = sf::Vector2f(0, -1);
+			SPEED = 120;
 			}
 		}
 	}
@@ -122,5 +112,8 @@ sf::FloatRect Silverfish::getHitBox(){
 	return getTransform().transformRect(mAnimation.getCurrAnimation().getSprite().getGlobalBounds());
 }
 sf::Shape* Silverfish::getNarrowHitbox() const{
+	mHitbox->setPosition(getPosition());
+	mHitbox->setScale(getScale());
+	mHitbox->setRotation(getRotation());
 	return mHitbox;
 }

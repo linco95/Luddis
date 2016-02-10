@@ -31,8 +31,6 @@ static const int HEIGHT = 1080;
 static const float DESIRED_ASPECTRATIO = (float)WIDTH / (float)HEIGHT;
 static const Color BGCOLOR = Color::Black;
 static const std::string TEXTURE_NAME = "Resources/Images/Grafik_Luddis120x80_s1d3v1.png";
-static const std::string TEXTURE_DUST = "Resources/Images/Grafik_damm1_s1d4v1.png";
-static const std::string TEXTURE_CHIPS = "Resources/Images/Grafik_smula2_s1d4v1.png";
 static const std::string TEXTURE_BUTTON = "Resources/Images/Button";
 static const std::string TEXTURE_CHIPSCOUNTER = "Resources/Images/ChipsCounter.png";
 static const std::string TEXTURE_LUDDCOUNTER = "Resources/Images/LuddCounter.png";
@@ -61,41 +59,6 @@ struct GameManagerImp : public EventObserver {
 	// Temporary function (might keep luddis init here). Most of this should be handled in the levelmanager/level class instead
 	void initializeEntities(){
 
-
-		Obstacle* mStopp = new Obstacle(TEXTURE_NAME, &mMainWindow, Obstacle::SOLID, Vector2f(150, 150), Vector2f(150, 150));
-		EntityManager::getInstance().addEntity(mStopp);
-		CollisionManager::getInstance().addCollidable(mStopp);
-
-		mSpider = new Spider(&mMainWindow);
-		EntityManager::getInstance().addEntity(mSpider);
-
-		mBoss = new BossDishCloth(&mMainWindow);
-		EntityManager::getInstance().addEntity(mBoss);
-		CollisionManager::getInstance().addCollidable(mBoss);
-
-		mDust = new Dust(TEXTURE_DUST, &mMainWindow);
-		EntityManager::getInstance().addEntity(mDust);
-		CollisionManager::getInstance().addCollidable(mDust);
-		mDust2 = new Dust(TEXTURE_DUST, &mMainWindow);
-		EntityManager::getInstance().addEntity(mDust2);
-		CollisionManager::getInstance().addCollidable(mDust2);
-		mDust3 = new Dust(TEXTURE_DUST, &mMainWindow);
-		EntityManager::getInstance().addEntity(mDust3);
-		CollisionManager::getInstance().addCollidable(mDust3);
-		mDust4 = new Dust(TEXTURE_DUST, &mMainWindow);
-		EntityManager::getInstance().addEntity(mDust4);
-		CollisionManager::getInstance().addCollidable(mDust4);
-
-		mChips = new Chips(TEXTURE_CHIPS, &mMainWindow);
-		EntityManager::getInstance().addEntity(mChips);
-		CollisionManager::getInstance().addCollidable(mChips);
-		mChips2 = new Chips(TEXTURE_CHIPS, &mMainWindow);
-		EntityManager::getInstance().addEntity(mChips2);
-		CollisionManager::getInstance().addCollidable(mChips2);
-		mChips3 = new Chips(TEXTURE_CHIPS, &mMainWindow);
-		EntityManager::getInstance().addEntity(mChips3);
-		CollisionManager::getInstance().addCollidable(mChips3);
-
 		mChipsCounter = new ScoreCounter(&mMainWindow, TEXTURE_CHIPSCOUNTER, sf::Vector2i(400, 50), ScoreCounter::ScoreType::CHIPS);
 		GUIManager::getInstance().addInterfaceElement(mChipsCounter);
 
@@ -105,6 +68,12 @@ struct GameManagerImp : public EventObserver {
 
 		mLuddCounter = new ScoreCounter(&mMainWindow, TEXTURE_LUDDCOUNTER, sf::Vector2i(550, 50), ScoreCounter::ScoreType::DUST);
 		GUIManager::getInstance().addInterfaceElement(mLuddCounter);
+
+		// Temporary splash screen
+		sf::RectangleShape splashScreen(sf::Vector2f((float)WIDTH, (float)HEIGHT));
+		splashScreen.setTexture(&ResourceManager::getInstance().getTexture("resources/images/splash.png"));
+		mMainWindow.draw(splashScreen);
+		mMainWindow.display();
 
 		mLevel = new Level();
 		mLevel->initializeLevel(mMainWindow, mPlayer);
