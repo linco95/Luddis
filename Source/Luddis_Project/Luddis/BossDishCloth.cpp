@@ -101,6 +101,92 @@ void BossDishCloth::updateMovement(const sf::Time& deltaTime){
 			//For different states of damage (changes happen next shot if hit when shooting)
 			//State 1
 			if (mLife < 26){
+				//int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
+				mAnimation.replaceAnimation(SHOOTING_ANIMATION_4);
+				//mAnimation.getCurrAnimation().setFrame(frame);
+			}
+			//State 2
+			if (25 < mLife && mLife < 51){
+				//int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
+				mAnimation.replaceAnimation(SHOOTING_ANIMATION_3);
+				//mAnimation.getCurrAnimation().setFrame(frame);
+			}
+			//State 3
+			if (50 < mLife && mLife < 76){
+				//int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
+				mAnimation.replaceAnimation(SHOOTING_ANIMATION_2);
+				//mAnimation.getCurrAnimation().setFrame(frame);
+			}
+			//State 4
+			if (75 < mLife){
+				//int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
+				mAnimation.replaceAnimation(SHOOTING_ANIMATION);
+				//mAnimation.getCurrAnimation().setFrame(frame);
+			}
+
+			//mAnimation.replaceAnimation(SHOOTING_ANIMATION);
+		}
+	}
+}
+
+void BossDishCloth::attack(){
+	sf::Vector2f vec(0, 1);
+	int max = 8;
+
+	if (mLife < 50){
+		max = 2;
+	}
+	for (int i = 0; i < max; i++)
+	{
+
+		vec = VectorMath::rotateVector(vec, 360 / (float)max);
+		Projectile* proj = new Projectile(PROJECTILE_FILEPATH, vec*PROJECTILE_SPEED, getPosition() + vec*PROJECTILE_SPEED / 3.0f, PROJECTILE_LIFETIME, ENEMY_STUN);
+		EntityManager::getInstance().addEntity(proj);
+		CollisionManager::getInstance().addCollidable(proj);
+	}
+}
+
+BossDishCloth::Category BossDishCloth::getCollisionCategory(){
+	return ENEMY;
+}
+
+BossDishCloth::Type BossDishCloth::getCollisionType(){
+	return REC;
+}
+
+void BossDishCloth::collide(CollidableEntity* collidable){
+	if (collidable->getCollisionCategory() == HAIR){
+		if (!mShooting){
+			mLife -= 15;
+			// For different states of damages (causes animation to "start over")
+			//State 1
+			if (mLife < 26){
+				int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
+				mAnimation.setDefaultAnimation(ANIMATION_IDLE_4);
+				mAnimation.getCurrAnimation().setFrame(frame);
+			}
+			//State 2
+			if (25 < mLife && mLife < 51){
+				int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
+				mAnimation.setDefaultAnimation(ANIMATION_IDLE_3);
+				mAnimation.getCurrAnimation().setFrame(frame);
+			}
+			//State 3
+			if (50 < mLife && mLife < 76){
+				int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
+				mAnimation.setDefaultAnimation(ANIMATION_IDLE_2);
+				mAnimation.getCurrAnimation().setFrame(frame);
+			}
+			//State 4
+			if (75 < mLife){
+				int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
+				mAnimation.setDefaultAnimation(ANIMATION_IDLE);
+				mAnimation.getCurrAnimation().setFrame(frame);
+			}
+		}
+		if (mShooting){
+			//State 1
+			if (mLife < 26){
 				int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
 				mAnimation.replaceAnimation(SHOOTING_ANIMATION_4);
 				mAnimation.getCurrAnimation().setFrame(frame);
@@ -123,66 +209,7 @@ void BossDishCloth::updateMovement(const sf::Time& deltaTime){
 				mAnimation.replaceAnimation(SHOOTING_ANIMATION);
 				mAnimation.getCurrAnimation().setFrame(frame);
 			}
-			
-			//mAnimation.replaceAnimation(SHOOTING_ANIMATION);
 		}
-	}
-}
-
-void BossDishCloth::attack(){
-	sf::Vector2f vec(0, 1);
-	int max = 8;
-	
-	if(mLife < 50){
-		max = 2;
-	}
-	for (int i = 0; i < max; i++)
-	{
-
-		vec = VectorMath::rotateVector(vec, 360/(float)max);
-		Projectile* proj = new Projectile(PROJECTILE_FILEPATH, vec*PROJECTILE_SPEED, getPosition()+vec*PROJECTILE_SPEED/3.0f, PROJECTILE_LIFETIME, ENEMY_STUN);
-		EntityManager::getInstance().addEntity(proj);
-		CollisionManager::getInstance().addCollidable(proj);
-	}
-}
-
-BossDishCloth::Category BossDishCloth::getCollisionCategory(){
-	return ENEMY;
-}
-
-BossDishCloth::Type BossDishCloth::getCollisionType(){
-	return REC;
-}
-
-void BossDishCloth::collide(CollidableEntity* collidable){
-	if (collidable->getCollisionCategory() == HAIR){
-		mLife -= 15;
-		// For different states of damages (causes animation to "start over")
-		//State 1
-		if (mLife < 26){
-			int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
-			mAnimation.setDefaultAnimation(ANIMATION_IDLE_4);
-			mAnimation.getCurrAnimation().setFrame(frame);
-		}
-		//State 2
-		if (25 < mLife && mLife < 51){
-			int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
-			mAnimation.setDefaultAnimation(ANIMATION_IDLE_3);
-			mAnimation.getCurrAnimation().setFrame(frame);
-		}
-		//State 3
-		if (50 < mLife && mLife < 76){
-			int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
-			mAnimation.setDefaultAnimation(ANIMATION_IDLE_2);
-			mAnimation.getCurrAnimation().setFrame(frame);
-		}
-		//State 4
-		if (75 < mLife){
-			int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
-			mAnimation.setDefaultAnimation(ANIMATION_IDLE);
-			mAnimation.getCurrAnimation().setFrame(frame);
-		}
-		
 	}
 }
 
@@ -190,7 +217,6 @@ sf::FloatRect BossDishCloth::getHitBox(){
 	return getTransform().transformRect(mAnimation.getCurrAnimation().getSprite().getGlobalBounds());
 }
 sf::Shape* BossDishCloth::getNarrowHitbox() const{
-
 	mHitbox->setPosition(getPosition());
 	mHitbox->setScale(getScale());
 	mHitbox->setRotation(getRotation());
