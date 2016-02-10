@@ -1,9 +1,9 @@
 #ifndef INCLUDED_OBSTACLE
 #define INCLUDED_OBSTACLE
 
-
 #include "CollidableEntity.h"
 #include <SFML\Graphics.hpp>
+#include "AnimationQueue.h"
 
 class Obstacle : public CollidableEntity{
 public:
@@ -41,7 +41,8 @@ private:
 	bool mActive;
 	float mActiveTime;
 	float mIdleTime;
-};
 
+	//AnimationQueue mAnimation;
+};
 
 #endif

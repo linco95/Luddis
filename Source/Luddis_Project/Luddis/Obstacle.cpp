@@ -7,6 +7,9 @@ static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 static const float IDLE_TIME = 4;
 static const float ACTIVE_TIME = 2;
 
+//static const Animation ANIMATION_IDLE = Animation("Resources/Images/Spritesheets/...");
+//static const Animation ANIMATION_ACTIVE = Animation("Resources/Images/Spritesheets/...");
+
 Obstacle::Obstacle(std::string textureFilename, sf::RenderWindow* window, ObstacleType type, sf::Vector2f direction, const sf::Vector2f& position) :
 mIsAlive(true),
 mIsActive(true),
@@ -34,6 +37,8 @@ void Obstacle::tick(const sf::Time& deltaTime){
 			if (mActiveTime <= 0){
 				mActive = false;
 				mActiveTime = ACTIVE_TIME;
+
+				//mAnimation.setDefaultAnimation(ANIMATION_IDLE);
 			}
 		}
 		else if (mActive == false){
@@ -41,6 +46,8 @@ void Obstacle::tick(const sf::Time& deltaTime){
 			if (mIdleTime <= 0){
 				mActive = false;
 				mIdleTime = IDLE_TIME;
+
+				//mAnimation.setDefaultAnimation(ANIMATION_ACTIVE);
 			}
 		}
 	}
