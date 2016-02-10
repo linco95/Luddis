@@ -31,7 +31,8 @@ private:
 	Category getCollisionCategory() override;
 	Type getCollisionType() override;
 	void collide(CollidableEntity *collidable) override;
-	
+	void changeScale();
+
 	AnimationQueue mAnimation;
 	sf::RenderWindow* mWindow;
 	float mProjectileCooldown;
