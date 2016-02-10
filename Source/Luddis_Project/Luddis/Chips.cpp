@@ -22,8 +22,14 @@ mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 	int r1 = rand() % (int)size.y + 1;
 	int r2 = rand() % (int)size.x + 1;
 	// Set spawn position
-	mSprite.setPosition((float)r2, (float)r1);
+	setPosition((float)r2, (float)r1);
 
+
+	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
+
+	mHitbox->setPosition(getPosition());
+	mHitbox->setScale(getScale());
+	mHitbox->setRotation(getRotation());
 }
 
 Chips::~Chips(){
@@ -73,7 +79,7 @@ void Chips::collide(CollidableEntity *collidable){
 }
 
 sf::FloatRect Chips::getHitBox(){
-	return mSprite.getGlobalBounds();
+	return getTransform().transformRect(mSprite.getGlobalBounds());
 }
 
 sf::Shape* Chips::getNarrowHitbox() const{

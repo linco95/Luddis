@@ -21,6 +21,11 @@ mIdleTime(IDLE_TIME)
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	setPosition(position);
+	
+	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
+	mHitbox->setPosition(getPosition());
+	mHitbox->setScale(getScale());
+	mHitbox->setRotation(getRotation());
 }
 
 Obstacle::~Obstacle(){

@@ -41,6 +41,7 @@ static const bool VSYNCENABLED = true;
 
 static const std::string FUCKING_ESSAY = "I just want a long string to see how sf::Text objects act with things like wrapping words etc around the screen so I just need to have thing long text. Anyways I am running out of things to say so I'm just going to leave it at this. Hopefully its long enough to satisfy my needs. Also thats what she said.";
 
+
 /*
 TODO:
 Implement states
@@ -107,6 +108,12 @@ struct GameManagerImp : public EventObserver {
 
 		mLuddCounter = new ScoreCounter(&mMainWindow, TEXTURE_LUDDCOUNTER, sf::Vector2i(550, 50), ScoreCounter::ScoreType::DUST);
 		EntityManager::getInstance().addEntity(mLuddCounter);
+
+		// Temporary splash screen
+		sf::RectangleShape splashScreen(sf::Vector2f((float)WIDTH, (float)HEIGHT));
+		splashScreen.setTexture(&ResourceManager::getInstance().getTexture("resources/images/splash.png"));
+		mMainWindow.draw(splashScreen);
+		mMainWindow.display();
 
 		mLevel = new Level();
 		mLevel->initializeLevel(mMainWindow, mPlayer);

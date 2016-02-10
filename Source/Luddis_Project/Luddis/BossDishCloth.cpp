@@ -24,7 +24,7 @@ static const int MAX_LIFE = 100;
 static const float ATTACK_INTERVAL = 3.5f;
 static const float PROJECTILE_LIFETIME = 2.5f;
 static const float PROJECTILE_SPEED = 300;
-static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
+static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(250, 250));
 
 BossDishCloth::BossDishCloth(sf::RenderWindow* window) :
 mIsAlive(true),
@@ -35,9 +35,11 @@ mLife(MAX_LIFE),
 mAttackInterval(ATTACK_INTERVAL),
 mDirection(0, 1.0f),
 mAnimation(Animation(ANIMATION_IDLE)),
-mHitbox(new sf::CircleShape(HITBOX_SHAPE))
+mHitbox(new sf::RectangleShape(HITBOX_SHAPE))
 {
 	setPosition(3000, 500);
+	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
+
 }
 
 BossDishCloth::~BossDishCloth(){
@@ -188,5 +190,9 @@ sf::FloatRect BossDishCloth::getHitBox(){
 	return getTransform().transformRect(mAnimation.getCurrAnimation().getSprite().getGlobalBounds());
 }
 sf::Shape* BossDishCloth::getNarrowHitbox() const{
+
+	mHitbox->setPosition(getPosition());
+	mHitbox->setScale(getScale());
+	mHitbox->setRotation(getRotation());
 	return mHitbox;
 }

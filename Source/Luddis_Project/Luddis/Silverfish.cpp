@@ -13,7 +13,7 @@ static const int DAMAGE = 10;
 static const int LIFE = 15;
 static const sf::Vector2f FRONTVECTOR(-1, 0);
 
-static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
+static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(55,17));
 
 Silverfish::Silverfish(sf::RenderWindow* window, const sf::Vector2f& position, std::string textureFilename) :
 mIsAlive(true),
@@ -22,7 +22,7 @@ mSwimAway(false),
 mLife(LIFE),
 mWindow(window),
 mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
-mHitbox(new sf::CircleShape(HITBOX_SHAPE))
+mHitbox(new sf::RectangleShape(HITBOX_SHAPE))
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	// Get a y-spawn position
@@ -45,6 +45,9 @@ mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 		dir = { -1, -1 };
 		mDirection = VectorMath::normalizeVector(dir);
 	}
+
+
+	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
 
 }
 
@@ -111,5 +114,8 @@ sf::FloatRect Silverfish::getHitBox(){
 	return getTransform().transformRect(mSprite.getGlobalBounds());
 }
 sf::Shape* Silverfish::getNarrowHitbox() const{
+	mHitbox->setPosition(getPosition());
+	mHitbox->setScale(getScale());
+	mHitbox->setRotation(getRotation());
 	return mHitbox;
 }

@@ -13,8 +13,8 @@
 #include <string>
 #include <array>
 
-//static const Animation ANIMATION_FILEPATH = Animation("resources/images/spritesheets/Grafik_Luddis walkcykle_longer");
-static const Animation ANIMATION_FILEPATH = Animation("resources/images/spritesheets/Sprite_Debug_480x205");
+static const Animation ANIMATION_FILEPATH = Animation("resources/images/spritesheets/Grafik_Luddis walkcykle_longer");
+//static const Animation ANIMATION_FILEPATH = Animation("resources/images/spritesheets/Sprite_Debug_480x205");
 
 static const Animation HIT_ANIMATION = Animation("resources/images/spritesheets/Grafik_Luddis_hit_sprite_s2d2v1");
 static const Animation SHOT_ANIMATION = Animation("resources/images/spritesheets/Grafik_Luddis shot120x90treframes_s2d3v1");
@@ -40,7 +40,7 @@ static const float PROJECTILE_SPEED = 300;
 static const float MUZZLEOFFSET = 50.0f;
 static const sf::Vector2f FRONTVECTOR(1, 0);
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
-static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(35, 8);
+static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(20,20));
 
 Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) : 
 	mIsAlive(true), 
@@ -53,7 +53,7 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	mAnimation(ANIMATION_FILEPATH),
 	mColliding(false),
 	mPrevPos(0, 0),
-	mHitbox(new sf::CircleShape(HITBOX_SHAPE))
+	mHitbox(new sf::RectangleShape(HITBOX_SHAPE))
 {
 	setPosition(mWindow->getView().getSize().x / 2, mWindow->getView().getSize().y / 2);
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);

@@ -6,7 +6,7 @@
 #include "VectorMath.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
-
+ 
 static float SPEED = 180;
 static const float WAIT_INTERVAL = 1.8f;
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
@@ -25,8 +25,6 @@ mSprite(ResourceManager::getInstance().getTexture(textureFilename))
 	sf::Vector2f dir;
 	dir = { 0, 1 };
 	mDirection = VectorMath::normalizeVector(dir);
-
-
 }
 
 Spider::~Spider(){
@@ -34,8 +32,6 @@ Spider::~Spider(){
 
 void Spider::tick(const sf::Time& deltaTime){
 	updateMovement(deltaTime);
-
-
 }
 
 void Spider::updateMovement(const sf::Time& deltaTime){
