@@ -46,6 +46,9 @@ private:
 	sf::Vector2f mDirectionVector;
 	sf::Vector2f mPrevPos;
 	sf::Shape* mHitbox;
+
+	float mScaleX;
+	float mScaleY;
 };
 
 #endif // !_INCLUDED_LUDDIS_

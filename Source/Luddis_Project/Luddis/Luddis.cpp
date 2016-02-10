@@ -56,7 +56,9 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	mAnimation(ANIMATION_FILEPATH),
 	mColliding(false),
 	mPrevPos(0, 0),
-	mHitbox(new sf::RectangleShape(HITBOX_SHAPE))
+	mHitbox(new sf::RectangleShape(HITBOX_SHAPE)),
+	mScaleX(1),
+	mScaleY(1)
 {
 	setPosition(mWindow->getView().getSize().x / 2, mWindow->getView().getSize().y / 2);
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
@@ -205,6 +207,7 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 		&& mProjectileCooldown <= 0){
 		attack();
 		mAnimation.replaceAnimation(SHOT_ANIMATION);
+		mAnimation.getCurrAnimation().changeScale(mScaleX, mScaleY);
 	}
 	//Handle keyboard presses
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
@@ -238,6 +241,7 @@ void Luddis::collide(CollidableEntity *collidable){
 	}
 	if (collidable->getCollisionCategory() == BG_DAMAGE){
 		mAnimation.replaceAnimation(HIT_ANIMATION);
+		mAnimation.getCurrAnimation().changeScale(mScaleX, mScaleY);
 		if (mLoseDust < 0){
 			Inventory::getInstance().removeDust(1);
 			mLoseDust = 1.0f;
@@ -245,18 +249,20 @@ void Luddis::collide(CollidableEntity *collidable){
 	}
 	if (collidable->getCollisionCategory() == ENEMY) {
 		mAnimation.replaceAnimation(HIT_ANIMATION);
+		mAnimation.getCurrAnimation().changeScale(mScaleX, mScaleY);
 		if (mLoseDust < 0){
 			Inventory::getInstance().removeDust(1);
 			mLoseDust = 1.0f;
 		}
 	}
 	if (collidable->getCollisionCategory() == COLLECT){
-		
+		changeScale();
 	}
 	if (collidable->getCollisionCategory() == ENEMY_STUN){
 		if (mStunDuration <= 0){
 			mStunDuration = 1.0f;
 			mAnimation.replaceAnimation(HIT_ANIMATION);
+			mAnimation.getCurrAnimation().changeScale(mScaleX, mScaleY);
 		}
 	}
 }
@@ -264,20 +270,26 @@ void Luddis::collide(CollidableEntity *collidable){
 void Luddis::changeScale(){
 	int dust = Inventory::getInstance().getDust();
 	if (dust < 2){
-		mAnimation.getCurrAnimation().setScale(float(1), float(1));
+		mScaleX = 1;
+		mScaleY = 1;
 	}
-	else if (dust < 4 && dust > 1){
-		mAnimation.getCurrAnimation().setScale(float(1.25), float(1.25));
+	if (dust < 4 && dust > 1){
+		mScaleX = 1.25;
+		mScaleY = 1.25;
 	}
-	else if (dust < 6 && dust > 3){
-		mAnimation.getCurrAnimation().setScale(float(1.5), float(1.5));
+	if (dust < 6 && dust > 3){
+		mScaleX = 1.5;
+		mScaleY = 1.5;
 	}
-	else if (dust < 8 && dust > 5){
-		mAnimation.getCurrAnimation().setScale(float(1.75), float(1.75));
+	if (dust < 8 && dust > 5){
+		mScaleX = 1.75;
+		mScaleY = 1.75;
 	}
-	else if (dust > 7){
-		mAnimation.getCurrAnimation().setScale(float(2), float(2));
+	if (dust > 7){
+		mScaleX = 2;
+		mScaleY = 2;
 	}
+	mAnimation.getCurrAnimation().changeScale(mScaleY, mScaleY);
 }
 
 sf::FloatRect Luddis::getHitBox(){

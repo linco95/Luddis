@@ -29,6 +29,7 @@ public:
 	bool hasLooped() const;
 	Animation(const Animation& aAnim);
 	Animation& operator=(const Animation& aAnim);
+	void changeScale(float x, float y);
 private:
 	AnimationImp* mAImp;
 };
