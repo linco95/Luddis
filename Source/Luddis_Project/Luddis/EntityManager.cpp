@@ -1,8 +1,6 @@
 #include "EntityManager.h"
 #include <SFML\Graphics.hpp>
 
-static const sf::Color BGCOLOR = sf::Color::Black;
-
 //Temp, shuld move this to a more appropriate function
 static const int WIDTH = 1920;
 static const int HEIGHT = 1080;
@@ -65,25 +63,13 @@ void EntityManager::renderEntities(sf::RenderWindow& window){
 		renderMap[e->getRenderLayer()].push_back(e);
 	}
 	// render the entities
-	window.clear(BGCOLOR);
-
+	
 	for (auto it : renderMap){
-		//Special case for the GUI layer
-		sf::View currentView = window.getView();
-		if (it.first == Entity::GUI_FOREGROUND ||
-			it.first == Entity::GUI_BACKGROUND){
-			sf::View view(sf::FloatRect(0, 0, (float)WIDTH, (float)HEIGHT));
-			window.setView(view);
-		}
+		
 		for (auto e : it.second){
 			window.draw(*e);
 		}
-		if (it.first == Entity::GUI_FOREGROUND ||
-			it.first == Entity::GUI_BACKGROUND){
-			window.setView(currentView);
-		}
 	}
-	//window.display();
 }
 
 // Function that gets used to read all entities. (Added to be used by rendering)

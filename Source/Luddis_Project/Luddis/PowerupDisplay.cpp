@@ -48,7 +48,7 @@ void PowerupDisplay::setActive(const bool& active){
 }
 
 PowerupDisplay::RenderLayer PowerupDisplay::getRenderLayer() const{
-	return GUI_FOREGROUND;
+	return FOREGROUND;
 }
 
 float PowerupDisplay::getCooldown() const{
