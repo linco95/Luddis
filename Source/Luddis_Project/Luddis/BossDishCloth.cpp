@@ -26,7 +26,7 @@ static const float PROJECTILE_LIFETIME = 2.5f;
 static const float PROJECTILE_SPEED = 300;
 static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 
-BossDishCloth::BossDishCloth(sf::RenderWindow* window) :
+BossDishCloth::BossDishCloth(sf::RenderWindow* window, const sf::Vector2f& position) :
 mIsAlive(true),
 mIsActive(true),
 mWindow(window),
@@ -37,7 +37,7 @@ mDirection(0, 1.0f),
 mAnimation(Animation(ANIMATION_IDLE)),
 mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 {
-	setPosition(3000, 500);
+	setPosition(position);
 }
 
 BossDishCloth::~BossDishCloth(){

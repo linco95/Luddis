@@ -1,4 +1,5 @@
 #include "Obstacle.h"
+#include "VectorMath.h"
 #include "ResourceManager.h"
 
 const Entity::RenderLayer LAYER = Entity::RenderLayer::OBSTACLES;
@@ -10,12 +11,12 @@ static const float ACTIVE_TIME = 2;
 //static const Animation ANIMATION_IDLE = Animation("Resources/Images/Spritesheets/...");
 //static const Animation ANIMATION_ACTIVE = Animation("Resources/Images/Spritesheets/...");
 
-Obstacle::Obstacle(std::string textureFilename, sf::RenderWindow* window, ObstacleType type, sf::Vector2f direction, const sf::Vector2f& position) :
+Obstacle::Obstacle(sf::RenderWindow* window, std::string textureFilename, ObstacleType type, const sf::Vector2f& position, const float& angle) :
 mIsAlive(true),
 mIsActive(true),
 mWindow(window),
-mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
 mType(type),
+mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
 mHitbox(new sf::CircleShape(HITBOX_SHAPE)),
 // The following three are only used by changing objects
 mActive(true),
@@ -24,6 +25,7 @@ mIdleTime(IDLE_TIME)
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	setPosition(position);
+	rotate(angle);
 }
 
 Obstacle::~Obstacle(){
@@ -31,6 +33,7 @@ Obstacle::~Obstacle(){
 }
 
 void Obstacle::tick(const sf::Time& deltaTime){
+	
 	if (mType == BG_DAMAGE){
 		if (mActive == true){
 			mActiveTime -= float(deltaTime.asSeconds());
