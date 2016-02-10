@@ -8,7 +8,7 @@
 
 using namespace sf;
 
-struct AnimationImp : public Drawable {
+struct AnimationImp : public Drawable, public sf::Transformable {
 	
 	AnimationImp(const std::string& aFilePathNoExtension) :
 		mCurrSprite(0),

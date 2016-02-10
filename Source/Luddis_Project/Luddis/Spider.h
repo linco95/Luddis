@@ -28,7 +28,6 @@ private:
 	sf::Sprite mSprite;
 	sf::RenderWindow* mWindow;
 	sf::Vector2f mDirection;
-	sf::Vector2f mDirection2;
 	AnimationQueue mAnimation;
 };
 
