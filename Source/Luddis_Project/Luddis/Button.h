@@ -7,6 +7,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include "InterfaceElement.h"
+#include <functional>
 
 class Button : public InterfaceElement{
 public:
@@ -14,7 +15,7 @@ public:
 	//have three horizontal frames of equal size.
 	//The first will be the default, the second the mouseover
 	//and the third the click frame
-	Button(std::string graphicFilename, std::string buttonText, sf::RenderWindow* window, sf::Vector2f pos, void(*action)() = 0);
+	Button(std::string graphicFilename, std::string buttonText, sf::RenderWindow* window, sf::Vector2f pos, InterfaceElement* owner);
 	virtual ~Button();
 
 	void tick(const sf::Time& deltaTime) override;
@@ -23,12 +24,12 @@ public:
 	bool isAlive() const override;
 	bool isActive() const override;
 	void setActive(const bool& active) override;
-	void onClick(void(*action)());
-	
+	void kill();
 
 private:
 	void updateInput();
 
+	InterfaceElement* mOwner;
 	sf::RenderWindow* mWindow;
 	sf::Sprite mSprite;
 	sf::IntRect mRects[3];

@@ -4,11 +4,12 @@
 
 static const std::string DEFAULT_FONTTYPE = "resources/fonts/arial.ttf";
 
-Button::Button(std::string graphicFilename, std::string buttonText, sf::RenderWindow* window, sf::Vector2f pos, void(*action)()) :
+Button::Button(std::string graphicFilename, std::string buttonText, sf::RenderWindow* window, sf::Vector2f pos, InterfaceElement* owner) :
 mWindow(window),
 mIsAlive(true),
 mClicked(false),
 mIsActive(false),
+mOwner(owner),
 mButtonText(buttonText, ResourceManager::getInstance().getFont(DEFAULT_FONTTYPE), 16),
 mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 	setPosition(pos);
@@ -61,7 +62,7 @@ void Button::updateInput(){
 		!sf::Mouse::isButtonPressed(sf::Mouse::Left) &&
 		mSprite.getGlobalBounds().contains(vector)){
 		//Release click
-		//onClick();
+		mOwner->onClick(mButtonText.getString());
 	}
 	if (mSprite.getGlobalBounds().contains(vector)){
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
@@ -81,9 +82,6 @@ void Button::updateInput(){
 	}
 }
 
-void Button::onClick(void(*action)()){
-	//Take action
-	if (mClicked = true){
-		action();
-	}
+void Button::kill(){
+	mIsAlive = false;
 }

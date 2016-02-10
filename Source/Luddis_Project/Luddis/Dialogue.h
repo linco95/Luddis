@@ -20,11 +20,15 @@ public:
 	void setActive(const bool& active) override;
 	void updateText(const sf::Time& deltaTime);
 	void setText(std::string newTextString);
+	void onClick(std::string buttonType) override;
 private:
 	void addButton(std::string buttonFile, std::string buttonText, sf::Vector2f pos, int index);
 	void initialize(std::string dialogueFile);
 	void internalClear();
-
+	void nextButton();
+	void previousButton();
+	void okButton();
+	
 	sf::RenderWindow* mWindow;
 	bool mIsAlive;
 	bool mIsActive;

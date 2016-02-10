@@ -4,7 +4,6 @@
 #include "Utils.h"
 #include <rapidjson/document.h>
 #include <array>
-#include <iostream>
 
 static const std::string DIALOGUE_TEXTURE = "Resources/Images/Parchment.png";
 static const std::array<std::string, 4> CONFIGMEMBERS = { "Character_filename", "Character_displayname", "Header", "Pages" };
@@ -60,8 +59,6 @@ void Dialogue::initialize(std::string dialogueFile){
 			std::string buttonText = buttonInfo["Button_text"].GetString();
 			assert(buttonInfo.HasMember("Button_image") && buttonInfo["Button_image"].IsString());
 			std::string buttonImage = buttonInfo["Button_image"].GetString();
-			std::cout << "Button text: " << buttonText << "\nButton image: " << buttonImage <<
-				"\nButton nr: "<<i<<"\nPage: "<<itr<<"\n";
 			addButton(buttonInfo["Button_image"].GetString(), buttonInfo["Button_text"].GetString(), sf::Vector2f(60 + (float)i * 75, 300), (int)itr);
 
 		}
@@ -77,12 +74,7 @@ void Dialogue::initialize(std::string dialogueFile){
 }
 
 void Dialogue::tick(const sf::Time& deltaTime){
-	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++){
-		if (i == 0){
-			//NYI
-			//mButtons[mActivePage][i]->onClick(test());
-		}
-	}
+	
 }
 
 void Dialogue::draw(sf::RenderTarget& target, sf::RenderStates states) const{
@@ -115,11 +107,52 @@ Dialogue::RenderLayer Dialogue::getRenderLayer() const{
 }
 
 void Dialogue::addButton(std::string buttonFile, std::string buttonText, sf::Vector2f pos, int index){
-	Button* button = new Button(buttonFile, buttonText, mWindow, pos + getPosition());
+	Button* button = new Button(buttonFile, buttonText, mWindow, pos + getPosition(), this);
 	mButtons[index].push_back(button);
 	GUIManager::getInstance().addInterfaceElement(button);
 }
 
 void Dialogue::internalClear(){
 	mCharacterDisplay->kill();
+	for (int i = 0; i < mActivePage+1;i++){
+		for (ButtonVector::size_type j = 0; j < mButtons[i].size(); j++){
+			mButtons[i][j]->kill();
+		}
+	}
+}
+
+void Dialogue::nextButton(){
+	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++){
+		mButtons[mActivePage][i]->setActive(false);
+	}
+	mActivePage += 1;
+	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++){
+		mButtons[mActivePage][i]->setActive(true);
+	}
+}
+
+void Dialogue::previousButton(){
+	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++){
+		mButtons[mActivePage][i]->setActive(false);
+	}
+	mActivePage -= 1;
+	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++){
+		mButtons[mActivePage][i]->setActive(true);
+	}
+}
+
+void Dialogue::okButton(){
+	mIsAlive = false;
+}
+
+void Dialogue::onClick(std::string buttonType){
+	if (buttonType == "Next"){
+		nextButton();
+	}
+	else if (buttonType == "Prev"){
+		previousButton();
+	}
+	else if (buttonType == "Ok"){
+		okButton();
+	}
 }

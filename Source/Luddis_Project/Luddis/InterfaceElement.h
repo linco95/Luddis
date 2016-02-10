@@ -4,6 +4,7 @@
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/System/Time.hpp>
+#include <string>
 
 class InterfaceElement: public sf::Drawable, public sf::Transformable{
 public:
@@ -20,6 +21,7 @@ public:
 	virtual bool isAlive() const = 0;
 	virtual bool isActive() const = 0;
 	virtual void setActive(const bool& active) = 0;
+	virtual void onClick(std::string buttonType){}
 };
 
 #endif // !_INCLUDEDINTERFACE_ELEMENT_
