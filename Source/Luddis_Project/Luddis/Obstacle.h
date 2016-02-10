@@ -16,7 +16,7 @@ public:
 		DAMAGE
 	};
 
-	Obstacle(std::string textureFilename, sf::RenderWindow* window, ObstacleType type, sf::Vector2f direction, const sf::Vector2f& position);
+	Obstacle(sf::RenderWindow* window, std::string textureFilename, ObstacleType type, const sf::Vector2f& position, const float& angle);
 	~Obstacle();
 
 	void tick(const sf::Time& deltaTime) override;

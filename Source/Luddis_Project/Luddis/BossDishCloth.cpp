@@ -26,7 +26,7 @@ static const float PROJECTILE_LIFETIME = 2.5f;
 static const float PROJECTILE_SPEED = 300;
 static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(250, 250));
 
-BossDishCloth::BossDishCloth(sf::RenderWindow* window) :
+BossDishCloth::BossDishCloth(sf::RenderWindow* window, const sf::Vector2f& position) :
 mIsAlive(true),
 mIsActive(true),
 mWindow(window),
@@ -37,7 +37,7 @@ mDirection(0, 1.0f),
 mAnimation(Animation(ANIMATION_IDLE)),
 mHitbox(new sf::RectangleShape(HITBOX_SHAPE))
 {
-	setPosition(3000, 500);
+	setPosition(position);
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
 
 }
@@ -123,7 +123,7 @@ void BossDishCloth::updateMovement(const sf::Time& deltaTime){
 				mAnimation.replaceAnimation(SHOOTING_ANIMATION);
 				//mAnimation.getCurrAnimation().setFrame(frame);
 			}
-
+			
 			//mAnimation.replaceAnimation(SHOOTING_ANIMATION);
 		}
 	}
@@ -132,7 +132,7 @@ void BossDishCloth::updateMovement(const sf::Time& deltaTime){
 void BossDishCloth::attack(){
 	sf::Vector2f vec(0, 1);
 	int max = 8;
-
+	
 	if (mLife < 50){
 		max = 2;
 	}
@@ -157,32 +157,32 @@ BossDishCloth::Type BossDishCloth::getCollisionType(){
 void BossDishCloth::collide(CollidableEntity* collidable){
 	if (collidable->getCollisionCategory() == HAIR){
 		if (!mShooting){
-			mLife -= 15;
-			// For different states of damages (causes animation to "start over")
-			//State 1
-			if (mLife < 26){
-				int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
-				mAnimation.setDefaultAnimation(ANIMATION_IDLE_4);
-				mAnimation.getCurrAnimation().setFrame(frame);
-			}
-			//State 2
-			if (25 < mLife && mLife < 51){
-				int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
-				mAnimation.setDefaultAnimation(ANIMATION_IDLE_3);
-				mAnimation.getCurrAnimation().setFrame(frame);
-			}
-			//State 3
-			if (50 < mLife && mLife < 76){
-				int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
-				mAnimation.setDefaultAnimation(ANIMATION_IDLE_2);
-				mAnimation.getCurrAnimation().setFrame(frame);
-			}
-			//State 4
-			if (75 < mLife){
-				int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
-				mAnimation.setDefaultAnimation(ANIMATION_IDLE);
-				mAnimation.getCurrAnimation().setFrame(frame);
-			}
+		mLife -= 15;
+		// For different states of damages (causes animation to "start over")
+		//State 1
+		if (mLife < 26){
+			int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
+			mAnimation.setDefaultAnimation(ANIMATION_IDLE_4);
+			mAnimation.getCurrAnimation().setFrame(frame);
+		}
+		//State 2
+		if (25 < mLife && mLife < 51){
+			int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
+			mAnimation.setDefaultAnimation(ANIMATION_IDLE_3);
+			mAnimation.getCurrAnimation().setFrame(frame);
+		}
+		//State 3
+		if (50 < mLife && mLife < 76){
+			int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
+			mAnimation.setDefaultAnimation(ANIMATION_IDLE_2);
+			mAnimation.getCurrAnimation().setFrame(frame);
+		}
+		//State 4
+		if (75 < mLife){
+			int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
+			mAnimation.setDefaultAnimation(ANIMATION_IDLE);
+			mAnimation.getCurrAnimation().setFrame(frame);
+		}
 		}
 		if (mShooting){
 			//State 1

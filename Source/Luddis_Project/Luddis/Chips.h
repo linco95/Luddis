@@ -10,7 +10,7 @@
 
 class Chips : public CollidableEntity {
 public:
-	Chips(std::string textureFilename, sf::RenderWindow* window);
+	Chips(sf::RenderWindow* window, std::string textureFilename, const sf::Vector2f& position, const float& angle);
 	~Chips();
 
 	void tick(const sf::Time& deltaTime) override;

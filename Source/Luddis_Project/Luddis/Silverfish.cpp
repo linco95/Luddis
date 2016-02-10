@@ -19,7 +19,7 @@ static const sf::Vector2f FRONTVECTOR(-1, 0);
 
 static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(55,17));
 
-Silverfish::Silverfish(sf::RenderWindow* window, const sf::Vector2f& position) :
+Silverfish::Silverfish(sf::RenderWindow* window, const sf::Vector2f& position, const float& angle) :
 mIsAlive(true),
 mIsActive(true),
 mSwimAway(false),
@@ -35,20 +35,11 @@ mHitbox(new sf::RectangleShape(HITBOX_SHAPE))
 	// Set spawn position
 	setPosition(position);
 
-
-	// Chose direction (towards the left)
-	int r2 = rand()%2;
 	sf::Vector2f dir;
-	// Diagonally up
-	if (r2 == 1){
-		dir = { -1, 1 };
-		mDirection = VectorMath::normalizeVector(dir);
-	}
-	// Diagonally down
-	else if (r2 == 0){
-		dir = { -1, -1 };
-		mDirection = VectorMath::normalizeVector(dir);
-	}
+	dir = { 1, 1 };
+	dir = VectorMath::rotateVector(dir, angle);
+	mDirection = VectorMath::normalizeVector(dir);
+
 
 
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);

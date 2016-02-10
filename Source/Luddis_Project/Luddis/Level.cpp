@@ -2,6 +2,12 @@
 #include "ResourceManager.h"
 #include "SoundEngine.h"
 #include "Silverfish.h"
+#include "BossDishCloth.h"
+#include "Luddis.h"
+#include "Spider.h"
+#include "Chips.h"
+#include "Dust.h"
+#include "Obstacle.h"
 #include "EntityManager.h"
 #include "CollisionManager.h"
 #include "Utils.h"
@@ -13,7 +19,7 @@ static const float X_OFFSET = 200.f,
 				   Y_OFFSET = 50.f,
 				   SCROLLSPEED = 200;
 
-static const std::array<std::string, 3> CONFIGMEMBERS = { "Background", "Silverfish_spawns", "Boss_config" };
+static const std::array<std::string, 8> CONFIGMEMBERS = { "Background", "Silverfish_spawns", "Obstacle_spawns", "Chips_spawns", "Dust_spawns", "Boss_spawns", "Spider_spawns", "Boss_config" };
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::BACKGROUND;
 Level::Level() :
 mIsActive(true)
@@ -41,9 +47,80 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		assert(itr->HasMember("y") && (*itr)["y"].IsInt());
 		assert(itr->HasMember("angle") && (*itr)["angle"].IsDouble());
 
-		Silverfish* fish = new Silverfish(mWindow, sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()));
+		Silverfish* fish = new Silverfish(mWindow, sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()), (float)(*itr)["angle"].GetDouble());
 		em->addEntity(fish);
 		cm->addCollidable(fish);
+		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
+	}
+
+	const rapidjson::Value& obstacleSpawns = configDoc["Obstacle_spawns"];
+	assert(obstacleSpawns.IsArray());
+	for (rapidjson::Value::ConstValueIterator itr = obstacleSpawns.Begin(); itr != obstacleSpawns.End(); itr++){
+		assert(itr->IsObject());
+		assert(itr->HasMember("filename") && (*itr)["filename"].IsString());
+		assert(itr->HasMember("type") && (*itr)["type"].IsInt());
+		assert(itr->HasMember("x") && (*itr)["x"].IsInt());
+		assert(itr->HasMember("y") && (*itr)["y"].IsInt());
+		assert(itr->HasMember("angle") && (*itr)["angle"].IsDouble());
+
+		Obstacle* obstacle = new Obstacle(mWindow, (*itr)["filename"].GetString(), Obstacle::ObstacleType((*itr)["type"].GetInt()), sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()), (float)(*itr)["angle"].GetDouble());
+		em->addEntity(obstacle);
+		cm->addCollidable(obstacle);
+		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
+	}
+
+	const rapidjson::Value& chipsSpawns = configDoc["Chips_spawns"];
+	assert(chipsSpawns.IsArray());
+	for (rapidjson::Value::ConstValueIterator itr = chipsSpawns.Begin(); itr != chipsSpawns.End(); itr++){
+		assert(itr->IsObject());
+		assert(itr->HasMember("filename") && (*itr)["filename"].IsString());
+		assert(itr->HasMember("x") && (*itr)["x"].IsInt());
+		assert(itr->HasMember("y") && (*itr)["y"].IsInt());
+		assert(itr->HasMember("angle") && (*itr)["angle"].IsDouble());
+
+		Chips* chips = new Chips(mWindow, (*itr)["filename"].GetString(), sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()), (float)(*itr)["angle"].GetDouble());
+		em->addEntity(chips);
+		cm->addCollidable(chips);
+		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
+	}
+
+	const rapidjson::Value& dustSpawns = configDoc["Dust_spawns"];
+	assert(dustSpawns.IsArray());
+	for (rapidjson::Value::ConstValueIterator itr = dustSpawns.Begin(); itr != dustSpawns.End(); itr++){
+		assert(itr->IsObject());
+		assert(itr->HasMember("filename") && (*itr)["filename"].IsString());
+		assert(itr->HasMember("x") && (*itr)["x"].IsInt());
+		assert(itr->HasMember("y") && (*itr)["y"].IsInt());
+		assert(itr->HasMember("angle") && (*itr)["angle"].IsDouble());
+
+		Dust* dust = new Dust(mWindow, (*itr)["filename"].GetString(), sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()), (float)(*itr)["angle"].GetDouble());
+		em->addEntity(dust);
+		cm->addCollidable(dust);
+		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
+	}
+
+	const rapidjson::Value& bossSpawns = configDoc["Boss_spawns"];
+	assert(bossSpawns.IsArray());
+	for (rapidjson::Value::ConstValueIterator itr = bossSpawns.Begin(); itr != bossSpawns.End(); itr++){
+		assert(itr->IsObject());
+		assert(itr->HasMember("x") && (*itr)["x"].IsInt());
+		assert(itr->HasMember("y") && (*itr)["y"].IsInt());
+
+		BossDishCloth* boss = new BossDishCloth(mWindow, sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()));
+		em->addEntity(boss);
+		cm->addCollidable(boss);
+		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
+	}
+
+	const rapidjson::Value& spiderSpawns = configDoc["Spider_spawns"];
+	assert(spiderSpawns.IsArray());
+	for (rapidjson::Value::ConstValueIterator itr = spiderSpawns.Begin(); itr != spiderSpawns.End(); itr++){
+		assert(itr->IsObject());
+		assert(itr->HasMember("x") && (*itr)["x"].IsInt());
+		assert(itr->HasMember("y") && (*itr)["y"].IsInt());
+
+		Spider* spider = new Spider(mWindow, sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()));
+		em->addEntity(spider);
 		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
 	}
 
