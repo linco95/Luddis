@@ -128,7 +128,7 @@ void CollisionManager::detectCollisions(){
 		for (CollidableVector::size_type j = i + 1; j < collidables.size(); j++){
 			CollidableEntity *collidable1 = collidables.at(j);
 			if (collidable0->getHitBox().intersects(collidable1->getHitBox()) && (collidable0->getCollisionCategory() != collidable1->getCollisionCategory())){
-					/*collidable0->collide(collidable1);
+				/*	collidable0->collide(collidable1);
 					collidable1->collide(collidable0);*/
 				colliding.push(std::make_pair(collidable0, collidable1));
 			}

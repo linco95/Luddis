@@ -2,12 +2,16 @@
 #include "ResourceManager.h"
 #include <iostream>
 
-Button::Button(std::string graphicFilename, sf::RenderWindow* window, sf::Vector2f pos, void (*action)(int, double)) :
+static const std::string DEFAULT_FONTTYPE = "resources/fonts/arial.ttf";
+
+Button::Button(std::string graphicFilename, std::string buttonText, sf::RenderWindow* window, sf::Vector2f pos, void(*action)()) :
 mWindow(window),
 mIsAlive(true),
 mClicked(false),
-mIsActive(true),
+mIsActive(false),
+mButtonText(buttonText, ResourceManager::getInstance().getFont(DEFAULT_FONTTYPE), 16),
 mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
+	setPosition(pos);
 	sf::IntRect rect(mSprite.getTextureRect());
 	rect.width  /= 3;
 	mSprite.setTextureRect(rect);
@@ -15,8 +19,9 @@ mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 		mRects[i] = rect;
 		mRects[i].left += i*rect.width;
 	}
-	
-	mSprite.setPosition(pos);
+	mButtonText.setColor(sf::Color::Black);
+	mButtonText.setOrigin(mButtonText.getGlobalBounds().width / 2, mButtonText.getGlobalBounds().height / 2);
+	mSprite.setOrigin(mSprite.getGlobalBounds().width / 2, mSprite.getGlobalBounds().height / 2);
 }
 
 Button::~Button(){
@@ -35,27 +40,28 @@ void Button::setActive(const bool& active){
 	mIsActive = active;
 }
 
+Button::RenderLayer Button::getRenderLayer() const {
+	return FOREGROUND;
+}
+
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	states.transform *= getTransform();
 	target.draw(mSprite, states);
+	target.draw(mButtonText, states);
 }
 
 bool Button::isAlive() const{
 	return mIsAlive;
 }
 
-Button::RenderLayer Button::getRenderLayer() const{
-	return GUI;
-}
-
 void Button::updateInput(){
-	sf::Vector2f vector(mWindow->mapPixelToCoords(sf::Mouse::getPosition(*mWindow)));
-	//Map pixel to coords does not work when the viewport changes
+	sf::Vector2f vector = mWindow->mapPixelToCoords(sf::Mouse::getPosition(*mWindow)) - getPosition();
+	
 	if (mClicked &&
 		!sf::Mouse::isButtonPressed(sf::Mouse::Left) &&
 		mSprite.getGlobalBounds().contains(vector)){
 		//Release click
-		onClick();
+		//onClick();
 	}
 	if (mSprite.getGlobalBounds().contains(vector)){
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
@@ -75,7 +81,9 @@ void Button::updateInput(){
 	}
 }
 
-void Button::onClick(){
+void Button::onClick(void(*action)()){
 	//Take action
-
+	if (mClicked = true){
+		action();
+	}
 }

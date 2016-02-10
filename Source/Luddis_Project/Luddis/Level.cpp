@@ -11,7 +11,7 @@ using namespace sf;
 
 static const float X_OFFSET = 200.f,
 				   Y_OFFSET = 50.f,
-				   SCROLLSPEED = 120.f;
+				   SCROLLSPEED = 200;
 
 static const std::array<std::string, 3> CONFIGMEMBERS = { "Background", "Silverfish_spawns", "Boss_config" };
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::BACKGROUND;
@@ -23,6 +23,7 @@ mIsActive(true)
 Level::~Level(){
 
 }
+
 #include <iostream>
 void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Document& configDoc){
 	EntityManager* em = &EntityManager::getInstance();

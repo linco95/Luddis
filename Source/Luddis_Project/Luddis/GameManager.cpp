@@ -7,6 +7,7 @@
 #include "EventManager.h"
 #include "ResourceManager.h"
 #include "SoundEngine.h"
+#include "GUIManager.h"
 #include "Dialogue.h"
 #include "Level.h"
 #include "Button.h"
@@ -30,7 +31,6 @@ static const int HEIGHT = 1080;
 static const float DESIRED_ASPECTRATIO = (float)WIDTH / (float)HEIGHT;
 static const Color BGCOLOR = Color::Black;
 static const std::string TEXTURE_NAME = "Resources/Images/Grafik_Luddis120x80_s1d3v1.png";
-static const std::string TEXTURE_SILVERFISH = "Resources/Images/Grafik_silverfisk_prototyp_s1d3v2.png";
 static const std::string TEXTURE_DUST = "Resources/Images/Grafik_damm1_s1d4v1.png";
 static const std::string TEXTURE_CHIPS = "Resources/Images/Grafik_smula2_s1d4v1.png";
 static const std::string TEXTURE_BUTTON = "Resources/Images/Button";
@@ -38,9 +38,6 @@ static const std::string TEXTURE_CHIPSCOUNTER = "Resources/Images/ChipsCounter.p
 static const std::string TEXTURE_LUDDCOUNTER = "Resources/Images/LuddCounter.png";
 static const std::string FONT_NAME = "arial.ttf";
 static const bool VSYNCENABLED = true;
-
-static const std::string FUCKING_ESSAY = "I just want a long string to see how sf::Text objects act with things like wrapping words etc around the screen so I just need to have thing long text. Anyways I am running out of things to say so I'm just going to leave it at this. Hopefully its long enough to satisfy my needs. Also thats what she said.";
-
 
 /*
 TODO:
@@ -69,7 +66,7 @@ struct GameManagerImp : public EventObserver {
 		EntityManager::getInstance().addEntity(mStopp);
 		CollisionManager::getInstance().addCollidable(mStopp);
 
-		mSpider = new Spider("resources/images/Grafik_spindel_Enter_s2d3v1.png", &mMainWindow);
+		mSpider = new Spider(&mMainWindow);
 		EntityManager::getInstance().addEntity(mSpider);
 
 		mBoss = new BossDishCloth(&mMainWindow);
@@ -100,14 +97,14 @@ struct GameManagerImp : public EventObserver {
 		CollisionManager::getInstance().addCollidable(mChips3);
 
 		mChipsCounter = new ScoreCounter(&mMainWindow, TEXTURE_CHIPSCOUNTER, sf::Vector2i(400, 50), ScoreCounter::ScoreType::CHIPS);
-		EntityManager::getInstance().addEntity(mChipsCounter);
+		GUIManager::getInstance().addInterfaceElement(mChipsCounter);
 
 		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mPlayer);
 		CollisionManager::getInstance().addCollidable(mPlayer);
 
 		mLuddCounter = new ScoreCounter(&mMainWindow, TEXTURE_LUDDCOUNTER, sf::Vector2i(550, 50), ScoreCounter::ScoreType::DUST);
-		EntityManager::getInstance().addEntity(mLuddCounter);
+		GUIManager::getInstance().addInterfaceElement(mLuddCounter);
 
 		// Temporary splash screen
 		sf::RectangleShape splashScreen(sf::Vector2f((float)WIDTH, (float)HEIGHT));
@@ -175,7 +172,11 @@ struct GameManagerImp : public EventObserver {
 		// To avoid multiple functioncalls every iteration of gameloop
 		EntityManager* em = &EntityManager::getInstance();
 		CollisionManager* cm = &CollisionManager::getInstance();
+		GUIManager* gm = &GUIManager::getInstance();
 		SoundEngine* se = &SoundEngine::getInstance();
+
+		View view(FloatRect(0, 0, (float)WIDTH, (float)HEIGHT));
+		View mapView;
 		se->setMainVolume(100);
 		Clock gameClock;
 		while (mMainWindow.isOpen()){
@@ -185,6 +186,10 @@ struct GameManagerImp : public EventObserver {
 			
 			// Update Entities     |
 			se->update(gameClock.getElapsedTime());
+			mapView = mMainWindow.getView();
+			mMainWindow.setView(view);
+			gm->updateElements(gameClock.getElapsedTime());
+			mMainWindow.setView(mapView);
 			em->updateEntities(gameClock.restart());
 			cm->detectCollisions();
 
@@ -195,9 +200,18 @@ struct GameManagerImp : public EventObserver {
 			}
 			cm->removeDeadCollidables();
 			em->removeDeadEntities();
+			gm->removeObsoleteElements();
 
 			// Render
+			mMainWindow.clear();
+
 			em->renderEntities(mMainWindow);
+
+			mapView = mMainWindow.getView();
+			mMainWindow.setView(view);
+			gm->renderElements(mMainWindow);
+			mMainWindow.setView(mapView);
+
 #ifdef LUDDIS_DEBUG_DRAW_HITBOXES
 			cm->drawHitboxes(mMainWindow);
 #endif

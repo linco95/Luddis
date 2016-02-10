@@ -1,11 +1,12 @@
 #ifndef _INCLUDED_POWERUPDISPLAY_
 #define _INCLUDED_POWERUPDISPLAY_
 
-#include "Entity.h"
+#include "InterfaceElement.h"
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <string>
+#include <SFML/Graphics/Sprite.hpp>
 
-class PowerupDisplay: public Entity{
+class PowerupDisplay: public InterfaceElement{
 public:
 	PowerupDisplay(std::string textureFilename, sf::Vector2f pos, float cooldown);
 	~PowerupDisplay();

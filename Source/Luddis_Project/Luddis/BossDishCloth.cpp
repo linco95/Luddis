@@ -19,7 +19,7 @@ static const Animation SHOOTING_ANIMATION_3 = Animation("Resources/Images/Sprite
 static const Animation ANIMATION_IDLE_4 = Animation("Resources/Images/Spritesheets/Grafik_TrasanFas4_S2D3V2");
 static const Animation SHOOTING_ANIMATION_4 = Animation("Resources/Images/Spritesheets/Grafik_TrasanAttackFas4_S2D4V1");
 
-static const std::string PROJECTILE_FILEPATH = "Resources/Images/BAWS1projectile.png";
+static const std::string PROJECTILE_FILEPATH = "Resources/Images/Grafik_TrasanProjektil_S2D5V1.png";
 static const int MAX_LIFE = 100;
 static const float ATTACK_INTERVAL = 3.5f;
 static const float PROJECTILE_LIFETIME = 2.5f;
@@ -131,7 +131,7 @@ void BossDishCloth::updateMovement(const sf::Time& deltaTime){
 
 void BossDishCloth::attack(){
 	sf::Vector2f vec(0, 1);
-	int max = 3;
+	int max = 8;
 	
 	if(mLife < 50){
 		max = 2;
@@ -139,7 +139,7 @@ void BossDishCloth::attack(){
 	for (int i = 0; i < max; i++)
 	{
 
-		vec = VectorMath::rotateVector(vec, 135/(float)max);
+		vec = VectorMath::rotateVector(vec, 360/(float)max);
 		Projectile* proj = new Projectile(PROJECTILE_FILEPATH, vec*PROJECTILE_SPEED, getPosition()+vec*PROJECTILE_SPEED/3.0f, PROJECTILE_LIFETIME, ENEMY_STUN);
 		EntityManager::getInstance().addEntity(proj);
 		CollisionManager::getInstance().addCollidable(proj);

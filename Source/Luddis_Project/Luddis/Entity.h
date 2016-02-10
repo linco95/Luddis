@@ -18,8 +18,7 @@ public:
 		OBSTACLES,
 		ITEM,
 		PLAYER,
-		FOREGROUND,
-		GUI
+		FOREGROUND
 	};
 
 	Entity();

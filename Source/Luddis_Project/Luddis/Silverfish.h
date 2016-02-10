@@ -4,15 +4,15 @@
 #include <string>
 
 #include "CollidableEntity.h"
+#include "AnimationQueue.h"
 #include <SFML/Window.hpp>
 #include <SFML/Audio/Sound.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
-static const char* DEFAULTIMAGE = "Resources/Images/Grafik_silverfisk_prototyp_s1d3v2.png";
 
 class Silverfish : public CollidableEntity {
 public:
-	Silverfish(sf::RenderWindow* window, const sf::Vector2f& position, std::string textureFilename = DEFAULTIMAGE);
+	Silverfish(sf::RenderWindow* window, const sf::Vector2f& position);
 	~Silverfish();
 
 	void tick(const sf::Time& deltaTime) override;
@@ -36,6 +36,7 @@ private:
 	void collide(CollidableEntity *collidable) override;
 	int mLife;
 	sf::Shape* mHitbox;
+	AnimationQueue mAnimation;
 };
 
 #endif

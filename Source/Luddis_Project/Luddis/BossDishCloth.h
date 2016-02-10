@@ -8,7 +8,7 @@
 class BossDishCloth: public CollidableEntity{
 public:
 	BossDishCloth(sf::RenderWindow* window);
-	~BossDishCloth();
+	virtual ~BossDishCloth();
 
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

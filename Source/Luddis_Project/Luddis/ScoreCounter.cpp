@@ -51,7 +51,7 @@ void ScoreCounter::setActive(const bool& active){
 }
 
 ScoreCounter::RenderLayer ScoreCounter::getRenderLayer() const{
-	return GUI;
+	return FOREGROUND;
 }
 
 void ScoreCounter::setScore(int score){
