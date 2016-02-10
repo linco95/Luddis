@@ -8,7 +8,7 @@
 #include <math.h>
 
 static float SPEED = 180;
-static const float WAIT_INTERVAL = 1.0f;
+static const float WAIT_INTERVAL = 3.0f;
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 static const Animation ANIMATION_ENTER = Animation("resources/images/spritesheets/Grafik_spindel_SpriteEnterv2");
 static const Animation ANIMATION_IDLE = Animation("resources/images/spritesheets/Grafik_spindel_SpriteIdle");
@@ -38,14 +38,17 @@ void Spider::tick(const sf::Time& deltaTime){
 	updateMovement(deltaTime);
 	if (mWait <= 0)
 		mWait = WAIT_INTERVAL;
+	if (getPosition().y<(-mAnimation.getCurrAnimation().getSprite().getGlobalBounds().height / 2) || getPosition().y > mWindow->getView().getSize().y + mAnimation.getCurrAnimation().getSprite().getGlobalBounds().height / 2){
+		mIsAlive = false;
+	}
 }
 
 void Spider::updateMovement(const sf::Time& deltaTime){
 	if (getPosition().y >= 500){
-			mWait -= deltaTime.asSeconds();
 			int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
-			mAnimation.setDefaultAnimation(ANIMATION_IDLE);
+			mAnimation.replaceAnimation(ANIMATION_IDLE);
 			mAnimation.getCurrAnimation().setFrame(frame);
+			mWait -= deltaTime.asSeconds();
 			if (mWait <= 0){
 				int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
 				mAnimation.setDefaultAnimation(ANIMATION_LEAVE);
