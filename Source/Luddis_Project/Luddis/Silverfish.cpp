@@ -51,6 +51,7 @@ Silverfish::~Silverfish(){
 }
 
 void Silverfish::tick(const sf::Time& deltaTime){
+	if (!mIsActive) return;
 	updateMovement(deltaTime);
 	mAnimation.tick(deltaTime);
 	if (getPosition().y<(-mAnimation.getCurrAnimation().getSprite().getGlobalBounds().height / 2) || getPosition().y > mWindow->getView().getSize().y + mAnimation.getCurrAnimation().getSprite().getGlobalBounds().height / 2){
@@ -65,6 +66,7 @@ void Silverfish::updateMovement(const sf::Time& deltaTime){
 }
 
 void Silverfish::draw(sf::RenderTarget& target, sf::RenderStates states) const{
+	if (!mIsActive) return;
 	states.transform *= getTransform();
 	target.draw(mAnimation.getCurrAnimation(), states);
 }
@@ -109,7 +111,12 @@ void Silverfish::collide(CollidableEntity *collidable){
 }
 
 sf::FloatRect Silverfish::getHitBox(){
-	return getTransform().transformRect(mAnimation.getCurrAnimation().getSprite().getGlobalBounds());
+	if (mIsActive){
+		return getTransform().transformRect(mAnimation.getCurrAnimation().getSprite().getGlobalBounds());
+	}
+	else {
+		return sf::FloatRect(-999, -999, 0, 0);
+	}
 }
 sf::Shape* Silverfish::getNarrowHitbox() const{
 	mHitbox->setPosition(getPosition());
