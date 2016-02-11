@@ -43,7 +43,7 @@ static const float PROJECTILE_SPEED = 300;
 static const float MUZZLEOFFSET = 50.0f;
 static const sf::Vector2f FRONTVECTOR(1, 0);
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
-static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(20,20));
+static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(35, 8);
 
 Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) : 
 	mIsAlive(true), 
@@ -56,11 +56,11 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	mAnimation(ANIMATION_FILEPATH),
 	mColliding(false),
 	mPrevPos(0, 0),
-	mHitbox(new sf::RectangleShape(HITBOX_SHAPE))
+	mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 {
 	setPosition(mWindow->getView().getSize().x / 2, mWindow->getView().getSize().y / 2);
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
-	sf::Mouse::setPosition(sf::Vector2i((int)getPosition().x, (int)getPosition().y));
+	sf::Mouse::setPosition(mWindow->mapCoordsToPixel(getPosition()));
 	mPowerups[0] = new PowerupDisplay(POWER_DISPLAY, sf::Vector2f((float)mWindow->getSize().x * 2 / 5, 1000), 15.0f);
 	
 	//Adds a display of the first power that luddis has
@@ -116,6 +116,7 @@ sf::Vector2f Luddis::getVectorMouseToSprite() const{
 
 void Luddis::updateMovement(const sf::Time& deltaTime){
 	sf::Vector2f direction = getVectorMouseToSprite();
+	if (VectorMath::getVectorLengthSq(direction) == 0) return;
 	sf::Vector2f offset(VectorMath::normalizeVector(direction));
 	float moveX(offset.x*deltaTime.asSeconds()*MOVESPEED);
 	float moveY(offset.y*deltaTime.asSeconds()*MOVESPEED);
@@ -168,7 +169,7 @@ void Luddis::updateRotation(){
 	
 	sf::Vector2f direction = getVectorMouseToSprite();
 	//float rotation = std::atan2f(direction.x, -direction.y) * 180 / (float)M_PI;
-	float rotation = VectorMath::getAngle(sf::Vector2f(FRONTVECTOR), direction) * 180 / (float)M_PI;
+	float rotation = VectorMath::getAngle(FRONTVECTOR, direction) * 180 / (float)M_PI;
 	setRotation(rotation);
 
 	static bool isFlipped = false;

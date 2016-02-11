@@ -1,6 +1,11 @@
 TODO
 
 Writing Level class
+	- Loading obstacles narrow hitbox form config
+
+Make animationqueue use resourcemanager, to avoid copying the spritesheets/animations everytime an animation changes.
+
+Make sure luddis doesnt move use mouseposition when they are equal (zero vector does not give pleasant results)
 
 Implement a music queue for starting with an intro, and moving on to looping music
 
@@ -103,8 +108,11 @@ Johanna showed a bug with the animation
 Got the idea that the collision is not working because the points on the shape is not transformed => both shapes are on same standard position => they're colliding
 
 10/2/16
+Projection sorting min wasnt working
 
-
+11/2/16
+opitimzing animationqueue
+optimized rotating by 90 (getting normal in narrow collision) by adding getNormal function that just return (-y, x)
 
 BRAINSTORM
 

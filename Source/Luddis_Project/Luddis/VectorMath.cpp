@@ -1,6 +1,7 @@
 #define _USE_MATH_DEFINES
 #include "VectorMath.h"
 #include <cmath>
+#include <cassert>
 
 float VectorMath::dotProduct(const sf::Vector2f& a, const sf::Vector2f& b){
 	return a.x * b.x + a.y * b.y;
@@ -18,6 +19,7 @@ sf::Vector2f VectorMath::projectVector(const sf::Vector2f& aVector, const sf::Ve
 }
 
 sf::Vector2f VectorMath::normalizeVector(const sf::Vector2f& vector){
+	assert(getVectorLengthSq(vector) != 0);
 	if (getVectorLengthSq(vector) == 1) return vector;
 	float factor = 1 / getVectorLength(vector);
 	 return sf::Vector2f(vector.x*factor, vector.y*factor);
@@ -25,9 +27,10 @@ sf::Vector2f VectorMath::normalizeVector(const sf::Vector2f& vector){
 
 // Returns the angle between two vectors.
 float VectorMath::getAngle(const sf::Vector2f& v1, const sf::Vector2f& v2){
-	sf::Vector2f nv1 = normalizeVector(v1);
-	sf::Vector2f nv2 = normalizeVector(v2);
-	return std::atan2(nv2.y, nv2.x) - std::atan2(nv1.y, nv1.x);
+	return std::atan2(v2.y, v2.x) - std::atan2(v1.y, v1.x);
+}
+sf::Vector2f VectorMath::getNormal(const sf::Vector2f& aVector){
+	return sf::Vector2f(-aVector.y, aVector.x);
 }
 
 sf::Vector2f VectorMath::rotateVector(const sf::Vector2f& vector, const float& degrees){

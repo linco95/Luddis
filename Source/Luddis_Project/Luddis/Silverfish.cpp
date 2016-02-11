@@ -17,7 +17,7 @@ static const int DAMAGE = 10;
 static const int LIFE = 15;
 static const sf::Vector2f FRONTVECTOR(-1, 0);
 
-static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(55,17));
+static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(55, 17));
 
 Silverfish::Silverfish(sf::RenderWindow* window, const sf::Vector2f& position) :
 mIsAlive(true),
@@ -37,7 +37,7 @@ mHitbox(new sf::RectangleShape(HITBOX_SHAPE))
 
 
 	// Chose direction (towards the left)
-	int r2 = rand()%2;
+	int r2 = rand() % 2;
 	sf::Vector2f dir;
 	// Diagonally up
 	if (r2 == 1){
@@ -104,14 +104,14 @@ Silverfish::Type Silverfish::getCollisionType(){
 
 void Silverfish::collide(CollidableEntity *collidable){
 	if (collidable->getCollisionCategory() == FRIEND || collidable->getCollisionCategory() == HAIR){
-		if (mSwimAway== false){
-		mLife -= 5;
-		if (mLife <= 0){
-			mAnimation.replaceAnimation(ANIMATION_HIT);
-			mAnimation.setDefaultAnimation(ANIMATION_DEAD);
-			mSwimAway = true;
-			mDirection = sf::Vector2f(0, -1);
-			SPEED = 120;
+		if (mSwimAway == false){
+			mLife -= 5;
+			if (mLife <= 0){
+				mAnimation.replaceAnimation(ANIMATION_HIT);
+				mAnimation.setDefaultAnimation(ANIMATION_DEAD);
+				mSwimAway = true;
+				mDirection = sf::Vector2f(0, -1);
+				SPEED = 120;
 			}
 		}
 	}
