@@ -102,6 +102,7 @@ void Luddis::tick(const sf::Time& deltaTime){
 		mLoseDust -= deltaTime.asSeconds();
 	}
 	mAnimation.tick(deltaTime);
+	changeScale();
 }
 
 void Luddis::draw(sf::RenderTarget& target, sf::RenderStates states) const{
@@ -256,7 +257,7 @@ void Luddis::collide(CollidableEntity *collidable){
 		}
 	}
 	if (collidable->getCollisionCategory() == COLLECT){
-		changeScale();
+
 	}
 	if (collidable->getCollisionCategory() == ENEMY_STUN){
 		if (mStunDuration <= 0){
@@ -270,24 +271,24 @@ void Luddis::collide(CollidableEntity *collidable){
 void Luddis::changeScale(){
 	int dust = Inventory::getInstance().getDust();
 	if (dust < 2){
-		mScaleX = 1;
-		mScaleY = 1;
+		mScaleX = 1.0f;
+		mScaleY = 1.0f;
 	}
-	if (dust < 4 && dust > 1){
-		mScaleX = 1.25;
-		mScaleY = 1.25;
+	else if (dust < 4 && dust > 1){
+		mScaleX = 1.25f;
+		mScaleY = 1.25f;
 	}
-	if (dust < 6 && dust > 3){
-		mScaleX = 1.5;
-		mScaleY = 1.5;
+	else if (dust < 6 && dust > 3){
+		mScaleX = 1.5f;
+		mScaleY = 1.5f;
 	}
-	if (dust < 8 && dust > 5){
-		mScaleX = 1.75;
-		mScaleY = 1.75;
+	else if (dust < 8 && dust > 5){
+		mScaleX = 1.75f;
+		mScaleY = 1.75f;
 	}
-	if (dust > 7){
-		mScaleX = 2;
-		mScaleY = 2;
+	else if (dust > 7){
+		mScaleX = 2.0f;
+		mScaleY = 2.0f;
 	}
 	mAnimation.getCurrAnimation().changeScale(mScaleY, mScaleY);
 }
