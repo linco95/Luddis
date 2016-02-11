@@ -14,14 +14,14 @@ static const Animation ANIMATION_ENTER = Animation("resources/images/spritesheet
 static const Animation ANIMATION_IDLE = Animation("resources/images/spritesheets/Grafik_spindel_SpriteIdle");
 static const Animation ANIMATION_LEAVE = Animation("resources/images/spritesheets/Grafik_spindel_SpriteClimbv2");
 
-Spider::Spider(sf::RenderWindow* window) :
+Spider::Spider(sf::RenderWindow* window, const sf::Vector2f& position) :
 mIsAlive(true),
 mIsActive(true),
 mWindow(window),
 mAnimation(Animation(ANIMATION_ENTER)),
 mWait(WAIT_INTERVAL)
 {
-	setPosition(1500,10);
+	setPosition(position);
 	sf::Vector2f dir;
 	dir = { 0, 1 };
 	mDirection = VectorMath::normalizeVector(dir);

@@ -112,6 +112,12 @@
     <ClCompile Include="CharacterPortrait.cpp">
       <Filter>Source Files\Entities\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="PauseMenu.cpp">
+      <Filter>Source Files\Entities\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateLevel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -222,6 +228,15 @@
     <ClInclude Include="CharacterPortrait.h">
       <Filter>Header Files\Entities\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="PauseMenu.h">
+      <Filter>Header Files\Entities\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateLevel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -251,232 +266,5 @@
     <Filter Include="Header Files\Entities\GUI">
       <UniqueIdentifier>{552173e4-367d-4e60-a497-9cde76ca1fcb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{df7205b4-855f-49f5-8dcd-208a2f46ec93}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources\Audio">
-      <UniqueIdentifier>{80e70a19-f333-4a0a-9a7d-2716966d1e17}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources\Configs">
-      <UniqueIdentifier>{24676852-3036-4669-9c89-d8175c9a6347}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources\Fonts">
-      <UniqueIdentifier>{b55b160f-4a29-4d70-bbb8-10a271040431}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources\Images">
-      <UniqueIdentifier>{16736b0a-874d-4d70-b982-4e1e5843d9ea}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources\Music">
-      <UniqueIdentifier>{c430d380-0a56-4629-a960-1720df1933ae}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources\Configs\Dialogue">
-      <UniqueIdentifier>{7e84ca8c-c096-4a77-8936-de97ca6aacbf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources\Configs\Example">
-      <UniqueIdentifier>{3d700a03-1cb2-4eb6-9248-5e89998b4296}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources\Configs\Levels">
-      <UniqueIdentifier>{9b806538-8125-4e71-a5a2-6e5b86652c5d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources\Images\Levels">
-      <UniqueIdentifier>{dd0e007b-63a9-4800-8023-19ff09fa7f96}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources\Images\Spritesheets">
-      <UniqueIdentifier>{2aa05968-710f-4cc4-b6d2-e52c0955af02}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Media Include="Resources\Audio\Damm_Slurp_01.wav">
-      <Filter>Resources\Audio</Filter>
-    </Media>
-    <Media Include="Resources\Audio\luddis_crumbgather_s1d2v1.wav">
-      <Filter>Resources\Audio</Filter>
-    </Media>
-    <Media Include="Resources\Audio\Luddis_skott_16bit.wav">
-      <Filter>Resources\Audio</Filter>
-    </Media>
-    <Media Include="Resources\Audio\Skott_Bl+Ñs_Sm+Ñ_01.wav">
-      <Filter>Resources\Audio</Filter>
-    </Media>
-    <Media Include="Resources\Audio\Skott_Bl+Ñs_Sm+Ñ_02.wav">
-      <Filter>Resources\Audio</Filter>
-    </Media>
-    <Media Include="Resources\Audio\Skott_Bl+Ñs_Sm+Ñ_03.wav">
-      <Filter>Resources\Audio</Filter>
-    </Media>
-    <Media Include="Resources\Music\musik16.wav">
-      <Filter>Resources\Music</Filter>
-    </Media>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Configs\Dialogue\Example_Dialogue.json">
-      <Filter>Resources\Configs\Dialogue</Filter>
-    </None>
-    <None Include="Resources\Configs\Example\test.json">
-      <Filter>Resources\Configs\Example</Filter>
-    </None>
-    <None Include="Resources\Configs\Levels\Level01.json">
-      <Filter>Resources\Configs\Levels</Filter>
-    </None>
-    <None Include="Resources\Images\Spritesheets\debug.json">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </None>
-    <None Include="Resources\Images\Spritesheets\Grafik_Luddis shot120x90treframes_s2d3v1.json">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </None>
-    <None Include="Resources\Images\Spritesheets\Grafik_Luddis_hit_sprite_s2d2v1.json">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </None>
-    <None Include="Resources\Images\Spritesheets\Grafik_TrasanAttackFas1_S2D4V3.json">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </None>
-    <None Include="Resources\Images\Spritesheets\Grafik_TrasanAttackFas2_S2D4V3.json">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </None>
-    <None Include="Resources\Images\Spritesheets\Grafik_TrasanAttackFas3_S2D4V1.json">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </None>
-    <None Include="Resources\Images\Spritesheets\Grafik_TrasanAttackFas4_S2D4V1.json">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </None>
-    <None Include="Resources\Images\Spritesheets\Grafik_TrasanFas1_S2D3V2.json">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </None>
-    <None Include="Resources\Images\Spritesheets\Grafik_TrasanFas2_S2D3V2.json">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </None>
-    <None Include="Resources\Images\Spritesheets\Grafik_TrasanFas3_S2D3V1.json">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </None>
-    <None Include="Resources\Images\Spritesheets\Grafik_TrasanFas4_S2D3V2.json">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </None>
-    <None Include="Resources\Images\Spritesheets\Luddis_ walkcykle.json">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Font Include="Resources\Fonts\arial.ttf">
-      <Filter>Resources\Fonts</Filter>
-    </Font>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Resources\Images\BAWS1projectile.png">
-      <Filter>Resources\Images</Filter>
-    </Image>
-    <Image Include="Resources\Images\ChipsCounter.png">
-      <Filter>Resources\Images</Filter>
-    </Image>
-    <Image Include="Resources\Images\Grafik_Attack 1_35x35_s1d3v1.png">
-      <Filter>Resources\Images</Filter>
-    </Image>
-    <Image Include="Resources\Images\Grafik_Attack 2_35x35_s1d3v1.png">
-      <Filter>Resources\Images</Filter>
-    </Image>
-    <Image Include="Resources\Images\Grafik_Attack 3_35x35_s1d3v1.png">
-      <Filter>Resources\Images</Filter>
-    </Image>
-    <Image Include="Resources\Images\Grafik_Bana1_1Final_S2D3V1.png">
-      <Filter>Resources\Images</Filter>
-    </Image>
-    <Image Include="Resources\Images\Grafik_damm1_s1d4v1.png">
-      <Filter>Resources\Images</Filter>
-    </Image>
-    <Image Include="Resources\Images\Grafik_Luddis120x80_s1d3v1.png">
-      <Filter>Resources\Images</Filter>
-    </Image>
-    <Image Include="Resources\Images\Grafik_silverfisk_prototyp_s1d3v2.png">
-      <Filter>Resources\Images</Filter>
-    </Image>
-    <Image Include="Resources\Images\Grafik_smula2_s1d4v1.png">
-      <Filter>Resources\Images</Filter>
-    </Image>
-    <Image Include="Resources\Images\Grafik_spindel_Enter_s2d3v1.png">
-      <Filter>Resources\Images</Filter>
-    </Image>
-    <Image Include="Resources\Images\LuddCounter.png">
-      <Filter>Resources\Images</Filter>
-    </Image>
-    <Image Include="Resources\Images\luddisIcon.png">
-      <Filter>Resources\Images</Filter>
-    </Image>
-    <Image Include="Resources\Images\Parchment.png">
-      <Filter>Resources\Images</Filter>
-    </Image>
-    <Image Include="Resources\Images\PowerDisplay.png">
-      <Filter>Resources\Images</Filter>
-    </Image>
-    <Image Include="Resources\Images\samplebutton.png">
-      <Filter>Resources\Images</Filter>
-    </Image>
-    <Image Include="Resources\Images\Levels\BackgroundLevel1-1.png">
-      <Filter>Resources\Images\Levels</Filter>
-    </Image>
-    <Image Include="Resources\Images\Levels\BackgroundLevel1-2.png">
-      <Filter>Resources\Images\Levels</Filter>
-    </Image>
-    <Image Include="Resources\Images\Levels\BackgroundLevel1-3.png">
-      <Filter>Resources\Images\Levels</Filter>
-    </Image>
-    <Image Include="Resources\Images\Levels\BackgroundLevel1-4.png">
-      <Filter>Resources\Images\Levels</Filter>
-    </Image>
-    <Image Include="Resources\Images\Levels\BackgroundLevel1-5.png">
-      <Filter>Resources\Images\Levels</Filter>
-    </Image>
-    <Image Include="Resources\Images\Levels\BackgroundLevel1-6.png">
-      <Filter>Resources\Images\Levels</Filter>
-    </Image>
-    <Image Include="Resources\Images\Levels\BackgroundLevel1-7.png">
-      <Filter>Resources\Images\Levels</Filter>
-    </Image>
-    <Image Include="Resources\Images\Spritesheets\debug.png">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </Image>
-    <Image Include="Resources\Images\Spritesheets\Grafik_Luddis shot120x90treframes_s2d3v1.png">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </Image>
-    <Image Include="Resources\Images\Spritesheets\Grafik_Luddis skjut sprite 120x90 tre frames_s2d3v1.png">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </Image>
-    <Image Include="Resources\Images\Spritesheets\Grafik_Luddis_hit_sprite_s2d2v1.png">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </Image>
-    <Image Include="Resources\Images\Spritesheets\Grafik_Luddis_sprite_walkcycle_120x90_s1d4v1.png">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </Image>
-    <Image Include="Resources\Images\Spritesheets\Grafik_Luddis_walkcykle_sprite_longer_version_s2d2v3.png">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </Image>
-    <Image Include="Resources\Images\Spritesheets\Grafik_TrasanAttackFas1_S2D4V3.png">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </Image>
-    <Image Include="Resources\Images\Spritesheets\Grafik_TrasanAttackFas2_S2D4V3.png">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </Image>
-    <Image Include="Resources\Images\Spritesheets\Grafik_TrasanAttackFas3_S2D4V1.png">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </Image>
-    <Image Include="Resources\Images\Spritesheets\Grafik_TrasanAttackFas4_S2D4V1.png">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </Image>
-    <Image Include="Resources\Images\Spritesheets\Grafik_TrasanFas1_S2D3V2.png">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </Image>
-    <Image Include="Resources\Images\Spritesheets\Grafik_TrasanFas2_S2D3V2.png">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </Image>
-    <Image Include="Resources\Images\Spritesheets\Grafik_TrasanFas3_S2D3V1.png">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </Image>
-    <Image Include="Resources\Images\Spritesheets\Grafik_TrasanFas4_S2D3V2.png">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </Image>
-    <Image Include="Resources\Images\Spritesheets\Luddis_ walkcykle.png">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </Image>
-    <Image Include="Resources\Images\Spritesheets\walkcykle_104x90_12_frames.png">
-      <Filter>Resources\Images\Spritesheets</Filter>
-    </Image>
   </ItemGroup>
 </Project>

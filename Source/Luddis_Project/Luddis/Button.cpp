@@ -4,24 +4,30 @@
 
 static const std::string DEFAULT_FONTTYPE = "resources/fonts/arial.ttf";
 
-Button::Button(std::string graphicFilename, std::string buttonText, sf::RenderWindow* window, sf::Vector2f pos, void(*action)()) :
+Button::Button(std::string graphicFilename, std::string buttonText, sf::RenderWindow* window, sf::Vector2f pos, InterfaceElement* owner) :
 mWindow(window),
 mIsAlive(true),
 mClicked(false),
 mIsActive(false),
+mOwner(owner),
 mButtonText(buttonText, ResourceManager::getInstance().getFont(DEFAULT_FONTTYPE), 16),
 mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 	setPosition(pos);
-	sf::IntRect rect(mSprite.getTextureRect());
-	rect.width  /= 3;
-	mSprite.setTextureRect(rect);
+	sf::IntRect spriteRect(mSprite.getTextureRect());
+	spriteRect.width /= 3;
+	mSprite.setTextureRect(spriteRect);
 	for (int i = 0; i < 3; i++){
-		mRects[i] = rect;
-		mRects[i].left += i*rect.width;
+		mRects[i] = spriteRect;
+		mRects[i].left += i*spriteRect.width;
+	}
+	sf::FloatRect textRect = mButtonText.getGlobalBounds();
+	float xScale = (float)textRect.width/spriteRect.width;
+	if ((float)textRect.width> spriteRect.width){
+		mSprite.setScale(xScale+0.5f, 1);
 	}
 	mButtonText.setColor(sf::Color::Black);
-	mButtonText.setOrigin(mButtonText.getGlobalBounds().width / 2, mButtonText.getGlobalBounds().height / 2);
-	mSprite.setOrigin(mSprite.getGlobalBounds().width / 2, mSprite.getGlobalBounds().height / 2);
+	mButtonText.setOrigin(textRect.width / 2, textRect.height / 2);
+	mSprite.setOrigin((float)spriteRect.width / 2, (float)spriteRect.height / 2);
 }
 
 Button::~Button(){
@@ -61,7 +67,7 @@ void Button::updateInput(){
 		!sf::Mouse::isButtonPressed(sf::Mouse::Left) &&
 		mSprite.getGlobalBounds().contains(vector)){
 		//Release click
-		//onClick();
+		mOwner->onClick(mButtonText.getString());
 	}
 	if (mSprite.getGlobalBounds().contains(vector)){
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
@@ -81,9 +87,6 @@ void Button::updateInput(){
 	}
 }
 
-void Button::onClick(void(*action)()){
-	//Take action
-	if (mClicked = true){
-		action();
-	}
+void Button::kill(){
+	mIsAlive = false;
 }

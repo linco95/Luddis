@@ -12,7 +12,7 @@
 
 class Silverfish : public CollidableEntity {
 public:
-	Silverfish(sf::RenderWindow* window, const sf::Vector2f& position);
+	Silverfish(sf::RenderWindow* window, const sf::Vector2f& position, const float& angle);
 	~Silverfish();
 
 	void tick(const sf::Time& deltaTime) override;
@@ -37,6 +37,7 @@ private:
 	int mLife;
 	sf::Shape* mHitbox;
 	AnimationQueue mAnimation;
+	Category mAlignment;
 };
 
 #endif

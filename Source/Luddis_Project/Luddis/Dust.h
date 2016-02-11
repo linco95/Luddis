@@ -10,7 +10,7 @@
 
 class Dust : public CollidableEntity {
 public:
-	Dust(std::string textureFilename, sf::RenderWindow* window);
+	Dust(sf::RenderWindow* window, std::string textureFilename, const sf::Vector2f& position, const float& angle);
 	~Dust();
 
 	void tick(const sf::Time& deltaTime) override;

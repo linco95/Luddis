@@ -19,14 +19,15 @@ static const sf::Vector2f FRONTVECTOR(-1, 0);
 
 static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(55, 17));
 
-Silverfish::Silverfish(sf::RenderWindow* window, const sf::Vector2f& position) :
+Silverfish::Silverfish(sf::RenderWindow* window, const sf::Vector2f& position, const float& angle) :
 mIsAlive(true),
 mIsActive(true),
 mSwimAway(false),
 mLife(LIFE),
 mWindow(window),
 mAnimation(Animation(ANIMATION_SWIM)),
-mHitbox(new sf::RectangleShape(HITBOX_SHAPE))
+mHitbox(new sf::RectangleShape(HITBOX_SHAPE)),
+mAlignment(ENEMY)
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	// Get a y-spawn position
@@ -35,20 +36,11 @@ mHitbox(new sf::RectangleShape(HITBOX_SHAPE))
 	// Set spawn position
 	setPosition(position);
 
-
-	// Chose direction (towards the left)
-	int r2 = rand() % 2;
 	sf::Vector2f dir;
-	// Diagonally up
-	if (r2 == 1){
-		dir = { -1, 1 };
+	dir = { 1, 1 };
+	dir = VectorMath::rotateVector(dir, angle);
 		mDirection = VectorMath::normalizeVector(dir);
-	}
-	// Diagonally down
-	else if (r2 == 0){
-		dir = { -1, -1 };
-		mDirection = VectorMath::normalizeVector(dir);
-	}
+
 
 
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
@@ -60,6 +52,7 @@ Silverfish::~Silverfish(){
 }
 
 void Silverfish::tick(const sf::Time& deltaTime){
+	if (!mIsActive) return;
 	updateMovement(deltaTime);
 	mAnimation.tick(deltaTime);
 	if (getPosition().y<(-mAnimation.getCurrAnimation().getSprite().getGlobalBounds().height / 2) || getPosition().y > mWindow->getView().getSize().y + mAnimation.getCurrAnimation().getSprite().getGlobalBounds().height / 2){
@@ -74,6 +67,7 @@ void Silverfish::updateMovement(const sf::Time& deltaTime){
 }
 
 void Silverfish::draw(sf::RenderTarget& target, sf::RenderStates states) const{
+	if (!mIsActive) return;
 	states.transform *= getTransform();
 	target.draw(mAnimation.getCurrAnimation(), states);
 }
@@ -95,7 +89,7 @@ Entity::RenderLayer Silverfish::getRenderLayer() const{
 }
 
 Silverfish::Category Silverfish::getCollisionCategory(){
-	return ENEMY;
+	return mAlignment;
 }
 
 Silverfish::Type Silverfish::getCollisionType(){
@@ -105,20 +99,26 @@ Silverfish::Type Silverfish::getCollisionType(){
 void Silverfish::collide(CollidableEntity *collidable){
 	if (collidable->getCollisionCategory() == FRIEND || collidable->getCollisionCategory() == HAIR){
 		if (mSwimAway == false){
-			mLife -= 5;
-			if (mLife <= 0){
-				mAnimation.replaceAnimation(ANIMATION_HIT);
-				mAnimation.setDefaultAnimation(ANIMATION_DEAD);
-				mSwimAway = true;
-				mDirection = sf::Vector2f(0, -1);
-				SPEED = 120;
+		mLife -= 5;
+		if (mLife <= 0){
+			mAnimation.replaceAnimation(ANIMATION_HIT);
+			mAnimation.setDefaultAnimation(ANIMATION_DEAD);
+			mSwimAway = true;
+			mDirection = sf::Vector2f(0, -1);
+			SPEED = 120;
+			mAlignment = FRIEND;
 			}
 		}
 	}
 }
 
 sf::FloatRect Silverfish::getHitBox(){
+	if (mIsActive){
 	return getTransform().transformRect(mAnimation.getCurrAnimation().getSprite().getGlobalBounds());
+}
+	else {
+		return sf::FloatRect(-999, -999, 0, 0);
+	}
 }
 sf::Shape* Silverfish::getNarrowHitbox() const{
 	mHitbox->setPosition(getPosition());

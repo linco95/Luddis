@@ -75,6 +75,9 @@ struct AnimationImp : public Drawable, public sf::Transformable {
 	const Sprite& getSprite() const {
 		return mSprite;
 	}
+	void changeScale(float x, float y){
+		mSprite.setScale(x, y);
+	}
 	void stepAnimation(const int& aStep){
 		setFrame(mCurrSprite + aStep);
 	}
@@ -172,4 +175,8 @@ Animation& Animation::operator=(const Animation& aAnim){
 	delete mAImp;
 	mAImp = new AnimationImp(*aAnim.mAImp);
 	return *this;
+}
+
+void Animation::changeScale(float x, float y){
+	mAImp->changeScale(x, y);
 }
