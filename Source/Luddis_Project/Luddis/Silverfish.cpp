@@ -26,7 +26,8 @@ mSwimAway(false),
 mLife(LIFE),
 mWindow(window),
 mAnimation(Animation(ANIMATION_SWIM)),
-mHitbox(new sf::RectangleShape(HITBOX_SHAPE))
+mHitbox(new sf::RectangleShape(HITBOX_SHAPE)),
+mAlignment(ENEMY)
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	// Get a y-spawn position
@@ -88,7 +89,7 @@ Entity::RenderLayer Silverfish::getRenderLayer() const{
 }
 
 Silverfish::Category Silverfish::getCollisionCategory(){
-	return ENEMY;
+	return mAlignment;
 }
 
 Silverfish::Type Silverfish::getCollisionType(){
@@ -105,6 +106,7 @@ void Silverfish::collide(CollidableEntity *collidable){
 			mSwimAway = true;
 			mDirection = sf::Vector2f(0, -1);
 			SPEED = 120;
+			mAlignment = FRIEND;
 			}
 		}
 	}

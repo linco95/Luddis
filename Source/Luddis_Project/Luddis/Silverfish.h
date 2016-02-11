@@ -37,6 +37,7 @@ private:
 	int mLife;
 	sf::Shape* mHitbox;
 	AnimationQueue mAnimation;
+	Category mAlignment;
 };
 
 #endif
