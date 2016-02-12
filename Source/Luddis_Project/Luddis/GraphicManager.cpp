@@ -111,14 +111,14 @@ Animation& GraphicManager::getAnimation(std::string filename){
 			return *mAnimations.at(i).first;
 		}
 	}
-	loadFont(filename);
+	loadAnimation(filename);
 	return getAnimation(filename);
 }
 
 //Loads a font into memory. !!Cannot store two files with the same filename!!
 void GraphicManager::loadAnimation(std::string filename){
 	for (AnimationPairVector::size_type i = 0; i < mAnimations.size(); i++){
-		assert(mFonts.at(i).second != filename);
+		assert(mAnimations.at(i).second != filename);
 	}
 
 	Animation* animation = new Animation(filename);

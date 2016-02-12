@@ -4,8 +4,12 @@ Säpos hq is in nowhere!
 
 Writing Level class
 	- Loading obstacles narrow hitbox form config
+	- Load chips/ludd from a map
 
 Make animationqueue use resourcemanager, to avoid copying the spritesheets/animations everytime an animation changes.
+
+Implement states on the boss dishrag
+	- Ask if we should implement random intervals on boss stopping 
 
 Make sure luddis doesnt move use mouseposition when they are equal (zero vector does not give pleasant results)
 	- Make sure luddis loads in the correct position (rotation)

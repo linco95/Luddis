@@ -14,13 +14,13 @@
 #include <string>
 #include <array>
 
-static const Animation ANIMATION_FILEPATH = Animation("resources/images/spritesheets/Luddis_ walkcykle");
+static const std::string ANIMATION_FILEPATH = "resources/images/spritesheets/Luddis_ walkcykle";
 //static const Animation ANIMATION_FILEPATH = Animation("resources/images/spritesheets/Sprite_Debug_480x205");
 
 static const std::string TEST_DIALOGUE = "Resources/Configs/Dialogue/Example_Dialogue.json";
 
-static const Animation HIT_ANIMATION = Animation("resources/images/spritesheets/Grafik_Luddis_hit_sprite_s2d2v1");
-static const Animation SHOT_ANIMATION = Animation("resources/images/spritesheets/Grafik_Luddis shot120x90treframes_s2d3v1");
+static const std::string HIT_ANIMATION = "resources/images/spritesheets/Grafik_Luddis_hit_sprite_s2d2v1";
+static const std::string SHOT_ANIMATION = "resources/images/spritesheets/Grafik_Luddis shot120x90treframes_s2d3v1";
 static const std::string SOUND_FILENAME1 = "Resources/Audio/Skott_Blås_Små_01.wav";
 static const std::string SOUND_FILENAME2 = "Resources/Audio/Skott_Blås_Små_02.wav";
 static const std::string SOUND_FILENAME3 = "Resources/Audio/Skott_Blås_Små_03.wav";
@@ -174,7 +174,7 @@ void Luddis::updateRotation(){
 	float rotation = VectorMath::getAngle(FRONTVECTOR, direction) * 180 / (float)M_PI;
 	setRotation(rotation);
 
-	static bool isFlipped = true;
+	static bool isFlipped = false;
 	if (direction.x <= 0 && !isFlipped){
 		scale(sf::Vector2f(1, -1));
 		isFlipped = true;
@@ -186,8 +186,7 @@ void Luddis::updateRotation(){
 }
 
 void Luddis::attack(){
-	//sf::Vector2f direction = VectorMath::normalizeVector(getVectorMouseToSprite()) * PROJECTILE_SPEED;
-	sf::Vector2f direction = VectorMath::normalizeVector(getTransform().transformPoint(FRONTVECTOR));
+	sf::Vector2f direction = VectorMath::rotateVector(FRONTVECTOR, getRotation());
 	sf::Vector2f muzzlePoint = getPosition() + direction * MUZZLEOFFSET;
 	mProjectileCooldown = PROJECTILE_RELOAD;
 	int randValue = std::rand() % PROJECTILE_FILENAME.max_size();
@@ -209,7 +208,7 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 		&& mProjectileCooldown <= 0){
 		attack();
 		mAnimation.replaceAnimation(SHOT_ANIMATION);
-		mAnimation.getCurrAnimation().changeScale(mScaleX, mScaleY);
+		//setScale(mScaleX, mScaleY);
 	}
 	//Handle keyboard presses
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
@@ -243,7 +242,7 @@ void Luddis::collide(CollidableEntity *collidable){
 	}
 	if (collidable->getCollisionCategory() == BG_DAMAGE){
 		mAnimation.replaceAnimation(HIT_ANIMATION);
-		mAnimation.getCurrAnimation().changeScale(mScaleX, mScaleY);
+		//setScale(mScaleX, mScaleY);
 		if (mLoseDust < 0){
 			Inventory::getInstance().removeDust(1);
 			mLoseDust = 1.0f;
@@ -251,7 +250,7 @@ void Luddis::collide(CollidableEntity *collidable){
 	}
 	if (collidable->getCollisionCategory() == ENEMY) {
 		mAnimation.replaceAnimation(HIT_ANIMATION);
-		mAnimation.getCurrAnimation().changeScale(mScaleX, mScaleY);
+		//setScale(mScaleX, mScaleY);
 		if (mLoseDust < 0){
 			Inventory::getInstance().removeDust(1);
 			mLoseDust = 1.0f;
@@ -264,7 +263,7 @@ void Luddis::collide(CollidableEntity *collidable){
 		if (mStunDuration <= 0){
 			mStunDuration = 1.0f;
 			mAnimation.replaceAnimation(HIT_ANIMATION);
-			mAnimation.getCurrAnimation().changeScale(mScaleX, mScaleY);
+			//setScale(mScaleX, mScaleY);
 		}
 	}
 }
@@ -291,7 +290,7 @@ void Luddis::changeScale(){
 		mScaleX = 2.0f;
 		mScaleY = 2.0f;
 	}
-	mAnimation.getCurrAnimation().changeScale(mScaleY, mScaleY);
+	//setScale(mScaleY, mScaleY);
 }
 
 sf::FloatRect Luddis::getHitBox(){

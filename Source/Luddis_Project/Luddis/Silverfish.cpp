@@ -7,9 +7,9 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-static const Animation ANIMATION_SWIM = Animation("resources/images/spritesheets/Grafik_silverfisk_SwimSprite_s1d5v2");
-static const Animation ANIMATION_HIT = Animation("resources/images/spritesheets/Grafik_silverfisk_DeathSprite_s1d5v2");
-static const Animation ANIMATION_DEAD = Animation("resources/images/spritesheets/Grafik_silverfisk_deadSprite_s1d5v2");
+static const std::string ANIMATION_SWIM = "resources/images/spritesheets/Grafik_silverfisk_SwimSprite_s1d5v2";
+static const std::string ANIMATION_HIT = "resources/images/spritesheets/Grafik_silverfisk_DeathSprite_s1d5v2";
+static const std::string ANIMATION_DEAD = "resources/images/spritesheets/Grafik_silverfisk_deadSprite_s1d5v2";
 
 static float SPEED = 80;
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
@@ -25,7 +25,7 @@ mIsActive(true),
 mSwimAway(false),
 mLife(LIFE),
 mWindow(window),
-mAnimation(Animation(ANIMATION_SWIM)),
+mAnimation(ANIMATION_SWIM),
 mHitbox(new sf::RectangleShape(HITBOX_SHAPE)),
 mAlignment(ENEMY)
 {
@@ -55,7 +55,11 @@ void Silverfish::tick(const sf::Time& deltaTime){
 	if (!mIsActive) return;
 	updateMovement(deltaTime);
 	mAnimation.tick(deltaTime);
-	if (getPosition().y<(-mAnimation.getCurrAnimation().getSprite().getGlobalBounds().height / 2) || getPosition().y > mWindow->getView().getSize().y + mAnimation.getCurrAnimation().getSprite().getGlobalBounds().height / 2){
+	// TODO: Cleanup, enable fishes to be outside while spawning
+	if (getPosition().y<(
+		-mAnimation.getCurrAnimation().getSprite().getGlobalBounds().height / 2) ||
+		getPosition().y > mWindow->getView().getSize().y + mAnimation.getCurrAnimation().getSprite().getGlobalBounds().height / 2
+		){
 		mIsAlive = false;
 	}
 }
