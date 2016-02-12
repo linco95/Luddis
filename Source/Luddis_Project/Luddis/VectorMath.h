@@ -16,6 +16,7 @@ struct VectorMath{
 	static sf::Vector2f normalizeVector(const sf::Vector2f& vector);
 	static float getAngle(const sf::Vector2f& v1, const sf::Vector2f& v2);
 	static sf::Vector2f rotateVector(const sf::Vector2f& vector, const float& degrees);
+	static sf::Vector2f getNormal(const sf::Vector2f& aVector);
 	static sf::Vector2f projectVector(const sf::Vector2f& aVector, const sf::Vector2f& aProjectOn);
 
 };

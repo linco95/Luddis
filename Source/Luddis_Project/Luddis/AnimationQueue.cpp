@@ -1,4 +1,5 @@
 #include "AnimationQueue.h"
+#include "ResourceManager.h"
 
 AnimationQueue::AnimationQueue(const Animation& aDefaultAnimation):
 	mDefaultAnim(aDefaultAnimation),

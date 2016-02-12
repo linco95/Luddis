@@ -8,17 +8,17 @@
 
 //Different states depending on how damaged the boss is.
 //State 1
-static const Animation ANIMATION_IDLE = Animation("Resources/Images/Spritesheets/Grafik_TrasanFas1_S2D3V2");
-static const Animation SHOOTING_ANIMATION = Animation("Resources/Images/Spritesheets/Grafik_TrasanAttackFas1_S2D4V3");
+static const std::string ANIMATION_IDLE = ("Resources/Images/Spritesheets/Grafik_TrasanFas1_S2D3V2");
+static const std::string SHOOTING_ANIMATION = ("Resources/Images/Spritesheets/Grafik_TrasanAttackFas1_S2D4V3");
 //State 2
-static const Animation ANIMATION_IDLE_2 = Animation("Resources/Images/Spritesheets/Grafik_TrasanFas2_S2D3V2");
-static const Animation SHOOTING_ANIMATION_2 = Animation("Resources/Images/Spritesheets/Grafik_TrasanAttackFas2_S2D4V3");
+static const std::string ANIMATION_IDLE_2 = ("Resources/Images/Spritesheets/Grafik_TrasanFas2_S2D3V2");
+static const std::string SHOOTING_ANIMATION_2 = ("Resources/Images/Spritesheets/Grafik_TrasanAttackFas2_S2D4V3");
 //State 3
-static const Animation ANIMATION_IDLE_3 = Animation("Resources/Images/Spritesheets/Grafik_TrasanFas3_S2D3V1");
-static const Animation SHOOTING_ANIMATION_3 = Animation("Resources/Images/Spritesheets/Grafik_TrasanAttackFas3_S2D4V1");
+static const std::string ANIMATION_IDLE_3 = ("Resources/Images/Spritesheets/Grafik_TrasanFas3_S2D3V1");
+static const std::string SHOOTING_ANIMATION_3 = ("Resources/Images/Spritesheets/Grafik_TrasanAttackFas3_S2D4V1");
 //State 4
-static const Animation ANIMATION_IDLE_4 = Animation("Resources/Images/Spritesheets/Grafik_TrasanFas4_S2D3V2");
-static const Animation SHOOTING_ANIMATION_4 = Animation("Resources/Images/Spritesheets/Grafik_TrasanAttackFas4_S2D4V1");
+static const std::string ANIMATION_IDLE_4 = ("Resources/Images/Spritesheets/Grafik_TrasanFas4_S2D3V2");
+static const std::string SHOOTING_ANIMATION_4 = ("Resources/Images/Spritesheets/Grafik_TrasanAttackFas4_S2D4V1");
 
 static const std::string PROJECTILE_FILEPATH = "Resources/Images/Grafik_TrasanProjektil_S2D5V1.png";
 

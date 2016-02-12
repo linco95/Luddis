@@ -41,14 +41,18 @@ void CollisionManager::drawHitboxes(sf::RenderWindow& aWindow) const {
 		sf::Shape* temp = c->getNarrowHitbox();
 		assert(temp != 0);
 		temp->setFillColor(sf::Color(0,255,0,155));
+		temp->setOutlineColor(sf::Color::Black);
+		temp->setOutlineThickness(2.0f);
 		aWindow.draw(*temp);
+		sf::CircleShape pivot(2, 4);
+		pivot.setFillColor(sf::Color::Black);
+		pivot.setPosition(temp->getPosition() - sf::Vector2f(1,1));
+		aWindow.draw(pivot);
 	}
 }
 #endif
 
 #pragma region Narrow Collision
-#include "GameManager.h"
-#include <iostream>
 // return a pair of scalars, representing the min, respective max value of the shapes projection on the axis. first = min, second = max
 std::pair<float, float> getProjection(const sf::Shape& shape, const sf::Vector2f& axis){
 	// Avoid calculating each loop iteration
@@ -57,18 +61,24 @@ std::pair<float, float> getProjection(const sf::Shape& shape, const sf::Vector2f
 	shapeTrans.translate(-shape.getOrigin());
 
 	float minVal = 0, maxVal = 0;
-
+	bool first = true;
 	for (std::size_t i = 0; i < shape.getPointCount(); i++){
 		sf::Vector2f vecToPoint = shapeTrans.transformPoint(shape.getPoint(i));
 		const float scalar = VectorMath::dotProduct(axis, vecToPoint) / axisSq;
-		if (scalar < minVal){
-			minVal = scalar;
+		if (first){
+			minVal = maxVal = scalar;
+			first = false;
+		}
+		else{
+			if (scalar < minVal){
+				minVal = scalar;
 			}
-		else if (scalar > maxVal){
-			maxVal = scalar;
+			if (scalar > maxVal){
+				maxVal = scalar;
+			}
 		}
 	}
-	assert(minVal < maxVal);
+	assert(minVal <= maxVal);
 	return std::make_pair(minVal, maxVal);
 }
 
@@ -84,17 +94,18 @@ void narrowCollision(std::stack<std::pair<CollidableEntity*, CollidableEntity*>>
 		bool isColliding = true;
 		for (std::size_t i = 0; i < firstPointCount; i++) {
 			// Every side in one of the shapes
-			sf::Vector2f firstVec = firstShape->getPoint(i < firstPointCount ? i + 1 : 0),
-				secondVec = firstShape->getPoint(i);
+			sf::Vector2f firstVec = firstShape->getPoint(i < firstPointCount ? i + 1 : 0);
+			sf::Vector2f secondVec = firstShape->getPoint(i);
 			// Transform the points
 			sf::Transform shapeTrans = firstShape->getTransform();
-			shapeTrans.translate(-firstShape->getOrigin());
+
+			//shapeTrans.translate();
 			firstVec = shapeTrans.transformPoint(firstVec);
 			secondVec = shapeTrans.transformPoint(secondVec);
 			sf::Vector2f side = firstVec - secondVec;
 
 			// Get the normal to the side
-			sf::Vector2f axis = VectorMath::rotateVector(side, 90.f);
+			sf::Vector2f axis = VectorMath::getNormal(side);
 
 			// Project both shapes on the axis
 			std::pair<float, float> shapeProj[2];
