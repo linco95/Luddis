@@ -21,6 +21,10 @@ public:
 	void addDust(int dust);
 	void removeDust(int dust);
 
+	int getPowerUp();
+	void setPowerUp(int pow);
+	void changePowerUp(int pow);
+
 	int getEggs();
 	void setEggs(int eggs);
 	void changeEggs(int eggs);
@@ -36,6 +40,7 @@ private:
 	int mChips;
 	int mDust;
 	int mEggs;
+	int mPowerUp;
 };
 
 #endif
