@@ -9,7 +9,7 @@
 
 class Spider : public Entity {
 public:
-	Spider(sf::RenderWindow* window, const sf::Vector2f& position);
+	Spider(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget);
 	~Spider();
 
 	void tick(const sf::Time& deltaTime) override;
@@ -20,6 +20,8 @@ public:
 	RenderLayer getRenderLayer() const override;
 private:
 	void updateMovement(const sf::Time& deltaTime);
+	sf::Transformable* mTarget;
+	const float mActivate;
 	bool mTalk;
 	bool mIsAlive;
 	bool mIsActive;

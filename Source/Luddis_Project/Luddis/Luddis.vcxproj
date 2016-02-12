@@ -101,6 +101,7 @@
     <ClCompile Include="GUIManager.cpp" />
     <ClCompile Include="InterfaceElement.cpp" />
     <ClCompile Include="Inventory.cpp" />
+    <ClCompile Include="PowerUp.cpp" />
     <ClCompile Include="PowerupDisplay.cpp" />
     <ClCompile Include="ScoreCounter.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -142,6 +143,7 @@
     <ClInclude Include="GUIManager.h" />
     <ClInclude Include="InterfaceElement.h" />
     <ClInclude Include="Inventory.h" />
+    <ClInclude Include="PowerUp.h" />
     <ClInclude Include="PowerupDisplay.h" />
     <ClInclude Include="ScoreCounter.h" />
     <ClInclude Include="Entity.h" />

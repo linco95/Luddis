@@ -19,15 +19,17 @@ static const sf::Vector2f FRONTVECTOR(-1, 0);
 
 static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(55, 17));
 
-Silverfish::Silverfish(sf::RenderWindow* window, const sf::Vector2f& position, const float& angle) :
+Silverfish::Silverfish(sf::RenderWindow* window, const sf::Vector2f& position, const float& angle, const float& activation, Transformable* aTarget) :
 mIsAlive(true),
-mIsActive(true),
+mIsActive(false),
 mSwimAway(false),
 mLife(LIFE),
+mActivate(activation),
 mWindow(window),
 mAnimation(ANIMATION_SWIM),
 mHitbox(new sf::RectangleShape(HITBOX_SHAPE)),
-mAlignment(ENEMY)
+mAlignment(ENEMY),
+mTarget(aTarget)
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	// Get a y-spawn position
@@ -37,11 +39,14 @@ mAlignment(ENEMY)
 	setPosition(position);
 
 	sf::Vector2f dir;
-	dir = { 1, 1 };
+	dir = { 1, 0 };
 	dir = VectorMath::rotateVector(dir, angle);
-		mDirection = VectorMath::normalizeVector(dir);
+	mDirection = VectorMath::normalizeVector(dir);
 
 
+	if (mDirection.x > 0){
+		scale(sf::Vector2f(1, -1));
+	}
 
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
 
@@ -52,6 +57,9 @@ Silverfish::~Silverfish(){
 }
 
 void Silverfish::tick(const sf::Time& deltaTime){
+	if (mTarget->getPosition().x >= mActivate){
+		mIsActive = true;
+	}
 	if (!mIsActive) return;
 	updateMovement(deltaTime);
 	mAnimation.tick(deltaTime);
@@ -101,8 +109,8 @@ Silverfish::Type Silverfish::getCollisionType(){
 }
 
 void Silverfish::collide(CollidableEntity *collidable){
-	if (collidable->getCollisionCategory() == FRIEND || collidable->getCollisionCategory() == HAIR){
-		if (mSwimAway == false){
+	if (collidable->getCollisionCategory() == HAIR){
+		if (mSwimAway== false){
 		mLife -= 5;
 		if (mLife <= 0){
 			mAnimation.replaceAnimation(ANIMATION_HIT);
@@ -118,8 +126,8 @@ void Silverfish::collide(CollidableEntity *collidable){
 
 sf::FloatRect Silverfish::getHitBox(){
 	if (mIsActive){
-	return getTransform().transformRect(mAnimation.getCurrAnimation().getSprite().getGlobalBounds());
-}
+		return getTransform().transformRect(mAnimation.getCurrAnimation().getSprite().getGlobalBounds());
+	}
 	else {
 		return sf::FloatRect(-999, -999, 0, 0);
 	}

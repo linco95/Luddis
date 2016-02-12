@@ -1,5 +1,6 @@
 #include "BossDishCloth.h"
 #include "Projectile.h"
+#include "PowerUp.h"
 #include "EntityManager.h"
 #include "CollisionManager.h"
 #include "VectorMath.h"
@@ -20,22 +21,27 @@ static const std::string ANIMATION_IDLE_4 = ("Resources/Images/Spritesheets/Graf
 static const std::string SHOOTING_ANIMATION_4 = ("Resources/Images/Spritesheets/Grafik_TrasanAttackFas4_S2D4V1");
 
 static const std::string PROJECTILE_FILEPATH = "Resources/Images/Grafik_TrasanProjektil_S2D5V1.png";
+
+static const std::string POWERUP1_FILEPATH = "Resources/Images/Grafik_TrasanProjektil_S2D5V1.png";
+
 static const int MAX_LIFE = 100;
 static const float ATTACK_INTERVAL = 3.5f;
 static const float PROJECTILE_LIFETIME = 2.5f;
 static const float PROJECTILE_SPEED = 300;
 static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(250, 250));
 
-BossDishCloth::BossDishCloth(sf::RenderWindow* window, const sf::Vector2f& position) :
+BossDishCloth::BossDishCloth(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget) :
 mIsAlive(true),
-mIsActive(true),
+mIsActive(false),
 mWindow(window),
 mShooting(false),
+mActivate(activation),
 mLife(MAX_LIFE),
 mAttackInterval(ATTACK_INTERVAL),
 mDirection(0, 1.0f),
-mAnimation(ANIMATION_IDLE),
-mHitbox(new sf::RectangleShape(HITBOX_SHAPE))
+mAnimation(Animation(ANIMATION_IDLE)),
+mHitbox(new sf::RectangleShape(HITBOX_SHAPE)),
+mTarget(aTarget)
 {
 	setPosition(position);
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
@@ -47,7 +53,14 @@ BossDishCloth::~BossDishCloth(){
 }
 
 void BossDishCloth::tick(const sf::Time& deltaTime){
+	if (mTarget->getPosition().x >= mActivate){
+		mIsActive = true;
+	}
+	if (!mIsActive) return;
 	if (mLife <= 0){
+		PowerUp* pow1 = new PowerUp(POWERUP1_FILEPATH, getPosition());
+		EntityManager::getInstance().addEntity(pow1);
+		CollisionManager::getInstance().addCollidable(pow1);
 		mIsAlive = false;
 	}
 	mAttackInterval -= deltaTime.asSeconds();
@@ -61,6 +74,7 @@ void BossDishCloth::tick(const sf::Time& deltaTime){
 }
 
 void BossDishCloth::draw(sf::RenderTarget& target, sf::RenderStates states) const{
+	if (!mIsActive) return;
 	states.transform *= getTransform();
 	target.draw(mAnimation.getCurrAnimation(), states);
 }

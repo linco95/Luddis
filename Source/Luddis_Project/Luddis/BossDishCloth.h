@@ -7,7 +7,7 @@
 
 class BossDishCloth: public CollidableEntity{
 public:
-	BossDishCloth(sf::RenderWindow* window, const sf::Vector2f& position);
+	BossDishCloth(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget);
 	virtual ~BossDishCloth();
 
 	void tick(const sf::Time& deltaTime) override;
@@ -27,6 +27,8 @@ private:
 
 	AnimationQueue mAnimation;
 	sf::RenderWindow* mWindow;
+	sf::Transformable* mTarget;
+	const float mActivate;
 	bool mShooting;
 	bool mIsAlive;
 	bool mIsActive;
