@@ -12,7 +12,7 @@
 
 class Silverfish : public CollidableEntity {
 public:
-	Silverfish(sf::RenderWindow* window, const sf::Vector2f& position, const float& angle);
+	Silverfish(sf::RenderWindow* window, const sf::Vector2f& position, const float& angle, const float& activation, Transformable* aTarget);
 	~Silverfish();
 
 	void tick(const sf::Time& deltaTime) override;
@@ -25,6 +25,7 @@ public:
 	sf::Shape* getNarrowHitbox() const override; 
 private:
 	void updateMovement(const sf::Time& deltaTime);
+	sf::Transformable* mTarget;
 	bool mIsAlive;
 	bool mIsActive;
 	bool mSwimAway;
@@ -35,6 +36,7 @@ private:
 	Type getCollisionType() override;
 	void collide(CollidableEntity *collidable) override;
 	int mLife;
+	const float mActivate;
 	sf::Shape* mHitbox;
 	AnimationQueue mAnimation;
 	Category mAlignment;

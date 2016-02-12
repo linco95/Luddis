@@ -14,12 +14,14 @@ static const Animation ANIMATION_ENTER = Animation("resources/images/spritesheet
 static const Animation ANIMATION_IDLE = Animation("resources/images/spritesheets/Grafik_spindel_SpriteIdle");
 static const Animation ANIMATION_LEAVE = Animation("resources/images/spritesheets/Grafik_spindel_SpriteClimbv2");
 
-Spider::Spider(sf::RenderWindow* window, const sf::Vector2f& position) :
+Spider::Spider(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget) :
 mIsAlive(true),
-mIsActive(true),
+mIsActive(false),
+mActivate(activation),
 mWindow(window),
 mAnimation(Animation(ANIMATION_ENTER)),
-mWait(WAIT_INTERVAL)
+mWait(WAIT_INTERVAL),
+mTarget(aTarget)
 {
 	setPosition(position);
 	sf::Vector2f dir;
@@ -31,7 +33,10 @@ Spider::~Spider(){
 }
 
 void Spider::tick(const sf::Time& deltaTime){
-
+	if (mTarget->getPosition().x >= mActivate){
+		mIsActive = true;
+	}
+	if (!mIsActive) return;
 	mAnimation.tick(deltaTime);
 	updateMovement(deltaTime);
 	if (mWait <= 0)
@@ -63,6 +68,7 @@ void Spider::updateMovement(const sf::Time& deltaTime){
 
 
 void Spider::draw(sf::RenderTarget& target, sf::RenderStates states) const{
+	if (!mIsActive) return;
 	states.transform *= getTransform();
 	target.draw(mAnimation.getCurrAnimation(), states);
 }

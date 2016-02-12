@@ -26,16 +26,18 @@ static const float PROJECTILE_LIFETIME = 2.5f;
 static const float PROJECTILE_SPEED = 300;
 static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(250, 250));
 
-BossDishCloth::BossDishCloth(sf::RenderWindow* window, const sf::Vector2f& position) :
+BossDishCloth::BossDishCloth(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget) :
 mIsAlive(true),
-mIsActive(true),
+mIsActive(false),
 mWindow(window),
 mShooting(false),
+mActivate(activation),
 mLife(MAX_LIFE),
 mAttackInterval(ATTACK_INTERVAL),
 mDirection(0, 1.0f),
 mAnimation(Animation(ANIMATION_IDLE)),
-mHitbox(new sf::RectangleShape(HITBOX_SHAPE))
+mHitbox(new sf::RectangleShape(HITBOX_SHAPE)),
+mTarget(aTarget)
 {
 	setPosition(position);
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
@@ -47,6 +49,10 @@ BossDishCloth::~BossDishCloth(){
 }
 
 void BossDishCloth::tick(const sf::Time& deltaTime){
+	if (mTarget->getPosition().x >= mActivate){
+		mIsActive = true;
+	}
+	if (!mIsActive) return;
 	if (mLife <= 0){
 		mIsAlive = false;
 	}
@@ -61,6 +67,7 @@ void BossDishCloth::tick(const sf::Time& deltaTime){
 }
 
 void BossDishCloth::draw(sf::RenderTarget& target, sf::RenderStates states) const{
+	if (!mIsActive) return;
 	states.transform *= getTransform();
 	target.draw(mAnimation.getCurrAnimation(), states);
 }
