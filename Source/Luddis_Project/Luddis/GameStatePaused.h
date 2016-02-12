@@ -1,15 +1,16 @@
-#ifndef _INCLUDED_GAMESTATELEVEL_
-#define _INCLUDED_GAMESTATELEVEL_
+#ifndef _INCLUDED_GAMESTATEPAUSED_
+#define _INCLUDED_GAMESTATEPAUSED_
 
-#include "GameState.h"
+#include "GameState.h"	
 #include "EntityManager.h"
 #include "GUIManager.h"
 #include "CollisionManager.h"
+#include "Menu.h"
 
-class GameStateLevel : public GameState{
+class GameStatePaused : public GameState{
 public:
-	GameStateLevel(sf::RenderWindow* window);
-	~GameStateLevel();
+	GameStatePaused(sf::RenderWindow* window, Menu::MenuType menuType);
+	~GameStatePaused();
 
 	void update(sf::Clock& clock) override;
 	void render() override;
@@ -21,6 +22,7 @@ private:
 	sf::View mGUIView;
 	sf::View mMapView;
 	sf::RenderWindow* mWindow;
+	Menu mMenu;
 };
 
-#endif // !_INCLUDED_GAMESTATELEVEL_
+#endif // !_INCLUDED_GAMESTATEPAUSED_

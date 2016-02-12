@@ -19,6 +19,8 @@
 #include "Spider.h"
 #include "Obstacle.h"
 #include "ScoreCounter.h"
+#include "GameStateLevel.h"
+#include "GameStatePaused.h"
 
 #include <iostream>
 
@@ -31,7 +33,6 @@ static const int HEIGHT = 1080;
 static const float DESIRED_ASPECTRATIO = (float)WIDTH / (float)HEIGHT;
 static const Color BGCOLOR = Color::Black;
 static const std::string TEXTURE_NAME = "Resources/Images/Grafik_Luddis120x80_s1d3v1.png";
-static const std::string TEXTURE_BUTTON = "Resources/Images/Button";
 static const std::string TEXTURE_CHIPSCOUNTER = "Resources/Images/ChipsCounter.png";
 static const std::string TEXTURE_LUDDCOUNTER = "Resources/Images/LuddCounter.png";
 static const std::string FONT_NAME = "arial.ttf";
@@ -112,7 +113,8 @@ struct GameManagerImp : public EventObserver {
 				break;
 			case (Event::EventType::KeyPressed):
 				if (aEvent.key.code == Keyboard::Escape){
-					gameOver();
+				delete mCurrentGameState;
+				mCurrentGameState = new GameStatePaused(&mMainWindow, Menu::PAUSEMENU);
 				}
 				break;
 			default:
@@ -137,6 +139,8 @@ struct GameManagerImp : public EventObserver {
 		CollisionManager* cm = &CollisionManager::getInstance();
 		GUIManager* gm = &GUIManager::getInstance();
 		SoundEngine* se = &SoundEngine::getInstance();
+		
+		mCurrentGameState = new GameStateLevel(&mMainWindow);
 
 		View view(FloatRect(0, 0, (float)WIDTH, (float)HEIGHT));
 		View mapView;
@@ -147,44 +151,19 @@ struct GameManagerImp : public EventObserver {
 			// Handle Events       
 			handleEvents(mMainWindow);
 			
-			// Update Entities     |
-			se->update(gameClock.getElapsedTime());
-			mapView = mMainWindow.getView();
-			mMainWindow.setView(view);
-			gm->updateElements(gameClock.getElapsedTime());
-			mMainWindow.setView(mapView);
-			em->updateEntities(gameClock.restart());
-			cm->detectCollisions();
+			// Update according to the game's state
+			mCurrentGameState->update(gameClock);
 
-			
-			// Kill dead Entities
-			if (!mPlayer->isAlive()){
-				gameOver();
-			}
-			cm->removeDeadCollidables();
-			em->removeDeadEntities();
-			gm->removeObsoleteElements();
-
-			// Render
+			// Render according to the game's state
 			mMainWindow.clear();
-
-			em->renderEntities(mMainWindow);
-
-			mapView = mMainWindow.getView();
-			mMainWindow.setView(view);
-			gm->renderElements(mMainWindow);
-			mMainWindow.setView(mapView);
-
-#ifdef LUDDIS_DEBUG_DRAW_HITBOXES
-			cm->drawHitboxes(mMainWindow);
-#endif
+			mCurrentGameState->render();
 			mMainWindow.display();
 
 
 		}
 	}
 
-
+	GameState* mCurrentGameState;
 	RenderWindow mMainWindow;
 	Luddis *mPlayer;
 	

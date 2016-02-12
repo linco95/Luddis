@@ -112,11 +112,14 @@
     <ClCompile Include="CharacterPortrait.cpp">
       <Filter>Source Files\Entities\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="PauseMenu.cpp">
-      <Filter>Source Files\Entities\GUI</Filter>
-    </ClCompile>
     <ClCompile Include="GameStateLevel.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStatePaused.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Source Files\Entities\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -228,14 +231,17 @@
     <ClInclude Include="CharacterPortrait.h">
       <Filter>Header Files\Entities\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="PauseMenu.h">
-      <Filter>Header Files\Entities\GUI</Filter>
-    </ClInclude>
     <ClInclude Include="GameState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameStateLevel.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStatePaused.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Header Files\Entities\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

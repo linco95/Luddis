@@ -1,46 +1,37 @@
-#include "GameStateLevel.h"
+#include "GameStatePaused.h"
 
-GameStateLevel::GameStateLevel(sf::RenderWindow* window) :
+GameStatePaused::GameStatePaused(sf::RenderWindow* window, Menu::MenuType menuType) :
 mEM(&EntityManager::getInstance()),
 mGUIM(&GUIManager::getInstance()),
 mCM(&CollisionManager::getInstance()),
 mGUIView(sf::FloatRect(0, 0, (float)WIDTH, (float)HEIGHT)),
-mWindow(window){
+mWindow(window),
+mMenu(window, menuType, this){
 
 }
 
-GameStateLevel::~GameStateLevel(){
+GameStatePaused::~GameStatePaused(){
 
 }
 
-void GameStateLevel::update(sf::Clock& clock){
+void GameStatePaused::update(sf::Clock& clock){
 	//Do game logic
-	mEM->updateEntities(clock.getElapsedTime());
 	//Change the view when updating GUI elements
 	mMapView = mWindow->getView();
 	mWindow->setView(mGUIView);
-	mGUIM->updateElements(clock.restart());
+	mMenu.tick(clock.restart());
 	//Then change it back
 	mWindow->setView(mMapView);
-	mCM->detectCollisions();
-	
-
-	//Garbage collection
-	mCM->removeDeadCollidables();
-	mEM->removeDeadEntities();
-	mGUIM->removeObsoleteElements();
 }
 
-void GameStateLevel::render(){
+void GameStatePaused::render(){
 	//Draw objects
 	mEM->renderEntities(*mWindow);
 	//Change the view when drawing GUI elements
 	mMapView = mWindow->getView();
 	mWindow->setView(mGUIView);
 	mGUIM->renderElements(*mWindow);
+	mWindow->draw(mMenu);
 	//Then change it back
-	mWindow->setView(mMapView); 
-#ifdef LUDDIS_DEBUG_DRAW_HITBOXES
-		mCM->drawHitboxes(*mWindow);
-#endif
+	mWindow->setView(mMapView);
 }

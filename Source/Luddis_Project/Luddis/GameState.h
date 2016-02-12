@@ -7,7 +7,10 @@
 class GameState{
 public:
 	virtual void update(sf::Clock& clock) = 0;
-	virtual void render(sf::RenderWindow& window) = 0;
+	virtual void render() = 0;
+
+	static const int WIDTH = 1920;
+	static const int HEIGHT = 1080;
 };
 
 #endif // !_INCLUDED_GAMESTATE_
