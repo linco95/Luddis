@@ -118,6 +118,9 @@
     <ClCompile Include="GameStatePaused.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PowerUp.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
     <ClCompile Include="Menu.cpp">
       <Filter>Source Files\Entities\GUI</Filter>
     </ClCompile>
@@ -245,6 +248,9 @@
     </ClInclude>
     <ClInclude Include="ViewUtility.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PowerUp.h">
+      <Filter>Header Files\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -3,7 +3,8 @@
 Inventory::Inventory():
 mChips(0),
 mDust(0),
-mEggs(0)
+mEggs(0),
+mPowerUp(0)
 {
 
 }
@@ -56,4 +57,16 @@ void Inventory::setEggs(int eggs){
 
 void Inventory::changeEggs(int eggs){
 	mEggs += eggs;
+}
+
+int Inventory::getPowerUp(){
+	return mPowerUp;
+}
+
+void Inventory::setPowerUp(int pow){
+	mPowerUp = pow;
+}
+
+void Inventory::changePowerUp(int pow){
+	mPowerUp += pow;
 }

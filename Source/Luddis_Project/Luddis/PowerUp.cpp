@@ -1,4 +1,4 @@
-#include "Chips.h"
+#include "PowerUp.h"
 #include "ResourceManager.h"
 #include "EntityManager.h"
 #include <SFML/System.hpp>
@@ -9,17 +9,15 @@
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 
-Chips::Chips(sf::RenderWindow* window, std::string textureFilename, const sf::Vector2f& position, const float& angle) :
+PowerUp::PowerUp(std::string textureFilename, const sf::Vector2f& position) :
 mIsAlive(true),
 mIsActive(true),
-mWindow(window),
 mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
 mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	// Set spawn position
 	setPosition(position);
-	rotate(angle);
 
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
 
@@ -28,56 +26,55 @@ mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 	mHitbox->setRotation(getRotation());
 }
 
-Chips::~Chips(){
+PowerUp::~PowerUp(){
 	delete mHitbox;
 }
 
-void Chips::tick(const sf::Time& deltaTime){
+void PowerUp::tick(const sf::Time& deltaTime){
 }
 
 
-void Chips::draw(sf::RenderTarget& target, sf::RenderStates states) const{
+void PowerUp::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	states.transform *= getTransform();
 	target.draw(mSprite, states);
 }
 
-bool Chips::isAlive() const{
+bool PowerUp::isAlive() const{
 	return mIsAlive;
 }
 
-bool Chips::isActive() const{
+bool PowerUp::isActive() const{
 	return mIsActive;
 }
 
-void Chips::setActive(const bool& active){
+void PowerUp::setActive(const bool& active){
 	mIsActive = active;
 }
 
-Entity::RenderLayer Chips::getRenderLayer() const{
+Entity::RenderLayer PowerUp::getRenderLayer() const{
 	return LAYER;
 }
 
-Chips::Category Chips::getCollisionCategory(){
+PowerUp::Category PowerUp::getCollisionCategory(){
 	return COLLECT;
 }
 
-Chips::Type Chips::getCollisionType(){
+PowerUp::Type PowerUp::getCollisionType(){
 	return REC;
 }
 
 
-void Chips::collide(CollidableEntity *collidable){
+void PowerUp::collide(CollidableEntity *collidable){
 	if (collidable->getCollisionCategory() == FRIEND){
 		mIsAlive = false;
-		Inventory::getInstance().changeChips(1);
-		SoundEngine::getInstance().playSound("resources/audio/luddis_crumbgather_s1d2v1.wav");
+		Inventory::getInstance().changePowerUp(1);
 	}
 }
 
-sf::FloatRect Chips::getHitBox(){
+sf::FloatRect PowerUp::getHitBox(){
 	return getTransform().transformRect(mSprite.getGlobalBounds());
 }
 
-sf::Shape* Chips::getNarrowHitbox() const{
+sf::Shape* PowerUp::getNarrowHitbox() const{
 	return mHitbox;
 }

@@ -14,13 +14,13 @@
 #include <string>
 #include <array>
 
-static const Animation ANIMATION_FILEPATH = Animation("resources/images/spritesheets/Luddis_ walkcykle");
+static const std::string ANIMATION_FILEPATH = "resources/images/spritesheets/Luddis_ walkcykle";
 //static const Animation ANIMATION_FILEPATH = Animation("resources/images/spritesheets/Sprite_Debug_480x205");
 
 static const std::string TEST_DIALOGUE = "Resources/Configs/Dialogue/Example_Dialogue.json";
 
-static const Animation HIT_ANIMATION = Animation("resources/images/spritesheets/Grafik_Luddis_hit_sprite_s2d2v1");
-static const Animation SHOT_ANIMATION = Animation("resources/images/spritesheets/Grafik_Luddis shot120x90treframes_s2d3v1");
+static const std::string HIT_ANIMATION = "resources/images/spritesheets/Grafik_Luddis_hit_sprite_s2d2v1";
+static const std::string SHOT_ANIMATION = "resources/images/spritesheets/Grafik_Luddis shot120x90treframes_s2d3v1";
 static const std::string SOUND_FILENAME1 = "Resources/Audio/Skott_Blås_Små_01.wav";
 static const std::string SOUND_FILENAME2 = "Resources/Audio/Skott_Blås_Små_02.wav";
 static const std::string SOUND_FILENAME3 = "Resources/Audio/Skott_Blås_Små_03.wav";
@@ -43,7 +43,7 @@ static const float PROJECTILE_SPEED = 300;
 static const float MUZZLEOFFSET = 50.0f;
 static const sf::Vector2f FRONTVECTOR(1, 0);
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
-static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(20,20));
+static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(35, 8);
 
 Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) : 
 	mIsAlive(true), 
@@ -56,13 +56,13 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	mAnimation(ANIMATION_FILEPATH),
 	mColliding(false),
 	mPrevPos(0, 0),
-	mHitbox(new sf::RectangleShape(HITBOX_SHAPE)),
+	mHitbox(new sf::CircleShape(HITBOX_SHAPE)),
 	mScaleX(1),
 	mScaleY(1)
 {
 	setPosition(mWindow->getView().getSize().x / 2, mWindow->getView().getSize().y / 2);
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
-	sf::Mouse::setPosition(sf::Vector2i((int)getPosition().x, (int)getPosition().y));
+	//sf::Mouse::setPosition(mWindow->mapCoordsToPixel(getPosition()));
 	mPowerups[0] = new PowerupDisplay(POWER_DISPLAY, sf::Vector2f((float)mWindow->getSize().x * 2 / 5, 1000), 15.0f);
 	
 	//Adds a display of the first power that luddis has
@@ -102,6 +102,7 @@ void Luddis::tick(const sf::Time& deltaTime){
 		mLoseDust -= deltaTime.asSeconds();
 	}
 	mAnimation.tick(deltaTime);
+	changeScale();
 }
 
 void Luddis::draw(sf::RenderTarget& target, sf::RenderStates states) const{
@@ -111,13 +112,13 @@ void Luddis::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 
 sf::Vector2f Luddis::getVectorMouseToSprite() const{
 	sf::Vector2f playerPosition(getPosition());
-	sf::Vector2i terst = sf::Mouse::getPosition(*mWindow);
 	sf::Vector2f mousePosition(mWindow->mapPixelToCoords(sf::Mouse::getPosition(*mWindow)));
 	return mousePosition - playerPosition;
 }
 
 void Luddis::updateMovement(const sf::Time& deltaTime){
 	sf::Vector2f direction = getVectorMouseToSprite();
+	if (VectorMath::getVectorLengthSq(direction) == 0) return;
 	sf::Vector2f offset(VectorMath::normalizeVector(direction));
 	float moveX(offset.x*deltaTime.asSeconds()*MOVESPEED);
 	float moveY(offset.y*deltaTime.asSeconds()*MOVESPEED);
@@ -170,7 +171,7 @@ void Luddis::updateRotation(){
 	
 	sf::Vector2f direction = getVectorMouseToSprite();
 	//float rotation = std::atan2f(direction.x, -direction.y) * 180 / (float)M_PI;
-	float rotation = VectorMath::getAngle(sf::Vector2f(FRONTVECTOR), direction) * 180 / (float)M_PI;
+	float rotation = VectorMath::getAngle(FRONTVECTOR, direction) * 180 / (float)M_PI;
 	setRotation(rotation);
 
 	static bool isFlipped = false;
@@ -185,11 +186,11 @@ void Luddis::updateRotation(){
 }
 
 void Luddis::attack(){
-	sf::Vector2f direction = VectorMath::normalizeVector(getVectorMouseToSprite()) * PROJECTILE_SPEED;
-	sf::Vector2f muzzlePoint = getPosition() + direction * MUZZLEOFFSET / PROJECTILE_SPEED;
+	sf::Vector2f direction = VectorMath::rotateVector(FRONTVECTOR, getRotation());
+	sf::Vector2f muzzlePoint = getPosition() + direction * MUZZLEOFFSET;
 	mProjectileCooldown = PROJECTILE_RELOAD;
 	int randValue = std::rand() % PROJECTILE_FILENAME.max_size();
-	Projectile *proj = new Projectile(PROJECTILE_FILENAME[randValue], direction, muzzlePoint, PROJECTILE_TIMER, HAIR);
+	Projectile *proj = new Projectile(PROJECTILE_FILENAME[randValue], direction  * PROJECTILE_SPEED, muzzlePoint, PROJECTILE_TIMER, HAIR);
 	
 	EntityManager::getInstance().addEntity(proj);
 	CollisionManager::getInstance().addCollidable(proj);
@@ -207,7 +208,7 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 		&& mProjectileCooldown <= 0){
 		attack();
 		mAnimation.replaceAnimation(SHOT_ANIMATION);
-		mAnimation.getCurrAnimation().changeScale(mScaleX, mScaleY);
+		//setScale(mScaleX, mScaleY);
 	}
 	//Handle keyboard presses
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
@@ -241,7 +242,7 @@ void Luddis::collide(CollidableEntity *collidable){
 	}
 	if (collidable->getCollisionCategory() == BG_DAMAGE){
 		mAnimation.replaceAnimation(HIT_ANIMATION);
-		mAnimation.getCurrAnimation().changeScale(mScaleX, mScaleY);
+		//setScale(mScaleX, mScaleY);
 		if (mLoseDust < 0){
 			Inventory::getInstance().removeDust(1);
 			mLoseDust = 1.0f;
@@ -249,20 +250,20 @@ void Luddis::collide(CollidableEntity *collidable){
 	}
 	if (collidable->getCollisionCategory() == ENEMY) {
 		mAnimation.replaceAnimation(HIT_ANIMATION);
-		mAnimation.getCurrAnimation().changeScale(mScaleX, mScaleY);
+		//setScale(mScaleX, mScaleY);
 		if (mLoseDust < 0){
 			Inventory::getInstance().removeDust(1);
 			mLoseDust = 1.0f;
 		}
 	}
 	if (collidable->getCollisionCategory() == COLLECT){
-		changeScale();
+		
 	}
 	if (collidable->getCollisionCategory() == ENEMY_STUN){
 		if (mStunDuration <= 0){
 			mStunDuration = 1.0f;
 			mAnimation.replaceAnimation(HIT_ANIMATION);
-			mAnimation.getCurrAnimation().changeScale(mScaleX, mScaleY);
+			//setScale(mScaleX, mScaleY);
 		}
 	}
 }
@@ -270,26 +271,26 @@ void Luddis::collide(CollidableEntity *collidable){
 void Luddis::changeScale(){
 	int dust = Inventory::getInstance().getDust();
 	if (dust < 2){
-		mScaleX = 1;
-		mScaleY = 1;
+		mScaleX = 1.0f;
+		mScaleY = 1.0f;
 	}
-	if (dust < 4 && dust > 1){
-		mScaleX = 1.25;
-		mScaleY = 1.25;
+	else if (dust < 4 && dust > 1){
+		mScaleX = 1.25f;
+		mScaleY = 1.25f;
 	}
-	if (dust < 6 && dust > 3){
-		mScaleX = 1.5;
-		mScaleY = 1.5;
+	else if (dust < 6 && dust > 3){
+		mScaleX = 1.5f;
+		mScaleY = 1.5f;
 	}
-	if (dust < 8 && dust > 5){
-		mScaleX = 1.75;
-		mScaleY = 1.75;
+	else if (dust < 8 && dust > 5){
+		mScaleX = 1.75f;
+		mScaleY = 1.75f;
 	}
-	if (dust > 7){
-		mScaleX = 2;
-		mScaleY = 2;
+	else if (dust > 7){
+		mScaleX = 2.0f;
+		mScaleY = 2.0f;
 	}
-	mAnimation.getCurrAnimation().changeScale(mScaleY, mScaleY);
+	//setScale(mScaleY, mScaleY);
 }
 
 sf::FloatRect Luddis::getHitBox(){

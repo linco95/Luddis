@@ -5,6 +5,7 @@
 
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
+static const float ROTATIONSPEED = 1.f;
 
 //The max life time should be entered in milliseconds
 Projectile::Projectile(std::string textureFilename, sf::Vector2f direction, sf::Vector2f position, float maxLifeTimeMS, Projectile::Category collisionCategory):
@@ -16,10 +17,9 @@ Projectile::Projectile(std::string textureFilename, sf::Vector2f direction, sf::
 	mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
 	mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 {
-	float rotation = std::atan2f(direction.x, -direction.y) * 180 / (float)M_PI;
-	mSprite.setRotation(rotation);
+	mSprite.setRotation((float)(rand() % 360));
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
-	mSprite.setPosition(position);
+	setPosition(position);
 }
 
 Projectile::~Projectile(){
@@ -30,6 +30,7 @@ void Projectile::tick(const sf::Time& deltaTime){
 	mLifeTime -= deltaTime.asSeconds();
 	checkLifeTime();
 	updateMovement(deltaTime);
+	rotate(ROTATIONSPEED);
 }
 
 void Projectile::draw(sf::RenderTarget& target, sf::RenderStates states) const{
@@ -50,7 +51,7 @@ void Projectile::setActive(const bool& active){
 }
 
 void Projectile::updateMovement(const sf::Time& deltaTime){
-	mSprite.move(mDirection*deltaTime.asSeconds());
+	move(mDirection*deltaTime.asSeconds());
 }
 
 void Projectile::checkLifeTime(){
@@ -89,7 +90,7 @@ void Projectile::collide(CollidableEntity *collidable){
 }
 
 sf::FloatRect Projectile::getHitBox(){
-	return mSprite.getGlobalBounds();
+	return getTransform().transformRect(mSprite.getGlobalBounds());
 }
 
 void Projectile::setTexture(std::string filename){

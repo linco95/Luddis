@@ -7,9 +7,9 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-static const Animation ANIMATION_SWIM = Animation("resources/images/spritesheets/Grafik_silverfisk_SwimSprite_s1d5v2");
-static const Animation ANIMATION_HIT = Animation("resources/images/spritesheets/Grafik_silverfisk_DeathSprite_s1d5v2");
-static const Animation ANIMATION_DEAD = Animation("resources/images/spritesheets/Grafik_silverfisk_deadSprite_s1d5v2");
+static const std::string ANIMATION_SWIM = "resources/images/spritesheets/Grafik_silverfisk_SwimSprite_s1d5v2";
+static const std::string ANIMATION_HIT = "resources/images/spritesheets/Grafik_silverfisk_DeathSprite_s1d5v2";
+static const std::string ANIMATION_DEAD = "resources/images/spritesheets/Grafik_silverfisk_deadSprite_s1d5v2";
 
 static float SPEED = 80;
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
@@ -17,16 +17,19 @@ static const int DAMAGE = 10;
 static const int LIFE = 15;
 static const sf::Vector2f FRONTVECTOR(-1, 0);
 
-static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(55,17));
+static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(55, 17));
 
-Silverfish::Silverfish(sf::RenderWindow* window, const sf::Vector2f& position, const float& angle) :
+Silverfish::Silverfish(sf::RenderWindow* window, const sf::Vector2f& position, const float& angle, const float& activation, Transformable* aTarget) :
 mIsAlive(true),
-mIsActive(true),
+mIsActive(false),
 mSwimAway(false),
 mLife(LIFE),
+mActivate(activation),
 mWindow(window),
-mAnimation(Animation(ANIMATION_SWIM)),
-mHitbox(new sf::RectangleShape(HITBOX_SHAPE))
+mAnimation(ANIMATION_SWIM),
+mHitbox(new sf::RectangleShape(HITBOX_SHAPE)),
+mAlignment(ENEMY),
+mTarget(aTarget)
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	// Get a y-spawn position
@@ -36,11 +39,14 @@ mHitbox(new sf::RectangleShape(HITBOX_SHAPE))
 	setPosition(position);
 
 	sf::Vector2f dir;
-	dir = { 1, 1 };
+	dir = { 1, 0 };
 	dir = VectorMath::rotateVector(dir, angle);
 	mDirection = VectorMath::normalizeVector(dir);
 
 
+	if (mDirection.x > 0){
+		scale(sf::Vector2f(1, -1));
+	}
 
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
 
@@ -51,9 +57,17 @@ Silverfish::~Silverfish(){
 }
 
 void Silverfish::tick(const sf::Time& deltaTime){
+	if (mTarget->getPosition().x >= mActivate){
+		mIsActive = true;
+	}
+	if (!mIsActive) return;
 	updateMovement(deltaTime);
 	mAnimation.tick(deltaTime);
-	if (getPosition().y<(-mAnimation.getCurrAnimation().getSprite().getGlobalBounds().height / 2) || getPosition().y > mWindow->getView().getSize().y + mAnimation.getCurrAnimation().getSprite().getGlobalBounds().height / 2){
+	// TODO: Cleanup, enable fishes to be outside while spawning
+	if (getPosition().y<(
+		-mAnimation.getCurrAnimation().getSprite().getGlobalBounds().height / 2) ||
+		getPosition().y > mWindow->getView().getSize().y + mAnimation.getCurrAnimation().getSprite().getGlobalBounds().height / 2
+		){
 		mIsAlive = false;
 	}
 }
@@ -65,6 +79,7 @@ void Silverfish::updateMovement(const sf::Time& deltaTime){
 }
 
 void Silverfish::draw(sf::RenderTarget& target, sf::RenderStates states) const{
+	if (!mIsActive) return;
 	states.transform *= getTransform();
 	target.draw(mAnimation.getCurrAnimation(), states);
 }
@@ -86,7 +101,7 @@ Entity::RenderLayer Silverfish::getRenderLayer() const{
 }
 
 Silverfish::Category Silverfish::getCollisionCategory(){
-	return ENEMY;
+	return mAlignment;
 }
 
 Silverfish::Type Silverfish::getCollisionType(){
@@ -94,7 +109,7 @@ Silverfish::Type Silverfish::getCollisionType(){
 }
 
 void Silverfish::collide(CollidableEntity *collidable){
-	if (collidable->getCollisionCategory() == FRIEND || collidable->getCollisionCategory() == HAIR){
+	if (collidable->getCollisionCategory() == HAIR){
 		if (mSwimAway== false){
 		mLife -= 5;
 		if (mLife <= 0){
@@ -103,13 +118,19 @@ void Silverfish::collide(CollidableEntity *collidable){
 			mSwimAway = true;
 			mDirection = sf::Vector2f(0, -1);
 			SPEED = 120;
+			mAlignment = FRIEND;
 			}
 		}
 	}
 }
 
 sf::FloatRect Silverfish::getHitBox(){
-	return getTransform().transformRect(mAnimation.getCurrAnimation().getSprite().getGlobalBounds());
+	if (mIsActive){
+		return getTransform().transformRect(mAnimation.getCurrAnimation().getSprite().getGlobalBounds());
+	}
+	else {
+		return sf::FloatRect(-999, -999, 0, 0);
+	}
 }
 sf::Shape* Silverfish::getNarrowHitbox() const{
 	mHitbox->setPosition(getPosition());

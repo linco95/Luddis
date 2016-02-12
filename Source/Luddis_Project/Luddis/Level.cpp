@@ -46,8 +46,9 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		assert(itr->HasMember("x") && (*itr)["x"].IsInt());
 		assert(itr->HasMember("y") && (*itr)["y"].IsInt());
 		assert(itr->HasMember("angle") && (*itr)["angle"].IsDouble());
+		assert(itr->HasMember("activationpos") && (*itr)["activationpos"].IsInt());
 
-		Silverfish* fish = new Silverfish(mWindow, sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()), (float)(*itr)["angle"].GetDouble());
+		Silverfish* fish = new Silverfish(mWindow, sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()), (float)(*itr)["angle"].GetDouble(), (float)(*itr)["activationpos"].GetDouble(), mTarget);
 		em->addEntity(fish);
 		cm->addCollidable(fish);
 		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
@@ -105,8 +106,9 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		assert(itr->IsObject());
 		assert(itr->HasMember("x") && (*itr)["x"].IsInt());
 		assert(itr->HasMember("y") && (*itr)["y"].IsInt());
+		assert(itr->HasMember("activationpos") && (*itr)["activationpos"].IsInt());
 
-		BossDishCloth* boss = new BossDishCloth(mWindow, sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()));
+		BossDishCloth* boss = new BossDishCloth(mWindow, sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()), (float)(*itr)["activationpos"].GetDouble(), mTarget);
 		em->addEntity(boss);
 		cm->addCollidable(boss);
 		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
@@ -118,8 +120,9 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		assert(itr->IsObject());
 		assert(itr->HasMember("x") && (*itr)["x"].IsInt());
 		assert(itr->HasMember("y") && (*itr)["y"].IsInt());
+		assert(itr->HasMember("activationpos") && (*itr)["activationpos"].IsInt());
 
-		Spider* spider = new Spider(mWindow, sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()));
+		Spider* spider = new Spider(mWindow, sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()), (float)(*itr)["activationpos"].GetDouble(), mTarget);
 		em->addEntity(spider);
 		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
 	}

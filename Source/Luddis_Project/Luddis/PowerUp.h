@@ -1,19 +1,17 @@
-#ifndef INCLUDED_SILVERFISH
-#define INCLUDED_SILVERFISH
+#ifndef INCLUDED_POWERUP
+#define INCLUDED_POWERUP
 
 #include <string>
 
 #include "CollidableEntity.h"
-#include "AnimationQueue.h"
 #include <SFML/Window.hpp>
 #include <SFML/Audio/Sound.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
-
-class Silverfish : public CollidableEntity {
+class PowerUp : public CollidableEntity {
 public:
-	Silverfish(sf::RenderWindow* window, const sf::Vector2f& position, const float& angle, const float& activation, Transformable* aTarget);
-	~Silverfish();
+	PowerUp(std::string textureFilename, const sf::Vector2f& position);
+	~PowerUp();
 
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -22,24 +20,16 @@ public:
 	void setActive(const bool& active) override;
 	RenderLayer getRenderLayer() const override;
 	sf::FloatRect getHitBox() override;
-	sf::Shape* getNarrowHitbox() const override; 
+	sf::Shape* getNarrowHitbox() const override;
 private:
-	void updateMovement(const sf::Time& deltaTime);
-	sf::Transformable* mTarget;
 	bool mIsAlive;
 	bool mIsActive;
-	bool mSwimAway;
 	sf::Sprite mSprite;
 	sf::RenderWindow* mWindow;
-	sf::Vector2f mDirection;
 	Category getCollisionCategory() override;
 	Type getCollisionType() override;
 	void collide(CollidableEntity *collidable) override;
-	int mLife;
-	const float mActivate;
 	sf::Shape* mHitbox;
-	AnimationQueue mAnimation;
-	Category mAlignment;
 };
 
 #endif

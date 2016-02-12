@@ -1,6 +1,5 @@
 #include "Animation.h"
 #include "ResourceManager.h"
-//#include <SFML\System\Vector2.hpp>
 #include <cmath>
 #include "Utils.h"
 #include <rapidjson\document.h>
@@ -31,8 +30,8 @@ struct AnimationImp : public Drawable, public sf::Transformable {
 		mColumns = configDoc["Number_of_columns"].GetInt();
 		mFrameTime = sf::seconds((float)configDoc["Frame_time_seconds"].GetDouble());
 
-		mSpriteSheet = ResourceManager::getInstance().getTexture(aFilePathNoExtension + ".png");
-		mSprite.setTexture(mSpriteSheet);
+		mSpriteSheet = &ResourceManager::getInstance().getTexture(aFilePathNoExtension + ".png");
+		mSprite.setTexture(*mSpriteSheet);
 		mSprite.setTextureRect(IntRect(0, 0, mTileSize.x, mTileSize.y));
 		mSprite.setOrigin(Vector2f(mTileSize.x / 2.0f, mTileSize.y / 2.0f));
 	}
@@ -48,8 +47,8 @@ struct AnimationImp : public Drawable, public sf::Transformable {
 		mCurrTile(0, 0),
 		mHasLooped(false)
 	{ 
-		mSpriteSheet = ResourceManager::getInstance().getTexture(aFilePath);
-		mSprite.setTexture(mSpriteSheet);
+		mSpriteSheet = &ResourceManager::getInstance().getTexture(aFilePath);
+		mSprite.setTexture(*mSpriteSheet);
 		mSprite.setTextureRect(IntRect(0, 0, mTileSize.x, mTileSize.y));
 		mSprite.setOrigin(Vector2f(mTileSize.x / 2.0f, mTileSize.y / 2.0f));
 	}
@@ -75,9 +74,11 @@ struct AnimationImp : public Drawable, public sf::Transformable {
 	const Sprite& getSprite() const {
 		return mSprite;
 	}
-	void changeScale(float x, float y){
-		mSprite.setScale(x, y);
+	// Needs to be implemented in the actuan animation class, and where it should be used
+	Sprite& getSprite() {
+		return mSprite;
 	}
+
 	void stepAnimation(const int& aStep){
 		setFrame(mCurrSprite + aStep);
 	}
@@ -117,11 +118,11 @@ struct AnimationImp : public Drawable, public sf::Transformable {
 		mCurrentTime(aAnim.mCurrentTime),
 		mHasLooped(aAnim.mHasLooped)
 	{
-		mSprite.setTexture(mSpriteSheet);
+		mSprite.setTexture(*mSpriteSheet);
 	}
 
 	// Variables
-	Texture mSpriteSheet;
+	Texture* mSpriteSheet;
 	Vector2i mTileSize,
 			 mCurrTile;
 	Sprite mSprite;
@@ -175,8 +176,4 @@ Animation& Animation::operator=(const Animation& aAnim){
 	delete mAImp;
 	mAImp = new AnimationImp(*aAnim.mAImp);
 	return *this;
-}
-
-void Animation::changeScale(float x, float y){
-	mAImp->changeScale(x, y);
 }
