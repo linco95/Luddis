@@ -56,13 +56,13 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	mAnimation(ANIMATION_FILEPATH),
 	mColliding(false),
 	mPrevPos(0, 0),
-	mHitbox(new sf::CircleShape(HITBOX_SHAPE))
+	mHitbox(new sf::CircleShape(HITBOX_SHAPE)),
 	mScaleX(1),
 	mScaleY(1)
 {
 	setPosition(mWindow->getView().getSize().x / 2, mWindow->getView().getSize().y / 2);
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
-	sf::Mouse::setPosition(mWindow->mapCoordsToPixel(getPosition()));
+	//sf::Mouse::setPosition(mWindow->mapCoordsToPixel(getPosition()));
 	mPowerups[0] = new PowerupDisplay(POWER_DISPLAY, sf::Vector2f((float)mWindow->getSize().x * 2 / 5, 1000), 15.0f);
 	
 	//Adds a display of the first power that luddis has
@@ -112,7 +112,6 @@ void Luddis::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 
 sf::Vector2f Luddis::getVectorMouseToSprite() const{
 	sf::Vector2f playerPosition(getPosition());
-	sf::Vector2i terst = sf::Mouse::getPosition(*mWindow);
 	sf::Vector2f mousePosition(mWindow->mapPixelToCoords(sf::Mouse::getPosition(*mWindow)));
 	return mousePosition - playerPosition;
 }
@@ -175,7 +174,7 @@ void Luddis::updateRotation(){
 	float rotation = VectorMath::getAngle(FRONTVECTOR, direction) * 180 / (float)M_PI;
 	setRotation(rotation);
 
-	static bool isFlipped = false;
+	static bool isFlipped = true;
 	if (direction.x <= 0 && !isFlipped){
 		scale(sf::Vector2f(1, -1));
 		isFlipped = true;
@@ -187,11 +186,12 @@ void Luddis::updateRotation(){
 }
 
 void Luddis::attack(){
-	sf::Vector2f direction = VectorMath::normalizeVector(getVectorMouseToSprite()) * PROJECTILE_SPEED;
-	sf::Vector2f muzzlePoint = getPosition() + direction * MUZZLEOFFSET / PROJECTILE_SPEED;
+	//sf::Vector2f direction = VectorMath::normalizeVector(getVectorMouseToSprite()) * PROJECTILE_SPEED;
+	sf::Vector2f direction = VectorMath::normalizeVector(getTransform().transformPoint(FRONTVECTOR));
+	sf::Vector2f muzzlePoint = getPosition() + direction * MUZZLEOFFSET;
 	mProjectileCooldown = PROJECTILE_RELOAD;
 	int randValue = std::rand() % PROJECTILE_FILENAME.max_size();
-	Projectile *proj = new Projectile(PROJECTILE_FILENAME[randValue], direction, muzzlePoint, PROJECTILE_TIMER, HAIR);
+	Projectile *proj = new Projectile(PROJECTILE_FILENAME[randValue], direction  * PROJECTILE_SPEED, muzzlePoint, PROJECTILE_TIMER, HAIR);
 	
 	EntityManager::getInstance().addEntity(proj);
 	CollisionManager::getInstance().addCollidable(proj);

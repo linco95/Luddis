@@ -75,6 +75,11 @@ struct AnimationImp : public Drawable, public sf::Transformable {
 	const Sprite& getSprite() const {
 		return mSprite;
 	}
+	// Needs to be implemented in the actuan animation class, and where it should be used
+	Sprite& getSprite() {
+		return mSprite;
+	}
+	// replace with a non const getSprite
 	void changeScale(float x, float y){
 		mSprite.setScale(x, y);
 	}

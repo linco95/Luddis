@@ -1,22 +1,29 @@
 TODO
 
+Säpos hq is in nowhere!
+
 Writing Level class
 	- Loading obstacles narrow hitbox form config
 
 Make animationqueue use resourcemanager, to avoid copying the spritesheets/animations everytime an animation changes.
 
 Make sure luddis doesnt move use mouseposition when they are equal (zero vector does not give pleasant results)
-
+	- Make sure luddis loads in the correct position (rotation)
+	- Give luddis a direction vector, and use that to give him a default rotation, and maybe use it combined with prevpos, to do collision better?
 Implement a music queue for starting with an intro, and moving on to looping music
 
 Check that my math for checking gaps in SAT is correct / not redundant
+Align the collision check to the actual shape
 
-Do we really need separate classes for damm/chips
+Do we really need separate classes for dust/chips
 	
 Implementing states in gamemanager
 Maybe reading masks/maps by using sf::Image.getPixelPtr()
 
 ?? - 	Entity-component-system
+	- Skriva en lista med beteenden, och en lista med data som behövs, i Luddis
+	- Konvertera listan med data till primitiva datatyper (dubletter hanteras senare)
+	- 
 
 Generally assert pre-requirements (zeropointer etc). DbC
 
@@ -32,7 +39,7 @@ LOG
 26/1/16
 Started working on EventManager. Implementing Observerpattern.
 Went home
-Implemented states. Finished eventmanager. Moved bears luddis code from main, to the gamemanager. confirmed eventmanager works. Did some small fixes and comments around the code
+Implemented states. Finished eventmanager. Moved Björns luddis code from main, to the gamemanager. confirmed eventmanager works. Did some small fixes and comments around the code
 
 27/1/16
 Helped debugging projectile and entitymanager. Started working on Level. 
@@ -111,6 +118,7 @@ Got the idea that the collision is not working because the points on the shape i
 Projection sorting min wasnt working
 
 11/2/16
+added checks for zero-vectors in normaliaztion of vectors, and fixed places where we tried noramlizing zero-vecors
 opitimzing animationqueue
 optimized rotating by 90 (getting normal in narrow collision) by adding getNormal function that just return (-y, x)
 
