@@ -21,6 +21,7 @@
 #include "ScoreCounter.h"
 #include "GameStateLevel.h"
 #include "GameStatePaused.h"
+#include "ViewUtility.h"
 
 #include <iostream>
 
@@ -33,8 +34,8 @@ static const int HEIGHT = 1080;
 static const float DESIRED_ASPECTRATIO = (float)WIDTH / (float)HEIGHT;
 static const Color BGCOLOR = Color::Black;
 static const std::string TEXTURE_NAME = "Resources/Images/Grafik_Luddis120x80_s1d3v1.png";
-static const std::string TEXTURE_CHIPSCOUNTER = "Resources/Images/ChipsCounter.png";
-static const std::string TEXTURE_LUDDCOUNTER = "Resources/Images/LuddCounter.png";
+static const std::string TEXTURE_CHIPSCOUNTER = "Resources/Images/HUD_Chips_Icon.png";
+static const std::string TEXTURE_LUDDCOUNTER = "Resources/Images/HUD_Ludd_Icon.png";
 static const std::string FONT_NAME = "arial.ttf";
 static const bool VSYNCENABLED = true;
 
@@ -60,14 +61,14 @@ struct GameManagerImp : public EventObserver {
 	// Temporary function (might keep luddis init here). Most of this should be handled in the levelmanager/level class instead
 	void initializeEntities(){
 
-		mChipsCounter = new ScoreCounter(&mMainWindow, TEXTURE_CHIPSCOUNTER, sf::Vector2i(400, 50), ScoreCounter::ScoreType::CHIPS);
+		mChipsCounter = new ScoreCounter(&mMainWindow, TEXTURE_CHIPSCOUNTER, sf::Vector2f(WIDTH*0.4f, HEIGHT-60), ScoreCounter::ScoreType::CHIPS);
 		GUIManager::getInstance().addInterfaceElement(mChipsCounter);
 
 		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow);
 		EntityManager::getInstance().addEntity(mPlayer);
 		CollisionManager::getInstance().addCollidable(mPlayer);
 
-		mLuddCounter = new ScoreCounter(&mMainWindow, TEXTURE_LUDDCOUNTER, sf::Vector2i(550, 50), ScoreCounter::ScoreType::DUST);
+		mLuddCounter = new ScoreCounter(&mMainWindow, TEXTURE_LUDDCOUNTER, sf::Vector2f(WIDTH*0.6f, HEIGHT - 60), ScoreCounter::ScoreType::DUST);
 		GUIManager::getInstance().addInterfaceElement(mLuddCounter);
 
 		// Temporary splash screen
@@ -92,10 +93,8 @@ struct GameManagerImp : public EventObserver {
 		// Create the window
 		mMainWindow.create(VideoMode(WIDTH, HEIGHT), APPNAME, Style::Fullscreen);
 		mMainWindow.setVerticalSyncEnabled(VSYNCENABLED);
-		
-		// Set up view (Scale to screen size)
-		View view(FloatRect(0, 0, (float)WIDTH, (float)HEIGHT));
-		mMainWindow.setView(view);
+
+		mMainWindow.setView(ViewUtility::getViewSize());
 
 		// Set up icon
 		Image icon;
@@ -142,7 +141,6 @@ struct GameManagerImp : public EventObserver {
 		
 		mCurrentGameState = new GameStateLevel(&mMainWindow);
 
-		View view(FloatRect(0, 0, (float)WIDTH, (float)HEIGHT));
 		View mapView;
 		se->setMainVolume(100);
 		Clock gameClock;

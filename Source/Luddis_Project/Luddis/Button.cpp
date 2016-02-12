@@ -1,8 +1,9 @@
 #include "Button.h"
 #include "ResourceManager.h"
-#include <iostream>
 #include "EventManager.h"
-#include <vector>
+#include "ViewUtility.h"
+#include <iostream>
+#include <vector>	
 
 static const std::string DEFAULT_FONTTYPE = "resources/fonts/arial.ttf";
 static bool CLICKED = false;
@@ -100,7 +101,7 @@ void Button::updateInput(){
 void Button::update(const sf::Event &aEvent){
 	if (mIsActive){
 		//The viewport has to be changed here, since all EventObservers are iterated in the same vector.
-		sf::View GUIView(sf::FloatRect(0, 0, (float)1920, (float)1080));
+		sf::View GUIView(ViewUtility::getViewSize());
 		sf::View mapView = mWindow->getView();
 		mWindow->setView(GUIView);
 		static sf::Vector2f mousePos(0, 0);

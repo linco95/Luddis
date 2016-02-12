@@ -1,10 +1,11 @@
 #include "GameStatePaused.h"
+#include "ViewUtility.h"
 
 GameStatePaused::GameStatePaused(sf::RenderWindow* window, Menu::MenuType menuType) :
 mEM(&EntityManager::getInstance()),
 mGUIM(&GUIManager::getInstance()),
 mCM(&CollisionManager::getInstance()),
-mGUIView(sf::FloatRect(0, 0, (float)WIDTH, (float)HEIGHT)),
+mGUIView(ViewUtility::getViewSize()),
 mWindow(window),
 mMenu(window, menuType, this){
 

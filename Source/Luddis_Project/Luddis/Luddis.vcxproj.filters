@@ -243,6 +243,9 @@
     <ClInclude Include="Menu.h">
       <Filter>Header Files\Entities\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="ViewUtility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

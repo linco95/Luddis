@@ -166,6 +166,7 @@
     <ClInclude Include="TextBox.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="VectorMath.h" />
+    <ClInclude Include="ViewUtility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

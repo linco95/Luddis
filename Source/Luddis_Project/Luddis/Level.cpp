@@ -142,7 +142,6 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		mBackgroundImages.push_back(sprite);
 		increaseMapBounds(rect);
 	}
-
 }
 
 void Level::increaseMapBounds(sf::IntRect size){

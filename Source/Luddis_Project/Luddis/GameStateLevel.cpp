@@ -1,10 +1,11 @@
 #include "GameStateLevel.h"
+#include "ViewUtility.h"
 
 GameStateLevel::GameStateLevel(sf::RenderWindow* window) :
 mEM(&EntityManager::getInstance()),
 mGUIM(&GUIManager::getInstance()),
 mCM(&CollisionManager::getInstance()),
-mGUIView(sf::FloatRect(0, 0, (float)WIDTH, (float)HEIGHT)),
+mGUIView(ViewUtility::getViewSize()),
 mWindow(window){
 
 }
