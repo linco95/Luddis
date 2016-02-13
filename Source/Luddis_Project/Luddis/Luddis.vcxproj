@@ -118,6 +118,7 @@
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="ScoreGauge.cpp" />
     <ClCompile Include="Silverfish.cpp" />
     <ClCompile Include="SoundEngine.cpp" />
     <ClCompile Include="SoundManager.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="ScoreGauge.h" />
     <ClInclude Include="Silverfish.h" />
     <ClInclude Include="SoundEngine.h" />
     <ClInclude Include="SoundManager.h" />

@@ -18,7 +18,7 @@ public:
 	};
 
 	ScoreCounter(sf::RenderWindow* aWindow, std::string filename, sf::Vector2f screenPos, ScoreType type);
-	~ScoreCounter();
+	virtual ~ScoreCounter();
 
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

@@ -30,10 +30,12 @@ static const float PROJECTILE_LIFETIME = 2.5f;
 static const float PROJECTILE_SPEED = 300;
 static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(250, 250));
 
-BossDishCloth::BossDishCloth(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget) :
+BossDishCloth::BossDishCloth(sf::RenderWindow* window, const sf::Vector2f& position,
+	const float& activation, Transformable* aTarget, EntityManager* entityManager) :
 mIsAlive(true),
 mIsActive(false),
 mWindow(window),
+mEntityManager(entityManager),
 mShooting(false),
 mActivate(activation),
 mLife(MAX_LIFE),
@@ -59,7 +61,7 @@ void BossDishCloth::tick(const sf::Time& deltaTime){
 	if (!mIsActive) return;
 	if (mLife <= 0){
 		PowerUp* pow1 = new PowerUp(POWERUP1_FILEPATH, getPosition());
-		EntityManager::getInstance().addEntity(pow1);
+		mEntityManager->addEntity(pow1);
 		CollisionManager::getInstance().addCollidable(pow1);
 		mIsAlive = false;
 	}
@@ -155,7 +157,7 @@ void BossDishCloth::attack(){
 
 		vec = VectorMath::rotateVector(vec, 360 / (float)max);
 		Projectile* proj = new Projectile(PROJECTILE_FILEPATH, vec*PROJECTILE_SPEED, getPosition() + vec*PROJECTILE_SPEED / 3.0f, PROJECTILE_LIFETIME, ENEMY_STUN);
-		EntityManager::getInstance().addEntity(proj);
+		mEntityManager->addEntity(proj);
 		CollisionManager::getInstance().addCollidable(proj);
 	}
 }

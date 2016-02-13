@@ -12,20 +12,23 @@ public:
 
 	static Inventory& getInstance();
 
-	int getChips();
+	int getChips() const;
 	void setChips(int chips);
 	void changeChips(int chips);
 
-	int getDust();
+	int getDust() const;
 	void setDust(int dust);
 	void addDust(int dust);
-	void removeDust(int dust);
 
-	int getPowerUp();
+	int getMaxDust() const;
+	void setMaxDust(int maxDust);
+	void increaseMaxDust(int maxDust);
+
+	int getPowerUp() const;
 	void setPowerUp(int pow);
 	void changePowerUp(int pow);
 
-	int getEggs();
+	int getEggs() const;
 	void setEggs(int eggs);
 	void changeEggs(int eggs);
 
@@ -39,6 +42,7 @@ private:
 
 	int mChips;
 	int mDust;
+	int mMaxDust;
 	int mEggs;
 	int mPowerUp;
 };

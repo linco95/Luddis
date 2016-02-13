@@ -61,9 +61,6 @@
     <ClCompile Include="Projectile.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="ScoreCounter.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="Silverfish.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
@@ -92,25 +89,25 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TextBox.cpp">
-      <Filter>Source Files\Entities\GUI</Filter>
+      <Filter>Source Files\GUI</Filter>
     </ClCompile>
     <ClCompile Include="PowerupDisplay.cpp">
-      <Filter>Source Files\Entities\GUI</Filter>
+      <Filter>Source Files\GUI</Filter>
     </ClCompile>
     <ClCompile Include="Dialogue.cpp">
-      <Filter>Source Files\Entities\GUI</Filter>
+      <Filter>Source Files\GUI</Filter>
     </ClCompile>
     <ClCompile Include="Button.cpp">
-      <Filter>Source Files\Entities\GUI</Filter>
+      <Filter>Source Files\GUI</Filter>
     </ClCompile>
     <ClCompile Include="InterfaceElement.cpp">
-      <Filter>Source Files\Entities\GUI</Filter>
+      <Filter>Source Files\GUI</Filter>
     </ClCompile>
     <ClCompile Include="GUIManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
     <ClCompile Include="CharacterPortrait.cpp">
-      <Filter>Source Files\Entities\GUI</Filter>
+      <Filter>Source Files\GUI</Filter>
     </ClCompile>
     <ClCompile Include="GameStateLevel.cpp">
       <Filter>Source Files</Filter>
@@ -118,11 +115,17 @@
     <ClCompile Include="GameStatePaused.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoreCounter.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
     <ClCompile Include="PowerUp.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="Menu.cpp">
-      <Filter>Source Files\Entities\GUI</Filter>
+    <ClCompile Include="ScoreGauge.cpp">
+      <Filter>Source Files\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -186,9 +189,6 @@
     <ClInclude Include="Projectile.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="ScoreCounter.h">
-      <Filter>Header Files\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="Dust.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
@@ -214,25 +214,25 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Button.h">
-      <Filter>Header Files\Entities\GUI</Filter>
+      <Filter>Header Files\GUI</Filter>
     </ClInclude>
     <ClInclude Include="Dialogue.h">
-      <Filter>Header Files\Entities\GUI</Filter>
+      <Filter>Header Files\GUI</Filter>
     </ClInclude>
     <ClInclude Include="PowerupDisplay.h">
-      <Filter>Header Files\Entities\GUI</Filter>
+      <Filter>Header Files\GUI</Filter>
     </ClInclude>
     <ClInclude Include="TextBox.h">
-      <Filter>Header Files\Entities\GUI</Filter>
+      <Filter>Header Files\GUI</Filter>
     </ClInclude>
     <ClInclude Include="InterfaceElement.h">
-      <Filter>Header Files\Entities\GUI</Filter>
+      <Filter>Header Files\GUI</Filter>
     </ClInclude>
     <ClInclude Include="GUIManager.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
     <ClInclude Include="CharacterPortrait.h">
-      <Filter>Header Files\Entities\GUI</Filter>
+      <Filter>Header Files\GUI</Filter>
     </ClInclude>
     <ClInclude Include="GameState.h">
       <Filter>Header Files</Filter>
@@ -244,13 +244,19 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Menu.h">
-      <Filter>Header Files\Entities\GUI</Filter>
+      <Filter>Header Files\GUI</Filter>
     </ClInclude>
     <ClInclude Include="ViewUtility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PowerUp.h">
       <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreCounter.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreGauge.h">
+      <Filter>Header Files\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -275,10 +281,10 @@
     <Filter Include="Header Files\Entities">
       <UniqueIdentifier>{562db5d3-9fd4-4a6a-a85b-b8ca6086fe9c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Entities\GUI">
+    <Filter Include="Source Files\GUI">
       <UniqueIdentifier>{6ee98c1a-26c2-4f91-afc7-30602071b91b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Entities\GUI">
+    <Filter Include="Header Files\GUI">
       <UniqueIdentifier>{552173e4-367d-4e60-a497-9cde76ca1fcb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

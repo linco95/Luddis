@@ -9,13 +9,15 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <vector>
 
+class EntityManager;
+
 class Menu: public InterfaceElement, public EventObserver{
 public:
 	enum MenuType{
 		MAINMENU,
 		PAUSEMENU
 	};
-	Menu(sf::RenderWindow* window, MenuType menuType, GameState* gameState);
+	Menu(sf::RenderWindow* window, MenuType menuType, GameState* currentGameState, EntityManager* entityManager);
 	virtual ~Menu();
 
 	void tick(const sf::Time& deltaTime) override;
@@ -26,7 +28,7 @@ public:
 	void setActive(const bool& active) override;
 	void onClick(std::string) override;
 
-	void update(const sf::Event &aEvent) override;
+	void onEvent(const sf::Event &aEvent) override;
 
 private:
 	void initialize();
@@ -43,8 +45,9 @@ private:
 	sf::RectangleShape mBackground;
 	typedef std::vector<Button> ButtonVector;
 	ButtonVector mButtons;
+	EntityManager* mEntityManager;
 	sf::RenderWindow* mWindow;
-	GameState* mGameState;
+	GameState* mCurrentGameState;
 
 	bool mIsAlive;
 	bool mIsActive;

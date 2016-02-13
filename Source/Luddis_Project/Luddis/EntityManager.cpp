@@ -1,13 +1,10 @@
 #include "EntityManager.h"
 #include <SFML\Graphics.hpp>
 
-//Temp, shuld move this to a more appropriate function
-static const int WIDTH = 1920;
-static const int HEIGHT = 1080;
-
 // Constructor for the entity manager
 EntityManager::EntityManager():
 mEntities(){
+
 }
 
 // Destructor for the entity manager
@@ -16,12 +13,6 @@ EntityManager::~EntityManager(){
 		delete mEntities.back();
 		mEntities.pop_back();
 	}
-}
-
-//Fetch the singleton instance
-EntityManager& EntityManager::getInstance(){
-	static EntityManager eM;
-	return eM;
 }
 
 // Function to add entities to the manager (an entity pointer)

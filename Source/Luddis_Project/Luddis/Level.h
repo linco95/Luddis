@@ -9,11 +9,12 @@
 namespace sf{
 	class Music;
 }
+class EntityManager;
 
 class Level : public Entity {
 
 public:
-	Level();
+	Level(EntityManager* entityManager);
 	~Level();
 
 	void initializeLevel(sf::RenderWindow& aWindow, sf::Transformable* aTarget);
@@ -30,6 +31,7 @@ private:
 	void increaseMapBounds(sf::IntRect size);
 	void initializeEntities(sf::RenderWindow* window, const rapidjson::Document& configDoc);
 
+	EntityManager* mEntityManager;
 	sf::Transformable* mTarget;
 	sf::RenderWindow *mWindow;
 	typedef std::vector<sf::Sprite> SpriteVector;

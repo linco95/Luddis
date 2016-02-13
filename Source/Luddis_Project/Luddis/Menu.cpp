@@ -1,12 +1,14 @@
 #include "Menu.h"
 #include "GameStateLevel.h"
+#include "EntityManager.h"
 
 static const std::string MENUBUTTON_TEXTURE = "resources/images/menubutton.png";
 
-Menu::Menu(sf::RenderWindow* window, MenuType menuType, GameState* gameState) :
+Menu::Menu(sf::RenderWindow* window, MenuType menuType, GameState* currentGameState, EntityManager* entityManager) :
 mBackground(),
 mWindow(window),
-mGameState(gameState){
+mEntityManager(entityManager),
+mCurrentGameState(currentGameState){
 	initialize();
 	initializeButtons(menuType);
 }
@@ -75,7 +77,7 @@ void Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	}
 }
 
-void Menu::update(const sf::Event &aEvent){
+void Menu::onEvent(const sf::Event &aEvent){
 
 }
 
@@ -122,8 +124,8 @@ void Menu::buttonFuncLoadGame(){
 }
 
 void Menu::buttonFuncContinue(){
-	delete mGameState;
-	mGameState = new GameStateLevel(mWindow);
+	delete mCurrentGameState;
+	mCurrentGameState = new GameStateLevel(mWindow, mEntityManager, mCurrentGameState);
 }
 
 void Menu::buttonFuncSettings(){

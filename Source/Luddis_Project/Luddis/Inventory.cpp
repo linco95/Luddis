@@ -1,10 +1,13 @@
 #include "Inventory.h"
+#include <cmath>
+//#include <algorithm>
 
 Inventory::Inventory():
 mChips(0),
 mDust(0),
 mEggs(0),
-mPowerUp(0)
+mPowerUp(0),
+mMaxDust(15)
 {
 
 }
@@ -18,7 +21,7 @@ Inventory& Inventory::getInstance(){
 	return I;
 }
 
-int Inventory::getChips(){
+int Inventory::getChips() const{
 	return mChips;
 }
 
@@ -31,23 +34,33 @@ void Inventory::changeChips(int chips){
 }
 
 
-int Inventory::getDust(){
+int Inventory::getDust() const{
 	return mDust;
 }
 
 void Inventory::setDust(int dust){
 	mDust = dust;
+	mDust = std::min(mDust, mMaxDust);
 }
 
 void Inventory::addDust(int dust){
 	mDust += dust;
+	mDust = std::min(mDust, mMaxDust);
 }
 
-void Inventory::removeDust(int dust){
-	mDust -= dust;
+int Inventory::getMaxDust() const{
+	return mMaxDust;
 }
 
-int Inventory::getEggs(){
+void Inventory::setMaxDust(int maxDust){
+	mMaxDust = maxDust;
+}
+
+void Inventory::increaseMaxDust(int maxDust){
+	mMaxDust += maxDust;
+}
+
+int Inventory::getEggs() const{
 	return mEggs;
 }
 
@@ -59,7 +72,7 @@ void Inventory::changeEggs(int eggs){
 	mEggs += eggs;
 }
 
-int Inventory::getPowerUp(){
+int Inventory::getPowerUp() const{
 	return mPowerUp;
 }
 
