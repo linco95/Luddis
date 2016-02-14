@@ -9,7 +9,6 @@ class GameState: public EventObserver{
 public:
 	virtual void update(sf::Clock& clock) = 0;
 	virtual void render() = 0;
-
 	virtual void onEvent(const sf::Event &aEvent) = 0;
 };
 

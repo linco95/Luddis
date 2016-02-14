@@ -48,7 +48,7 @@ void ScoreGauge::updateGauge(){
 	if (mInventory->getMaxDust() != 0){
 		int maxDust = mInventory->getMaxDust();
 		int currentDust = mInventory->getDust();
-		int offset = maxDust / 3;
+		int offset = maxDust / 5;
 		int gaugeWidth = (int)((float)mGaugeRectSize.width * ((float)(currentDust+offset) / (float)(maxDust+offset)));
 		int gaugeHeight = mGaugeRectSize.height;
 		sf::IntRect gaugeRect(0, 0, gaugeWidth, gaugeHeight);

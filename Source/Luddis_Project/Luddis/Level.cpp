@@ -151,13 +151,13 @@ void Level::increaseMapBounds(sf::IntRect size){
 	mMapBounds.width += size.width;
 }
 
-void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget){
+void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget, std::string levelFilename){
 	//assert(aTarget != 0);
 
 	mTarget = aTarget;
 	mWindow = &aWindow;
 
-	std::string configText = LuddisUtilFuncs::loadJsonFile("resources/configs/levels/level01.json");
+	std::string configText = LuddisUtilFuncs::loadJsonFile(levelFilename);
 	rapidjson::Document configDoc;
 	configDoc.Parse(configText.c_str());
 	assert(configDoc.IsObject());

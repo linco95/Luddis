@@ -7,6 +7,8 @@ namespace sf{
 	class RenderWindow;
 }
 
+class GameState;
+
 class GameManager{
 public:
 	static GameManager& getInstance();
@@ -14,6 +16,7 @@ public:
 
 	void run();
 	void gameOver();
+	void setGameState(GameState* gameState);
 
 	GameManager(const GameManager&) = delete;
 	GameManager& operator=(const GameManager&) = delete;

@@ -1,21 +1,29 @@
 #include "GameStatePaused.h"
+#include "GameStateLevel.h"
 #include "ViewUtility.h"
 #include "EntityManager.h"
 #include "EventManager.h"
+#include "GameManager.h"
 
-GameStatePaused::GameStatePaused(sf::RenderWindow* window, Menu::MenuType menuType, EntityManager* entityManager, GameState* currentGameState) :
-mEM(entityManager),
+GameStatePaused::GameStatePaused(sf::RenderWindow* window, Menu::MenuType menuType, EntityManager* entityManager) :
+mEntityM(entityManager),
+mEventM(&EventManager::getInstance()),
 mGUIM(&GUIManager::getInstance()),
 mCM(&CollisionManager::getInstance()),
 mGUIView(ViewUtility::getViewSize()),
 mWindow(window),
-mMenu(window, menuType, this, mEM),
-mCurrentGameState(currentGameState){
-	EventManager::getInstance().attatch(this, sf::Event::EventType::KeyPressed);
+mMenu(window, Menu::PAUSEMENU, entityManager){
+	mEventM->attatch(this, sf::Event::EventType::KeyPressed);
 }
 
 GameStatePaused::~GameStatePaused(){
-	EventManager::getInstance().detatch(this, sf::Event::EventType::KeyPressed);
+	mEventM->detatch(this, sf::Event::EventType::KeyPressed);
+}
+
+void GameStatePaused::initialize(GameStateLevel* gameStateLevel){
+	mMenu.initialize(gameStateLevel);
+	mMenu.initializeButtons(Menu::PAUSEMENU);
+	mGameStateLevel = gameStateLevel;
 }
 
 void GameStatePaused::update(sf::Clock& clock){
@@ -30,7 +38,7 @@ void GameStatePaused::update(sf::Clock& clock){
 
 void GameStatePaused::render(){
 	//Draw objects
-	mEM->renderEntities(*mWindow);
+	mEntityM->renderEntities(*mWindow);
 	//Change the view when drawing GUI elements
 	mMapView = mWindow->getView();
 	mWindow->setView(mGUIView);
@@ -41,5 +49,13 @@ void GameStatePaused::render(){
 }
 
 void GameStatePaused::onEvent(const sf::Event &aEvent){
-
+	if (true){
+		switch (aEvent.type){
+		case (sf::Event::EventType::KeyPressed) :
+			if (aEvent.key.code == sf::Keyboard::Escape){
+			GameManager::getInstance().setGameState(mGameStateLevel);
+			}
+			break;
+		}
+	}
 }

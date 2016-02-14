@@ -17,7 +17,7 @@ public:
 	Level(EntityManager* entityManager);
 	~Level();
 
-	void initializeLevel(sf::RenderWindow& aWindow, sf::Transformable* aTarget);
+	void initializeLevel(sf::RenderWindow& aWindow, sf::Transformable* aTarget, std::string levelFilename);
 
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

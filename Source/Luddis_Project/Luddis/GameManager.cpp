@@ -40,6 +40,7 @@ static const std::string TEXTURE_LUDDCOUNTER = "Resources/Images/HUD_Ludd_Icon.p
 static const std::string TEXTURE_LUDDGAUGE_BG = "Resources/Images/LuddGaugeBackground.png";
 static const std::string TEXTURE_LUDDGAUGE_BAR = "Resources/Images/LuddGaugeBar.png";
 static const std::string FONT_NAME = "arial.ttf";
+static const std::string TEST_LEVEL = "Resources/Configs/Levels/Level01Entities.json";
 static const bool VSYNCENABLED = true;
 
 struct GameManagerImp : public EventObserver {
@@ -55,6 +56,10 @@ struct GameManagerImp : public EventObserver {
 
 	void gameOver(){
 		mMainWindow.close();
+	}
+
+	void setGameState(GameState* gameState){
+		mCurrentGameState = gameState;
 	}
 
 	// Temporary function (might keep luddis init here). Most of this should be handled in the levelmanager/level class instead
@@ -81,7 +86,7 @@ struct GameManagerImp : public EventObserver {
 		mMainWindow.display();
 		
 		mLevel = new Level(&mEntityManager);
-		mLevel->initializeLevel(mMainWindow, mPlayer);
+		mLevel->initializeLevel(mMainWindow, mPlayer, TEST_LEVEL);
 		mEntityManager.addEntity(mLevel);
 		mMainWindow.setMouseCursorVisible(true);
 	}
@@ -136,13 +141,18 @@ struct GameManagerImp : public EventObserver {
 		GUIManager* gm = &GUIManager::getInstance();
 		SoundEngine* se = &SoundEngine::getInstance();
 		
-		mCurrentGameState = new GameStateLevel(&mMainWindow, &mEntityManager, mCurrentGameState);
+		mGameStatePaused = new GameStatePaused(&mMainWindow, Menu::PAUSEMENU, &mEntityManager);
+		mGameStateLevel = new GameStateLevel(&mMainWindow, &mEntityManager);
+		mGameStateLevel->initialize(mGameStatePaused);
+		mGameStatePaused->initialize(mGameStateLevel);
+		mCurrentGameState = mGameStateLevel;
 
 		View mapView;
 		se->setMainVolume(100);
 		Clock gameClock;
 		while (mMainWindow.isOpen()){
-
+			//Ugly solution to a problem with each state reading input and responding to it,
+			//despite being "inactive"
 			// Handle Events       
 			handleEvents(mMainWindow);
 			
@@ -155,6 +165,9 @@ struct GameManagerImp : public EventObserver {
 			mMainWindow.display();
 		}
 	}
+
+	GameStateLevel* mGameStateLevel;
+	GameStatePaused* mGameStatePaused;
 
 	GameState* mCurrentGameState;
 	RenderWindow mMainWindow;
@@ -190,3 +203,8 @@ GameManager& GameManager::getInstance(){
 	static GameManager gm;
 	return gm;
 }
+
+void GameManager::setGameState(GameState* gameState){
+	mGMImp->setGameState(gameState);
+}
+
