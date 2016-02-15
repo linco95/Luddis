@@ -39,8 +39,9 @@ Obstacle::~Obstacle(){
 }
 
 void Obstacle::tick(const sf::Time& deltaTime){
-	
+	// Changing obstacle
 	if (mType == DAMAGE){
+		// Active obstacle (damaging)
 		if (mActive == true){
 			mActiveTime -= float(deltaTime.asSeconds());
 			if (mActiveTime <= 0){
@@ -50,6 +51,7 @@ void Obstacle::tick(const sf::Time& deltaTime){
 				mAnimation.setDefaultAnimation(ANIMATION_IDLE);
 			}
 		}
+		// Inactive
 		else if (mActive == false){
 			mIdleTime -= float(deltaTime.asSeconds());
 			if (mIdleTime <= 0){
@@ -61,6 +63,7 @@ void Obstacle::tick(const sf::Time& deltaTime){
 		}
 		mAnimation.tick(deltaTime);
 	}
+	// Solid obstacle
 	else {
 		return;
 	}
@@ -68,6 +71,7 @@ void Obstacle::tick(const sf::Time& deltaTime){
 
 void Obstacle::draw(sf::RenderTarget& target, sf::RenderStates states)const{
 	states.transform *= getTransform();
+	// TODO?: Support for animated solid obstacle is nonexistant
 	if (mType == SOLID)
 		target.draw(mSprite, states);
 	if (mType == DAMAGE)
