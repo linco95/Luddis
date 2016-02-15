@@ -20,7 +20,6 @@ public:
 	bool isAlive() const override;
 	bool isActive() const  override;
 	void setActive(const bool& active) override;
-	void updateText(const sf::Time& deltaTime);
 	void setText(std::string newTextString);
 	void onClick(std::string buttonFunc) override;
 private:
@@ -34,12 +33,14 @@ private:
 	sf::RenderWindow* mWindow;
 	GUIManager* mGUIManager;
 	EventManager* mEventManager;
+	bool mDrawContents;
 	bool mIsAlive;
 	bool mIsActive;
 	CharacterPortrait* mCharacterDisplay;
+	float mAnimationTimer;
 	int mButtonCount;
 	int mActivePage;
-	sf::Sprite mSprite;
+	sf::RectangleShape mBackground;
 	TextBox mHeader;
 	typedef std::vector<TextBox> TextBoxVector;
 	TextBoxVector mDialogueTexts;

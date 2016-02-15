@@ -1,6 +1,5 @@
 #include "Inventory.h"
 #include <cmath>
-//#include <algorithm>
 
 Inventory::Inventory():
 mChips(0),
@@ -39,14 +38,12 @@ int Inventory::getDust() const{
 }
 
 void Inventory::setDust(int dust){
-	mDust = dust;
-	mDust = std::min(mDust, mMaxDust);
+	mDust = std::min(mDust = dust, mMaxDust);
 	mDust = std::max(mDust, 0);
 }
 
 void Inventory::addDust(int dust){
-	mDust += dust;
-	mDust = std::min(mDust, mMaxDust);
+	mDust = std::min(mDust += dust, mMaxDust);
 	mDust = std::max(mDust, 0);
 }
 

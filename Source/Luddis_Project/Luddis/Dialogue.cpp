@@ -3,24 +3,38 @@
 #include "GUIManager.h"
 #include "Utils.h"
 #include <rapidjson/document.h>
+#include <cmath>
 #include <array>
 
-static const std::string DIALOGUE_TEXTURE = "Resources/Images/Parchment.png";
 static const std::array<std::string, 4> CONFIGMEMBERS = { "Character_filename", "Character_displayname", "Header", "Pages" };
-static sf::IntRect DEFAULT_RECT(30, 30, 400, 0);
+
+static const float ANIMATION_TIME = 1.5f;
+static const float RECT_WIDTH = 500;
+static const float RECT_HEIGHT = 400;
+static const int INDENT = 30;
+static sf::Vector2f DialogueBoxMaxSize(RECT_WIDTH, RECT_HEIGHT);
+static sf::IntRect DEFAULT_RECT(INDENT, INDENT, (int)RECT_WIDTH-INDENT*2, 0);
 
 Dialogue::Dialogue(const std::string& dialogueFile, sf::RenderWindow* window, GUIManager* guiManager, EventManager* eventManager, sf::Vector2f pos) :
 mButtonCount(0),
+mAnimationTimer(ANIMATION_TIME),
 mIsAlive(true),
 mIsActive(true),
+mDrawContents(false),
 mWindow(window),
 mGUIManager(guiManager),
 mEventManager(eventManager),
 mActivePage(0),
-mSprite(ResourceManager::getInstance().getTexture(DIALOGUE_TEXTURE)),
+mBackground(),
 mDialogueTexts(),
 mHeader(DEFAULT_RECT, "", 28){
 	setPosition(pos);
+	sf::Vector2f offset(0, -RECT_HEIGHT);
+	mBackground.setPosition(offset);
+	mHeader.setPosition(offset);
+	mBackground.setFillColor(sf::Color(150, 40, 170));
+	mBackground.setOutlineColor(sf::Color::Black);
+	mBackground.setOutlineThickness((float)INDENT / 2);
 	initialize(dialogueFile);
 }
 
@@ -40,10 +54,13 @@ void Dialogue::initialize(std::string dialogueFile){
 
 	std::string textureFilename = configDoc["Character_filename"].GetString();
 	std::string characterName = configDoc["Character_displayname"].GetString();
-	sf::Vector2f pos = getPosition();
+	
+	sf::Vector2f offset(0, -RECT_HEIGHT);
+	sf::Vector2f pos = getPosition() + offset;
 	
 	mCharacterDisplay = new CharacterPortrait(textureFilename, characterName, pos);
 	mGUIManager->addInterfaceElement(mCharacterDisplay);
+	mCharacterDisplay->setActive(false);
 
 	mHeader.setString(configDoc["Header"].GetString());
 	const rapidjson::Value& pages = configDoc["Pages"];
@@ -62,35 +79,47 @@ void Dialogue::initialize(std::string dialogueFile){
 			std::string buttonImage = buttonInfo["Button_image"].GetString();
 			assert(buttonInfo.HasMember("Button_func") && buttonInfo["Button_func"].IsString());
 			std::string buttonFunc = buttonInfo["Button_func"].GetString();
-			addButton(buttonImage, buttonText, buttonFunc, sf::Vector2f(80 + (float)i * 100, 300), (int)itr);
+			addButton(buttonImage, buttonText, buttonFunc,mBackground.getPosition() +  sf::Vector2f(80 + (float)i * 100, RECT_HEIGHT-(float)INDENT*2.0f), (int)itr);
 
 		}
 		TextBox textBox(DEFAULT_RECT, pages[itr]["Text"].GetString(), 24);
+		textBox.setPosition(offset);
 		mDialogueTexts.push_back(textBox);
 		if (itr == 0){
 			mDialogueTexts.back().move(0, 40);
 		}
 	}
-	for (ButtonVector::size_type i = 0; i < mButtons[0].size(); i++){
-		mButtons[0].at(i)->setActive(true);
-	}
 }
 
 void Dialogue::tick(const sf::Time& deltaTime){
-	
+	if (mAnimationTimer > 0){
+		mAnimationTimer -= deltaTime.asSeconds();
+		std::max(mAnimationTimer, 0.0f);
+		float height = RECT_HEIGHT*((ANIMATION_TIME - mAnimationTimer) / ANIMATION_TIME);
+		sf::Vector2f size(RECT_WIDTH, height);
+		sf::Vector2f position(0, -height);
+
+		mBackground.setSize(size);
+		mBackground.setPosition(position);
+	}
+	else if(!mDrawContents){
+		mDrawContents = true;
+		mCharacterDisplay->setActive(true);
+		for (ButtonVector::size_type i = 0; i < mButtons[0].size(); i++){
+			mButtons[0].at(i)->setActive(true);
+		}
+	}
 }
 
 void Dialogue::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	states.transform *= getTransform();
-	target.draw(mSprite, states);
-	target.draw(mDialogueTexts[mActivePage], states);
-	if (mActivePage == 0){
-		target.draw(mHeader, states);
+	target.draw(mBackground, states);
+	if (mDrawContents){
+		target.draw(mDialogueTexts[mActivePage], states);
+		if (mActivePage == 0){
+			target.draw(mHeader, states);
+		}
 	}
-}
-
-void Dialogue::updateText(const sf::Time& deltaTime){
-	
 }
 
 bool Dialogue::isAlive() const{

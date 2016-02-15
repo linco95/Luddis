@@ -29,7 +29,7 @@ void GameStateLevel::initialize(GameStatePaused* gameStateLevel){
 	mGameStatePaused = gameStateLevel;
 	mPowerupDisplays[0] = new PowerupDisplay(POWER_DISPLAY, sf::Vector2f((float)ViewUtility::VIEW_WIDTH*0.8f, (float)ViewUtility::VIEW_HEIGHT - 60), 15.0f);
 	mGUIM->addInterfaceElement(mPowerupDisplays[0]);
-	Dialogue* dialogue = new Dialogue(TEST_DIALOGUE, mWindow, mGUIM, &mEventM, sf::Vector2f(150, 150));
+	Dialogue* dialogue = new Dialogue(TEST_DIALOGUE, mWindow, mGUIM, &mEventM, sf::Vector2f((float)ViewUtility::VIEW_WIDTH/2, (float)ViewUtility::VIEW_HEIGHT-100));
 	mGUIM->addInterfaceElement(dialogue);
 }
 

@@ -14,8 +14,8 @@ mName(characterName, ResourceManager::getInstance().getFont(DEFAULT_FONT), DEFAU
 	float textOrigoX = mName.getGlobalBounds().width / 2;
 	float textOrigoY = mName.getGlobalBounds().height / 2;
 	mName.setOrigin(textOrigoX, textOrigoY);
-	mName.move(-40, 40);
-	mSprite.move(-40, 0);
+	mName.move(0, spriteOrigoY*1.5f);
+	move(spriteOrigoX*2.5f, -spriteOrigoY);
 }
 
 CharacterPortrait::~CharacterPortrait(){
