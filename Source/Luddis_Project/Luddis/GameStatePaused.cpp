@@ -5,19 +5,18 @@
 #include "EventManager.h"
 #include "GameManager.h"
 
-GameStatePaused::GameStatePaused(sf::RenderWindow* window, Menu::MenuType menuType, EntityManager* entityManager) :
+GameStatePaused::GameStatePaused(sf::RenderWindow* window, Menu::MenuType menuType, EntityManager* entityManager, GUIManager* guiManager) :
 mEntityM(entityManager),
-mEventM(&EventManager::getInstance()),
-mGUIM(&GUIManager::getInstance()),
-mCM(&CollisionManager::getInstance()),
+mEventM(),
+mGUIM(guiManager),
 mGUIView(ViewUtility::getViewSize()),
 mWindow(window),
-mMenu(window, Menu::PAUSEMENU, entityManager){
-	mEventM->attatch(this, sf::Event::EventType::KeyPressed);
+mMenu(window, &mEventM, Menu::PAUSEMENU, entityManager){
+	mEventM.attatch(this, sf::Event::EventType::KeyPressed);
 }
 
 GameStatePaused::~GameStatePaused(){
-	mEventM->detatch(this, sf::Event::EventType::KeyPressed);
+	mEventM.detatch(this, sf::Event::EventType::KeyPressed);
 }
 
 void GameStatePaused::initialize(GameStateLevel* gameStateLevel){
@@ -57,5 +56,12 @@ void GameStatePaused::onEvent(const sf::Event &aEvent){
 			}
 			break;
 		}
+	}
+}
+
+void GameStatePaused::handleEvents(){
+	sf::Event currEvent;
+	while (mWindow->pollEvent(currEvent)){
+		mEventM.notify(currEvent);
 	}
 }

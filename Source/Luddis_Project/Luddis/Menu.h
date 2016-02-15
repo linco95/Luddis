@@ -10,6 +10,7 @@
 #include <vector>
 
 class EntityManager;
+class EventManager;
 class GameStateLevel;
 
 class Menu: public InterfaceElement, public EventObserver{
@@ -18,7 +19,7 @@ public:
 		MAINMENU,
 		PAUSEMENU
 	};
-	Menu(sf::RenderWindow* window, MenuType menuType, EntityManager* entityManager);
+	Menu(sf::RenderWindow* window, EventManager* eventManager, MenuType menuType, EntityManager* entityManager);
 	virtual ~Menu();
 
 	void initialize(GameStateLevel* gameStateLevel);
@@ -48,6 +49,7 @@ private:
 	typedef std::vector<Button> ButtonVector;
 	ButtonVector mButtons;
 	EntityManager* mEntityManager;
+	EventManager* mEventManager;
 	GameStateLevel* mGameStateLevel;
 	sf::RenderWindow* mWindow;
 

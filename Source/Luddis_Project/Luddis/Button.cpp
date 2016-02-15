@@ -3,13 +3,15 @@
 #include "EventManager.h"
 #include "ViewUtility.h"
 #include <iostream>
-#include <vector>	
+#include <vector>
+#include "GUIManager.h"
 
 static const std::string DEFAULT_FONTTYPE = "resources/fonts/arial.ttf";
 static bool CLICKED = false;
 
-Button::Button(std::string graphicFilename, std::string buttonText, std::string buttonFunc, sf::RenderWindow* window, sf::Vector2f pos, InterfaceElement* owner) :
+Button::Button(std::string graphicFilename, std::string buttonText, std::string buttonFunc, sf::RenderWindow* window, EventManager* eventManager, sf::Vector2f pos, InterfaceElement* owner) :
 mWindow(window),
+mEventManager(eventManager),
 mIsAlive(true),
 mIsActive(false),
 mOwner(owner),
@@ -32,7 +34,7 @@ mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 	mButtonText.setColor(sf::Color::Black);
 	mButtonText.setOrigin(textRect.width / 2, textRect.height / 2);
 	mSprite.setOrigin((float)spriteRect.width / 2, (float)spriteRect.height / 2);
-	EventManager::getInstance().attatch(this, std::vector < sf::Event::EventType > { sf::Event::MouseButtonReleased, sf::Event::MouseButtonPressed, sf::Event::MouseMoved });
+	mEventManager->attatch(this, std::vector < sf::Event::EventType > { sf::Event::MouseButtonReleased, sf::Event::MouseButtonPressed, sf::Event::MouseMoved });
 
 #ifdef LUDDIS_DEBUG_DRAW_HITBOXES
 	mDebugCircle.setPointCount(6);
@@ -46,7 +48,7 @@ mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 }
 
 Button::~Button(){
-	EventManager::getInstance().detatch(this, std::vector < sf::Event::EventType > { sf::Event::MouseButtonReleased, sf::Event::MouseButtonPressed, sf::Event::MouseMoved});
+	mEventManager->detatch(this, std::vector < sf::Event::EventType > { sf::Event::MouseButtonReleased, sf::Event::MouseButtonPressed, sf::Event::MouseMoved});
 }
 
 void Button::tick(const sf::Time& deltaTime){

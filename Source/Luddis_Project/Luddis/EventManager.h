@@ -17,7 +17,7 @@ namespace sf{
 // Class that handles incoming events and notifies every observer which event was incoming.
 class EventManager : public EventSubject {
 public:
-	static EventManager& getInstance();
+	EventManager();
 	~EventManager();
 
 	// Function that adds an observer that listens for the types in types. Observer will get notified if any of the specific types are occuring. if
@@ -33,17 +33,12 @@ public:
 	// Detatch this observer from the specific type
 	void detatch(EventObserver *obs, const sf::Event::EventType &type) override;
 
-
-	EventManager& operator=(const EventManager&) = delete;
-	EventManager(const EventManager&) = delete;
-
 private:
 	typedef std::set<EventObserver*> ObserverSet;
 	typedef std::unordered_map<sf::Event::EventType, ObserverSet> EventToObservers;
 
 	EventToObservers mEventToObservers;
 
-	EventManager();
 };
 
 #endif
