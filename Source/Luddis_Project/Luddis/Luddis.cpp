@@ -258,6 +258,7 @@ void Luddis::collide(CollidableEntity *collidable){
 	}
 }
 
+// Change luddis' size depending on the amount of dust that the inventory has
 void Luddis::changeScale(){
 	int dust = Inventory::getInstance().getDust();
 	if (dust < 2){

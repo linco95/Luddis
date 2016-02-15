@@ -104,6 +104,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 	for (std::size_t i = 0; i < CONFIGMEMBERS.size(); i++){
 		assert(configDoc.HasMember(CONFIGMEMBERS[i].c_str()));
 	}
+	// Silverfishes
 	const rapidjson::Value& fishSpawns = configDoc["Silverfish_spawns"];
 	assert(fishSpawns.IsArray());
 	for (rapidjson::Value::ConstValueIterator itr = fishSpawns.Begin(); itr != fishSpawns.End(); itr++){
@@ -119,6 +120,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
 	}
 
+	// Obstacles
 	const rapidjson::Value& obstacleSpawns = configDoc["Obstacle_spawns"];
 	assert(obstacleSpawns.IsArray());
 	for (rapidjson::Value::ConstValueIterator itr = obstacleSpawns.Begin(); itr != obstacleSpawns.End(); itr++){
@@ -138,6 +140,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 	// Initialize eggs, chips and ludd from a map
 	readInitMap();
 
+	// The boss
 	const rapidjson::Value& bossSpawns = configDoc["Boss_spawns"];
 	assert(bossSpawns.IsArray());
 	for (rapidjson::Value::ConstValueIterator itr = bossSpawns.Begin(); itr != bossSpawns.End(); itr++){
@@ -152,6 +155,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
 	}
 
+	// The spider
 	const rapidjson::Value& spiderSpawns = configDoc["Spider_spawns"];
 	assert(spiderSpawns.IsArray());
 	for (rapidjson::Value::ConstValueIterator itr = spiderSpawns.Begin(); itr != spiderSpawns.End(); itr++){
@@ -165,6 +169,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
 	}
 
+	//The background
 	const rapidjson::Value& background = configDoc["Background"];
 	assert(background.IsObject());
 	const rapidjson::Value& segments = background["segments"];

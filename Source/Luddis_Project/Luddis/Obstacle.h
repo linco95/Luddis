@@ -42,7 +42,7 @@ private:
 	float mActiveTime;
 	float mIdleTime;
 
-	//AnimationQueue mAnimation;
+	AnimationQueue mAnimation;
 };
 
 #endif
