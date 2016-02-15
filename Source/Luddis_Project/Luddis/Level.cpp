@@ -10,7 +10,6 @@
 #include "Obstacle.h"
 #include "EntityManager.h"
 #include "CollisionManager.h"
-#include "Utils.h"
 #include <SFML\Audio.hpp>
 #include <array>
 using namespace sf;
@@ -157,7 +156,7 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget, s
 	mTarget = aTarget;
 	mWindow = &aWindow;
 
-	std::string configText = LuddisUtilFuncs::loadJsonFile(levelFilename);
+	std::string configText = ResourceManager::getInstance().loadJsonFile(levelFilename);
 	rapidjson::Document configDoc;
 	configDoc.Parse(configText.c_str());
 	assert(configDoc.IsObject());

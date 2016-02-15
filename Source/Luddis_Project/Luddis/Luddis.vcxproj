@@ -170,7 +170,6 @@
     <ClInclude Include="Spider.h" />
     <ClInclude Include="SpiderEgg.h" />
     <ClInclude Include="TextBox.h" />
-    <ClInclude Include="Utils.h" />
     <ClInclude Include="VectorMath.h" />
     <ClInclude Include="ViewUtility.h" />
   </ItemGroup>
