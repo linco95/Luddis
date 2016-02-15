@@ -5,6 +5,7 @@
 #include "CollisionManager.h"
 #include "VectorMath.h"
 #include <SFML\Graphics\Shape.hpp>
+#include "ResourceManager.h"
 
 //Different states depending on how damaged the boss is.
 //State 1
@@ -30,6 +31,17 @@ static const float PROJECTILE_LIFETIME = 2.5f;
 static const float PROJECTILE_SPEED = 300;
 static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(250, 250));
 
+void loadResources(){
+	//ResourceManager::getInstance().loadTexture(ANIMATION_IDLE + ".png");
+	ResourceManager::getInstance().loadTexture(SHOOTING_ANIMATION + ".png");
+	ResourceManager::getInstance().loadTexture(ANIMATION_IDLE_2 + ".png");
+	ResourceManager::getInstance().loadTexture(SHOOTING_ANIMATION_2 + ".png");
+	ResourceManager::getInstance().loadTexture(ANIMATION_IDLE_3 + ".png");
+	ResourceManager::getInstance().loadTexture(SHOOTING_ANIMATION_3 + ".png");
+	ResourceManager::getInstance().loadTexture(ANIMATION_IDLE_4 + ".png");
+	ResourceManager::getInstance().loadTexture(SHOOTING_ANIMATION_4 + ".png");
+}
+
 BossDishCloth::BossDishCloth(sf::RenderWindow* window, const sf::Vector2f& position,
 	const float& activation, Transformable* aTarget, EntityManager* entityManager) :
 mIsAlive(true),
@@ -45,6 +57,7 @@ mAnimation(Animation(ANIMATION_IDLE)),
 mHitbox(new sf::RectangleShape(HITBOX_SHAPE)),
 mTarget(aTarget)
 {
+	loadResources();
 	setPosition(position);
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
 
@@ -68,7 +81,6 @@ void BossDishCloth::tick(const sf::Time& deltaTime){
 	mAttackInterval -= deltaTime.asSeconds();
 	updateMovement(deltaTime);
 	mAnimation.tick(deltaTime);
-	//setScale((float)mLife / 100, (float)mLife / 100);
 	if (mAttackInterval <= 0){
 		attack();
 		mAttackInterval = ATTACK_INTERVAL;
@@ -112,7 +124,6 @@ void BossDishCloth::updateMovement(const sf::Time& deltaTime){
 	}
 	else{
 		if (!mShooting){
-			//Seem to cause a few frames of lagg
 			mShooting = true;
 			//For different states of damage (changes happen next shot if hit when shooting)
 			//State 1
@@ -178,7 +189,7 @@ void BossDishCloth::collide(CollidableEntity* collidable){
 	if (collidable->getCollisionCategory() == HAIR){
 		if (!mShooting){
 		mLife -= 15;
-		// For different states of damages (causes animation to "start over")
+		// For different states of damages
 		//State 1
 		if (mLife < 26){
 			int  frame = mAnimation.getCurrAnimation().getCurrentFrame();

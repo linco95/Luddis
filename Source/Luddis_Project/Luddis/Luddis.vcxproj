@@ -97,6 +97,7 @@
     <ClCompile Include="Dialogue.cpp" />
     <ClCompile Include="Dust.cpp" />
     <ClCompile Include="GameStateLevel.cpp" />
+    <ClCompile Include="GameStateMap.cpp" />
     <ClCompile Include="GameStatePaused.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="GUIManager.cpp" />
@@ -141,6 +142,7 @@
     <ClInclude Include="Dust.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameStateLevel.h" />
+    <ClInclude Include="GameStateMap.h" />
     <ClInclude Include="GameStatePaused.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="GUIManager.h" />

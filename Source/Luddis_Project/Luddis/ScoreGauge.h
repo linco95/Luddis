@@ -27,7 +27,7 @@ private:
 	sf::RenderWindow* mWindow;
 	Inventory* mInventory;
 	ResourceManager* mResourceManager;
-	sf::Sprite mBackground;
+	sf::Sprite mFrame;
 	sf::Sprite mGauge;
 	sf::IntRect mGaugeRectSize;
 

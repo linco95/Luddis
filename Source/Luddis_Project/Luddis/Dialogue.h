@@ -7,9 +7,11 @@
 #include "TextBox.h"
 #include "CharacterPortrait.h"
 
+class GUIManager;
+
 class Dialogue : public InterfaceElement{
 public:
-	Dialogue(const std::string& dialogueFile, sf::RenderWindow* window, sf::Vector2f pos);
+	Dialogue(const std::string& dialogueFile, sf::RenderWindow* window, GUIManager* guiManager, EventManager* eventManager, sf::Vector2f pos);
 	~Dialogue();
 
 	void tick(const sf::Time& deltaTime) override;
@@ -18,7 +20,6 @@ public:
 	bool isAlive() const override;
 	bool isActive() const  override;
 	void setActive(const bool& active) override;
-	void updateText(const sf::Time& deltaTime);
 	void setText(std::string newTextString);
 	void onClick(std::string buttonFunc) override;
 private:
@@ -30,12 +31,16 @@ private:
 	void closeButton();
 	
 	sf::RenderWindow* mWindow;
+	GUIManager* mGUIManager;
+	EventManager* mEventManager;
+	bool mDrawContents;
 	bool mIsAlive;
 	bool mIsActive;
 	CharacterPortrait* mCharacterDisplay;
+	float mAnimationTimer;
 	int mButtonCount;
 	int mActivePage;
-	sf::Sprite mSprite;
+	sf::RectangleShape mBackground;
 	TextBox mHeader;
 	typedef std::vector<TextBox> TextBoxVector;
 	TextBoxVector mDialogueTexts;

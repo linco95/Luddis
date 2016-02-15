@@ -10,11 +10,6 @@ GUIManager::~GUIManager(){
 	clearInterfaceElements();
 }
 
-GUIManager& GUIManager::getInstance(){
-	static GUIManager gm;
-	return gm;
-}
-
 void GUIManager::addInterfaceElement(InterfaceElement* ie){
 	mElements.push_back(ie);
 }

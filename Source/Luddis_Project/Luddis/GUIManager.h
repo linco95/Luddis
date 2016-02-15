@@ -7,18 +7,14 @@
 
 class GUIManager{
 public:
+	GUIManager();
 	~GUIManager();
-	GUIManager(GUIManager&) = delete;
-	GUIManager& operator=(GUIManager&) = delete;
-
-	static GUIManager& getInstance();
 
 	void addInterfaceElement(InterfaceElement* ie);
 	void removeObsoleteElements();
 	void renderElements(sf::RenderWindow& window);
 	void updateElements(const sf::Time& deltaTime);
 private:
-	GUIManager();
 	void clearInterfaceElements();
 
 	typedef std::vector<InterfaceElement*> InterfaceElementVector;

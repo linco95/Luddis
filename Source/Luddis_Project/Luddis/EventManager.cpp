@@ -50,10 +50,3 @@ void EventManager::detatch(EventObserver *obs, const Event::EventType &type){
 	mEventToObservers[type].erase(obs);
 }
 #pragma endregion Functions related to the observer pattern
-
-
-
-EventManager& EventManager::getInstance(){
-	static EventManager em;
-	return em;
-}

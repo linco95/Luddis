@@ -17,17 +17,11 @@
 
 static const std::string ANIMATION_FILEPATH = "resources/images/spritesheets/Luddis_ walkcykle";
 //static const Animation ANIMATION_FILEPATH = Animation("resources/images/spritesheets/Sprite_Debug_480x205");
-
-static const std::string TEST_DIALOGUE = "Resources/Configs/Dialogue/Example_Dialogue.json";
-
 static const std::string HIT_ANIMATION = "resources/images/spritesheets/Grafik_Luddis_hit_sprite_s2d2v1";
 static const std::string SHOT_ANIMATION = "resources/images/spritesheets/Grafik_Luddis shot120x90treframes_s2d3v1";
 static const std::string SOUND_FILENAME1 = "Resources/Audio/Skott_Blås_Små_01.wav";
 static const std::string SOUND_FILENAME2 = "Resources/Audio/Skott_Blås_Små_02.wav";
 static const std::string SOUND_FILENAME3 = "Resources/Audio/Skott_Blås_Små_03.wav";
-
-static const std::string POWER_DISPLAY = "Resources/Images/PowerButton.png";
-static const std::string BUTTON_TEXTURE = "Resources/Images/Button.png";
 
 //This should be dynamic later to determine what texture to use for projectiles
 static const std::array<std::string, 3> PROJECTILE_FILENAME = { "Resources/Images/Grafik_Attack 1_35x35_s1d3v1.png",
@@ -59,17 +53,15 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window, EntityMana
 	mPrevPos(0, 0),
 	mHitbox(new sf::CircleShape(HITBOX_SHAPE)),
 	mScaleX(1),
-	mScaleY(1)
+	mScaleY(1),
+	mIsFlipped(false)
 {
 	setPosition(mWindow->getView().getSize().x / 2, mWindow->getView().getSize().y / 2);
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
 	//sf::Mouse::setPosition(mWindow->mapCoordsToPixel(getPosition()));
 	
 	//Adds a display of the first power that luddis has. Some different class might want to handle this
-	mPowerups[0] = new PowerupDisplay(POWER_DISPLAY, sf::Vector2f((float)ViewUtility::VIEW_WIDTH*0.8f, (float)ViewUtility::VIEW_HEIGHT-60), 15.0f);
-	GUIManager::getInstance().addInterfaceElement(mPowerups[0]);
-	Dialogue* dialogue = new Dialogue(TEST_DIALOGUE, mWindow, sf::Vector2f(150, 150));
-	GUIManager::getInstance().addInterfaceElement(dialogue);
+	
 }
 
 Luddis::~Luddis(){
@@ -176,14 +168,13 @@ void Luddis::updateRotation(){
 	float rotation = VectorMath::getAngle(FRONTVECTOR, direction) * 180 / (float)M_PI;
 	setRotation(rotation);
 
-	static bool isFlipped = false;
-	if (direction.x <= 0 && !isFlipped){
+	if (direction.x <= 0 && !mIsFlipped){
 		scale(sf::Vector2f(1, -1));
-		isFlipped = true;
+		mIsFlipped = true;
 	}
-	else if (direction.x > 0 && isFlipped){
+	else if (direction.x > 0 && mIsFlipped){
 		scale(sf::Vector2f(1, -1));
-		isFlipped = false;
+		mIsFlipped = false;
 	}
 }
 
@@ -244,7 +235,6 @@ void Luddis::collide(CollidableEntity *collidable){
 	}
 	if (collidable->getCollisionCategory() == BG_DAMAGE){
 		mAnimation.replaceAnimation(HIT_ANIMATION);
-		//setScale(mScaleX, mScaleY);
 		if (mLoseDust < 0){
 			Inventory::getInstance().addDust(-1);
 			mLoseDust = 1.0f;
@@ -252,7 +242,6 @@ void Luddis::collide(CollidableEntity *collidable){
 	}
 	if (collidable->getCollisionCategory() == ENEMY) {
 		mAnimation.replaceAnimation(HIT_ANIMATION);
-		//setScale(mScaleX, mScaleY);
 		if (mLoseDust < 0){
 			Inventory::getInstance().addDust(-1);
 			mLoseDust = 1.0f;
@@ -265,7 +254,6 @@ void Luddis::collide(CollidableEntity *collidable){
 		if (mStunDuration <= 0){
 			mStunDuration = 1.0f;
 			mAnimation.replaceAnimation(HIT_ANIMATION);
-			//setScale(mScaleX, mScaleY);
 		}
 	}
 }
@@ -292,7 +280,10 @@ void Luddis::changeScale(){
 		mScaleX = 2.0f;
 		mScaleY = 2.0f;
 	}
-	//setScale(mScaleY, mScaleY);
+	if (mIsFlipped == false)
+		setScale(mScaleY, mScaleY);
+	if (mIsFlipped == true)
+		setScale(mScaleY, -mScaleY);
 }
 
 sf::FloatRect Luddis::getHitBox(){
