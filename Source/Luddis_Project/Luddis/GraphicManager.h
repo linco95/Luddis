@@ -13,7 +13,7 @@ public:
 
 	//Texture related functions
 	sf::Texture& getTexture(std::string filename);
-	void loadTexture(std::string filename, sf::IntRect& rect);
+	void loadTexture(std::string filename, sf::IntRect& rect = sf::IntRect());
 	void clearTexture(std::string filename);
 	void clearAllTextures();
 
