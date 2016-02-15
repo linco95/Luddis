@@ -8,6 +8,7 @@
 #include "VectorMath.h"
 #include "Projectile.h"
 #include "Dialogue.h"
+#include "ViewUtility.h"
 #include <SFML/System.hpp>
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -25,7 +26,7 @@ static const std::string SOUND_FILENAME1 = "Resources/Audio/Skott_Blås_Små_01.wa
 static const std::string SOUND_FILENAME2 = "Resources/Audio/Skott_Blås_Små_02.wav";
 static const std::string SOUND_FILENAME3 = "Resources/Audio/Skott_Blås_Små_03.wav";
 
-static const std::string POWER_DISPLAY = "Resources/Images/PowerDisplay.png";
+static const std::string POWER_DISPLAY = "Resources/Images/PowerButton.png";
 static const std::string BUTTON_TEXTURE = "Resources/Images/Button.png";
 
 //This should be dynamic later to determine what texture to use for projectiles
@@ -45,14 +46,14 @@ static const sf::Vector2f FRONTVECTOR(1, 0);
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(35, 8);
 
-Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) : 
+Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window, EntityManager* entityManager) :
 	mIsAlive(true), 
 	mIsActive(true),
 	mWindow(window), 
 	mProjectileCooldown(0), 
 	mStunDuration(0),
 	mLoseDust(1),
-	// Magic constants below are just temporary, until the file manager is created and implemented with the animation
+	mEntityManager(entityManager),
 	mAnimation(ANIMATION_FILEPATH),
 	mColliding(false),
 	mPrevPos(0, 0),
@@ -63,9 +64,9 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window) :
 	setPosition(mWindow->getView().getSize().x / 2, mWindow->getView().getSize().y / 2);
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
 	//sf::Mouse::setPosition(mWindow->mapCoordsToPixel(getPosition()));
-	mPowerups[0] = new PowerupDisplay(POWER_DISPLAY, sf::Vector2f((float)mWindow->getSize().x * 2 / 5, 1000), 15.0f);
 	
-	//Adds a display of the first power that luddis has
+	//Adds a display of the first power that luddis has. Some different class might want to handle this
+	mPowerups[0] = new PowerupDisplay(POWER_DISPLAY, sf::Vector2f((float)ViewUtility::VIEW_WIDTH*0.8f, (float)ViewUtility::VIEW_HEIGHT-60), 15.0f);
 	GUIManager::getInstance().addInterfaceElement(mPowerups[0]);
 	Dialogue* dialogue = new Dialogue(TEST_DIALOGUE, mWindow, sf::Vector2f(150, 150));
 	GUIManager::getInstance().addInterfaceElement(dialogue);
@@ -192,7 +193,7 @@ void Luddis::attack(){
 	int randValue = std::rand() % PROJECTILE_FILENAME.max_size();
 	Projectile *proj = new Projectile(PROJECTILE_FILENAME[randValue], direction  * PROJECTILE_SPEED, muzzlePoint, PROJECTILE_TIMER, HAIR);
 	
-	EntityManager::getInstance().addEntity(proj);
+	mEntityManager->addEntity(proj);
 	CollisionManager::getInstance().addCollidable(proj);
 	// Pull out constant variable
 	SoundEngine::getInstance().playSound("resources/audio/Luddis_skott_16bit.wav");
@@ -244,7 +245,7 @@ void Luddis::collide(CollidableEntity *collidable){
 		mAnimation.replaceAnimation(HIT_ANIMATION);
 		//setScale(mScaleX, mScaleY);
 		if (mLoseDust < 0){
-			Inventory::getInstance().removeDust(1);
+			Inventory::getInstance().addDust(-1);
 			mLoseDust = 1.0f;
 		}
 	}
@@ -252,7 +253,7 @@ void Luddis::collide(CollidableEntity *collidable){
 		mAnimation.replaceAnimation(HIT_ANIMATION);
 		//setScale(mScaleX, mScaleY);
 		if (mLoseDust < 0){
-			Inventory::getInstance().removeDust(1);
+			Inventory::getInstance().addDust(-1);
 			mLoseDust = 1.0f;
 		}
 	}

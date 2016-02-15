@@ -32,7 +32,7 @@ void EventManager::notify(const sf::Event& aEvent) const{
 	if (mEventToObservers.find(aEvent.type) != mEventToObservers.end()){
 		const ObserverSet& observers = mEventToObservers.at(aEvent.type);
 		for (auto o : observers){
-			o->update(aEvent);
+			o->onEvent(aEvent);
 		}
 	}
 	

@@ -1,21 +1,22 @@
-#ifndef _INCLUDED_GAMESTATELEVEL_
-#define _INCLUDED_GAMESTATELEVEL_
+#ifndef _INCLUDED_GAMESTATEPAUSED_
+#define _INCLUDED_GAMESTATEPAUSED_
 
 #include "GameState.h"
 #include "GUIManager.h"
 #include "CollisionManager.h"
+#include "Menu.h"
 
 class EntityManager;
 class EventManager;
-class GameStatePaused;
+class GameStateLevel;
 
-class GameStateLevel : public GameState{
+class GameStatePaused : public GameState{
 public:
 	//TODO: have each state manage their own EntityManager, instead of the GameManager
-	GameStateLevel(sf::RenderWindow* window, EntityManager* entityManager);
-	~GameStateLevel();
+	GameStatePaused(sf::RenderWindow* window, Menu::MenuType menuType, EntityManager* entityManager);
+	virtual ~GameStatePaused();
 
-	void initialize(GameStatePaused* gameStatePaused);
+	void initialize(GameStateLevel* gameStateLevel);
 
 	void update(sf::Clock& clock) override;
 	void render() override;
@@ -26,10 +27,11 @@ private:
 	GUIManager* mGUIM;
 	CollisionManager* mCM;
 	EventManager* mEventM;
-	GameStatePaused* mGameStatePaused;
+	GameStateLevel* mGameStateLevel;
 	sf::View mGUIView;
 	sf::View mMapView;
 	sf::RenderWindow* mWindow;
+	Menu mMenu;
 };
 
-#endif // !_INCLUDED_GAMESTATELEVEL_
+#endif // !_INCLUDED_GAMESTATEPAUSED_

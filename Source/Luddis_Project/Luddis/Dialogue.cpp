@@ -59,7 +59,9 @@ void Dialogue::initialize(std::string dialogueFile){
 			std::string buttonText = buttonInfo["Button_text"].GetString();
 			assert(buttonInfo.HasMember("Button_image") && buttonInfo["Button_image"].IsString());
 			std::string buttonImage = buttonInfo["Button_image"].GetString();
-			addButton(buttonInfo["Button_image"].GetString(), buttonInfo["Button_text"].GetString(), sf::Vector2f(80 + (float)i * 100, 300), (int)itr);
+			assert(buttonInfo.HasMember("Button_func") && buttonInfo["Button_func"].IsString());
+			std::string buttonFunc = buttonInfo["Button_func"].GetString();
+			addButton(buttonImage, buttonText, buttonFunc, sf::Vector2f(80 + (float)i * 100, 300), (int)itr);
 
 		}
 		TextBox textBox(DEFAULT_RECT, pages[itr]["Text"].GetString(), 24);
@@ -106,8 +108,8 @@ Dialogue::RenderLayer Dialogue::getRenderLayer() const{
 	return BACKGROUND;
 }
 
-void Dialogue::addButton(std::string buttonFile, std::string buttonText, sf::Vector2f pos, int index){
-	Button* button = new Button(buttonFile, buttonText, mWindow, pos + getPosition(), this);
+void Dialogue::addButton(std::string buttonFile, std::string buttonText, std::string buttonFunc, sf::Vector2f pos, int index){
+	Button* button = new Button(buttonFile, buttonText, buttonFunc, mWindow, pos + getPosition(), this);
 	mButtons[index].push_back(button);
 	GUIManager::getInstance().addInterfaceElement(button);
 }
@@ -141,18 +143,18 @@ void Dialogue::previousButton(){
 	}
 }
 
-void Dialogue::okButton(){
+void Dialogue::closeButton(){
 	mIsAlive = false;
 }
 
-void Dialogue::onClick(std::string buttonType){
-	if (buttonType == "Next"){
+void Dialogue::onClick(std::string buttonFunc){
+	if (buttonFunc == "Next"){
 		nextButton();
 	}
-	else if (buttonType == "Prev"){
+	else if (buttonFunc == "Previous"){
 		previousButton();
 	}
-	else if (buttonType == "Ok"){
-		okButton();
+	else if (buttonFunc == "Close"){
+		closeButton();
 	}
 }

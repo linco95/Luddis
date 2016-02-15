@@ -9,9 +9,11 @@
 #include "PowerupDisplay.h"
 #include <SFML/Audio/Sound.hpp>
 
+class EntityManager;
+
 class Luddis : public CollidableEntity{
 public:
-	Luddis(std::string textureFilename, sf::RenderWindow* window);
+	Luddis(std::string textureFilename, sf::RenderWindow* windowm, EntityManager* entityManager);
 	~Luddis();
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -34,6 +36,7 @@ private:
 	void changeScale();
 
 	AnimationQueue mAnimation;
+	EntityManager* mEntityManager;
 	sf::RenderWindow* mWindow;
 	float mProjectileCooldown;
 	float mStunDuration;

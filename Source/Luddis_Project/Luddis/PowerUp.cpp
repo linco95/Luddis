@@ -67,7 +67,7 @@ PowerUp::Type PowerUp::getCollisionType(){
 void PowerUp::collide(CollidableEntity *collidable){
 	if (collidable->getCollisionCategory() == FRIEND){
 		mIsAlive = false;
-		Inventory::getInstance().changeChips(1);
+		Inventory::getInstance().changePowerUp(1);
 	}
 }
 

@@ -3,6 +3,7 @@
 
 #include "InterfaceElement.h"
 #include "Animation.h"
+#include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
 
 namespace sf{
@@ -16,8 +17,8 @@ public:
 		DUST
 	};
 
-	ScoreCounter(sf::RenderWindow* aWindow, std::string filename, sf::Vector2i screenPos, ScoreType type);
-	~ScoreCounter();
+	ScoreCounter(sf::RenderWindow* aWindow, std::string filename, sf::Vector2f screenPos, ScoreType type);
+	virtual ~ScoreCounter();
 
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -31,8 +32,8 @@ private:
 	bool mAlive;
 	bool mIsActive;
 	sf::RenderWindow* mWindow;
-	sf::Vector2i mPosition;
-	Animation mAnimation;
+	sf::Vector2f mPosition;
+	sf::Sprite mSprite;
 	sf::Text mCounter;
 	int mScore;
 	ScoreType mType;

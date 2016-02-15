@@ -97,7 +97,8 @@
     <ClCompile Include="Dialogue.cpp" />
     <ClCompile Include="Dust.cpp" />
     <ClCompile Include="GameStateLevel.cpp" />
-    <ClCompile Include="PauseMenu.cpp" />
+    <ClCompile Include="GameStatePaused.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="GUIManager.cpp" />
     <ClCompile Include="InterfaceElement.cpp" />
     <ClCompile Include="Inventory.cpp" />
@@ -117,6 +118,7 @@
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="ScoreGauge.cpp" />
     <ClCompile Include="Silverfish.cpp" />
     <ClCompile Include="SoundEngine.cpp" />
     <ClCompile Include="SoundManager.cpp" />
@@ -139,7 +141,8 @@
     <ClInclude Include="Dust.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameStateLevel.h" />
-    <ClInclude Include="PauseMenu.h" />
+    <ClInclude Include="GameStatePaused.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="GUIManager.h" />
     <ClInclude Include="InterfaceElement.h" />
     <ClInclude Include="Inventory.h" />
@@ -158,6 +161,7 @@
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="ScoreGauge.h" />
     <ClInclude Include="Silverfish.h" />
     <ClInclude Include="SoundEngine.h" />
     <ClInclude Include="SoundManager.h" />
@@ -166,6 +170,7 @@
     <ClInclude Include="TextBox.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="VectorMath.h" />
+    <ClInclude Include="ViewUtility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -21,7 +21,7 @@ public:
 	virtual bool isAlive() const = 0;
 	virtual bool isActive() const = 0;
 	virtual void setActive(const bool& active) = 0;
-	virtual void onClick(std::string buttonType){}
+	virtual void onClick(std::string buttonFunc){}
 };
 
 #endif // !_INCLUDEDINTERFACE_ELEMENT_

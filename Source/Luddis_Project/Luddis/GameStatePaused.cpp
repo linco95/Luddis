@@ -1,66 +1,59 @@
-#include "GameStateLevel.h"
 #include "GameStatePaused.h"
+#include "GameStateLevel.h"
 #include "ViewUtility.h"
 #include "EntityManager.h"
 #include "EventManager.h"
 #include "GameManager.h"
 
-GameStateLevel::GameStateLevel(sf::RenderWindow* window, EntityManager* entityManager) :
+GameStatePaused::GameStatePaused(sf::RenderWindow* window, Menu::MenuType menuType, EntityManager* entityManager) :
 mEntityM(entityManager),
 mEventM(&EventManager::getInstance()),
 mGUIM(&GUIManager::getInstance()),
 mCM(&CollisionManager::getInstance()),
 mGUIView(ViewUtility::getViewSize()),
-mWindow(window){
+mWindow(window),
+mMenu(window, Menu::PAUSEMENU, entityManager){
 	mEventM->attatch(this, sf::Event::EventType::KeyPressed);
 }
 
-GameStateLevel::~GameStateLevel(){
+GameStatePaused::~GameStatePaused(){
 	mEventM->detatch(this, sf::Event::EventType::KeyPressed);
 }
 
-void GameStateLevel::initialize(GameStatePaused* gameStateLevel){
-	mGameStatePaused = gameStateLevel;
+void GameStatePaused::initialize(GameStateLevel* gameStateLevel){
+	mMenu.initialize(gameStateLevel);
+	mMenu.initializeButtons(Menu::PAUSEMENU);
+	mGameStateLevel = gameStateLevel;
 }
 
-void GameStateLevel::update(sf::Clock& clock){
+void GameStatePaused::update(sf::Clock& clock){
 	//Do game logic
-	mEntityM->updateEntities(clock.getElapsedTime());
 	//Change the view when updating GUI elements
 	mMapView = mWindow->getView();
 	mWindow->setView(mGUIView);
-	mGUIM->updateElements(clock.restart());
+	mMenu.tick(clock.restart());
 	//Then change it back
 	mWindow->setView(mMapView);
-	mCM->detectCollisions();
-	
-
-	//Garbage collection
-	mCM->removeDeadCollidables();
-	mEntityM->removeDeadEntities();
-	mGUIM->removeObsoleteElements();
 }
 
-void GameStateLevel::render(){
+void GameStatePaused::render(){
 	//Draw objects
 	mEntityM->renderEntities(*mWindow);
 	//Change the view when drawing GUI elements
 	mMapView = mWindow->getView();
 	mWindow->setView(mGUIView);
 	mGUIM->renderElements(*mWindow);
+	mWindow->draw(mMenu);
 	//Then change it back
-	mWindow->setView(mMapView); 
-#ifdef LUDDIS_DEBUG_DRAW_HITBOXES
-	mCM->drawHitboxes(*mWindow);
-#endif
+	mWindow->setView(mMapView);
 }
 
-void GameStateLevel::onEvent(const sf::Event &aEvent){
+void GameStatePaused::onEvent(const sf::Event &aEvent){
 	if (true){
 		switch (aEvent.type){
 		case (sf::Event::EventType::KeyPressed) :
 			if (aEvent.key.code == sf::Keyboard::Escape){
-			GameManager::getInstance().setGameState(mGameStatePaused);
+			GameManager::getInstance().setGameState(mGameStateLevel);
 			}
 			break;
 		}
