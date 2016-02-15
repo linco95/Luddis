@@ -7,7 +7,7 @@ mIsActive(true),
 mIsAlive(true),
 mInventory(&Inventory::getInstance()),
 mResourceManager(&ResourceManager::getInstance()),
-mBackground(mResourceManager->getTexture(backgroundFilename)),
+mFrame(mResourceManager->getTexture(backgroundFilename)),
 mGauge(mResourceManager->getTexture(gaugeFilename)),
 mGaugeRectSize(mGauge.getTextureRect()){
 	setPosition(screenPos);
@@ -24,8 +24,8 @@ void ScoreGauge::tick(const sf::Time& deltaTime){
 
 void ScoreGauge::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	states.transform *= getTransform();
-	target.draw(mBackground, states);
 	target.draw(mGauge, states);
+	target.draw(mFrame, states);
 }
 
 bool ScoreGauge::isAlive() const{

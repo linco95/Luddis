@@ -9,11 +9,13 @@ static const std::string DIALOGUE_TEXTURE = "Resources/Images/Parchment.png";
 static const std::array<std::string, 4> CONFIGMEMBERS = { "Character_filename", "Character_displayname", "Header", "Pages" };
 static sf::IntRect DEFAULT_RECT(30, 30, 400, 0);
 
-Dialogue::Dialogue(const std::string& dialogueFile, sf::RenderWindow* window, sf::Vector2f pos):
+Dialogue::Dialogue(const std::string& dialogueFile, sf::RenderWindow* window, GUIManager* guiManager, EventManager* eventManager, sf::Vector2f pos) :
 mButtonCount(0),
 mIsAlive(true),
 mIsActive(true),
 mWindow(window),
+mGUIManager(guiManager),
+mEventManager(eventManager),
 mActivePage(0),
 mSprite(ResourceManager::getInstance().getTexture(DIALOGUE_TEXTURE)),
 mDialogueTexts(),
@@ -27,7 +29,6 @@ Dialogue::~Dialogue(){
 }
 
 void Dialogue::initialize(std::string dialogueFile){
-	GUIManager* gui = &GUIManager::getInstance();
 	std::string configText = LuddisUtilFuncs::loadJsonFile(dialogueFile);
 	rapidjson::Document configDoc;
 	configDoc.Parse(configText.c_str());
@@ -42,7 +43,7 @@ void Dialogue::initialize(std::string dialogueFile){
 	sf::Vector2f pos = getPosition();
 	
 	mCharacterDisplay = new CharacterPortrait(textureFilename, characterName, pos);
-	gui->addInterfaceElement(mCharacterDisplay);
+	mGUIManager->addInterfaceElement(mCharacterDisplay);
 
 	mHeader.setString(configDoc["Header"].GetString());
 	const rapidjson::Value& pages = configDoc["Pages"];
@@ -109,9 +110,9 @@ Dialogue::RenderLayer Dialogue::getRenderLayer() const{
 }
 
 void Dialogue::addButton(std::string buttonFile, std::string buttonText, std::string buttonFunc, sf::Vector2f pos, int index){
-	Button* button = new Button(buttonFile, buttonText, buttonFunc, mWindow, pos + getPosition(), this);
+	Button* button = new Button(buttonFile, buttonText, buttonFunc, mWindow, mEventManager, pos + getPosition(), this);
 	mButtons[index].push_back(button);
-	GUIManager::getInstance().addInterfaceElement(button);
+	mGUIManager->addInterfaceElement(button);
 }
 
 void Dialogue::internalClear(){

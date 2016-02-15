@@ -5,9 +5,10 @@
 
 static const std::string MENUBUTTON_TEXTURE = "resources/images/menubutton.png";
 
-Menu::Menu(sf::RenderWindow* window, MenuType menuType, EntityManager* entityManager) :
+Menu::Menu(sf::RenderWindow* window, EventManager* eventManager, MenuType menuType, EntityManager* entityManager) :
 mBackground(),
 mWindow(window),
+mEventManager(eventManager),
 mEntityManager(entityManager){
 }
 
@@ -54,7 +55,7 @@ void Menu::initializeButtons(MenuType menuType){
 }
 
 void Menu::addButton(std::string buttonFile, std::string buttonText, std::string buttonFunc, sf::Vector2f pos){
-	Button button(buttonFile, buttonText, buttonFunc, mWindow, pos, this);
+	Button button(buttonFile, buttonText, buttonFunc, mWindow, mEventManager, pos, this);
 	mButtons.push_back(button);
 }
 

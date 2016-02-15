@@ -11,13 +11,15 @@
 #include "InterfaceElement.h"
 #include "EventObserver.h"
 
+class EventManager;
+
 class Button : public InterfaceElement, public EventObserver{
 public:
 	//This class goes by the assumption that the texture will
 	//have three horizontal frames of equal size.
 	//The first will be the default, the second the mouseover
 	//and the third the click frame
-	Button(std::string graphicFilename, std::string buttonText, std::string buttonFunc, sf::RenderWindow* window, sf::Vector2f pos, InterfaceElement* owner);
+	Button(std::string graphicFilename, std::string buttonText, std::string buttonFunc, sf::RenderWindow* window, EventManager* eventManager, sf::Vector2f pos, InterfaceElement* owner);
 	virtual ~Button();
 
 	void onEvent(const sf::Event &aEvent)override;
@@ -35,6 +37,7 @@ private:
 
 	InterfaceElement* mOwner;
 	sf::RenderWindow* mWindow;
+	EventManager* mEventManager;
 	sf::Sprite mSprite;
 	sf::IntRect mRects[3];
 	sf::Text mButtonText;

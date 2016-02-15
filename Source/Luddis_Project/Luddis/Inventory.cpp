@@ -41,11 +41,13 @@ int Inventory::getDust() const{
 void Inventory::setDust(int dust){
 	mDust = dust;
 	mDust = std::min(mDust, mMaxDust);
+	mDust = std::max(mDust, 0);
 }
 
 void Inventory::addDust(int dust){
 	mDust += dust;
 	mDust = std::min(mDust, mMaxDust);
+	mDust = std::max(mDust, 0);
 }
 
 int Inventory::getMaxDust() const{
