@@ -44,6 +44,7 @@ private:
 	bool mIsAlive;
 	bool mIsActive;
 	bool mColliding;
+	bool mIsFlipped;
 	PowerupDisplay* mPowerups[4];
 	sf::FloatRect mCollideBox;
 	sf::Vector2f mDirectionVector;
