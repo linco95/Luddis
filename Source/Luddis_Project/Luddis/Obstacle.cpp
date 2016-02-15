@@ -8,8 +8,8 @@ static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 static const float IDLE_TIME = 4;
 static const float ACTIVE_TIME = 2;
 
-//static const Animation ANIMATION_IDLE = Animation("Resources/Images/Spritesheets/...");
-//static const Animation ANIMATION_ACTIVE = Animation("Resources/Images/Spritesheets/...");
+static const Animation ANIMATION_IDLE = Animation("Resources/Images/Spritesheets/Grafik_Luddis shot120x90treframes_s2d3v1");
+static const Animation ANIMATION_ACTIVE = Animation("Resources/Images/Spritesheets/Grafik_Luddis_hit_sprite_s2d2v1");
 
 Obstacle::Obstacle(sf::RenderWindow* window, std::string textureFilename, ObstacleType type, const sf::Vector2f& position, const float& angle) :
 mIsAlive(true),
@@ -19,9 +19,10 @@ mType(type),
 mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
 mHitbox(new sf::CircleShape(HITBOX_SHAPE)),
 // The following three are only used by changing objects
-mActive(true),
+mActive(false),
 mActiveTime(ACTIVE_TIME),
-mIdleTime(IDLE_TIME)
+mIdleTime(IDLE_TIME),
+mAnimation(ANIMATION_IDLE)
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	setPosition(position);
@@ -31,7 +32,6 @@ mIdleTime(IDLE_TIME)
 	mHitbox->setPosition(getPosition());
 	mHitbox->setScale(getScale());
 	mHitbox->setRotation(getRotation());
-	
 }
 
 Obstacle::~Obstacle(){
@@ -40,25 +40,26 @@ Obstacle::~Obstacle(){
 
 void Obstacle::tick(const sf::Time& deltaTime){
 	
-	if (mType == BG_DAMAGE){
+	if (mType == DAMAGE){
 		if (mActive == true){
 			mActiveTime -= float(deltaTime.asSeconds());
 			if (mActiveTime <= 0){
 				mActive = false;
 				mActiveTime = ACTIVE_TIME;
 
-				//mAnimation.setDefaultAnimation(ANIMATION_IDLE);
+				mAnimation.setDefaultAnimation(ANIMATION_IDLE);
 			}
 		}
 		else if (mActive == false){
 			mIdleTime -= float(deltaTime.asSeconds());
 			if (mIdleTime <= 0){
-				mActive = false;
+				mActive = true;
 				mIdleTime = IDLE_TIME;
 
-				//mAnimation.setDefaultAnimation(ANIMATION_ACTIVE);
+				mAnimation.setDefaultAnimation(ANIMATION_ACTIVE);
 			}
 		}
+		mAnimation.tick(deltaTime);
 	}
 	else {
 		return;
@@ -67,7 +68,10 @@ void Obstacle::tick(const sf::Time& deltaTime){
 
 void Obstacle::draw(sf::RenderTarget& target, sf::RenderStates states)const{
 	states.transform *= getTransform();
-	target.draw(mSprite, states);
+	if (mType == SOLID)
+		target.draw(mSprite, states);
+	if (mType == DAMAGE)
+		target.draw(mAnimation.getCurrAnimation(), states);
 }
 
 bool Obstacle::isAlive() const{
@@ -96,7 +100,12 @@ sf::Shape* Obstacle::getNarrowHitbox() const{
 
 Obstacle::Category Obstacle::getCollisionCategory(){
 	if (mType == DAMAGE){
-		return BG_DAMAGE;
+		if (mIsActive){
+			return BG_DAMAGE;
+		}
+		else{
+			return BG_SOLID;
+		}
 	}
 	else /*if (mType == SOLID)*/{
 		return BG_SOLID;
