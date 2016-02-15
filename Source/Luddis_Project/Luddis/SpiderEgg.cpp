@@ -5,7 +5,7 @@
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::ITEM;
 static const sf::CircleShape HITBOX_SHAPE(10, 8);
 
-SpiderEgg::SpiderEgg(std::string textureFilename, sf::RenderWindow* window) :
+SpiderEgg::SpiderEgg(sf::RenderWindow* window, const std::string& textureFilename, const sf::Vector2f& aPos) :
 mIsAlive(true),
 mIsActive(true),
 mWindow(window),
@@ -13,6 +13,8 @@ mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
 mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
+	setPosition(aPos);
+	//mHitbox.setPosition(getPosition());
 }
 
 SpiderEgg::~SpiderEgg(){

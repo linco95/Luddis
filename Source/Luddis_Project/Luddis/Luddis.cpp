@@ -205,7 +205,7 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 	}
 	//Handle keyboard presses
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
-		if (mPowerups[0]->getCooldown() <= 0){
+		if (mPowerups[0] != 0 && mPowerups[0]->getCooldown() <= 0){
 			mPowerups[0]->activateCooldown();
 		}
 	}
