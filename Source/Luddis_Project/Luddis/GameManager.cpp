@@ -168,19 +168,7 @@ struct GameManagerImp : public EventObserver {
 	Luddis *mPlayer;
 	
 	// Needs to be moved to corresponding level later.
-	Silverfish *mEnemy1;
-	Silverfish *mEnemy2;
-	BossDishCloth* mBoss;
-
-	Spider *mSpider;
-
-	Dust *mDust;
-	Dust *mDust2;
-	Dust *mDust3;
-	Dust *mDust4;
-	Chips *mChips;
-	Chips *mChips2;
-	Chips *mChips3;
+	
 	ScoreCounter *mChipsCounter;
 	ScoreCounter *mLuddCounter;
 
