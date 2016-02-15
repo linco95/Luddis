@@ -5,6 +5,7 @@ Säpos hq is in nowhere!
 Writing Level class
 	- Loading obstacles narrow hitbox form config
 	- Load chips/ludd from a map
+	- Add multi-layered background (lights man, lights!)
 
 Make animationqueue use resourcemanager, to avoid copying the spritesheets/animations everytime an animation changes.
 
@@ -126,50 +127,12 @@ added checks for zero-vectors in normaliaztion of vectors, and fixed places wher
 opitimzing animationqueue
 optimized rotating by 90 (getting normal in narrow collision) by adding getNormal function that just return (-y, x)
 
-BRAINSTORM
+14/2/16
+Tested porting Luddis to Linux (Luddis + Linux = Luddux?)
 
-*facepalm*
-just set view(0,0,1920,1080) <.<
-
-Resolution scaling:
-1920 x 1080 standard definition = VIRTUALW, VIRTUALH
-
-
-ScreenW 		VRITUALW
-  /      	=		/
-ScreenH			VIRTUALH
-
-
-if ImageH < VIRTUALH
-	scale down image, keep aspect ratio
-	
-if ImageW < VIRTUALW
-	scale down image, keep aspect ratio
-	
- if ImageW > VIRTUALW && ImageH != VIRTUALH
-	Scale up image, keep aspect ratio
- if ImageH > VIRTUALH && ImageW != VIRTUALW
-	Scale up image, keep aspect ratio
-
-	pseudokod
-	void scaleW(){
-		float factor = ScreenH * VIRTUALW/VIRTUALH
-		Image.scale(factor, factor);
-	}
-
-	void scaleH(){
-		float factor = ScreenW * VIRTUALW/VIRTUALH
-		Image.scale(factor, factor);
-	}
-
-
-
-
-
-
-
-
-
+15/2/16
+Added defaultvalue to loadTexture
+Adding loading of json files to the resourcemanager. Saving the json files in memory.
 
 
 

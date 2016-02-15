@@ -89,6 +89,7 @@ void Luddis::setActive(const bool& active){
 }
 
 void Luddis::tick(const sf::Time& deltaTime){
+
 	if (mProjectileCooldown >= 0){
 		mProjectileCooldown -= deltaTime.asSeconds();
 	}
