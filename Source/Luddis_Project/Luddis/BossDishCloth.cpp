@@ -162,7 +162,7 @@ void BossDishCloth::attack(){
 	}
 	
 	Projectile* proj = new Projectile(PROJECTILE_FILEPATH, vec*PROJECTILE_SPEED, sf::Vector2f(getPosition().x, 590) + vec*PROJECTILE_SPEED / 3.0f, PROJECTILE_LIFETIME, ENEMY_STUN);
-	EntityManager::getInstance().addEntity(proj);
+	mEntityManager->addEntity(proj);
 	CollisionManager::getInstance().addCollidable(proj);
 }
 
