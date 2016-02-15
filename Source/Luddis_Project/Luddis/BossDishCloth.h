@@ -5,9 +5,11 @@
 #include "CollidableEntity.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 
+class EntityManager;
+
 class BossDishCloth: public CollidableEntity{
 public:
-	BossDishCloth(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget);
+	BossDishCloth(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget, EntityManager* entityManager);
 	virtual ~BossDishCloth();
 
 	void tick(const sf::Time& deltaTime) override;
@@ -26,6 +28,7 @@ private:
 	void attack();
 
 	AnimationQueue mAnimation;
+	EntityManager* mEntityManager;
 	sf::RenderWindow* mWindow;
 	sf::Transformable* mTarget;
 	const float mActivate;

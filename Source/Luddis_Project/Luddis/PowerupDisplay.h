@@ -9,7 +9,7 @@
 class PowerupDisplay: public InterfaceElement{
 public:
 	PowerupDisplay(std::string textureFilename, sf::Vector2f pos, float cooldown);
-	~PowerupDisplay();
+	virtual ~PowerupDisplay();
 
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

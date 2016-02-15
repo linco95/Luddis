@@ -20,7 +20,7 @@ public:
 	Button(std::string graphicFilename, std::string buttonText, std::string buttonFunc, sf::RenderWindow* window, sf::Vector2f pos, InterfaceElement* owner);
 	virtual ~Button();
 
-	void update(const sf::Event &aEvent)override;
+	void onEvent(const sf::Event &aEvent)override;
 
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

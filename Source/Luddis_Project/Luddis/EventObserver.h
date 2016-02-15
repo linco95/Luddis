@@ -9,7 +9,7 @@ class EventObserver{
 public:
 	virtual ~EventObserver();
 
-	virtual void update(const sf::Event &aEvent) = 0;
+	virtual void onEvent(const sf::Event &aEvent) = 0;
 	
 };
 

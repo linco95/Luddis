@@ -19,6 +19,7 @@
 #include "Spider.h"
 #include "Obstacle.h"
 #include "ScoreCounter.h"
+#include "ScoreGauge.h"
 #include "GameStateLevel.h"
 #include "GameStatePaused.h"
 #include "ViewUtility.h"
@@ -36,17 +37,16 @@ static const Color BGCOLOR = Color::Black;
 static const std::string TEXTURE_NAME = "Resources/Images/Grafik_Luddis120x80_s1d3v1.png";
 static const std::string TEXTURE_CHIPSCOUNTER = "Resources/Images/HUD_Chips_Icon.png";
 static const std::string TEXTURE_LUDDCOUNTER = "Resources/Images/HUD_Ludd_Icon.png";
+static const std::string TEXTURE_LUDDGAUGE_BG = "Resources/Images/LuddGaugeBackground.png";
+static const std::string TEXTURE_LUDDGAUGE_BAR = "Resources/Images/LuddGaugeBar.png";
 static const std::string FONT_NAME = "arial.ttf";
+static const std::string TEST_LEVEL = "Resources/Configs/Levels/Level01Entities.json";
 static const bool VSYNCENABLED = true;
 
-/*
-TODO:
-Implement states
-*/
 struct GameManagerImp : public EventObserver {
 
 	GameManagerImp() {
-		EventManager::getInstance().attatch(this, std::vector<Event::EventType> { Event::EventType::Closed, Event::EventType::KeyPressed } );
+		EventManager::getInstance().attatch(this, Event::EventType::Closed);
 	}
 
 	void run(){
@@ -58,18 +58,25 @@ struct GameManagerImp : public EventObserver {
 		mMainWindow.close();
 	}
 
+	void setGameState(GameState* gameState){
+		mCurrentGameState = gameState;
+	}
+
 	// Temporary function (might keep luddis init here). Most of this should be handled in the levelmanager/level class instead
 	void initializeEntities(){
 
-		mChipsCounter = new ScoreCounter(&mMainWindow, TEXTURE_CHIPSCOUNTER, sf::Vector2f(WIDTH*0.4f, HEIGHT-60), ScoreCounter::ScoreType::CHIPS);
-		GUIManager::getInstance().addInterfaceElement(mChipsCounter);
-
-		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow);
-		EntityManager::getInstance().addEntity(mPlayer);
+		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow, &mEntityManager);
+		mEntityManager.addEntity(mPlayer);
 		CollisionManager::getInstance().addCollidable(mPlayer);
 
-		mLuddCounter = new ScoreCounter(&mMainWindow, TEXTURE_LUDDCOUNTER, sf::Vector2f(WIDTH*0.6f, HEIGHT - 60), ScoreCounter::ScoreType::DUST);
+		mChipsCounter = new ScoreCounter(&mMainWindow, TEXTURE_CHIPSCOUNTER, sf::Vector2f(WIDTH*0.7f, HEIGHT-60), ScoreCounter::ScoreType::CHIPS);
+		GUIManager::getInstance().addInterfaceElement(mChipsCounter);
+
+		mLuddCounter = new ScoreCounter(&mMainWindow, TEXTURE_LUDDCOUNTER, sf::Vector2f(WIDTH*0.3f, HEIGHT - 60), ScoreCounter::ScoreType::DUST);
 		GUIManager::getInstance().addInterfaceElement(mLuddCounter);
+
+		mLuddGauge = new ScoreGauge(&mMainWindow, TEXTURE_LUDDGAUGE_BG, TEXTURE_LUDDGAUGE_BAR, sf::Vector2f(WIDTH*0.45f, HEIGHT - 60));
+		GUIManager::getInstance().addInterfaceElement(mLuddGauge);
 
 		mMainWindow.setMouseCursorVisible(false);
 		// Temporary splash screen
@@ -78,9 +85,9 @@ struct GameManagerImp : public EventObserver {
 		mMainWindow.draw(splashScreen);
 		mMainWindow.display();
 		
-		mLevel = new Level();
-		mLevel->initializeLevel(mMainWindow, mPlayer);
-		EntityManager::getInstance().addEntity(mLevel);
+		mLevel = new Level(&mEntityManager);
+		mLevel->initializeLevel(mMainWindow, mPlayer, TEST_LEVEL);
+		mEntityManager.addEntity(mLevel);
 		mMainWindow.setMouseCursorVisible(true);
 	}
 
@@ -107,16 +114,10 @@ struct GameManagerImp : public EventObserver {
 		
 	}
 
-	void update(const Event& aEvent) override{
+	void onEvent(const Event& aEvent) override{
 		switch(aEvent.type){
 			case (Event::EventType::Closed):
 				gameOver();
-				break;
-			case (Event::EventType::KeyPressed):
-				if (aEvent.key.code == Keyboard::Escape){
-				delete mCurrentGameState;
-				mCurrentGameState = new GameStatePaused(&mMainWindow, Menu::PAUSEMENU);
-				}
 				break;
 			default:
 				// NO-OP
@@ -136,18 +137,22 @@ struct GameManagerImp : public EventObserver {
 
 	void gameLoop(){
 		// To avoid multiple functioncalls every iteration of gameloop
-		EntityManager* em = &EntityManager::getInstance();
 		CollisionManager* cm = &CollisionManager::getInstance();
 		GUIManager* gm = &GUIManager::getInstance();
 		SoundEngine* se = &SoundEngine::getInstance();
 		
-		mCurrentGameState = new GameStateLevel(&mMainWindow);
+		mGameStatePaused = new GameStatePaused(&mMainWindow, Menu::PAUSEMENU, &mEntityManager);
+		mGameStateLevel = new GameStateLevel(&mMainWindow, &mEntityManager);
+		mGameStateLevel->initialize(mGameStatePaused);
+		mGameStatePaused->initialize(mGameStateLevel);
+		mCurrentGameState = mGameStateLevel;
 
 		View mapView;
 		se->setMainVolume(100);
 		Clock gameClock;
 		while (mMainWindow.isOpen()){
-
+			//Ugly solution to a problem with each state reading input and responding to it,
+			//despite being "inactive"
 			// Handle Events       
 			handleEvents(mMainWindow);
 			
@@ -158,19 +163,22 @@ struct GameManagerImp : public EventObserver {
 			mMainWindow.clear();
 			mCurrentGameState->render();
 			mMainWindow.display();
-
-
 		}
 	}
+
+	GameStateLevel* mGameStateLevel;
+	GameStatePaused* mGameStatePaused;
 
 	GameState* mCurrentGameState;
 	RenderWindow mMainWindow;
 	Luddis *mPlayer;
+	EntityManager mEntityManager;
 	
 	// Needs to be moved to corresponding level later.
-	
+
 	ScoreCounter *mChipsCounter;
 	ScoreCounter *mLuddCounter;
+	ScoreGauge *mLuddGauge;
 
 	Level* mLevel; //To be replaced with LevelManager with LevelVector
 };
@@ -196,3 +204,8 @@ GameManager& GameManager::getInstance(){
 	static GameManager gm;
 	return gm;
 }
+
+void GameManager::setGameState(GameState* gameState){
+	mGMImp->setGameState(gameState);
+}
+

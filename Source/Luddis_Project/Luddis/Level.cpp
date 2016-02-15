@@ -21,8 +21,9 @@ static const float X_OFFSET = 200.f,
 
 static const std::array<std::string, 8> CONFIGMEMBERS = { "Background", "Silverfish_spawns", "Obstacle_spawns", "Chips_spawns", "Dust_spawns", "Boss_spawns", "Spider_spawns", "Boss_config" };
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::BACKGROUND;
-Level::Level() :
-mIsActive(true)
+Level::Level(EntityManager* entityManager) :
+mIsActive(true),
+mEntityManager(entityManager)
 {
 
 }
@@ -32,7 +33,6 @@ Level::~Level(){
 
 #include <iostream>
 void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Document& configDoc){
-	EntityManager* em = &EntityManager::getInstance();
 	CollisionManager* cm = &CollisionManager::getInstance();
 	ResourceManager* rm = &ResourceManager::getInstance();
 
@@ -49,7 +49,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		assert(itr->HasMember("activationpos") && (*itr)["activationpos"].IsInt());
 
 		Silverfish* fish = new Silverfish(mWindow, sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()), (float)(*itr)["angle"].GetDouble(), (float)(*itr)["activationpos"].GetDouble(), mTarget);
-		em->addEntity(fish);
+		mEntityManager->addEntity(fish);
 		cm->addCollidable(fish);
 		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
 	}
@@ -65,7 +65,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		assert(itr->HasMember("angle") && (*itr)["angle"].IsDouble());
 
 		Obstacle* obstacle = new Obstacle(mWindow, (*itr)["filename"].GetString(), Obstacle::ObstacleType((*itr)["type"].GetInt()), sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()), (float)(*itr)["angle"].GetDouble());
-		em->addEntity(obstacle);
+		mEntityManager->addEntity(obstacle);
 		cm->addCollidable(obstacle);
 		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
 	}
@@ -80,7 +80,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		assert(itr->HasMember("angle") && (*itr)["angle"].IsDouble());
 
 		Chips* chips = new Chips(mWindow, (*itr)["filename"].GetString(), sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()), (float)(*itr)["angle"].GetDouble());
-		em->addEntity(chips);
+		mEntityManager->addEntity(chips);
 		cm->addCollidable(chips);
 		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
 	}
@@ -95,7 +95,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		assert(itr->HasMember("angle") && (*itr)["angle"].IsDouble());
 
 		Dust* dust = new Dust(mWindow, (*itr)["filename"].GetString(), sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()), (float)(*itr)["angle"].GetDouble());
-		em->addEntity(dust);
+		mEntityManager->addEntity(dust);
 		cm->addCollidable(dust);
 		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
 	}
@@ -108,8 +108,8 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		assert(itr->HasMember("y") && (*itr)["y"].IsInt());
 		assert(itr->HasMember("activationpos") && (*itr)["activationpos"].IsInt());
 
-		BossDishCloth* boss = new BossDishCloth(mWindow, sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()), (float)(*itr)["activationpos"].GetDouble(), mTarget);
-		em->addEntity(boss);
+		BossDishCloth* boss = new BossDishCloth(mWindow, sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()), (float)(*itr)["activationpos"].GetDouble(), mTarget, mEntityManager);
+		mEntityManager->addEntity(boss);
 		cm->addCollidable(boss);
 		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
 	}
@@ -123,7 +123,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		assert(itr->HasMember("activationpos") && (*itr)["activationpos"].IsInt());
 
 		Spider* spider = new Spider(mWindow, sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()), (float)(*itr)["activationpos"].GetDouble(), mTarget);
-		em->addEntity(spider);
+		mEntityManager->addEntity(spider);
 		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
 	}
 
@@ -151,13 +151,13 @@ void Level::increaseMapBounds(sf::IntRect size){
 	mMapBounds.width += size.width;
 }
 
-void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget){
+void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget, std::string levelFilename){
 	//assert(aTarget != 0);
 
 	mTarget = aTarget;
 	mWindow = &aWindow;
 
-	std::string configText = LuddisUtilFuncs::loadJsonFile("resources/configs/levels/level01.json");
+	std::string configText = LuddisUtilFuncs::loadJsonFile(levelFilename);
 	rapidjson::Document configDoc;
 	configDoc.Parse(configText.c_str());
 	assert(configDoc.IsObject());

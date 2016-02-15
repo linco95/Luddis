@@ -15,14 +15,12 @@
 
 class EntityManager {
 public:
+	//Is no longer a singleton for the reason of having each state manage
+	//a separate entity vector.
 	typedef std::vector<Entity*> EntitiesVector;
-
-	EntityManager(EntityManager&) = delete;
-	EntityManager& operator=(EntityManager&) = delete;
+	EntityManager();
 	~EntityManager();
 
-	static EntityManager& getInstance();
-	
 	void addEntity(Entity* entity);
 	void removeDeadEntities();
 
@@ -33,7 +31,7 @@ public:
 
 	void renderEntities(sf::RenderWindow& window);
 private:
-	EntityManager();
+	
 	EntitiesVector mEntities;
 };
 #endif

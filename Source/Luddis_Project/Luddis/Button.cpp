@@ -32,7 +32,8 @@ mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 	mButtonText.setColor(sf::Color::Black);
 	mButtonText.setOrigin(textRect.width / 2, textRect.height / 2);
 	mSprite.setOrigin((float)spriteRect.width / 2, (float)spriteRect.height / 2);
-	EventManager::getInstance().attatch(this, std::vector < sf::Event::EventType > { sf::Event::MouseButtonReleased, sf::Event::MouseButtonPressed });
+	EventManager::getInstance().attatch(this, std::vector < sf::Event::EventType > { sf::Event::MouseButtonReleased, sf::Event::MouseButtonPressed, sf::Event::MouseMoved });
+
 #ifdef LUDDIS_DEBUG_DRAW_HITBOXES
 	mDebugCircle.setPointCount(6);
 	mDebugCircle.setRadius(15.0f);
@@ -45,7 +46,7 @@ mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 }
 
 Button::~Button(){
-	EventManager::getInstance().detatch(this, std::vector < sf::Event::EventType > { sf::Event::MouseButtonReleased, sf::Event::MouseButtonPressed });
+	EventManager::getInstance().detatch(this, std::vector < sf::Event::EventType > { sf::Event::MouseButtonReleased, sf::Event::MouseButtonPressed, sf::Event::MouseMoved});
 }
 
 void Button::tick(const sf::Time& deltaTime){
@@ -98,7 +99,7 @@ void Button::updateInput(){
 	}
 }
 
-void Button::update(const sf::Event &aEvent){
+void Button::onEvent(const sf::Event &aEvent){
 	if (mIsActive){
 		//The viewport has to be changed here, since all EventObservers are iterated in the same vector.
 		sf::View GUIView(ViewUtility::getViewSize());
