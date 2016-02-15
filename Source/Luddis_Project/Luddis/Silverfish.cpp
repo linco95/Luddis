@@ -48,6 +48,8 @@ mTarget(aTarget)
 		scale(sf::Vector2f(1, -1));
 	}
 
+	mHitbox->setScale(getScale());
+	mHitbox->setRotation(getRotation());
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
 
 }
@@ -134,7 +136,5 @@ sf::FloatRect Silverfish::getHitBox(){
 }
 sf::Shape* Silverfish::getNarrowHitbox() const{
 	mHitbox->setPosition(getPosition());
-	mHitbox->setScale(getScale());
-	mHitbox->setRotation(getRotation());
 	return mHitbox;
 }

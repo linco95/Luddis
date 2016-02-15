@@ -81,7 +81,7 @@ std::pair<float, float> getProjection(const sf::Shape& shape, const sf::Vector2f
 	assert(minVal <= maxVal);
 	return std::make_pair(minVal, maxVal);
 }
-
+#include <iostream>
 void narrowCollision(std::stack<std::pair<CollidableEntity*, CollidableEntity*>>& colliding){
 	while (!colliding.empty()){
 		auto pair = colliding.top();
@@ -96,12 +96,13 @@ void narrowCollision(std::stack<std::pair<CollidableEntity*, CollidableEntity*>>
 			// Every side in one of the shapes
 			sf::Vector2f firstVec = firstShape->getPoint(i < firstPointCount ? i + 1 : 0);
 			sf::Vector2f secondVec = firstShape->getPoint(i);
+			
 			// Transform the points
 			sf::Transform shapeTrans = firstShape->getTransform();
 
-			//shapeTrans.translate();
-			firstVec = shapeTrans.transformPoint(firstVec);
-			secondVec = shapeTrans.transformPoint(secondVec);
+			////shapeTrans.translate();
+			//firstVec = shapeTrans.transformPoint(firstVec);
+			//secondVec = shapeTrans.transformPoint(secondVec);
 			sf::Vector2f side = firstVec - secondVec;
 
 			// Get the normal to the side
@@ -123,6 +124,7 @@ void narrowCollision(std::stack<std::pair<CollidableEntity*, CollidableEntity*>>
 		}
 		// If no gaps were found, collide. Not like this, always colliding now!
 		if (isColliding){
+			//std::cout << '\a';
 			pair.first->collide(pair.second);
 			pair.second->collide(pair.first);
 		}

@@ -144,7 +144,7 @@ void BossDishCloth::updateMovement(const sf::Time& deltaTime){
 }
 
 void BossDishCloth::attack(){
-	sf::Vector2f vec(0, 1);
+	sf::Vector2f vec(-1, 0);
 	int max = 8;
 	
 	if (mLife < 50){
@@ -158,6 +158,10 @@ void BossDishCloth::attack(){
 		EntityManager::getInstance().addEntity(proj);
 		CollisionManager::getInstance().addCollidable(proj);
 	}
+	
+	Projectile* proj = new Projectile(PROJECTILE_FILEPATH, vec*PROJECTILE_SPEED, sf::Vector2f(getPosition().x, 590) + vec*PROJECTILE_SPEED / 3.0f, PROJECTILE_LIFETIME, ENEMY_STUN);
+	EntityManager::getInstance().addEntity(proj);
+	CollisionManager::getInstance().addCollidable(proj);
 }
 
 BossDishCloth::Category BossDishCloth::getCollisionCategory(){
