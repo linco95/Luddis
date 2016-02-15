@@ -19,6 +19,9 @@ Projectile::Projectile(std::string textureFilename, sf::Vector2f direction, sf::
 {
 	mSprite.setRotation((float)(rand() % 360));
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
+	mHitbox->setScale(getScale());
+	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
+
 	setPosition(position);
 }
 
@@ -97,5 +100,7 @@ void Projectile::setTexture(std::string filename){
 	mSprite.setTexture(ResourceManager::getInstance().getTexture(filename), true);
 }
 sf::Shape* Projectile::getNarrowHitbox() const{
+	mHitbox->setPosition(getPosition());
+	mHitbox->setRotation(getRotation());
 	return mHitbox;
 }

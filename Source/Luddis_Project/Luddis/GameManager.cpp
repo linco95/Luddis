@@ -65,7 +65,6 @@ struct GameManagerImp : public EventObserver {
 	// Temporary function (might keep luddis init here). Most of this should be handled in the levelmanager/level class instead
 	void initializeEntities(){
 
-
 		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow, &mEntityManager);
 		mEntityManager.addEntity(mPlayer);
 		CollisionManager::getInstance().addCollidable(mPlayer);
@@ -125,7 +124,7 @@ struct GameManagerImp : public EventObserver {
 				break;
 		}
 	}
-
+	
 
 
 	void handleEvents(RenderWindow& aWindow){
