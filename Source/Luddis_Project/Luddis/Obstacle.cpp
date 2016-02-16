@@ -48,7 +48,7 @@ void Obstacle::tick(const sf::Time& deltaTime){
 				mIsDamaging = false;
 				mDamageTime = DAMAGE_TIME;
 				// Move to start idle animation
-				sf::Vector2f moving = -((float)mSprite.getTextureRect().height / 4) * VectorMath::getNormal(sf::Vector2f(cos(mAngle), sin(mAngle)));
+				sf::Vector2f moving = -((float)mSprite.getTextureRect().height / 3.7f) * VectorMath::getNormal(sf::Vector2f(cos(mAngle), sin(mAngle)));
 				move(moving);
 
 				mAnimation.setDefaultAnimation(ANIMATION_IDLE);
@@ -61,7 +61,7 @@ void Obstacle::tick(const sf::Time& deltaTime){
 				mIsDamaging = true;
 				mIdleTime = IDLE_TIME;
 				// Move to start damaging animation
-				sf::Vector2f moving = ((float)mSprite.getTextureRect().height / 4) * VectorMath::getNormal(sf::Vector2f(cos(mAngle), sin(mAngle)));
+				sf::Vector2f moving = ((float)mSprite.getTextureRect().height / 3.7f) * VectorMath::getNormal(sf::Vector2f(cos(mAngle), sin(mAngle)));
 				move(moving);
 
 				mAnimation.setDefaultAnimation(ANIMATION_DAMAGE);
