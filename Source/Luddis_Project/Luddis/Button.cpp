@@ -2,7 +2,6 @@
 #include "ResourceManager.h"
 #include "EventManager.h"
 #include "ViewUtility.h"
-#include <iostream>
 #include <vector>
 #include "GUIManager.h"
 
@@ -88,7 +87,7 @@ void Button::updateInput(){
 	vector = mWindow->mapPixelToCoords(sf::Mouse::getPosition(*mWindow)) - getPosition();
 
 #ifdef LUDDIS_DEBUG_DRAW_HITBOXES
-	//mDebugCircle.setPosition(vector);
+	mDebugCircle.setPosition(vector);
 #endif
 
 	if (mSprite.getGlobalBounds().contains(vector)){
@@ -107,6 +106,7 @@ void Button::onEvent(const sf::Event &aEvent){
 		sf::View GUIView(ViewUtility::getViewSize());
 		sf::View mapView = mWindow->getView();
 		mWindow->setView(GUIView);
+		sf::Vector2f pos(getPosition());
 		static sf::Vector2f mousePos(0, 0);
 		mousePos = mWindow->mapPixelToCoords(sf::Vector2i(aEvent.mouseButton.x, aEvent.mouseButton.y)) - getPosition();
 		if (aEvent.type == sf::Event::MouseButtonPressed&&

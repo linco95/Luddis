@@ -3,7 +3,6 @@
 
 #include "InterfaceElement.h"
 #include "Button.h"
-#include "EventObserver.h"
 #include "GameState.h"
 #include "EventObserver.h"
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -11,15 +10,16 @@
 
 class EntityManager;
 class EventManager;
+class GUIManager;
 class GameStateLevel;
 
-class Menu: public InterfaceElement, public EventObserver{
+class Menu: public InterfaceElement{
 public:
 	enum MenuType{
 		MAINMENU,
 		PAUSEMENU
 	};
-	Menu(sf::RenderWindow* window, EventManager* eventManager, MenuType menuType, EntityManager* entityManager);
+	Menu(sf::RenderWindow* window, EventManager* eventManager, GUIManager* gUIManager, MenuType menuType, EntityManager* entityManager);
 	virtual ~Menu();
 
 	void initialize(GameStateLevel* gameStateLevel);
@@ -33,23 +33,25 @@ public:
 	void setActive(const bool& active) override;
 	void onClick(std::string) override;
 
-	void onEvent(const sf::Event &aEvent) override;
 
 private:
+	void internalClear();
 	void addButton(std::string buttonFile, std::string buttonText, std::string buttonFunc, sf::Vector2f pos);
 
 	void buttonFuncNewGame();
 	void buttonFuncLoadGame();
 	void buttonFuncContinue();
+	void buttonFuncExitLevel();
 	void buttonFuncSettings();
 	void buttonFuncQuitGame();
 	void buttonFuncResetLevel();
 
-	sf::RectangleShape mBackground;
-	typedef std::vector<Button> ButtonVector;
+	sf::RectangleShape* mBackground;
+	typedef std::vector<Button*> ButtonVector;
 	ButtonVector mButtons;
 	EntityManager* mEntityManager;
 	EventManager* mEventManager;
+	GUIManager* mGUIManager;
 	GameStateLevel* mGameStateLevel;
 	sf::RenderWindow* mWindow;
 

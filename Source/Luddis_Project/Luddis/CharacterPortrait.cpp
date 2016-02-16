@@ -13,6 +13,7 @@ mName(characterName, ResourceManager::getInstance().getFont(DEFAULT_FONT), DEFAU
 	mSprite.setOrigin(spriteOrigoX, spriteOrigoY);
 	float textOrigoX = mName.getGlobalBounds().width / 2;
 	float textOrigoY = mName.getGlobalBounds().height / 2;
+	mName.setColor(sf::Color::Black);
 	mName.setOrigin(textOrigoX, textOrigoY);
 	mName.move(0, spriteOrigoY*1.5f);
 	move(spriteOrigoX*2.5f, -spriteOrigoY);

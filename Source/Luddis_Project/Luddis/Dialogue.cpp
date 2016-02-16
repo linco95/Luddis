@@ -9,8 +9,8 @@
 static const std::array<std::string, 4> CONFIGMEMBERS = { "Character_filename", "Character_displayname", "Header", "Pages" };
 
 static const float ANIMATION_TIME = 1.5f;
-static const float RECT_WIDTH = 500;
-static const float RECT_HEIGHT = 400;
+static const float RECT_WIDTH = 1000;
+static const float RECT_HEIGHT = 600;
 static const int INDENT = 30;
 static sf::Vector2f DialogueBoxMaxSize(RECT_WIDTH, RECT_HEIGHT);
 static sf::IntRect DEFAULT_RECT(INDENT, INDENT, (int)RECT_WIDTH-INDENT*2, 0);
@@ -92,7 +92,7 @@ void Dialogue::initialize(std::string dialogueFile){
 }
 
 void Dialogue::tick(const sf::Time& deltaTime){
-	if (mAnimationTimer > 0){
+	if (mAnimationTimer >= 0){
 		mAnimationTimer -= deltaTime.asSeconds();
 		std::max(mAnimationTimer, 0.0f);
 		float height = RECT_HEIGHT*((ANIMATION_TIME - mAnimationTimer) / ANIMATION_TIME);
