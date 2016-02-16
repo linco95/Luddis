@@ -22,7 +22,7 @@ static const float X_OFFSET = 200.f,
 				   Y_OFFSET = 50.f,
 				   SCROLLSPEED = 200;
 
-static const std::array<std::string, 8> CONFIGMEMBERS = { "Background", "Silverfish_spawns", "Obstacle_spawns", "Chips_spawns", "Dust_spawns", "Boss_spawns", "Spider_spawns", "Boss_config" };
+static const std::array<std::string, 6> CONFIGMEMBERS = { "Background", "Silverfish_spawns", "Obstacle_spawns", "Boss_spawns", "Spider_spawns", "Boss_config" };
 static const char* mapfilepath = "Resources/Configs/Levels/Level01MAP.png";
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::BACKGROUND;
 // Temporary, needs to be a bit more dynamic
@@ -102,6 +102,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 	ResourceManager* rm = &ResourceManager::getInstance();
 
 	for (std::size_t i = 0; i < CONFIGMEMBERS.size(); i++){
+		std::cout << CONFIGMEMBERS[i] << std::endl;
 		assert(configDoc.HasMember(CONFIGMEMBERS[i].c_str()));
 	}
 	// Silverfishes
