@@ -5,7 +5,7 @@
 
 class SpiderEgg : public CollidableEntity{
 public:
-	SpiderEgg(std::string textureFilename, sf::RenderWindow* window);
+	SpiderEgg(sf::RenderWindow* window, const std::string& textureFilename, const sf::Vector2f& aPos);
 	~SpiderEgg();
 
 	void tick(const sf::Time& deltaTime) override;

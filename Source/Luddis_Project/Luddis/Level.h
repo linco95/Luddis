@@ -30,6 +30,7 @@ private:
 	void updateView(const sf::Time& deltaTime);
 	void increaseMapBounds(sf::IntRect size);
 	void initializeEntities(sf::RenderWindow* window, const rapidjson::Document& configDoc);
+	void readInitMap();
 
 	EntityManager* mEntityManager;
 	sf::Transformable* mTarget;

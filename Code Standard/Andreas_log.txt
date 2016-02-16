@@ -1,13 +1,11 @@
 TODO
 
-Säpos hq is in nowhere!
-
 Writing Level class
 	- Loading obstacles narrow hitbox form config
 	- Load chips/ludd from a map
 	- Add multi-layered background (lights man, lights!)
 
-Make animationqueue use resourcemanager, to avoid copying the spritesheets/animations everytime an animation changes.
+Fade out projectiles/ludd
 
 Implement states on the boss dishrag
 	- Ask if we should implement random intervals on boss stopping 
