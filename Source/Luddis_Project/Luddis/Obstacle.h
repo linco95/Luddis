@@ -42,7 +42,7 @@ private:
 	bool mIsDamaging;
 	float mDamageTime;
 	float mIdleTime;
-
+	float mAngle;
 	AnimationQueue mAnimation;
 };
 

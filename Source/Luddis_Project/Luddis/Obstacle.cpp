@@ -22,7 +22,8 @@ mActive(true),
 mIsDamaging(false),
 mDamageTime(DAMAGE_TIME),
 mIdleTime(IDLE_TIME),
-mAnimation(ANIMATION_IDLE)
+mAnimation(ANIMATION_IDLE),
+mAngle(angle)
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	setPosition(position);
@@ -47,6 +48,9 @@ void Obstacle::tick(const sf::Time& deltaTime){
 			if (mDamageTime <= 0){
 				mIsDamaging = false;
 				mDamageTime = DAMAGE_TIME;
+				// Move to start idle animation
+				sf::Vector2f moving = -((float)mSprite.getTextureRect().height / 4) * VectorMath::getNormal(sf::Vector2f(cos(mAngle), sin(mAngle)));
+				move(moving);
 
 				mAnimation.setDefaultAnimation(ANIMATION_IDLE);
 			}
@@ -57,6 +61,9 @@ void Obstacle::tick(const sf::Time& deltaTime){
 			if (mIdleTime <= 0){
 				mIsDamaging = true;
 				mIdleTime = IDLE_TIME;
+				// Move to start damaging animation
+				sf::Vector2f moving = ((float)mSprite.getTextureRect().height / 4) * VectorMath::getNormal(sf::Vector2f(cos(mAngle), sin(mAngle)));
+				move(moving);
 
 				mAnimation.setDefaultAnimation(ANIMATION_DAMAGE);
 			}
@@ -122,3 +129,18 @@ Obstacle::Type Obstacle::getCollisionType(){
 
 void Obstacle::collide(CollidableEntity *collidable){
 }
+
+
+
+/*
+195 grader frn klockan 12 medsols
+
+
+
+
+
+
+
+
+
+*/
