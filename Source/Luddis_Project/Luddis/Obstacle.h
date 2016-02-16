@@ -39,7 +39,8 @@ private:
 	sf::Shape* mHitbox;
 	ObstacleType mType;
 	bool mActive;
-	float mActiveTime;
+	bool mIsDamaging;
+	float mDamageTime;
 	float mIdleTime;
 
 	AnimationQueue mAnimation;
