@@ -96,6 +96,7 @@ void Luddis::tick(const sf::Time& deltaTime){
 		mLoseDust -= deltaTime.asSeconds();
 	}
 	mAnimation.tick(deltaTime);
+	// Update scale
 	changeScale();
 }
 
@@ -201,7 +202,6 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 		&& mProjectileCooldown <= 0){
 		attack();
 		mAnimation.replaceAnimation(SHOT_ANIMATION);
-		//setScale(mScaleX, mScaleY);
 	}
 	//Handle keyboard presses
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
@@ -229,10 +229,12 @@ Luddis::Type Luddis::getCollisionType(){
 }
 
 void Luddis::collide(CollidableEntity *collidable){
+	// Collision with solid object
 	if (collidable->getCollisionCategory() == BG_SOLID){
 		mColliding = true;
 		mCollideBox = collidable->getHitBox();
 	}
+	// Collision with damaging object
 	if (collidable->getCollisionCategory() == BG_DAMAGE){
 		mAnimation.replaceAnimation(HIT_ANIMATION);
 		if (mLoseDust < 0){
@@ -240,6 +242,7 @@ void Luddis::collide(CollidableEntity *collidable){
 			mLoseDust = 1.0f;
 		}
 	}
+	// Collision with an enemy
 	if (collidable->getCollisionCategory() == ENEMY) {
 		mAnimation.replaceAnimation(HIT_ANIMATION);
 		if (mLoseDust < 0){
@@ -247,9 +250,11 @@ void Luddis::collide(CollidableEntity *collidable){
 			mLoseDust = 1.0f;
 		}
 	}
+	// Collision with an collectible
 	if (collidable->getCollisionCategory() == COLLECT){
 		
 	}
+	// Collision with a stunning entity
 	if (collidable->getCollisionCategory() == ENEMY_STUN){
 		if (mStunDuration <= 0){
 			mStunDuration = 1.0f;
