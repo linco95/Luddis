@@ -38,10 +38,12 @@ private:
 
 	sf::Shape* mHitbox;
 	ObstacleType mType;
-	bool mActive;
+
+	// State managing variables
 	bool mIsDamaging;
 	float mDamageTime;
 	float mIdleTime;
+
 	float mAngle;
 	AnimationQueue mAnimation;
 };
