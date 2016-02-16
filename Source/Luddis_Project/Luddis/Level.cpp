@@ -10,7 +10,6 @@
 #include "Obstacle.h"
 #include "EntityManager.h"
 #include "CollisionManager.h"
-#include "Utils.h"
 #include <SFML\Audio.hpp>
 #include <array>
 using namespace sf;
@@ -39,6 +38,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 	for (std::size_t i = 0; i < CONFIGMEMBERS.size(); i++){
 		assert(configDoc.HasMember(CONFIGMEMBERS[i].c_str()));
 	}
+	// Silverfishes
 	const rapidjson::Value& fishSpawns = configDoc["Silverfish_spawns"];
 	assert(fishSpawns.IsArray());
 	for (rapidjson::Value::ConstValueIterator itr = fishSpawns.Begin(); itr != fishSpawns.End(); itr++){
@@ -54,6 +54,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
 	}
 
+	// Obstacles
 	const rapidjson::Value& obstacleSpawns = configDoc["Obstacle_spawns"];
 	assert(obstacleSpawns.IsArray());
 	for (rapidjson::Value::ConstValueIterator itr = obstacleSpawns.Begin(); itr != obstacleSpawns.End(); itr++){
@@ -70,6 +71,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
 	}
 
+	// Chips
 	const rapidjson::Value& chipsSpawns = configDoc["Chips_spawns"];
 	assert(chipsSpawns.IsArray());
 	for (rapidjson::Value::ConstValueIterator itr = chipsSpawns.Begin(); itr != chipsSpawns.End(); itr++){
@@ -85,6 +87,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
 	}
 
+	// Dust
 	const rapidjson::Value& dustSpawns = configDoc["Dust_spawns"];
 	assert(dustSpawns.IsArray());
 	for (rapidjson::Value::ConstValueIterator itr = dustSpawns.Begin(); itr != dustSpawns.End(); itr++){
@@ -100,6 +103,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
 	}
 
+	// The boss
 	const rapidjson::Value& bossSpawns = configDoc["Boss_spawns"];
 	assert(bossSpawns.IsArray());
 	for (rapidjson::Value::ConstValueIterator itr = bossSpawns.Begin(); itr != bossSpawns.End(); itr++){
@@ -114,6 +118,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
 	}
 
+	// The spider
 	const rapidjson::Value& spiderSpawns = configDoc["Spider_spawns"];
 	assert(spiderSpawns.IsArray());
 	for (rapidjson::Value::ConstValueIterator itr = spiderSpawns.Begin(); itr != spiderSpawns.End(); itr++){
@@ -127,6 +132,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
 	}
 
+	//The background
 	const rapidjson::Value& background = configDoc["Background"];
 	assert(background.IsObject());
 	const rapidjson::Value& segments = background["segments"];
@@ -157,7 +163,7 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget, s
 	mTarget = aTarget;
 	mWindow = &aWindow;
 
-	std::string configText = LuddisUtilFuncs::loadJsonFile(levelFilename);
+	std::string configText = ResourceManager::getInstance().loadJsonFile(levelFilename);
 	rapidjson::Document configDoc;
 	configDoc.Parse(configText.c_str());
 	assert(configDoc.IsObject());

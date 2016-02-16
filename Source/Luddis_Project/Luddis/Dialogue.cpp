@@ -1,7 +1,6 @@
 #include "Dialogue.h"
 #include "ResourceManager.h"
 #include "GUIManager.h"
-#include "Utils.h"
 #include <rapidjson/document.h>
 #include <cmath>
 #include <array>
@@ -43,7 +42,7 @@ Dialogue::~Dialogue(){
 }
 
 void Dialogue::initialize(std::string dialogueFile){
-	std::string configText = LuddisUtilFuncs::loadJsonFile(dialogueFile);
+	std::string configText = ResourceManager::getInstance().loadJsonFile(dialogueFile);
 	rapidjson::Document configDoc;
 	configDoc.Parse(configText.c_str());
 	assert(configDoc.IsObject());

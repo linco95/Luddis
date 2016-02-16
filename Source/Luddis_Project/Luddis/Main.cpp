@@ -70,7 +70,7 @@
 int main(){
 	/*testingJSON();
 	testingJSONFromFile("resources/configs/example/test.json");*/
-	//LuddisUtilFuncs::loadJsonFile("resources/configs/example/test.json");
+	//ResourceManager::getInstance().loadJsonFile("resources/configs/example/test.json");
 	GameManager::getInstance().run();
 
 	return 0;

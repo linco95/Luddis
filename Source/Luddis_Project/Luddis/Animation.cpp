@@ -1,7 +1,6 @@
 #include "Animation.h"
 #include "ResourceManager.h"
 #include <cmath>
-#include "Utils.h"
 #include <rapidjson\document.h>
 #include <cassert>
 
@@ -14,7 +13,7 @@ struct AnimationImp : public Drawable, public sf::Transformable {
 		mCurrTile(0,0),
 		mHasLooped(false)
 	{
-		std::string config = LuddisUtilFuncs::loadJsonFile(aFilePathNoExtension + ".json");
+		std::string config = ResourceManager::getInstance().loadJsonFile(aFilePathNoExtension + ".json");
 		rapidjson::Document configDoc;
 		configDoc.Parse(config.c_str());
 		assert(configDoc.IsObject());

@@ -12,95 +12,55 @@ SoundManager::~SoundManager(){
 }
 
 //Returns a soundbuffer associated with the filename. If there is none, it will create one
-sf::SoundBuffer& SoundManager::getSoundBuffer(std::string filename){
-	for (SoundBufferPairVector::size_type i = 0; i < mSoundBuffers.size(); i++){
-		if (mSoundBuffers.at(i).second == filename){
-			return *mSoundBuffers.at(i).first;
-		}
-	}
-	loadSoundBuffer(filename);
-	return getSoundBuffer(filename);
+sf::SoundBuffer& SoundManager::getSoundBuffer(const std::string& filename){
+	if (mSoundBuffers.find(filename) == mSoundBuffers.end())
+		loadSoundBuffer(filename);
+	return mSoundBuffers[filename];
 }
 
 //Loads a soundbuffer into memory. !!Cannot store two files with the same filename!!
-void SoundManager::loadSoundBuffer(std::string filename){
-	for (SoundBufferPairVector::size_type i = 0; i < mSoundBuffers.size(); i++){
-		assert(mSoundBuffers.at(i).second != filename);
+sf::SoundBuffer& SoundManager::loadSoundBuffer(const std::string& filename){
+	if (mSoundBuffers.find(filename) == mSoundBuffers.end()){
+		sf::SoundBuffer *sb = &mSoundBuffers[filename];
+		bool sbLoaded = sb->loadFromFile(filename);
+		assert(sbLoaded);
 	}
-
-	sf::SoundBuffer* soundBuffer = new sf::SoundBuffer();
-	bool isLoaded = soundBuffer->loadFromFile(filename);
-	assert(isLoaded);
-
-	std::pair<sf::SoundBuffer*, std::string> p1;
-	p1.first = soundBuffer;
-	p1.second = filename;
-
-	mSoundBuffers.push_back(p1);
+	return mSoundBuffers[filename];
 }
 
 //Removes the soundbuffer associated with the filename from memory.
-void SoundManager::clearSoundBuffer(std::string filename){
-	for (SoundBufferPairVector::size_type i = 0; i < mSoundBuffers.size(); i++){
-		if (mSoundBuffers.at(i).second == filename){
-			delete mSoundBuffers.at(i).first;
-			mSoundBuffers.erase(mSoundBuffers.begin() + i);
-		}
-	}
+void SoundManager::clearSoundBuffer(const std::string& filename){
+	mSoundBuffers.erase(filename);
 }
 
 //Removes all currently allocated soundbuffers from memory
 void SoundManager::clearAllSoundBuffers(){
-	while (!mSoundBuffers.empty()){
-		delete mSoundBuffers.back().first;
-		mSoundBuffers.pop_back();
-	}
+	mSoundBuffers.clear();
 }
 
 //Returns a music track associated with the filename. If there is none, it will create one
-sf::Music& SoundManager::getMusic(std::string filename){
-	for (MusicPairVector::size_type i = 0; i < mMusic.size(); i++){
-		if (mMusic.at(i).second == filename){
-			return *mMusic.at(i).first;
-		}
-	}
-	loadMusic(filename);
-	return getMusic(filename);
-
+sf::Music& SoundManager::getMusic(const std::string& filename){
+	if (mMusic.find(filename) == mMusic.end())
+		loadMusic(filename);
+	return mMusic[filename];
 }
 
 //Loads a music track into memory. !!Cannot store two files with the same filename!!
-void SoundManager::loadMusic(std::string filename){
-	for (MusicPairVector::size_type i = 0; i < mMusic.size(); i++){
-		assert(mMusic.at(i).second != filename);
+sf::Music& SoundManager::loadMusic(const std::string& filename){
+	if (mMusic.find(filename) == mMusic.end()){
+		sf::Music* music = &mMusic[filename];
+		bool musicLoaded = music->openFromFile(filename);
+		assert(musicLoaded);
 	}
-
-	sf::Music* music = new sf::Music();
-	bool isLoaded = music->openFromFile(filename);
-	assert(isLoaded);
-	
-	std::pair<sf::Music*, std::string> p1;
-	p1.first = music;
-	p1.second = filename;
-	
-	mMusic.push_back(p1);
-	
+	return mMusic[filename];
 }
 
 //Removes the music track associated with the filename from memory.
-void SoundManager::clearMusic(std::string filename){
-	for (MusicPairVector::size_type i = 0; i < mMusic.size(); i++){
-		if (mMusic.at(i).second == filename){
-			delete mMusic.at(i).first;
-			mMusic.erase(mMusic.begin() + i);
-		}
-	}
+void SoundManager::clearMusic(const std::string& filename){
+	mMusic.erase(filename);
 }
 
 //Removes all currently allocated music tracks from memory
 void SoundManager::clearAllMusic(){
-	while (!mMusic.empty()){
-		delete mMusic.back().first;
-		mMusic.pop_back();
-	}
+	mMusic.clear();
 }
