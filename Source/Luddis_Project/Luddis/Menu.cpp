@@ -1,11 +1,19 @@
 #include "Menu.h"
 #include "GameStateLevel.h"
+#include "ViewUtility.h"
+#include "ResourceManager.h"
 #include "EntityManager.h"
 #include "EventManager.h"
 #include "GUIManager.h"
 #include "GameManager.h"
+#include "VectorMath.h"
 
-static const std::string MENUBUTTON_TEXTURE = "resources/images/menubutton.png";
+static const std::string MENUBUTTON_TEXTURE = "Resources/Images/GUI/MenuButton.png";
+static const std::string MENUBUTTON_TEXTURE_SETTINGS = "Resources/Images/GUI/ButtonSettings.png";
+static const std::string MENUBUTTON_TEXTURE_RETURN = "Resources/Images/GUI/ButtonReturn.png";
+static const std::string MENUBUTTON_TEXTURE_QUITGAME = "Resources/Images/GUI/ButtonQuitGame.png";
+static const std::string MENUBUTTON_TEXTURE_EXITLEVEL = "Resources/Images/GUI/ButtonExitLevel.png";
+static const std::string MENU_BACKGROUND_TEXTURE = "Resources/Images/GUI/MenuBackground.png";
 
 Menu::Menu(sf::RenderWindow* window, EventManager* eventManager, GUIManager* gUIManager, MenuType menuType, EntityManager* entityManager) :
 mBackground(new sf::RectangleShape()),
@@ -33,36 +41,41 @@ void Menu::initialize(GameStateLevel* gameStateLevel){
 	mBackground->setSize(vector);
 	mBackground->setOrigin(vector.x / 2, vector.y / 2);
 	mBackground->setOutlineColor(sf::Color::Magenta);
-	mBackground->setOutlineThickness(15.0f);
+	mBackground->setOutlineThickness(5.0f);
+	mBackground->setTexture(&ResourceManager::getInstance().getTexture( MENU_BACKGROUND_TEXTURE));
 	sf::Vector2f vector2 = mWindow->getView().getSize()*(0.5f);
 	setPosition(vector2);
 }
 
 void Menu::initializeButtons(MenuType menuType){
+	int maxButtons;
 	sf::Vector2f position(getPosition());
+	sf::Vector2f offset(0, mBackground->getSize().y / 2.5f);
 	switch (menuType)
 	{
 	case Menu::MAINMENU:
-		position.y -= mBackground->getSize().y / 2.5f;
-		addButton(MENUBUTTON_TEXTURE, "Stara Nytt Spel", "NewGame", position);
-		position.y += mBackground->getSize().y / 5;
-		addButton(MENUBUTTON_TEXTURE, "Ladda Spel", "LoadGame", position);
-		position.y += mBackground->getSize().y / 5;
-		addButton(MENUBUTTON_TEXTURE, "Inställningar", "Settings", position);
-		position.y += mBackground->getSize().y / 5;
-		addButton(MENUBUTTON_TEXTURE, "Avsluta", "Quit", position);
+		maxButtons = 4;
+		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
+		addButton(MENUBUTTON_TEXTURE, "Stara Nytt Spel", "NewGame", position+offset);
+		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
+		addButton(MENUBUTTON_TEXTURE, "Ladda Spel", "LoadGame", position + offset);
+		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
+		addButton(MENUBUTTON_TEXTURE_SETTINGS, "", "Settings", position + offset);
+		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
+		addButton(MENUBUTTON_TEXTURE_QUITGAME, "", "Quit", position + offset);
 		break;
 	case Menu::PAUSEMENU:
-		position.y -= mBackground->getSize().y / 2.5f;
-		addButton(MENUBUTTON_TEXTURE, "Fortsätt", "Continue", position);
-		position.y += mBackground->getSize().y / 5;
-		addButton(MENUBUTTON_TEXTURE, "Starta Om Nivå", "ResetLevel", position);
-		position.y += mBackground->getSize().y / 5;
-		addButton(MENUBUTTON_TEXTURE, "Inställningar", "Settings", position);
-		position.y += mBackground->getSize().y / 5;
-		addButton(MENUBUTTON_TEXTURE, "Avsluta Nivå", "ExitLevel", position);
-		position.y += mBackground->getSize().y / 5;
-		addButton(MENUBUTTON_TEXTURE, "Avsluta Spel", "QuitGame", position);
+		maxButtons = 5;
+		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
+		addButton(MENUBUTTON_TEXTURE_RETURN, "", "Continue", position + offset);
+		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
+		addButton(MENUBUTTON_TEXTURE, "Starta Om Nivå", "ResetLevel", position + offset);
+		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
+		addButton(MENUBUTTON_TEXTURE_SETTINGS, "", "Settings", position + offset);
+		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
+		addButton(MENUBUTTON_TEXTURE_EXITLEVEL, "", "ExitLevel", position + offset);
+		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
+		addButton(MENUBUTTON_TEXTURE_QUITGAME, "", "QuitGame", position + offset);
 		break;
 	default:
 

@@ -6,7 +6,7 @@
 #include <array>
 
 static const std::array<std::string, 4> CONFIGMEMBERS = { "Character_filename", "Character_displayname", "Header", "Pages" };
-static const std::string BACKGROUND_TEXTURE = "Resources/Images/DialogueFrame.png";
+static const std::string BACKGROUND_TEXTURE = "Resources/Images/GUI/DialogueFrame.png";
 
 static const float ANIMATION_TIME = 1.5f;
 static const float RECT_WIDTH = 1000;

@@ -27,6 +27,8 @@ public:
 	void setInDialogue(bool inDialogue);
 	void setupLevel(std::string levelFile);
 	void resetLevel();
+	void resetInventory();
+
 
 private:
 	EntityManager* mEntityM;
@@ -42,6 +44,12 @@ private:
 	std::string mCurrentLevelFile;
 
 	PowerupDisplay* mPowerupDisplays[2];
+	struct CurrentInventory{
+		int dust;
+		int chips;
+		int eggs;
+	};
+	CurrentInventory mInv;
 };
 
 #endif // !_INCLUDED_GAMESTATELEVEL_
