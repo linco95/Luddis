@@ -20,6 +20,7 @@ Inventory& Inventory::getInstance(){
 	return I;
 }
 
+#pragma region CHIPS
 int Inventory::getChips() const{
 	return mChips;
 }
@@ -31,8 +32,9 @@ void Inventory::setChips(int chips){
 void Inventory::changeChips(int chips){
 	mChips += chips;
 }
+#pragma endregion Chips related functions
 
-
+#pragma region DUST
 int Inventory::getDust() const{
 	return mDust;
 }
@@ -58,7 +60,9 @@ void Inventory::setMaxDust(int maxDust){
 void Inventory::increaseMaxDust(int maxDust){
 	mMaxDust += maxDust;
 }
+#pragma endregion Dust related functions
 
+#pragma region EGGS
 int Inventory::getEggs() const{
 	return mEggs;
 }
@@ -70,7 +74,9 @@ void Inventory::setEggs(int eggs){
 void Inventory::changeEggs(int eggs){
 	mEggs += eggs;
 }
+#pragma endregion Egg related functions
 
+#pragma region POWER-UP
 int Inventory::getPowerUp() const{
 	return mPowerUp;
 }
@@ -82,3 +88,4 @@ void Inventory::setPowerUp(int pow){
 void Inventory::changePowerUp(int pow){
 	mPowerUp += pow;
 }
+#pragma endregion Power-up related functions
