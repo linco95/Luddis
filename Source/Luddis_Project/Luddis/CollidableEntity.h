@@ -27,9 +27,11 @@ public:
 	CollidableEntity();
 	virtual ~CollidableEntity();
 
-	// Funktion för att uppdatera entiteten
+	// Check what kind of object this is
 	virtual Category getCollisionCategory() = 0;
+	// Check the shae of the object
 	virtual Type getCollisionType() = 0;
+	// Collide the object with "collidable"
 	virtual void collide(CollidableEntity *collidable) = 0;
 	virtual sf::FloatRect getHitBox() = 0;
 	virtual sf::Shape* getNarrowHitbox() const = 0;

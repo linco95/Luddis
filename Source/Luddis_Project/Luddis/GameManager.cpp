@@ -141,9 +141,9 @@ struct GameManagerImp : public EventObserver {
 		
 		mGameStatePaused = new GameStatePaused(&mMainWindow, Menu::PAUSEMENU, &mEntityManager, &mGUIManager);
 		mGameStateLevel = new GameStateLevel(&mMainWindow, &mEntityManager, &mGUIManager);
-		mGameStateLevel->initialize(mGameStatePaused);
 		mGameStatePaused->initialize(mGameStateLevel);
-		mCurrentGameState = mGameStateLevel;
+		mGameStateLevel->initialize(mGameStatePaused);
+		mCurrentGameState = mGameStatePaused;
 
 		View mapView;
 		se->setMainVolume(100);
@@ -153,7 +153,7 @@ struct GameManagerImp : public EventObserver {
 
 			// Handle Events       
 			mCurrentGameState->handleEvents();
-			handleEvents(mMainWindow);
+			//handleEvents(mMainWindow);
 			// Update according to the game's state
 			mCurrentGameState->update(gameClock);
 

@@ -25,13 +25,14 @@ public:
 
 private:
 	EntityManager* mEntityM;
-	GUIManager* mGUIM;
+	GUIManager* mLevelGUIM;
+	GUIManager mMenuGUIM;
 	EventManager mEventM;
 	GameStateLevel* mGameStateLevel;
 	sf::View mGUIView;
 	sf::View mMapView;
 	sf::RenderWindow* mWindow;
-	Menu mMenu;
+	Menu* mMenu;
 };
 
 #endif // !_INCLUDED_GAMESTATEPAUSED_
