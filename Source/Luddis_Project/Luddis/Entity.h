@@ -24,12 +24,17 @@ public:
 	Entity();
 	virtual ~Entity();
 
-	// Funktion för att uppdatera entiteten
+	// Udate the entity
 	virtual void tick(const sf::Time& deltaTime) = 0;
+	// Draw the entity
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
+	// Check if an entity is alive
 	virtual bool isAlive() const = 0;
+	// Determines in what order entities are drawn
 	virtual RenderLayer getRenderLayer() const = 0;
+	// Check if an entity is active
 	virtual bool isActive() const = 0;
+	// Set an entities "active" state
 	virtual void setActive(const bool& active) = 0;
 };
 

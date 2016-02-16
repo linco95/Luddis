@@ -6,10 +6,10 @@ const Entity::RenderLayer LAYER = Entity::RenderLayer::OBSTACLES;
 const int DAMAGE = 0;
 static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 static const float IDLE_TIME = 4;
-static const float ACTIVE_TIME = 2;
+static const float DAMAGE_TIME = 2;
 
-static const Animation ANIMATION_IDLE = Animation("Resources/Images/Spritesheets/Grafik_Luddis shot120x90treframes_s2d3v1");
-static const Animation ANIMATION_ACTIVE = Animation("Resources/Images/Spritesheets/Grafik_Luddis_hit_sprite_s2d2v1");
+static const Animation ANIMATION_IDLE = Animation("Resources/Images/Spritesheets/Grafik_steam_AnimationIdleSprite");
+static const Animation ANIMATION_DAMAGE = Animation("Resources/Images/Spritesheets/Grafik_steam_AnimationSprite");
 
 Obstacle::Obstacle(sf::RenderWindow* window, std::string textureFilename, ObstacleType type, const sf::Vector2f& position, const float& angle) :
 mIsAlive(true),
@@ -18,9 +18,9 @@ mWindow(window),
 mType(type),
 mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
 mHitbox(new sf::CircleShape(HITBOX_SHAPE)),
-// The following three are only used by changing objects
-mActive(false),
-mActiveTime(ACTIVE_TIME),
+mActive(true),
+mIsDamaging(false),
+mDamageTime(DAMAGE_TIME),
 mIdleTime(IDLE_TIME),
 mAnimation(ANIMATION_IDLE)
 {
@@ -42,23 +42,23 @@ void Obstacle::tick(const sf::Time& deltaTime){
 	// Changing obstacle
 	if (mType == DAMAGE){
 		// Active obstacle (damaging)
-		if (mActive == true){
-			mActiveTime -= float(deltaTime.asSeconds());
-			if (mActiveTime <= 0){
-				mActive = false;
-				mActiveTime = ACTIVE_TIME;
+		if (mIsDamaging == true){
+			mDamageTime -= float(deltaTime.asSeconds());
+			if (mDamageTime <= 0){
+				mIsDamaging = false;
+				mDamageTime = DAMAGE_TIME;
 
 				mAnimation.setDefaultAnimation(ANIMATION_IDLE);
 			}
 		}
 		// Inactive
-		else if (mActive == false){
+		else if (mIsDamaging == false){
 			mIdleTime -= float(deltaTime.asSeconds());
 			if (mIdleTime <= 0){
-				mActive = true;
+				mIsDamaging = true;
 				mIdleTime = IDLE_TIME;
 
-				mAnimation.setDefaultAnimation(ANIMATION_ACTIVE);
+				mAnimation.setDefaultAnimation(ANIMATION_DAMAGE);
 			}
 		}
 		mAnimation.tick(deltaTime);
@@ -104,7 +104,7 @@ sf::Shape* Obstacle::getNarrowHitbox() const{
 
 Obstacle::Category Obstacle::getCollisionCategory(){
 	if (mType == DAMAGE){
-		if (mIsActive){
+		if (mIsDamaging){
 			return BG_DAMAGE;
 		}
 		else{
