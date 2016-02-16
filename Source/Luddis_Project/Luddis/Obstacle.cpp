@@ -128,18 +128,3 @@ Obstacle::Type Obstacle::getCollisionType(){
 
 void Obstacle::collide(CollidableEntity *collidable){
 }
-
-
-
-/*
-195 grader frn klockan 12 medsols
-
-
-
-
-
-
-
-
-
-*/
