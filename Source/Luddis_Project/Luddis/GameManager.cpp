@@ -22,6 +22,7 @@
 #include "ScoreGauge.h"
 #include "GameStateLevel.h"
 #include "GameStatePaused.h"
+#include "GameStateMap.h"
 #include "ViewUtility.h"
 
 #include <iostream>
@@ -34,13 +35,12 @@ static const int WIDTH = 1920;
 static const int HEIGHT = 1080;
 static const float DESIRED_ASPECTRATIO = (float)WIDTH / (float)HEIGHT;
 static const Color BGCOLOR = Color::Black;
-static const std::string TEXTURE_NAME = "Resources/Images/Grafik_Luddis120x80_s1d3v1.png";
 static const std::string TEXTURE_CHIPSCOUNTER = "Resources/Images/HUD_Chips_Icon.png";
 static const std::string TEXTURE_LUDDCOUNTER = "Resources/Images/HUD_Ludd_Icon.png";
 static const std::string TEXTURE_LUDDGAUGE_FRAME = "Resources/Images/LuddGaugeFrame.png";
 static const std::string TEXTURE_LUDDGAUGE_BAR = "Resources/Images/LuddGaugeBar.png";
-static const std::string FONT_NAME = "arial.ttf";
 static const std::string TEST_LEVEL = "Resources/Configs/Levels/Level01Entities.json";
+static const std::string FONT_NAME = "arial.ttf";
 static const bool VSYNCENABLED = true;
 
 struct GameManagerImp : public EventObserver {
@@ -65,9 +65,6 @@ struct GameManagerImp : public EventObserver {
 	// Temporary function (might keep luddis init here). Most of this should be handled in the levelmanager/level class instead
 	void initializeEntities(){
 
-		mPlayer = new Luddis(TEXTURE_NAME, &mMainWindow, &mEntityManager);
-		mEntityManager.addEntity(mPlayer);
-		CollisionManager::getInstance().addCollidable(mPlayer);
 
 		mChipsCounter = new ScoreCounter(&mMainWindow, TEXTURE_CHIPSCOUNTER, sf::Vector2f(WIDTH*0.7f, HEIGHT-60), ScoreCounter::ScoreType::CHIPS);
 		mGUIManager.addInterfaceElement(mChipsCounter);
@@ -85,9 +82,6 @@ struct GameManagerImp : public EventObserver {
 		mMainWindow.draw(splashScreen);
 		mMainWindow.display();
 		
-		mLevel = new Level(&mEntityManager);
-		mLevel->initializeLevel(mMainWindow, mPlayer, TEST_LEVEL);
-		mEntityManager.addEntity(mLevel);
 		mMainWindow.setMouseCursorVisible(true);
 	}
 
@@ -141,9 +135,11 @@ struct GameManagerImp : public EventObserver {
 		
 		mGameStatePaused = new GameStatePaused(&mMainWindow, Menu::PAUSEMENU, &mEntityManager, &mGUIManager);
 		mGameStateLevel = new GameStateLevel(&mMainWindow, &mEntityManager, &mGUIManager);
+		mGameStateMap = new GameStateMap(&mMainWindow);
 		mGameStatePaused->initialize(mGameStateLevel);
 		mGameStateLevel->initialize(mGameStatePaused);
-		mCurrentGameState = mGameStatePaused;
+		mGameStateLevel->setupLevel(TEST_LEVEL);
+		mCurrentGameState = mGameStateLevel;
 
 		View mapView;
 		se->setMainVolume(100);
@@ -169,18 +165,16 @@ struct GameManagerImp : public EventObserver {
 
 	GameStateLevel* mGameStateLevel;
 	GameStatePaused* mGameStatePaused;
+	GameStateMap* mGameStateMap;
 
 	GameState* mCurrentGameState;
 	RenderWindow mMainWindow;
-	Luddis *mPlayer;
 	
 	// Needs to be moved to corresponding level later.
 
 	ScoreCounter *mChipsCounter;
 	ScoreCounter *mLuddCounter;
 	ScoreGauge *mLuddGauge;
-
-	Level* mLevel; //To be replaced with LevelManager with LevelVector
 };
 
 GameManager::GameManager() :

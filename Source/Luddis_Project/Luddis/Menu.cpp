@@ -153,5 +153,6 @@ void Menu::buttonFuncQuitGame(){
 }
 
 void Menu::buttonFuncResetLevel(){
-	
+	mGameStateLevel->resetLevel();
+	GameManager::getInstance().setGameState(mGameStateLevel);
 }

@@ -25,11 +25,12 @@ public:
 	void removeDeadEntities();
 
 	void updateEntities(const sf::Time& deltaTime);
+	void renderEntities(sf::RenderWindow& window);
+	void emptyVector();
 
 	// Function that gets used to read all entities. (Added to be used by rendering)
 	const EntitiesVector& getEntities() const;
 
-	void renderEntities(sf::RenderWindow& window);
 private:
 	
 	EntitiesVector mEntities;

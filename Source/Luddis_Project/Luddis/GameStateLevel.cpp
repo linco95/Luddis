@@ -6,6 +6,10 @@
 #include "GameManager.h"
 #include "PowerupDisplay.h"
 #include "Dialogue.h"
+#include "Level.h"
+#include "Luddis.h"
+
+static const std::string LUDDIS_TEXTURE = "Resources/Images/Grafik_Luddis120x80_s1d3v1.png";
 
 static const std::string POWER_DISPLAY = "Resources/Images/PowerButton.png";
 static const std::string BUTTON_TEXTURE = "Resources/Images/Button.png";
@@ -17,7 +21,8 @@ mEventM(),
 mGUIM(guiManager),
 mCM(&CollisionManager::getInstance()),
 mGUIView(ViewUtility::getViewSize()),
-mWindow(window){
+mWindow(window),
+mInDialogue(false){
 	mEventM.attatch(this, sf::Event::EventType::KeyPressed);
 }
 
@@ -35,14 +40,16 @@ void GameStateLevel::initialize(GameStatePaused* gameStateLevel){
 
 void GameStateLevel::update(sf::Clock& clock){
 	//Do game logic
-	mEntityM->updateEntities(clock.getElapsedTime());
+	if (!mInDialogue){
+		mEntityM->updateEntities(clock.getElapsedTime());
+		mCM->detectCollisions();
+	}
 	//Change the view when updating GUI elements
 	mMapView = mWindow->getView();
 	mWindow->setView(mGUIView);
 	mGUIM->updateElements(clock.restart());
 	//Then change it back
 	mWindow->setView(mMapView);
-	mCM->detectCollisions();
 
 	//Garbage collection
 	mCM->removeDeadCollidables();
@@ -80,5 +87,31 @@ void GameStateLevel::handleEvents(){
 	sf::Event currEvent;
 	while (mWindow->pollEvent(currEvent)){
 		mEventM.notify(currEvent);
+	}
+}
+
+bool GameStateLevel::getInDialogue() const{
+	return mInDialogue;
+}
+
+void GameStateLevel::setInDialogue(bool inDialogue){
+	mInDialogue = inDialogue;
+}
+
+void GameStateLevel::setupLevel(std::string levelFile){
+	mCurrentLevelFile = levelFile;
+	Luddis *mPlayer = new Luddis(LUDDIS_TEXTURE, mWindow, mEntityM);
+	mEntityM->addEntity(mPlayer);
+	mCM->addCollidable(mPlayer);
+	mLevel = new Level(mEntityM);
+	mEntityM->addEntity(mLevel);
+	mLevel->initializeLevel(*mWindow, mPlayer, levelFile);
+}
+
+void GameStateLevel::resetLevel(){
+	if (!mCurrentLevelFile.empty()){
+		mCM->emptyVector();
+		mEntityM->emptyVector();
+		setupLevel(mCurrentLevelFile);
 	}
 }

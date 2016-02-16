@@ -11,7 +11,7 @@ mCollidables(){
 }
 
 CollisionManager::~CollisionManager(){
-
+	emptyVector();
 }
 
 CollisionManager& CollisionManager::getInstance(){
@@ -151,5 +151,11 @@ void CollisionManager::detectCollisions(){
 	}
 	if (!colliding.empty()){
 		narrowCollision(colliding);
+	}
+}
+
+void CollisionManager::emptyVector(){
+	while (!mCollidables.empty()){
+		mCollidables.pop_back();
 	}
 }

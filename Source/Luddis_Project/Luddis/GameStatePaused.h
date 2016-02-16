@@ -12,7 +12,6 @@ class GameStateLevel;
 
 class GameStatePaused : public GameState{
 public:
-	//TODO: have each state manage their own EntityManager, instead of the GameManager
 	GameStatePaused(sf::RenderWindow* window, Menu::MenuType menuType, EntityManager* entityManager, GUIManager* guiManager);
 	virtual ~GameStatePaused();
 

@@ -9,10 +9,7 @@ mEntities(){
 
 // Destructor for the entity manager
 EntityManager::~EntityManager(){
-	while (!mEntities.empty()){
-		delete mEntities.back();
-		mEntities.pop_back();
-	}
+	emptyVector();
 }
 
 // Function to add entities to the manager (an entity pointer)
@@ -73,5 +70,13 @@ void EntityManager::updateEntities(const sf::Time& deltaTime){
 	EntitiesVector temp(mEntities);
 	for (auto e : temp){
 		e->tick(deltaTime);
+	}
+}
+
+void EntityManager::emptyVector(){
+	//Does not work as some of the objects are shared with the collision manager.
+	while (!mEntities.empty()){
+		delete mEntities.back();
+		mEntities.pop_back();
 	}
 }
