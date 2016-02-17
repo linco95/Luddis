@@ -6,7 +6,7 @@
 #include "SoundEngine.h"
 #include "Inventory.h"
 
-static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
+static const Entity::RenderLayer LAYER = Entity::RenderLayer::ITEM;
 static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 
 Chips::Chips(sf::RenderWindow* window, std::string textureFilename, const sf::Vector2f& position, const float& angle) :

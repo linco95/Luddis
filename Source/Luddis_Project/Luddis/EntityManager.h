@@ -11,7 +11,7 @@
 #include <SFML/System.hpp>
 #include <vector>
 #include "Entity.h"
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 class EntityManager {
 public:
