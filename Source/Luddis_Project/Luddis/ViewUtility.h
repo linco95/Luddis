@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics/View.hpp>
 
-
+//Simply used on a low level to retrieve default view info.
 namespace ViewUtility{
 	static const int VIEW_WIDTH = 1920;
 	static const int VIEW_HEIGHT = 1080;

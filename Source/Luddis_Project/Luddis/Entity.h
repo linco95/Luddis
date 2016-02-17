@@ -24,7 +24,7 @@ public:
 	Entity();
 	virtual ~Entity();
 
-	// Udate the entity
+	// Update the entity
 	virtual void tick(const sf::Time& deltaTime) = 0;
 	// Draw the entity
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;

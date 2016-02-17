@@ -130,6 +130,7 @@
     <ClCompile Include="GameStateMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TutorialText.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -260,6 +261,9 @@
     </ClInclude>
     <ClInclude Include="GameStateMap.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialText.h">
+      <Filter>Header Files\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

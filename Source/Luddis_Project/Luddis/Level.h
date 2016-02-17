@@ -9,12 +9,14 @@
 namespace sf{
 	class Music;
 }
+
 class EntityManager;
+class GameStateLevel;
 
 class Level : public Entity {
 
 public:
-	Level(EntityManager* entityManager);
+	Level(EntityManager* entityManager, GameStateLevel* gameStateLevel);
 	~Level();
 
 	void initializeLevel(sf::RenderWindow& aWindow, sf::Transformable* aTarget, std::string levelFilename);
@@ -33,6 +35,7 @@ private:
 	void readInitMap();
 
 	EntityManager* mEntityManager;
+	GameStateLevel* mGameStateLevel;
 	sf::Transformable* mTarget;
 	sf::RenderWindow *mWindow;
 	typedef std::vector<sf::Sprite> SpriteVector;

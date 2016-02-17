@@ -6,6 +6,7 @@ TextBox::TextBox(sf::IntRect box, std::string text, int fontSize, std::string fo
 mTextString(text),
 mBox(box),
 mFontSize(fontSize),
+mRows(0),
 mFontName(fontName){
 	setFont(fontName);
 	mText.setString(wrapText(mTextString, mBox.width, ResourceManager::getInstance().getFont(mFontName), mFontSize));
@@ -17,6 +18,11 @@ TextBox::~TextBox(){
 
 void TextBox::setString(const std::string& text){
 	mText.setString(wrapText(text, mBox.width, ResourceManager::getInstance().getFont(mFontName), mFontSize));
+	size_t position = 0;
+	mRows = 1;
+	while (position = mTextString.find("\n") != sf::String::InvalidPos){
+		mRows++;
+	}
 }
 
 void TextBox::setFont(std::string fontName){
@@ -60,4 +66,8 @@ sf::String TextBox::wrapText(sf::String string, unsigned width, const sf::Font &
 	}
 
 	return string;
+}
+
+int TextBox::getRows() const{
+	return mRows;
 }

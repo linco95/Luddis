@@ -134,6 +134,7 @@ sf::FloatRect Silverfish::getHitBox(){
 		return sf::FloatRect(-999, -999, 0, 0);
 	}
 }
+
 sf::Shape* Silverfish::getNarrowHitbox() const{
 	mHitbox->setPosition(getPosition());
 	return mHitbox;

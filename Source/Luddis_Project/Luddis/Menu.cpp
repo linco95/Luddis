@@ -42,7 +42,6 @@ void Menu::initialize(GameStateLevel* gameStateLevel){
 	mBackground->setOrigin(vector.x / 2, vector.y / 2);
 	mBackground->setOutlineColor(sf::Color::Magenta);
 	mBackground->setOutlineThickness(5.0f);
-	mBackground->setTexture(&ResourceManager::getInstance().getTexture( MENU_BACKGROUND_TEXTURE));
 	sf::Vector2f vector2 = mWindow->getView().getSize()*(0.5f);
 	setPosition(vector2);
 }

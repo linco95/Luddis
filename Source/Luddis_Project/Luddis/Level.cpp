@@ -9,9 +9,11 @@
 #include "Dust.h"
 #include "Obstacle.h"
 #include "SpiderEgg.h"
+#include "TutorialText.h"
 #include "ViewUtility.h"
 #include "EntityManager.h"
 #include "CollisionManager.h"
+#include "GameStateLevel.h"
 #include <SFML\Audio.hpp>
 #include <array>
 #include <map>
@@ -38,11 +40,15 @@ struct spawnableInfo{
 		type(aType){}
 	sf::Color color;
 	EntityType type;
-} ;
-spawnableInfo spawns[] {spawnableInfo(sf::Color(0, 0, 0), CHIPS), spawnableInfo(sf::Color(255, 0, 0), DUST), spawnableInfo(sf::Color(0, 0, 255), EGG)};
-Level::Level(EntityManager* entityManager) :
+};
+spawnableInfo spawns[] {
+		spawnableInfo(sf::Color(0, 0, 0), CHIPS),
+		spawnableInfo(sf::Color(255, 0, 0), DUST),
+		spawnableInfo(sf::Color(0, 0, 255), EGG)};
+Level::Level(EntityManager* entityManager, GameStateLevel* gameStateLevel) :
 mIsActive(true),
-mEntityManager(entityManager)
+mEntityManager(entityManager),
+mGameStateLevel(gameStateLevel)
 {
 
 }
@@ -104,9 +110,12 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 	ResourceManager* rm = &ResourceManager::getInstance();
 
 	for (std::size_t i = 0; i < CONFIGMEMBERS.size(); i++){
+		//Is this really optimal? Some levels will have enemies
+		//that are not present on other levels.
 		std::cout << CONFIGMEMBERS[i] << std::endl;
 		assert(configDoc.HasMember(CONFIGMEMBERS[i].c_str()));
 	}
+
 	// Silverfishes
 	const rapidjson::Value& fishSpawns = configDoc["Silverfish_spawns"];
 	assert(fishSpawns.IsArray());
@@ -117,10 +126,37 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		assert(itr->HasMember("angle") && (*itr)["angle"].IsDouble());
 		assert(itr->HasMember("activationpos") && (*itr)["activationpos"].IsInt());
 
-		Silverfish* fish = new Silverfish(mWindow, sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()), (float)(*itr)["angle"].GetDouble(), (float)(*itr)["activationpos"].GetDouble(), mTarget);
+		float x = (float)(*itr)["x"].GetInt();
+		float y = (float)(*itr)["y"].GetInt();
+		sf::Vector2f pos(x, y);
+		float angle = (float)(*itr)["angle"].GetDouble();
+		float act = (float)(*itr)["activationpos"].GetInt();
+
+		Silverfish* fish = new Silverfish(mWindow, pos, angle, act, mTarget);
 		mEntityManager->addEntity(fish);
 		cm->addCollidable(fish);
-		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
+		std::cout << x << " " << y << std::endl;
+	}
+
+	//TutorialTexts
+	if (configDoc.HasMember("TutorialText_spawns") && configDoc["TutorialText_spawns"].IsArray()){
+		const rapidjson::Value& tutorialSpawns = configDoc["TutorialText_spawns"];
+		for (rapidjson::Value::ConstValueIterator itr = tutorialSpawns.Begin(); itr != tutorialSpawns.End(); itr++){
+			assert(itr->IsObject());
+			assert(itr->HasMember("x") && (*itr)["x"].IsInt());
+			assert(itr->HasMember("y") && (*itr)["y"].IsInt());
+			assert(itr->HasMember("text") && (*itr)["text"].IsString());
+			assert(itr->HasMember("activationpos") && (*itr)["activationpos"].IsInt());
+			float x = (float)(*itr)["x"].GetInt();
+			float y = (float)(*itr)["y"].GetInt();
+			sf::Vector2f pos(x, y);
+			std::string text = (*itr)["text"].GetString();
+			float act = (float)(*itr)["activationpos"].GetInt();
+
+			TutorialText* tut = new TutorialText(mWindow, pos, act, text, mTarget);
+			mEntityManager->addEntity(tut);
+			std::cout << x << " " << y << std::endl;
+		}
 	}
 
 	// Obstacles
@@ -134,7 +170,14 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		assert(itr->HasMember("y") && (*itr)["y"].IsInt());
 		assert(itr->HasMember("angle") && (*itr)["angle"].IsDouble());
 
-		Obstacle* obstacle = new Obstacle(mWindow, (*itr)["filename"].GetString(), Obstacle::ObstacleType((*itr)["type"].GetInt()), sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()), (float)(*itr)["angle"].GetDouble());
+		std::string filename = (*itr)["filename"].GetString();
+		int type =(*itr)["type"].GetInt();
+		float x = (float)(*itr)["x"].GetInt();
+		float y = (float)(*itr)["y"].GetInt();
+		sf::Vector2f pos(x, y);
+		float angle = (float)(*itr)["angle"].GetDouble();
+
+		Obstacle* obstacle = new Obstacle(mWindow, filename, Obstacle::ObstacleType(type),pos, angle);
 		mEntityManager->addEntity(obstacle);
 		cm->addCollidable(obstacle);
 		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
@@ -152,10 +195,15 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		assert(itr->HasMember("y") && (*itr)["y"].IsInt());
 		assert(itr->HasMember("activationpos") && (*itr)["activationpos"].IsInt());
 
-		BossDishCloth* boss = new BossDishCloth(mWindow, sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()), (float)(*itr)["activationpos"].GetDouble(), mTarget, mEntityManager);
+		float x = (float)(*itr)["x"].GetInt();
+		float y = (float)(*itr)["y"].GetInt();
+		sf::Vector2f pos(x, y);
+		float act = (float)(*itr)["activationpos"].GetInt();
+
+		BossDishCloth* boss = new BossDishCloth(mWindow, pos, act, mTarget, mEntityManager);
 		mEntityManager->addEntity(boss);
 		cm->addCollidable(boss);
-		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
+		std::cout << x << " " << y << std::endl;
 	}
 
 	// The spider
@@ -167,9 +215,14 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		assert(itr->HasMember("y") && (*itr)["y"].IsInt());
 		assert(itr->HasMember("activationpos") && (*itr)["activationpos"].IsInt());
 
-		Spider* spider = new Spider(mWindow, sf::Vector2f((float)(*itr)["x"].GetDouble(), (float)(*itr)["y"].GetDouble()), (float)(*itr)["activationpos"].GetDouble(), mTarget);
+		float x = (float)(*itr)["x"].GetInt();
+		float y = (float)(*itr)["y"].GetInt();
+		sf::Vector2f pos(x, y);
+		float act = (float)(*itr)["activationpos"].GetInt();
+
+		Spider* spider = new Spider(mWindow, pos, act, mTarget, mGameStateLevel);
 		mEntityManager->addEntity(spider);
-		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
+		std::cout << x << " " << y << std::endl;
 	}
 
 	//The background

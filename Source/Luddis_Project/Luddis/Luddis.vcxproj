@@ -126,6 +126,7 @@
     <ClCompile Include="Spider.cpp" />
     <ClCompile Include="SpiderEgg.cpp" />
     <ClCompile Include="TextBox.cpp" />
+    <ClCompile Include="TutorialText.cpp" />
     <ClCompile Include="VectorMath.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -170,6 +171,7 @@
     <ClInclude Include="Spider.h" />
     <ClInclude Include="SpiderEgg.h" />
     <ClInclude Include="TextBox.h" />
+    <ClInclude Include="TutorialText.h" />
     <ClInclude Include="VectorMath.h" />
     <ClInclude Include="ViewUtility.h" />
   </ItemGroup>

@@ -14,7 +14,6 @@ static const std::string LUDDIS_TEXTURE = "Resources/Images/Grafik_Luddis120x80_
 
 static const std::string POWER_DISPLAY = "Resources/Images/GUI/PowerButton.png";
 static const std::string BUTTON_TEXTURE = "Resources/Images/GUI/Button.png";
-static const std::string TEST_DIALOGUE = "Resources/Configs/Dialogue/Example_Dialogue.json";
 
 GameStateLevel::GameStateLevel(sf::RenderWindow* window, EntityManager* entityManager, GUIManager* guiManager) :
 mEntityM(entityManager),
@@ -35,8 +34,6 @@ void GameStateLevel::initialize(GameStatePaused* gameStateLevel){
 	mGameStatePaused = gameStateLevel;
 	mPowerupDisplays[0] = new PowerupDisplay(POWER_DISPLAY, sf::Vector2f((float)ViewUtility::VIEW_WIDTH*0.8f, (float)ViewUtility::VIEW_HEIGHT - 60), 15.0f);
 	mGUIM->addInterfaceElement(mPowerupDisplays[0]);
-	Dialogue* dialogue = new Dialogue(TEST_DIALOGUE, mWindow, mGUIM, &mEventM, sf::Vector2f((float)ViewUtility::VIEW_WIDTH*0.3f, (float)ViewUtility::VIEW_HEIGHT-100));
-	mGUIM->addInterfaceElement(dialogue);
 }
 
 void GameStateLevel::update(sf::Clock& clock){
@@ -91,6 +88,14 @@ void GameStateLevel::handleEvents(){
 	}
 }
 
+void GameStateLevel::createDialogue(std::string dialogueFilename, sf::Vector2f pos){
+	Dialogue* dialogue = new Dialogue(dialogueFilename, mWindow, mGUIM, &mEventM, pos, this);
+	mGUIM->addInterfaceElement(dialogue);
+	mInDialogue = true;
+}
+
+//Retarded name, but it returns if there is currently a dialogue
+//playing or not.
 bool GameStateLevel::getInDialogue() const{
 	return mInDialogue;
 }
@@ -108,7 +113,7 @@ void GameStateLevel::setupLevel(std::string levelFile){
 	Luddis *mPlayer = new Luddis(LUDDIS_TEXTURE, mWindow, mEntityM);
 	mEntityM->addEntity(mPlayer);
 	mCM->addCollidable(mPlayer);
-	mLevel = new Level(mEntityM);
+	mLevel = new Level(mEntityM, this);
 	mEntityM->addEntity(mLevel);
 	mLevel->initializeLevel(*mWindow, mPlayer, levelFile);
 }

@@ -7,9 +7,13 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
+class GUIManager;
+class EventManager;
+class GameStateLevel;
+
 class Spider : public Entity {
 public:
-	Spider(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget);
+	Spider(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget, GameStateLevel* gameStateLevel);
 	~Spider();
 
 	void tick(const sf::Time& deltaTime) override;
@@ -26,9 +30,11 @@ private:
 	bool mIsAlive;
 	bool mIsActive;
 	bool mWaiting;
+	bool mDisplayDialogue;
 	float mWait;
 	sf::Sprite mSprite;
 	sf::RenderWindow* mWindow;
+	GameStateLevel* mGameStateLevel;
 	sf::Vector2f mDirection;
 	AnimationQueue mAnimation;
 };

@@ -23,6 +23,7 @@ public:
 	void onEvent(const sf::Event &aEvent) override;
 	void handleEvents() override;
 
+	void createDialogue(std::string dialogueFile, sf::Vector2f pos);
 	bool getInDialogue() const;
 	void setInDialogue(bool inDialogue);
 	void setupLevel(std::string levelFile);

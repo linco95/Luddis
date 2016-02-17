@@ -1,11 +1,11 @@
 #include "Dialogue.h"
 #include "ResourceManager.h"
 #include "GUIManager.h"
+#include "GameStateLevel.h"
 #include <rapidjson/document.h>
 #include <cmath>
 #include <array>
 
-static const std::array<std::string, 4> CONFIGMEMBERS = { "Character_filename", "Character_displayname", "Header", "Pages" };
 static const std::string BACKGROUND_TEXTURE = "Resources/Images/GUI/DialogueFrame.png";
 
 static const float ANIMATION_TIME = 1.5f;
@@ -15,24 +15,24 @@ static const int INDENT = 30;
 static sf::Vector2f DialogueBoxMaxSize(RECT_WIDTH, RECT_HEIGHT);
 static sf::IntRect DEFAULT_RECT(INDENT, INDENT, (int)RECT_WIDTH-INDENT*2, 0);
 
-Dialogue::Dialogue(const std::string& dialogueFile, sf::RenderWindow* window, GUIManager* guiManager, EventManager* eventManager, sf::Vector2f pos) :
+Dialogue::Dialogue(const std::string& dialogueFile, sf::RenderWindow* window, GUIManager* guiManager, EventManager* eventManager, sf::Vector2f pos, GameStateLevel* gameStateLevel) :
 mButtonCount(0),
 mAnimationTimer(ANIMATION_TIME),
+mLevel(0),
 mIsAlive(true),
 mIsActive(true),
 mDrawContents(false),
 mWindow(window),
 mGUIManager(guiManager),
 mEventManager(eventManager),
+mGameStateLevel(gameStateLevel),
 mActivePage(0),
 mBackground(),
-mDialogueTexts(),
-mHeader(DEFAULT_RECT, "", 28){
+mDialogueTexts(){
 	setPosition(pos);
 	sf::Vector2f offset(0, -RECT_HEIGHT);
 	mBackground.setPosition(offset);
 	mBackground.setTexture(&ResourceManager::getInstance().getTexture(BACKGROUND_TEXTURE));
-	mHeader.setPosition(offset);
 	mBackground.setFillColor(sf::Color(255, 255, 255));
 	mBackground.setOutlineThickness((float)INDENT / 2);
 	initialize(dialogueFile);
@@ -40,6 +40,9 @@ mHeader(DEFAULT_RECT, "", 28){
 
 Dialogue::~Dialogue(){
 	internalClear();
+	if (mGameStateLevel != nullptr){
+		mGameStateLevel->setInDialogue(false);
+	}
 }
 
 void Dialogue::initialize(std::string dialogueFile){
@@ -48,21 +51,24 @@ void Dialogue::initialize(std::string dialogueFile){
 	configDoc.Parse(configText.c_str());
 	assert(configDoc.IsObject());
 
-	for (std::size_t i = 0; i < CONFIGMEMBERS.size(); i++){
-		assert(configDoc.HasMember(CONFIGMEMBERS[i].c_str()));
-	}
-
-	std::string textureFilename = configDoc["Character_filename"].GetString();
-	std::string characterName = configDoc["Character_displayname"].GetString();
-	
 	sf::Vector2f offset(0, -RECT_HEIGHT);
 	sf::Vector2f pos = getPosition() + offset;
-	
-	mCharacterDisplay = new CharacterPortrait(textureFilename, characterName, pos);
-	mGUIManager->addInterfaceElement(mCharacterDisplay);
-	mCharacterDisplay->setActive(false);
 
-	mHeader.setString(configDoc["Header"].GetString());
+	//A character portrait is optional.
+	if (configDoc.HasMember("Character_filename") &&
+		configDoc.HasMember("Character_displayname")){
+
+		std::string textureFilename = configDoc["Character_filename"].GetString();
+		std::string characterName = configDoc["Character_displayname"].GetString();
+
+
+		mCharacterDisplay = new CharacterPortrait(textureFilename, characterName, pos);
+		mGUIManager->addInterfaceElement(mCharacterDisplay);
+		mCharacterDisplay->setActive(false);
+	}
+
+	//TODO: Make header a member of pages instead
+	//and make it optional.	
 	const rapidjson::Value& pages = configDoc["Pages"];
 	assert(pages.IsArray());
 	for (rapidjson::SizeType itr = 0; itr < pages.Size(); itr++){
@@ -70,6 +76,8 @@ void Dialogue::initialize(std::string dialogueFile){
 		assert(pages[itr].HasMember("Text") && pages[itr]["Text"].IsString());
 		assert(pages[itr].HasMember("Buttons") && pages[itr]["Buttons"].IsArray());
 		const rapidjson::Value& buttons = pages[itr]["Buttons"];
+
+
 		for (rapidjson::SizeType i = 0; i < buttons.Size(); i++){
 			const rapidjson::Value& buttonInfo = buttons[i];
 			assert(buttonInfo.IsObject());
@@ -85,16 +93,28 @@ void Dialogue::initialize(std::string dialogueFile){
 		TextBox textBox(DEFAULT_RECT, pages[itr]["Text"].GetString(), 24);
 		textBox.setPosition(offset);
 		mDialogueTexts.push_back(textBox);
-		if (itr == 0){
-			mDialogueTexts.back().move(0, 40);
+		if (pages[itr].HasMember("Header")){
+			assert(pages[itr]["Header"].IsString());
+			std::string text = pages[itr]["Header"].GetString();
+			int fontSize = 32;
+
+			mHeaders[itr] = new TextBox(DEFAULT_RECT, text, fontSize);
+			mHeaders[itr]->setString(pages[itr]["Header"].GetString());
+
+			int offset = mHeaders[itr]->getRows()*fontSize;
+			mDialogueTexts.back().move(0.0f, (float)offset);
 		}
+	}
+	if (configDoc.HasMember("Level")){
+		assert(configDoc["Level"].IsInt());
+		mLevel = configDoc["Level"].GetInt();
 	}
 }
 
 void Dialogue::tick(const sf::Time& deltaTime){
-	if (mAnimationTimer >= 0){
+	if (mAnimationTimer > 0){
 		mAnimationTimer -= deltaTime.asSeconds();
-		std::max(mAnimationTimer, 0.0f);
+		mAnimationTimer = std::max(mAnimationTimer, 0.0f);
 		float height = RECT_HEIGHT*((ANIMATION_TIME - mAnimationTimer) / ANIMATION_TIME);
 		sf::Vector2f size(RECT_WIDTH, height);
 		sf::Vector2f position(0, -height);
@@ -116,8 +136,8 @@ void Dialogue::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	target.draw(mBackground, states);
 	if (mDrawContents){
 		target.draw(mDialogueTexts[mActivePage], states);
-		if (mActivePage == 0){
-			target.draw(mHeader, states);
+		if (mHeaders[mActivePage] != nullptr){
+			target.draw(*mHeaders[mActivePage], states);
 		}
 	}
 }
@@ -146,9 +166,12 @@ void Dialogue::addButton(std::string buttonFile, std::string buttonText, std::st
 
 void Dialogue::internalClear(){
 	mCharacterDisplay->kill();
-	for (int i = 0; i < mActivePage+1;i++){
+	for (TextBoxVector::size_type i = 0; i < mDialogueTexts.size(); i++){
 		for (ButtonVector::size_type j = 0; j < mButtons[i].size(); j++){
 			mButtons[i][j]->kill();
+		}
+		if (mHeaders[i] != nullptr){
+			delete mHeaders[i];
 		}
 	}
 }
@@ -177,6 +200,21 @@ void Dialogue::closeButton(){
 	mIsAlive = false;
 }
 
+void Dialogue::spiderButton1(){
+	//Read a json file and/or a png file to create extra entities
+	std::string jsonFilename = "Resources/Configs/Levels/LevelEntities.json";
+	jsonFilename.insert(jsonFilename.size() - 13, std::to_string(mLevel));
+}
+
+void Dialogue::spiderButton2(){
+
+}
+
+void Dialogue::spiderButton3(){
+
+}
+
+//Call the function corresonding to the string passed back.
 void Dialogue::onClick(std::string buttonFunc){
 	if (buttonFunc == "Next"){
 		nextButton();
@@ -186,5 +224,14 @@ void Dialogue::onClick(std::string buttonFunc){
 	}
 	else if (buttonFunc == "Close"){
 		closeButton();
+	}
+	else if (buttonFunc == "Spider1"){
+		spiderButton1();
+	}
+	else if (buttonFunc == "Spider2"){
+		spiderButton2();
+	}
+	else if (buttonFunc == "Spider3"){
+		spiderButton3();
 	}
 }

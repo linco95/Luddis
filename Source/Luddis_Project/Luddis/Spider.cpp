@@ -1,6 +1,10 @@
 #include "Spider.h"
+#include "Dialogue.h"
 #include "ResourceManager.h"
 #include "EntityManager.h"
+#include "GUIManager.h"
+#include "ViewUtility.h"
+#include "GameStateLevel.h"
 #include <SFML/System.hpp>
 #include <stdlib.h>
 #include "VectorMath.h"
@@ -14,14 +18,20 @@ static const std::string ANIMATION_ENTER = "resources/images/spritesheets/Grafik
 static const std::string ANIMATION_IDLE = "resources/images/spritesheets/Grafik_spindel_SpriteIdle";
 static const std::string ANIMATION_LEAVE = "resources/images/spritesheets/Grafik_spindel_SpriteClimbv2";
 
-Spider::Spider(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget) :
+//TODO: Put in constructor or something to have the spider display
+//level sensitive dialogues.
+static const std::string SPIDER_DIALOGUE = "Resources/Configs/Dialogue/SpiderDialogue1.json";
+
+Spider::Spider(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget,GameStateLevel* gameStateLevel) :
 mIsAlive(true),
 mIsActive(false),
+mDisplayDialogue(true),
 mActivate(activation),
 mWindow(window),
 mAnimation(ANIMATION_ENTER),
 mWait(WAIT_INTERVAL),
-mTarget(aTarget)
+mTarget(aTarget),
+mGameStateLevel(gameStateLevel)
 {
 	setPosition(position);
 	sf::Vector2f dir;
@@ -30,11 +40,20 @@ mTarget(aTarget)
 }
 
 Spider::~Spider(){
+
 }
 
 void Spider::tick(const sf::Time& deltaTime){
 	if (mTarget->getPosition().x >= mActivate){
 		mIsActive = true;
+		if (mDisplayDialogue){
+			//TODO: Make the levelstate create dialogues?
+			//Would prevent needing all the extra parameters
+			//for creating this object.
+			mDisplayDialogue = false;
+			sf::Vector2f pos((float)ViewUtility::VIEW_WIDTH*0.3f, (float)ViewUtility::VIEW_HEIGHT - 100);
+			mGameStateLevel->createDialogue(SPIDER_DIALOGUE, pos);
+		}
 	}
 	if (!mIsActive) return;
 	mAnimation.tick(deltaTime);

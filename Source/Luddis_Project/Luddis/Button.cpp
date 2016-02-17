@@ -18,6 +18,9 @@ mButtonFunc(buttonFunc),
 mButtonText(buttonText, ResourceManager::getInstance().getFont(DEFAULT_FONTTYPE), 16),
 mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 	setPosition(pos);
+	//Set the texture rect to a third of the original image,
+	//and set two more rects to correspond to the other
+	//"states" of the button, i.e. mouseover etc.
 	sf::IntRect spriteRect(mSprite.getTextureRect());
 	spriteRect.width /= 3;
 	mSprite.setTextureRect(spriteRect);
@@ -36,6 +39,7 @@ mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 	mEventManager->attatch(this, std::vector < sf::Event::EventType > { sf::Event::MouseButtonReleased, sf::Event::MouseButtonPressed, sf::Event::MouseMoved });
 
 #ifdef LUDDIS_DEBUG_DRAW_HITBOXES
+	//Debug info
 	mDebugCircle.setPointCount(6);
 	mDebugCircle.setRadius(15.0f);
 	mDebugRect.setSize((sf::Vector2f(mSprite.getGlobalBounds().width, mSprite.getGlobalBounds().height)));
@@ -82,13 +86,10 @@ bool Button::isAlive() const{
 	return mIsAlive;
 }
 
+//TODO: move whole function to onEvent
 void Button::updateInput(){
 	static sf::Vector2f vector(0,0);
 	vector = mWindow->mapPixelToCoords(sf::Mouse::getPosition(*mWindow)) - getPosition();
-
-#ifdef LUDDIS_DEBUG_DRAW_HITBOXES
-	mDebugCircle.setPosition(vector);
-#endif
 
 	if (mSprite.getGlobalBounds().contains(vector)){
 		//Default
@@ -109,16 +110,21 @@ void Button::onEvent(const sf::Event &aEvent){
 		sf::Vector2f pos(getPosition());
 		static sf::Vector2f mousePos(0, 0);
 		mousePos = mWindow->mapPixelToCoords(sf::Vector2i(aEvent.mouseButton.x, aEvent.mouseButton.y)) - getPosition();
+		//Listen for mouse clicks
 		if (aEvent.type == sf::Event::MouseButtonPressed&&
 			aEvent.mouseButton.button == sf::Mouse::Left){
 
 #ifdef LUDDIS_DEBUG_DRAW_HITBOXES
 			mDebugCircle.setPosition(mousePos);
 #endif
+			//Check to see if the mouse position is within the images bounds
 			if (mSprite.getGlobalBounds().contains(mousePos)){
 				mSprite.setTextureRect(mRects[2]);
 			}
 		}
+		//If the mouse is released within the bounds of the image,
+		//call the function of the owner object corresponding
+		//to the string passed on during inception
 		else if (aEvent.type == sf::Event::MouseButtonReleased&&
 			aEvent.mouseButton.button == sf::Mouse::Left){
 			sf::FloatRect rect(mSprite.getGlobalBounds());
@@ -127,6 +133,7 @@ void Button::onEvent(const sf::Event &aEvent){
 				mOwner->onClick(mButtonFunc);
 			}
 		}
+		//Reset view afterwards
 		mWindow->setView(mapView);
 	}
 }
