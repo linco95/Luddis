@@ -6,6 +6,7 @@
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 static const float ROTATIONSPEED = 1.f;
+static const float FADINGFACTOR = 0.5f;
 
 //The max life time should be entered in milliseconds
 Projectile::Projectile(std::string textureFilename, sf::Vector2f direction, sf::Vector2f position, float maxLifeTimeMS, Projectile::Category collisionCategory):
@@ -27,6 +28,10 @@ Projectile::Projectile(std::string textureFilename, sf::Vector2f direction, sf::
 
 Projectile::~Projectile(){
 	delete mHitbox;
+}
+void fadeProjectile(sf::Sprite& a_Sprite, const sf::Time& a_TimeLeft){
+	sf::Color curColor = a_Sprite.getColor();
+	curColor.a *= 1; // fadingfactor / timeleft -ish
 }
 
 void Projectile::tick(const sf::Time& deltaTime){

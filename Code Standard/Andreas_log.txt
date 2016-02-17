@@ -2,7 +2,6 @@ TODO
 
 Writing Level class
 	- Loading obstacles narrow hitbox form config
-	- Load chips/ludd from a map
 	- Add multi-layered background (lights man, lights!)
 
 Fade out projectiles/ludd
@@ -131,6 +130,13 @@ Tested porting Luddis to Linux (Luddis + Linux = Luddux?)
 15/2/16
 Added defaultvalue to loadTexture
 Adding loading of json files to the resourcemanager. Saving the json files in memory.
+Implementing function to load dust/chips/eggs from a map
+
+16/2/16
+Testing some implementations of ECS
+
+17/2/16
+Fixed the collision. The points were just transformed to the shapes location, without accounting for the origin of the shape.
 
 
 
