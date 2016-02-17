@@ -17,6 +17,7 @@ public:
 	void addCollidable(CollidableEntity* collidable);
 	void detectCollisions();
 	void removeDeadCollidables();
+	void emptyVector();
 
 #ifdef LUDDIS_DEBUG_DRAW_HITBOXES
 	void drawHitboxes(sf::RenderWindow& aWindow) const;
@@ -24,8 +25,8 @@ public:
 
 	CollisionManager(const CollisionManager&) = delete;
 	CollisionManager& operator=(CollisionManager&) = delete;
-private:
 
+private:
 	CollidableVector mCollidables;
 	CollisionManager();
 };

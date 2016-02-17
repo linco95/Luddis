@@ -6,6 +6,7 @@
 #include <array>
 
 static const std::array<std::string, 4> CONFIGMEMBERS = { "Character_filename", "Character_displayname", "Header", "Pages" };
+static const std::string BACKGROUND_TEXTURE = "Resources/Images/GUI/DialogueFrame.png";
 
 static const float ANIMATION_TIME = 1.5f;
 static const float RECT_WIDTH = 1000;
@@ -30,9 +31,9 @@ mHeader(DEFAULT_RECT, "", 28){
 	setPosition(pos);
 	sf::Vector2f offset(0, -RECT_HEIGHT);
 	mBackground.setPosition(offset);
+	mBackground.setTexture(&ResourceManager::getInstance().getTexture(BACKGROUND_TEXTURE));
 	mHeader.setPosition(offset);
-	mBackground.setFillColor(sf::Color(150, 40, 170));
-	mBackground.setOutlineColor(sf::Color::Black);
+	mBackground.setFillColor(sf::Color(255, 255, 255));
 	mBackground.setOutlineThickness((float)INDENT / 2);
 	initialize(dialogueFile);
 }

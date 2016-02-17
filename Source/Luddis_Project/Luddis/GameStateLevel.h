@@ -9,10 +9,10 @@ class EntityManager;
 class GameStatePaused;
 class PowerupDisplay;
 class GUIManager;
+class Level;
 
 class GameStateLevel : public GameState{
 public:
-	//TODO: have each state manage their own EntityManager, instead of the GameManager
 	GameStateLevel(sf::RenderWindow* window, EntityManager* entityManager, GUIManager* guiManager);
 	~GameStateLevel();
 
@@ -23,6 +23,13 @@ public:
 	void onEvent(const sf::Event &aEvent) override;
 	void handleEvents() override;
 
+	bool getInDialogue() const;
+	void setInDialogue(bool inDialogue);
+	void setupLevel(std::string levelFile);
+	void resetLevel();
+	void resetInventory();
+
+
 private:
 	EntityManager* mEntityM;
 	GUIManager* mGUIM;
@@ -32,8 +39,17 @@ private:
 	sf::View mGUIView;
 	sf::View mMapView;
 	sf::RenderWindow* mWindow;
+	Level* mLevel;
+	bool mInDialogue;
+	std::string mCurrentLevelFile;
 
 	PowerupDisplay* mPowerupDisplays[2];
+	struct CurrentInventory{
+		int dust;
+		int chips;
+		int eggs;
+	};
+	CurrentInventory mInv;
 };
 
 #endif // !_INCLUDED_GAMESTATELEVEL_

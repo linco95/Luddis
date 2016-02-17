@@ -6,9 +6,14 @@
 #include "GameManager.h"
 #include "PowerupDisplay.h"
 #include "Dialogue.h"
+#include "Level.h"
+#include "Inventory.h"
+#include "Luddis.h"
 
-static const std::string POWER_DISPLAY = "Resources/Images/PowerButton.png";
-static const std::string BUTTON_TEXTURE = "Resources/Images/Button.png";
+static const std::string LUDDIS_TEXTURE = "Resources/Images/Grafik_Luddis120x80_s1d3v1.png";
+
+static const std::string POWER_DISPLAY = "Resources/Images/GUI/PowerButton.png";
+static const std::string BUTTON_TEXTURE = "Resources/Images/GUI/Button.png";
 static const std::string TEST_DIALOGUE = "Resources/Configs/Dialogue/Example_Dialogue.json";
 
 GameStateLevel::GameStateLevel(sf::RenderWindow* window, EntityManager* entityManager, GUIManager* guiManager) :
@@ -17,7 +22,8 @@ mEventM(),
 mGUIM(guiManager),
 mCM(&CollisionManager::getInstance()),
 mGUIView(ViewUtility::getViewSize()),
-mWindow(window){
+mWindow(window),
+mInDialogue(false){
 	mEventM.attatch(this, sf::Event::EventType::KeyPressed);
 }
 
@@ -35,14 +41,16 @@ void GameStateLevel::initialize(GameStatePaused* gameStateLevel){
 
 void GameStateLevel::update(sf::Clock& clock){
 	//Do game logic
-	mEntityM->updateEntities(clock.getElapsedTime());
+	if (!mInDialogue){
+		mEntityM->updateEntities(clock.getElapsedTime());
+		mCM->detectCollisions();
+	}
 	//Change the view when updating GUI elements
 	mMapView = mWindow->getView();
 	mWindow->setView(mGUIView);
 	mGUIM->updateElements(clock.restart());
 	//Then change it back
 	mWindow->setView(mMapView);
-	mCM->detectCollisions();
 
 	//Garbage collection
 	mCM->removeDeadCollidables();
@@ -81,4 +89,42 @@ void GameStateLevel::handleEvents(){
 	while (mWindow->pollEvent(currEvent)){
 		mEventM.notify(currEvent);
 	}
+}
+
+bool GameStateLevel::getInDialogue() const{
+	return mInDialogue;
+}
+
+void GameStateLevel::setInDialogue(bool inDialogue){
+	mInDialogue = inDialogue;
+}
+
+void GameStateLevel::setupLevel(std::string levelFile){
+	Inventory* inv = &Inventory::getInstance();
+	mInv.chips = inv->getChips();
+	mInv.dust = inv->getDust();
+	mInv.eggs = inv->getEggs();
+	mCurrentLevelFile = levelFile;
+	Luddis *mPlayer = new Luddis(LUDDIS_TEXTURE, mWindow, mEntityM);
+	mEntityM->addEntity(mPlayer);
+	mCM->addCollidable(mPlayer);
+	mLevel = new Level(mEntityM);
+	mEntityM->addEntity(mLevel);
+	mLevel->initializeLevel(*mWindow, mPlayer, levelFile);
+}
+
+void GameStateLevel::resetLevel(){
+	if (!mCurrentLevelFile.empty()){
+		resetInventory();
+		mCM->emptyVector();
+		mEntityM->emptyVector();
+		setupLevel(mCurrentLevelFile);
+	}
+}
+
+void GameStateLevel::resetInventory(){
+	Inventory* inv = &Inventory::getInstance();
+	inv->setChips(mInv.chips);
+	inv->setDust(mInv.dust);
+	inv->setEggs(mInv.eggs);
 }

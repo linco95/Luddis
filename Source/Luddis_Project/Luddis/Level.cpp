@@ -9,6 +9,7 @@
 #include "Dust.h"
 #include "Obstacle.h"
 #include "SpiderEgg.h"
+#include "ViewUtility.h"
 #include "EntityManager.h"
 #include "CollisionManager.h"
 #include <SFML\Audio.hpp>
@@ -46,7 +47,7 @@ mEntityManager(entityManager)
 
 }
 Level::~Level(){
-
+	
 }
 
 #include "Debug.h"
@@ -97,6 +98,7 @@ void Level::readInitMap(){
 		}
 	}
 }
+
 void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Document& configDoc){
 	CollisionManager* cm = &CollisionManager::getInstance();
 	ResourceManager* rm = &ResourceManager::getInstance();
@@ -210,14 +212,13 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget, s
 
 	mPointsOfNoReturn.push_back(mWindow->getSize().x / 2 + 1000.f);
 	mCurrentPONR = mWindow->getView().getSize().x / 2;
-	//SoundEngine::getInstance().playMusic("resources/music/musik16.wav");
+	SoundEngine::getInstance().playMusic("resources/music/musik16.wav");
 
 }
 
 
 void Level::tick(const sf::Time& deltaTime) {
 	updateView(deltaTime);
-	
 }
 
 void Level::updateView(const Time& deltaTime){
