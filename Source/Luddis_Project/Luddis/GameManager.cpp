@@ -12,12 +12,6 @@
 #include "Level.h"
 #include "Button.h"
 #include <vector>
-#include "BossDishCloth.h"
-#include "Silverfish.h"
-#include "Dust.h"
-#include "Chips.h"
-#include "Spider.h"
-#include "Obstacle.h"
 #include "ScoreCounter.h"
 #include "ScoreGauge.h"
 #include "GameStateLevel.h"
