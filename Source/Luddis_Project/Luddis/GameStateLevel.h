@@ -10,6 +10,7 @@ class GameStatePaused;
 class PowerupDisplay;
 class GUIManager;
 class Level;
+class Spider;
 
 class GameStateLevel : public GameState{
 public:
@@ -23,7 +24,7 @@ public:
 	void onEvent(const sf::Event &aEvent) override;
 	void handleEvents() override;
 
-	void createDialogue(std::string dialogueFile, sf::Vector2f pos);
+	void createDialogue(std::string dialogueFile);
 	bool getInDialogue() const;
 	void setInDialogue(bool inDialogue);
 	void setupLevel(std::string levelFile);
@@ -41,6 +42,7 @@ private:
 	sf::View mMapView;
 	sf::RenderWindow* mWindow;
 	Level* mLevel;
+	Spider* mSpider;
 	bool mInDialogue;
 	std::string mCurrentLevelFile;
 
