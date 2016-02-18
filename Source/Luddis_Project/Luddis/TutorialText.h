@@ -30,12 +30,8 @@ private:
 
 	sf::RenderWindow* mWindow;
 	sf::Transformable* mTarget;
-	std::string mFinalText;
 	TextBox mText;
-	const float MAX_ANIMATE_TIME;
-	float mAnimateTime;
 	float mActivate;
-	bool mAnimating;
 	bool mIsAlive;
 	bool mIsActive;
 };

@@ -17,7 +17,8 @@ public:
 		ENEMY_PROJECTILE,
 		ENEMY_STUN,
 		BG_SOLID,
-		BG_DAMAGE
+		BG_DAMAGE,
+		EVENTZONE
 	};
 
 	enum Type{
@@ -29,7 +30,7 @@ public:
 
 	// Check what kind of object this is
 	virtual Category getCollisionCategory() = 0;
-	// Check the shae of the object
+	// Check the shape of the object
 	virtual Type getCollisionType() = 0;
 	// Collide the object with "collidable"
 	virtual void collide(CollidableEntity *collidable) = 0;

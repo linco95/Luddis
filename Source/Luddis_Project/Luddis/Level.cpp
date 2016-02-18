@@ -4,7 +4,7 @@
 #include "Silverfish.h"
 #include "BossDishCloth.h"
 #include "Luddis.h"
-#include "Spider.h"
+#include "EventZone.h"
 #include "Chips.h"
 #include "Dust.h"
 #include "Obstacle.h"
@@ -25,7 +25,7 @@ static const float X_OFFSET = 200.f,
 				   Y_OFFSET = 50.f,
 				   SCROLLSPEED = 200;
 
-static const std::array<std::string, 6> CONFIGMEMBERS = { "Background", "Silverfish_spawns", "Obstacle_spawns", "Boss_spawns", "Spider_spawns", "Boss_config" };
+static const std::array<std::string, 5> CONFIGMEMBERS = { "Background", "Silverfish_spawns", "Obstacle_spawns", "Boss_spawns", "Boss_config" };
 static const char* mapfilepath = "Resources/Configs/Levels/Level01MAP.png";
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::BACKGROUND;
 // Temporary, needs to be a bit more dynamic
@@ -57,7 +57,10 @@ Level::~Level(){
 }
 
 #include "Debug.h"
+//Could this be remade to return a vector of entities,
+//so it doesnt have to be run in realtime?
 void Level::readInitMap(){
+	EntityManager::EntitiesVector entities;
 	sf::Image mapImage;
 	bool loaded = mapImage.loadFromFile(mapfilepath);
 	assert(loaded);
@@ -96,6 +99,7 @@ void Level::readInitMap(){
 				}
 				// If an object was created (should always be true) add the collidableentity to the entitymanager and collisionmanager
 				if (obj != 0){
+					entities.push_back(obj);
 					mEntityManager->addEntity(obj);
 					CollisionManager::getInstance().addCollidable(obj);
 				}
@@ -115,6 +119,8 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		std::cout << CONFIGMEMBERS[i] << std::endl;
 		assert(configDoc.HasMember(CONFIGMEMBERS[i].c_str()));
 	}
+	assert(configDoc.HasMember("Level"));
+	int level = configDoc["Level"].GetInt();
 
 	// Silverfishes
 	const rapidjson::Value& fishSpawns = configDoc["Silverfish_spawns"];
@@ -206,23 +212,31 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		std::cout << x << " " << y << std::endl;
 	}
 
-	// The spider
-	const rapidjson::Value& spiderSpawns = configDoc["Spider_spawns"];
-	assert(spiderSpawns.IsArray());
-	for (rapidjson::Value::ConstValueIterator itr = spiderSpawns.Begin(); itr != spiderSpawns.End(); itr++){
-		assert(itr->IsObject());
-		assert(itr->HasMember("x") && (*itr)["x"].IsInt());
-		assert(itr->HasMember("y") && (*itr)["y"].IsInt());
-		assert(itr->HasMember("activationpos") && (*itr)["activationpos"].IsInt());
+	//Event zones
+	if (configDoc.HasMember("EventZone_rect_spawns")){
+		const rapidjson::Value& eventZoneRectSpawns = configDoc["EventZone_rect_spawns"];
+		assert(eventZoneRectSpawns.IsArray());
+		for (rapidjson::Value::ConstValueIterator itr = eventZoneRectSpawns.Begin(); itr != eventZoneRectSpawns.End(); itr++){
+			assert(itr->IsObject());
+			assert(itr->HasMember("x") && (*itr)["x"].IsInt());
+			assert(itr->HasMember("y") && (*itr)["y"].IsInt());
+			assert(itr->HasMember("width") && (*itr)["width"].IsInt());
+			assert(itr->HasMember("height") && (*itr)["height"].IsInt());
+			assert(itr->HasMember("eventtype") && (*itr)["eventtype"].IsInt());
 
-		float x = (float)(*itr)["x"].GetInt();
-		float y = (float)(*itr)["y"].GetInt();
-		sf::Vector2f pos(x, y);
-		float act = (float)(*itr)["activationpos"].GetInt();
+			float x = (float)(*itr)["x"].GetInt();
+			float y = (float)(*itr)["y"].GetInt();
+			float width = (float)(*itr)["width"].GetInt();
+			float height = (float)(*itr)["height"].GetInt();
+			int eventType = (*itr)["eventtype"].GetInt();
+			Vector2f size(width, height);
+			Vector2f position(x, y);
+			Shape* shape = new RectangleShape(size);
 
-		Spider* spider = new Spider(mWindow, pos, act, mTarget, mGameStateLevel);
-		mEntityManager->addEntity(spider);
-		std::cout << x << " " << y << std::endl;
+			EventZone* zone = new EventZone(mGameStateLevel, EventZone::EventType(eventType), position, shape, 0, level);
+			cm->addCollidable(zone);
+			std::cout << x << " " << y << width << " " << height << std::endl;
+		}
 	}
 
 	//The background
@@ -235,7 +249,6 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		std::string BGFILEPATH = background["filename"].GetString();
 		int position = background["filename"].GetStringLength() - 4;
 		BGFILEPATH.insert(position, std::to_string(i+1));
-		std::cout << "Filepath: "<< BGFILEPATH <<"\n";
 		rm->loadTexture(BGFILEPATH, IntRect(Vector2<int>(), Vector2<int>(Texture::getMaximumSize(), Texture::getMaximumSize())));
 		sf::IntRect rect(0, 0, (int)rm->getTexture(BGFILEPATH).getSize().x, (int)rm->getTexture(BGFILEPATH).getSize().y);
 		mMapBounds.height = rect.height;

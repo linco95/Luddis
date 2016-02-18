@@ -12,7 +12,6 @@
 #include <math.h>
 
 static float SPEED = 180;
-static const float WAIT_INTERVAL = 3.0f;
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 static const std::string ANIMATION_ENTER = "resources/images/spritesheets/Grafik_spindel_SpriteEnterv2";
 static const std::string ANIMATION_IDLE = "resources/images/spritesheets/Grafik_spindel_SpriteIdle";
@@ -20,18 +19,14 @@ static const std::string ANIMATION_LEAVE = "resources/images/spritesheets/Grafik
 
 //TODO: Put in constructor or something to have the spider display
 //level sensitive dialogues.
-static const std::string SPIDER_DIALOGUE = "Resources/Configs/Dialogue/SpiderDialogue1.json";
 
-Spider::Spider(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget,GameStateLevel* gameStateLevel) :
+Spider::Spider(sf::RenderWindow* window, const sf::Vector2f& position) :
 mIsAlive(true),
-mIsActive(false),
-mDisplayDialogue(true),
-mActivate(activation),
+mIsActive(true),
+mIdleAnimation(false),
+mTurn(false),
 mWindow(window),
-mAnimation(ANIMATION_ENTER),
-mWait(WAIT_INTERVAL),
-mTarget(aTarget),
-mGameStateLevel(gameStateLevel)
+mAnimation(ANIMATION_ENTER)
 {
 	setPosition(position);
 	sf::Vector2f dir;
@@ -44,22 +39,11 @@ Spider::~Spider(){
 }
 
 void Spider::tick(const sf::Time& deltaTime){
-	if (mTarget->getPosition().x >= mActivate){
-		mIsActive = true;
-		if (mDisplayDialogue){
-			//TODO: Make the levelstate create dialogues?
-			//Would prevent needing all the extra parameters
-			//for creating this object.
-			mDisplayDialogue = false;
-			sf::Vector2f pos((float)ViewUtility::VIEW_WIDTH*0.3f, (float)ViewUtility::VIEW_HEIGHT - 100);
-			mGameStateLevel->createDialogue(SPIDER_DIALOGUE, pos);
-		}
-	}
+	
 	if (!mIsActive) return;
 	mAnimation.tick(deltaTime);
 	updateMovement(deltaTime);
-	if (mWait <= 0)
-		mWait = WAIT_INTERVAL;
+	
 	if (getPosition().y<(-mAnimation.getCurrAnimation().getSprite().getGlobalBounds().height / 2) || getPosition().y > mWindow->getView().getSize().y + mAnimation.getCurrAnimation().getSprite().getGlobalBounds().height / 2){
 		mIsAlive = false;
 	}
@@ -67,27 +51,24 @@ void Spider::tick(const sf::Time& deltaTime){
 
 void Spider::updateMovement(const sf::Time& deltaTime){
 	if (getPosition().y >= 500){
-			int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
-			mAnimation.replaceAnimation(ANIMATION_IDLE);
-			mAnimation.getCurrAnimation().setFrame(frame);
-			mWait -= deltaTime.asSeconds();
-			if (mWait <= 0){
-				int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
-				mAnimation.setDefaultAnimation(ANIMATION_LEAVE);
-				mAnimation.getCurrAnimation().setFrame(frame);
-				sf::Vector2f dir2;
-				dir2 = { 0, -1 };
-				mDirection = VectorMath::normalizeVector(dir2);
-				move(mDirection * SPEED * deltaTime.asSeconds());
-			}
+		if (!mIdleAnimation){
+			mWaiting = true;
+			mAnimation.setDefaultAnimation(ANIMATION_IDLE);
+			mIdleAnimation = true;
+		}
+
+		if (mTurn){
+			mTurn = false;
+			mAnimation.setDefaultAnimation(ANIMATION_LEAVE);
+			sf::Vector2f dir2{0, -1};
+			mDirection = dir2;
+		}
 	}
-	else
-	move(mDirection * SPEED * deltaTime.asSeconds());
+	if (!mWaiting)
+		move(mDirection * SPEED * deltaTime.asSeconds());
 }
 
-
 void Spider::draw(sf::RenderTarget& target, sf::RenderStates states) const{
-	if (!mIsActive) return;
 	states.transform *= getTransform();
 	target.draw(mAnimation.getCurrAnimation(), states);
 }
@@ -104,6 +85,11 @@ void Spider::setActive(const bool& active){
 	mIsActive = active;
 }
 
-Entity::RenderLayer Spider::getRenderLayer() const{
-	return LAYER;
+Spider::RenderLayer Spider::getRenderLayer() const{
+	return FOREGROUND;
+}
+
+void Spider::turn(){
+	mTurn = true;
+	mWaiting = false;
 }

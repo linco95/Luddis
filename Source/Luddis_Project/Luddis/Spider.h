@@ -1,19 +1,19 @@
 #ifndef INCLUDED_SPIDER
 #define INCLUDED_SPIDER
 
-
-#include "CollidableEntity.h"
+#include "InterfaceElement.h"
 #include "AnimationQueue.h"
 #include <SFML/Window.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 
 class GUIManager;
 class EventManager;
 class GameStateLevel;
 
-class Spider : public Entity {
+class Spider : public InterfaceElement {
 public:
-	Spider(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget, GameStateLevel* gameStateLevel);
+	Spider(sf::RenderWindow* window, const sf::Vector2f& position);
 	~Spider();
 
 	void tick(const sf::Time& deltaTime) override;
@@ -22,16 +22,17 @@ public:
 	bool isActive() const override;
 	void setActive(const bool& active) override;
 	RenderLayer getRenderLayer() const override;
+
+	void turn();
+
 private:
 	void updateMovement(const sf::Time& deltaTime);
-	sf::Transformable* mTarget;
-	const float mActivate;
 	bool mTalk;
 	bool mIsAlive;
 	bool mIsActive;
 	bool mWaiting;
-	bool mDisplayDialogue;
-	float mWait;
+	bool mIdleAnimation;
+	bool mTurn;
 	sf::Sprite mSprite;
 	sf::RenderWindow* mWindow;
 	GameStateLevel* mGameStateLevel;
