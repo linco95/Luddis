@@ -32,8 +32,7 @@ private:
 	void addButton(std::string buttonFile, std::string buttonText, std::string buttonFunc, sf::Vector2f pos, int index);
 	void initialize(std::string dialogueFile);
 	void internalClear();
-	void nextButton();
-	void previousButton();
+	void changePageButton(int value);
 	void spiderButton1();
 	void spiderButton2();
 	void spiderButton3();
@@ -47,7 +46,8 @@ private:
 	bool mDrawContents;
 	bool mIsAlive;
 	bool mIsActive;
-	CharacterPortrait* mCharacterDisplay;
+	CharacterPortrait* mCharacterDisplayLeft;
+	CharacterPortrait* mCharacterDisplayRight;
 	float mAnimationTimer;
 	int mButtonCount;
 	int mActivePage;

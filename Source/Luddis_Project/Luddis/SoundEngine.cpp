@@ -37,15 +37,16 @@ void SoundEngine::setMusicVolume(float volume){
 	}
 }
 
-void SoundEngine::playSound(std::string filename){
+int SoundEngine::playSound(std::string filename){
 	//Might have to change this around to disallow the same buffert from playing two different sounds
 	for (int i = 0; i < MAX_SOUND_CHANNELS; i++){
 		if (mSoundChannels[i].getStatus() != sf::Sound::Playing){
 			mSoundChannels[i].setBuffer(ResourceManager::getInstance().getSoundBuffer(filename));
 			mSoundChannels[i].play();
-			return;
+			return i;
 		}
 	}
+	return -1;
 }
 
 void SoundEngine::playMusic(std::string filename){

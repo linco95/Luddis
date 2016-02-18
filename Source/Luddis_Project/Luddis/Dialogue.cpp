@@ -5,6 +5,7 @@
 #include <rapidjson/document.h>
 #include <cmath>
 #include <array>
+#include <typeinfo>
 
 static const std::string BACKGROUND_TEXTURE = "Resources/Images/GUI/DialogueFrame.png";
 
@@ -55,20 +56,32 @@ void Dialogue::initialize(std::string dialogueFile){
 	sf::Vector2f pos = getPosition() + offset;
 
 	//A character portrait is optional.
-	if (configDoc.HasMember("Character_filename") &&
-		configDoc.HasMember("Character_displayname")){
+	if (configDoc.HasMember("Left_character_filename") &&
+		configDoc.HasMember("Left_character_displayname")){
 
-		std::string textureFilename = configDoc["Character_filename"].GetString();
-		std::string characterName = configDoc["Character_displayname"].GetString();
+		std::string textureFilename = configDoc["Left_character_filename"].GetString();
+		std::string characterName = configDoc["Left_character_displayname"].GetString();
 
 
-		mCharacterDisplay = new CharacterPortrait(textureFilename, characterName, pos);
-		mGUIManager->addInterfaceElement(mCharacterDisplay);
-		mCharacterDisplay->setActive(false);
+		mCharacterDisplayLeft = new CharacterPortrait(textureFilename, characterName, pos);
+		mGUIManager->addInterfaceElement(mCharacterDisplayLeft);
+		mCharacterDisplayLeft->setActive(false);
+	}
+	//So is the second one
+	if (configDoc.HasMember("Right_character_filename") &&
+		configDoc.HasMember("Right_character_displayname")){
+
+		std::string textureFilename = configDoc["Right_character_filename"].GetString();
+		std::string characterName = configDoc["Right_character_displayname"].GetString();
+
+
+		sf::Vector2f rightPos = pos;
+		rightPos.x += 600;
+		mCharacterDisplayRight = new CharacterPortrait(textureFilename, characterName, rightPos);
+		mGUIManager->addInterfaceElement(mCharacterDisplayRight);
+		mCharacterDisplayRight->setActive(false);
 	}
 
-	//TODO: Make header a member of pages instead
-	//and make it optional.	
 	const rapidjson::Value& pages = configDoc["Pages"];
 	assert(pages.IsArray());
 	for (rapidjson::SizeType itr = 0; itr < pages.Size(); itr++){
@@ -87,10 +100,10 @@ void Dialogue::initialize(std::string dialogueFile){
 			std::string buttonImage = buttonInfo["Button_image"].GetString();
 			assert(buttonInfo.HasMember("Button_func") && buttonInfo["Button_func"].IsString());
 			std::string buttonFunc = buttonInfo["Button_func"].GetString();
-			addButton(buttonImage, buttonText, buttonFunc,mBackground.getPosition() +  sf::Vector2f(80 + (float)i * 100, RECT_HEIGHT-(float)INDENT*2.0f), (int)itr);
+			addButton(buttonImage, buttonText, buttonFunc, mBackground.getPosition() +  sf::Vector2f(80 + (float)i * 100, RECT_HEIGHT-(float)INDENT*2.0f), (int)itr);
 
 		}
-		TextBox textBox(DEFAULT_RECT, pages[itr]["Text"].GetString(), 24);
+		TextBox textBox(DEFAULT_RECT, pages[itr]["Text"].GetString(), 24, true);
 		textBox.setPosition(offset);
 		mDialogueTexts.push_back(textBox);
 		if (pages[itr].HasMember("Header")){
@@ -100,9 +113,10 @@ void Dialogue::initialize(std::string dialogueFile){
 
 			mHeaders[itr] = new TextBox(DEFAULT_RECT, text, fontSize);
 			mHeaders[itr]->setString(pages[itr]["Header"].GetString());
+			mHeaders[itr]->setPosition(offset);
 
-			int offset = mHeaders[itr]->getRows()*fontSize;
-			mDialogueTexts.back().move(0.0f, (float)offset);
+			int headerOffset = mHeaders[itr]->getRows()*fontSize;
+			mDialogueTexts.back().move(0.0f, (float)headerOffset);
 		}
 	}
 	if (configDoc.HasMember("Level")){
@@ -124,9 +138,16 @@ void Dialogue::tick(const sf::Time& deltaTime){
 	}
 	else if(!mDrawContents){
 		mDrawContents = true;
-		mCharacterDisplay->setActive(true);
+		mCharacterDisplayRight->setActive(true);
+		mCharacterDisplayLeft->setActive(true);
 		for (ButtonVector::size_type i = 0; i < mButtons[0].size(); i++){
 			mButtons[0].at(i)->setActive(true);
+		}
+	}
+	if (mDrawContents){
+		mDialogueTexts[mActivePage].animate(deltaTime);
+		if (mHeaders[mActivePage] != nullptr){
+			mHeaders[mActivePage]->animate(deltaTime);
 		}
 	}
 }
@@ -165,7 +186,8 @@ void Dialogue::addButton(std::string buttonFile, std::string buttonText, std::st
 }
 
 void Dialogue::internalClear(){
-	mCharacterDisplay->kill();
+	mCharacterDisplayRight->kill();
+	mCharacterDisplayLeft->kill();
 	for (TextBoxVector::size_type i = 0; i < mDialogueTexts.size(); i++){
 		for (ButtonVector::size_type j = 0; j < mButtons[i].size(); j++){
 			mButtons[i][j]->kill();
@@ -176,21 +198,11 @@ void Dialogue::internalClear(){
 	}
 }
 
-void Dialogue::nextButton(){
+void Dialogue::changePageButton(int value){
 	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++){
 		mButtons[mActivePage][i]->setActive(false);
 	}
-	mActivePage += 1;
-	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++){
-		mButtons[mActivePage][i]->setActive(true);
-	}
-}
-
-void Dialogue::previousButton(){
-	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++){
-		mButtons[mActivePage][i]->setActive(false);
-	}
-	mActivePage -= 1;
+	mActivePage += value;
 	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++){
 		mButtons[mActivePage][i]->setActive(true);
 	}
@@ -201,9 +213,11 @@ void Dialogue::closeButton(){
 }
 
 void Dialogue::spiderButton1(){
+	//NYI
 	//Read a json file and/or a png file to create extra entities
 	std::string jsonFilename = "Resources/Configs/Levels/LevelEntities.json";
 	jsonFilename.insert(jsonFilename.size() - 13, std::to_string(mLevel));
+	changePageButton(1);
 }
 
 void Dialogue::spiderButton2(){
@@ -216,17 +230,24 @@ void Dialogue::spiderButton3(){
 
 //Call the function corresonding to the string passed back.
 void Dialogue::onClick(std::string buttonFunc){
-	if (buttonFunc == "Next"){
-		nextButton();
-	}
-	else if (buttonFunc == "Previous"){
-		previousButton();
+	std::string substring = buttonFunc.substr(0, 4);
+	if (substring == "Page"){
+		int value = 0;
+		std::string string = buttonFunc.substr(5, buttonFunc.size());
+		if (buttonFunc.at(4) == '+'){
+			value = std::stoi(string);
+		}
+		else if (buttonFunc.at(4) == '-'){
+			value = -std::stoi(string);
+		}
+		changePageButton(value);
 	}
 	else if (buttonFunc == "Close"){
 		closeButton();
 	}
 	else if (buttonFunc == "Spider1"){
 		spiderButton1();
+
 	}
 	else if (buttonFunc == "Spider2"){
 		spiderButton2();

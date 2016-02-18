@@ -7,6 +7,7 @@
 #include "PowerupDisplay.h"
 #include "Dialogue.h"
 #include "Level.h"
+#include "Spider.h"
 #include "Inventory.h"
 #include "Luddis.h"
 
@@ -88,9 +89,14 @@ void GameStateLevel::handleEvents(){
 	}
 }
 
-void GameStateLevel::createDialogue(std::string dialogueFilename, sf::Vector2f pos){
+void GameStateLevel::createDialogue(std::string dialogueFilename){
+	sf::Vector2f pos((float)ViewUtility::VIEW_WIDTH*0.3f, (float)ViewUtility::VIEW_HEIGHT - 100);
 	Dialogue* dialogue = new Dialogue(dialogueFilename, mWindow, mGUIM, &mEventM, pos, this);
 	mGUIM->addInterfaceElement(dialogue);
+	if (dialogueFilename.substr() == "SpiderDialogue"){
+		mSpider = new Spider(mWindow, sf::Vector2f(400, 5));
+		mGUIM->addInterfaceElement(mSpider);
+	}
 	mInDialogue = true;
 }
 
@@ -102,6 +108,10 @@ bool GameStateLevel::getInDialogue() const{
 
 void GameStateLevel::setInDialogue(bool inDialogue){
 	mInDialogue = inDialogue;
+	if (mSpider != nullptr){
+		mSpider->turn();
+		mSpider = nullptr;
+	}
 }
 
 void GameStateLevel::setupLevel(std::string levelFile){
