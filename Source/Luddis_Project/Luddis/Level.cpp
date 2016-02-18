@@ -3,6 +3,7 @@
 #include "SoundEngine.h"
 #include "Silverfish.h"
 #include "BossDishCloth.h"
+#include "BackgroundEffect.h"
 #include "Luddis.h"
 #include "Spider.h"
 #include "Chips.h"
@@ -28,6 +29,13 @@ static const float X_OFFSET = 200.f,
 static const std::array<std::string, 6> CONFIGMEMBERS = { "Background", "Silverfish_spawns", "Obstacle_spawns", "Boss_spawns", "Spider_spawns", "Boss_config" };
 static const char* mapfilepath = "Resources/Configs/Levels/Level01MAP.png";
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::BACKGROUND;
+
+static const std::string EFFECT_FILEPATH = "Resources/Images/Placeholder_BackgroundEffect.png";
+static const float EFFECT_LIFETIME = 18.5f;
+static const float EFFECT_SPEED = 150;
+static const sf::Vector2f vec(-1, 1);
+static const float EFFECT_INTERVAL = 3.5f;
+
 // Temporary, needs to be a bit more dynamic
 enum EntityType{
 	CHIPS,
@@ -48,7 +56,8 @@ spawnableInfo spawns[] {
 Level::Level(EntityManager* entityManager, GameStateLevel* gameStateLevel) :
 mIsActive(true),
 mEntityManager(entityManager),
-mGameStateLevel(gameStateLevel)
+mGameStateLevel(gameStateLevel),
+mEffectInterval(EFFECT_INTERVAL)
 {
 
 }
@@ -272,6 +281,11 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget, s
 
 void Level::tick(const sf::Time& deltaTime) {
 	updateView(deltaTime);
+	mEffectInterval -= deltaTime.asSeconds();
+	if (mEffectInterval <= 0) {
+		createEffects();
+		mEffectInterval = (float)(rand() % 5);
+	}
 }
 
 void Level::updateView(const Time& deltaTime){
@@ -344,5 +358,13 @@ void Level::draw(RenderTarget& target, RenderStates states) const {
 		if (x < xMax && x >= xMin){
 			target.draw(mBackgroundImages[i]);
 		}
+	}
+}
+
+void Level::createEffects() {
+	//Background effect
+	for (int i = 0; i <= rand() % 20; i++){
+	BackgroundEffect* eff = new BackgroundEffect(EFFECT_FILEPATH, vec*EFFECT_SPEED, sf::Vector2f((float)(rand() %15000),-100) + vec*EFFECT_SPEED / 3.0f, EFFECT_LIFETIME, mTarget);
+	mEntityManager->addEntity(eff);
 	}
 }
