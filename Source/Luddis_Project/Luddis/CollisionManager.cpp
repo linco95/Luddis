@@ -6,6 +6,7 @@
 #include "VectorMath.h"
 #include <cassert>
 
+
 CollisionManager::CollisionManager() :
 mCollidables(){
 }
@@ -118,12 +119,22 @@ void narrowCollision(std::stack<std::pair<CollidableEntity*, CollidableEntity*>>
 			Then we check if there's a gap between the projected "shadows". If there is a gap, it is impossible for the shapes to be colliding, i.e. just continue to the next shape.
 			If we loop through all and find no gap, they are colliding, and we inform each CollidableEntity that the collision happened.
 			(This is called the "Separating Axis Theorem")
+			ADDITION:
+			We're now also saving down the axis with the smallest "shadow overlap". If we then move the shape so that the smallest shadow no longer overlaps, the objects 
+			are no longer colliding.
+			We then send that axis to the Entities so that they can move away.
 		*/
+
 		// Saving the number of points in the first shape, just to avoid some function calls
 		const std::size_t firstPointCount = hitboxPair.first->getPointCount();
 		
 		// We assume that there has been a collision, until we've proved the opposite
 		bool isColliding = true;
+
+		// Create the vector that defines the least change in position that is needed to not collide with the other entity.
+		// Initialized to the zero vector, we will check if it is the zero vector, then just assign, don't compare.
+		// This is the vector going from the first shape, to the second shape.
+		sf::Vector2f smallestOverlap(0,0);
 
 		// Loop through all the points in the first shape
 		for (std::size_t i = 0; i < firstPointCount; i++) {
@@ -142,17 +153,37 @@ void narrowCollision(std::stack<std::pair<CollidableEntity*, CollidableEntity*>>
 			std::pair<float, float> shapeProj[2];
 			shapeProj[0] = getProjection(*hitboxPair.first, axis);
 			shapeProj[1] = getProjection(*hitboxPair.second, axis);
-
+			
 			// Look for a gap between the projections and if there's a gap, the shapes are not colliding, i.e. go on to the next hitbox pair
-			if (shapeProj[0].first > shapeProj[1].second || shapeProj[0].second < shapeProj[1].first){
+			if (shapeProj[0].first >= shapeProj[1].second || shapeProj[0].second <= shapeProj[1].first){
 				isColliding = false;
 				break;
 			}
+			// If the shape is colliding, but one of the shapes shadows isn't contained inside of the other shape
+			else {
+				float diff = 0;
+				//  Is first.min < second.maxin but still within (first.min > second.min)?
+				if (shapeProj[0].first < shapeProj[1].second && shapeProj[0].first > shapeProj[1].first) {
+					 diff = shapeProj[1].second - shapeProj[0].first;
+				}
+				// Is first.max > second.min but still within (first.max < second.max)?
+				if (shapeProj[0].second > shapeProj[1].first && shapeProj[0].second < shapeProj[1].second) {
+					float tempDiff = shapeProj[1].first - shapeProj[0].second;
+					// Checks to see if diff is greater than this
+					if (abs(diff) > abs(tempDiff))
+						diff = tempDiff;
+				}
+				// If the smallestOverlap hasn't been initialized, or is longer than diff, we set the smallestOverlap to axis* diff
+				if (VectorMath::getVectorLength(smallestOverlap) == 0 || VectorMath::getVectorLength(smallestOverlap) > diff) {
+				// Direction: from first shape -> second shape
+					smallestOverlap = axis * diff;
+				}
+			}
 		}
-		// If no gaps were found, collide.
+		// If no gaps were found, collide. We give the smallestOverlap vector in the direction that the shape has to move to not be colliding anymore.
 		if (isColliding){
-			pair.first->collide(pair.second);
-			pair.second->collide(pair.first);
+			pair.first->collide(pair.second/*, smallestOverlap*/);
+			pair.second->collide(pair.first/*, -smallestOverlap*/);
 		}
 	}
 }
