@@ -10,6 +10,7 @@
 #include <SFML/Audio/Sound.hpp>
 
 class EntityManager;
+class GameStateLevel;
 
 class Luddis : public CollidableEntity{
 public:
@@ -23,6 +24,7 @@ public:
 	RenderLayer getRenderLayer() const override;
 	sf::FloatRect getHitBox() override;
 	sf::Shape* getNarrowHitbox() const override;
+	void reset(GameStateLevel* gameStateLevel);
 
 private:
 	sf::Vector2f getVectorMouseToSprite() const;
@@ -38,6 +40,7 @@ private:
 	AnimationQueue mAnimation;
 	EntityManager* mEntityManager;
 	sf::RenderWindow* mWindow;
+	GameStateLevel* mGameStateLevel;
 	float mProjectileCooldown;
 	float mStunDuration;
 	float mLoseDust;
@@ -45,6 +48,7 @@ private:
 	bool mIsActive;
 	bool mColliding;
 	bool mIsFlipped;
+	int mLife;
 	PowerupDisplay* mPowerups[4];
 	sf::FloatRect mCollideBox;
 	sf::Vector2f mDirectionVector;

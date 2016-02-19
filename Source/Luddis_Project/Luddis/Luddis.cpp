@@ -2,6 +2,8 @@
 #include "Inventory.h"
 #include "ResourceManager.h"
 #include "EntityManager.h"
+#include "GameStateLevel.h"
+#include "GameManager.h"
 #include "GUIManager.h"
 #include "CollisionManager.h"
 #include "SoundEngine.h"
@@ -54,12 +56,15 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window, EntityMana
 	mHitbox(new sf::CircleShape(HITBOX_SHAPE)),
 	mScaleX(1),
 	mScaleY(1),
-	mIsFlipped(false)
+	mIsFlipped(false),
+	mLife(2)
 {
 	setPosition(mWindow->getView().getSize().x / 2, mWindow->getView().getSize().y / 2);
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
 	//sf::Mouse::setPosition(mWindow->mapCoordsToPixel(getPosition()));
 	
+	Inventory::getInstance().addDust(mLife);
+
 	//Adds a display of the first power that luddis has. Some different class might want to handle this
 	
 }
@@ -98,6 +103,7 @@ void Luddis::tick(const sf::Time& deltaTime){
 	mAnimation.tick(deltaTime);
 	// Update scale
 	changeScale();
+
 }
 
 void Luddis::draw(sf::RenderTarget& target, sf::RenderStates states) const{
@@ -237,9 +243,12 @@ void Luddis::collide(CollidableEntity *collidable){
 	// Collision with damaging object
 	if (collidable->getCollisionCategory() == BG_DAMAGE){
 		mAnimation.replaceAnimation(HIT_ANIMATION);
-		if (mLoseDust < 0){
+		if (mLoseDust < 0) {
 			Inventory::getInstance().addDust(-1);
 			mLoseDust = 1.0f;
+			if (Inventory::getInstance().getDust() <= 0){
+				mIsAlive = false;
+			}
 		}
 	}
 	// Collision with an enemy
@@ -248,6 +257,9 @@ void Luddis::collide(CollidableEntity *collidable){
 		if (mLoseDust < 0){
 			Inventory::getInstance().addDust(-1);
 			mLoseDust = 1.0f;
+			if (Inventory::getInstance().getDust() <= 0) {
+				mIsAlive = false;
+			}
 		}
 	}
 	// Collision with an collectible
@@ -303,4 +315,9 @@ sf::Shape* Luddis::getNarrowHitbox() const{
 }
 Entity::RenderLayer Luddis::getRenderLayer() const {
 	return LAYER;
+}
+
+void Luddis::reset(GameStateLevel* gameStateLevel) {
+	mGameStateLevel->resetLevel();
+	GameManager::getInstance().setGameState(mGameStateLevel);
 }

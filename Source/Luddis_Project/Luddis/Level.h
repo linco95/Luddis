@@ -30,6 +30,7 @@ public:
 
 private:
 	void updateView(const sf::Time& deltaTime);
+	void createEffects();
 	void increaseMapBounds(sf::IntRect size);
 	void initializeEntities(sf::RenderWindow* window, const rapidjson::Document& configDoc);
 	void readInitMap();
@@ -46,6 +47,7 @@ private:
 	// PONR = Point Of No Return
 	float mCurrentPONR;
 	bool mIsActive;
+	float mEffectInterval;
 };
 
 #endif
