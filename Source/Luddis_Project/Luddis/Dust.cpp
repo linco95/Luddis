@@ -67,7 +67,6 @@ Dust::Type Dust::getCollisionType(){
 	return REC;
 }
 
-
 void Dust::collide(CollidableEntity *collidable){
 	if (collidable->getCollisionCategory() == FRIEND){
 		mIsAlive = false;

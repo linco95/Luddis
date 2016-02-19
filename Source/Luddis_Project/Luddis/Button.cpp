@@ -30,7 +30,7 @@ mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 	}
 	sf::FloatRect textRect = mButtonText.getGlobalBounds();
 	float xScale = (float)textRect.width/spriteRect.width;
-	if ((float)textRect.width> spriteRect.width){
+	if ((float)textRect.width+5.0f> spriteRect.width){
 		mSprite.setScale(xScale+0.5f, 1);
 	}
 	mButtonText.setColor(sf::Color::Black);

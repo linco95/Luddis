@@ -2,12 +2,14 @@
 #include "ResourceManager.h"
 #include "GUIManager.h"
 #include "GameStateLevel.h"
+#include "SoundEngine.h"
 #include <rapidjson/document.h>
 #include <cmath>
 #include <array>
 #include <typeinfo>
 
 static const std::string BACKGROUND_TEXTURE = "Resources/Images/GUI/DialogueFrame.png";
+static const std::string FILENAME = "Resources/Configs/Levels/Level";
 
 static const float ANIMATION_TIME = 1.5f;
 static const float RECT_WIDTH = 1000;
@@ -24,6 +26,8 @@ mIsAlive(true),
 mIsActive(true),
 mDrawContents(false),
 mWindow(window),
+mResourceManager(&ResourceManager::getInstance()),
+mSoundEngine(&SoundEngine::getInstance()),
 mGUIManager(guiManager),
 mEventManager(eventManager),
 mGameStateLevel(gameStateLevel),
@@ -33,7 +37,7 @@ mDialogueTexts(){
 	setPosition(pos);
 	sf::Vector2f offset(0, -RECT_HEIGHT);
 	mBackground.setPosition(offset);
-	mBackground.setTexture(&ResourceManager::getInstance().getTexture(BACKGROUND_TEXTURE));
+	mBackground.setTexture(&mResourceManager->getTexture(BACKGROUND_TEXTURE));
 	mBackground.setFillColor(sf::Color(255, 255, 255));
 	mBackground.setOutlineThickness((float)INDENT / 2);
 	initialize(dialogueFile);
@@ -44,10 +48,11 @@ Dialogue::~Dialogue(){
 	if (mGameStateLevel != nullptr){
 		mGameStateLevel->setInDialogue(false);
 	}
+	mSoundEngine->stopSound(mCurrentVoiceDialogue);
 }
 
 void Dialogue::initialize(std::string dialogueFile){
-	std::string configText = ResourceManager::getInstance().loadJsonFile(dialogueFile);
+	std::string configText = mResourceManager->loadJsonFile(dialogueFile);
 	rapidjson::Document configDoc;
 	configDoc.Parse(configText.c_str());
 	assert(configDoc.IsObject());
@@ -118,6 +123,11 @@ void Dialogue::initialize(std::string dialogueFile){
 			int headerOffset = mHeaders[itr]->getRows()*fontSize;
 			mDialogueTexts.back().move(0.0f, (float)headerOffset);
 		}
+		if (pages[itr].HasMember("Voice_file")) {
+			assert(pages[itr]["Voice_file"].IsString());
+			mSoundFiles[itr] = pages[itr]["Voice_file"].GetString();
+			mResourceManager->loadSoundBuffer(mSoundFiles[itr]);
+		}
 	}
 	if (configDoc.HasMember("Level")){
 		assert(configDoc["Level"].IsInt());
@@ -140,8 +150,10 @@ void Dialogue::tick(const sf::Time& deltaTime){
 		mDrawContents = true;
 		mCharacterDisplayRight->setActive(true);
 		mCharacterDisplayLeft->setActive(true);
-		for (ButtonVector::size_type i = 0; i < mButtons[0].size(); i++){
-			mButtons[0].at(i)->setActive(true);
+		if(mSoundFiles[mActivePage].size() != 0)
+			mCurrentVoiceDialogue = mSoundEngine->playSound(mSoundFiles[mActivePage]);
+		for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++){
+			mButtons[mActivePage].at(i)->setActive(true);
 		}
 	}
 	if (mDrawContents){
@@ -202,10 +214,15 @@ void Dialogue::changePageButton(int value){
 	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++){
 		mButtons[mActivePage][i]->setActive(false);
 	}
+	if (mSoundFiles[mActivePage].size() != 0)
+		mSoundEngine->stopSound(mCurrentVoiceDialogue);
 	mActivePage += value;
 	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++){
 		mButtons[mActivePage][i]->setActive(true);
 	}
+	if (mSoundFiles[mActivePage].size() != 0)
+		mCurrentVoiceDialogue = mSoundEngine->playSound(mSoundFiles[mActivePage]);
+
 }
 
 void Dialogue::closeButton(){
@@ -213,19 +230,27 @@ void Dialogue::closeButton(){
 }
 
 void Dialogue::spiderButton1(){
-	//NYI
-	//Read a json file and/or a png file to create extra entities
-	std::string jsonFilename = "Resources/Configs/Levels/LevelEntities.json";
-	jsonFilename.insert(jsonFilename.size() - 13, std::to_string(mLevel));
+	//Read a json file and a png file to create extra entities
+	std::string jsonFilename = FILENAME + std::to_string( mLevel) + "SpiderEasy.json";
+	std::string mapFilename = FILENAME + std::to_string(mLevel) + "SpiderEasy.png";
 	changePageButton(1);
+	mGameStateLevel->setupMission(mapFilename, jsonFilename);
 }
 
 void Dialogue::spiderButton2(){
-
+	//Read a json file and a png file to create extra entities
+	std::string jsonFilename = FILENAME + std::to_string(mLevel) + "SpiderMedium.json";
+	std::string mapFilename = FILENAME + std::to_string(mLevel) + "SpiderMedium.png";
+	changePageButton(2);
+	mGameStateLevel->setupMission(mapFilename, jsonFilename);
 }
 
 void Dialogue::spiderButton3(){
-
+	//Read a json file and a png file to create extra entities
+	std::string jsonFilename = FILENAME + std::to_string(mLevel) + "SpiderHard.json";
+	std::string mapFilename = FILENAME + std::to_string(mLevel) + "SpiderHard.png";
+	changePageButton(3);
+	mGameStateLevel->setupMission(mapFilename, jsonFilename);
 }
 
 //Call the function corresonding to the string passed back.

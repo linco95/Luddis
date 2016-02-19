@@ -4,12 +4,19 @@
 #include "EntityManager.h"
 #include "GUIManager.h"
 #include "GameManager.h"
+#include "ResourceManager.h"
 #include "PowerupDisplay.h"
 #include "Dialogue.h"
 #include "Level.h"
+#include "Dust.h"
+#include "Chips.h"
+#include "SpiderEgg.h"
+#include "Silverfish.h"
 #include "Spider.h"
+#include "EventZone.h"
 #include "Inventory.h"
 #include "Luddis.h"
+#include "Debug.h"
 
 static const std::string LUDDIS_TEXTURE = "Resources/Images/Grafik_Luddis120x80_s1d3v1.png";
 
@@ -23,7 +30,8 @@ mGUIM(guiManager),
 mCM(&CollisionManager::getInstance()),
 mGUIView(ViewUtility::getViewSize()),
 mWindow(window),
-mInDialogue(false){
+mInDialogue(false),
+mResetView(false){
 	mEventM.attatch(this, sf::Event::EventType::KeyPressed);
 }
 
@@ -42,6 +50,12 @@ void GameStateLevel::update(sf::Clock& clock){
 	if (!mInDialogue){
 		mEntityM->updateEntities(clock.getElapsedTime());
 		mCM->detectCollisions();
+	}
+	//Debug::log(std::to_string( clock.getElapsedTime().asSeconds())+ "\n" );
+	if (mResetView) {
+		mMapView = mWindow->getView();
+		mWindow->setView(mGUIView);
+		mResetView = false;
 	}
 	//Change the view when updating GUI elements
 	mMapView = mWindow->getView();
@@ -130,6 +144,7 @@ void GameStateLevel::setupLevel(std::string levelFile){
 
 void GameStateLevel::resetLevel(){
 	if (!mCurrentLevelFile.empty()){
+		mResetView = true;
 		resetInventory();
 		mCM->emptyVector();
 		mEntityM->emptyVector();
@@ -142,4 +157,14 @@ void GameStateLevel::resetInventory(){
 	inv->setChips(mInv.chips);
 	inv->setDust(mInv.dust);
 	inv->setEggs(mInv.eggs);
+}
+
+void GameStateLevel::setupMission(const std::string& mapFilename, const std::string& jsonFilename) {
+	std::string configText = ResourceManager::getInstance().loadJsonFile(jsonFilename);
+	rapidjson::Document configDoc;
+	configDoc.Parse(configText.c_str());
+	assert(configDoc.IsObject());
+
+	mLevel->initializeEntities(mWindow, configDoc);
+	mLevel->readInitMap(mapFilename);
 }
