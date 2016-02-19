@@ -134,6 +134,7 @@
     <ClCompile Include="EventZone.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="BackgroundEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
