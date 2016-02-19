@@ -10,14 +10,10 @@ static const std::string FONT = "Resources/Fonts/BuxtonSketch.ttf";
 TutorialText::TutorialText(sf::RenderWindow* window, sf::Vector2f position, float activationPoint, std::string text, sf::Transformable* aTarget) :
 mIsActive(false),
 mIsAlive(true),
-mAnimating(true),
 mActivate(activationPoint),
 mWindow(window),
 mTarget(aTarget),
-mText(BOX_SIZE, "", TEXT_SIZE, FONT),
-mFinalText(text),
-MAX_ANIMATE_TIME((float)(text.size()/30.0f)),
-mAnimateTime(MAX_ANIMATE_TIME){
+mText(BOX_SIZE, text, TEXT_SIZE, true, FONT){
 	setPosition(position);
 }
 
@@ -38,23 +34,11 @@ void TutorialText::tick(const sf::Time& deltaTime){
 }
 
 void TutorialText::updateText(const sf::Time& deltaTime){
-	if (mAnimateTime > 0){
-		mAnimateTime -= deltaTime.asSeconds();
-		mAnimateTime = std::max(mAnimateTime, 0.0f);
-		std::string tempString;
-		int maxStringLength = (int)((MAX_ANIMATE_TIME - mAnimateTime)*30);
-		for (int i = 0; i < maxStringLength; i++){
-			tempString.push_back(mFinalText[i]);
-		}
-		mText.setString(tempString);
-	}
-	else if (mAnimating){
-		mText.setString(mFinalText);
-		mAnimating = false;
-	}
+	mText.animate(deltaTime);
 }
 
 void TutorialText::draw(sf::RenderTarget& target, sf::RenderStates states) const{
+	if (!mIsActive) return;
 	states.transform *= getTransform();
 	mWindow->draw(mText, states);
 }

@@ -4,7 +4,7 @@
 #include <SFML/Audio/Sound.hpp>
 #include <SFML/Audio/Music.hpp>
 
-static const int MAX_SOUND_CHANNELS = 256;
+static const int MAX_SOUND_CHANNELS = 255;
 
 class SoundEngine{
 public:
@@ -20,7 +20,9 @@ public:
 	void setSoundVolume(float volume);
 	//Volume is a value from 0-100
 	void setMusicVolume(float volume);
-	void playSound(std::string filename);
+	//Returns the channel that is playing the sound.
+	int playSound(std::string filename);
+	void stopSound(int channel);
 	void playMusic(std::string filename);
 	//Fadetime in seconds
 	void fadeToNewMusic(std::string filename, float fadeTime = 1.5f);
