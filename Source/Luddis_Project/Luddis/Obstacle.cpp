@@ -4,25 +4,26 @@
 
 const Entity::RenderLayer LAYER = Entity::RenderLayer::OBSTACLES;
 const int DAMAGE = 0;
-static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
+//static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 static const float IDLE_TIME = 4;
 static const float DAMAGE_TIME = 2;
 
 static const Animation ANIMATION_IDLE = Animation("Resources/Images/Spritesheets/Grafik_steam_AnimationIdleSprite");
 static const Animation ANIMATION_DAMAGE = Animation("Resources/Images/Spritesheets/Grafik_steam_AnimationSprite");
 
-Obstacle::Obstacle(sf::RenderWindow* window, std::string textureFilename, ObstacleType type, const sf::Vector2f& position, const float& angle) :
+Obstacle::Obstacle(sf::RenderWindow* window, ObstacleType type, const sf::Vector2f& position, const float& angle, const sf::Vector2f& size, bool debug) :
 mIsAlive(true),
 mIsActive(true),
 mWindow(window),
 mType(type),
-mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
-mHitbox(new sf::CircleShape(HITBOX_SHAPE)),
+//mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
+mHitbox(new sf::RectangleShape(size)),
 mIsDamaging(false),
 mDamageTime(DAMAGE_TIME),
 mIdleTime(IDLE_TIME),
 mAnimation(ANIMATION_IDLE),
-mAngle(angle)
+mAngle(angle),
+mDebug(debug)
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	setPosition(position);

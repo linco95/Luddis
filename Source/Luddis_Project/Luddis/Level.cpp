@@ -164,20 +164,32 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 	assert(obstacleSpawns.IsArray());
 	for (rapidjson::Value::ConstValueIterator itr = obstacleSpawns.Begin(); itr != obstacleSpawns.End(); itr++){
 		assert(itr->IsObject());
-		assert(itr->HasMember("filename") && (*itr)["filename"].IsString());
 		assert(itr->HasMember("type") && (*itr)["type"].IsInt());
 		assert(itr->HasMember("x") && (*itr)["x"].IsInt());
 		assert(itr->HasMember("y") && (*itr)["y"].IsInt());
 		assert(itr->HasMember("angle") && (*itr)["angle"].IsDouble());
+		assert(itr->HasMember("height") && (*itr)["height"].IsInt());
+		assert(itr->HasMember("width") && (*itr)["width"].IsInt());
+		assert(itr->HasMember("debug") && (*itr)["debug"].IsInt());
 
-		std::string filename = (*itr)["filename"].GetString();
 		int type =(*itr)["type"].GetInt();
+		//Position
 		float x = (float)(*itr)["x"].GetInt();
 		float y = (float)(*itr)["y"].GetInt();
 		sf::Vector2f pos(x, y);
-		float angle = (float)(*itr)["angle"].GetDouble();
 
-		Obstacle* obstacle = new Obstacle(mWindow, filename, Obstacle::ObstacleType(type),pos, angle);
+		float angle = (float)(*itr)["angle"].GetDouble();
+		// Size
+		float sX = (float)(*itr)["width"].GetInt();
+		float sY = (float)(*itr)["height"].GetInt();
+		sf::Vector2f size(sX, sY);
+		// Debug (draw) mode
+		bool debug = false;
+		if ((int)(*itr)["debug"].GetInt() == 1){
+			debug = true;
+		}
+
+		Obstacle* obstacle = new Obstacle(mWindow, Obstacle::ObstacleType(type),pos, angle, size, debug);
 		mEntityManager->addEntity(obstacle);
 		cm->addCollidable(obstacle);
 		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
