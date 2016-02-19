@@ -17,6 +17,7 @@ public:
 	void run();
 	void gameOver();
 	void setGameState(GameState* gameState);
+	void getGameState(GameState* gameState);
 
 	GameManager(const GameManager&) = delete;
 	GameManager& operator=(const GameManager&) = delete;

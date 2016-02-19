@@ -136,6 +136,7 @@
     <ClCompile Include="TutorialText.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="BackgroundEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -271,6 +272,9 @@
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="EventZone.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="BackgroundEffect.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
   </ItemGroup>

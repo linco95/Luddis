@@ -32,6 +32,7 @@ public:
 
 private:
 	void updateView(const sf::Time& deltaTime);
+	void createEffects();
 	void increaseMapBounds(sf::IntRect size);
 
 	EntityManager* mEntityManager;
@@ -46,6 +47,7 @@ private:
 	// PONR = Point Of No Return
 	float mCurrentPONR;
 	bool mIsActive;
+	float mEffectInterval;
 };
 
 #endif
