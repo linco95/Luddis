@@ -4,6 +4,7 @@
 #include "GameState.h"
 #include "EventManager.h"
 #include "CollisionManager.h"
+#include <rapidjson\document.h>
 
 class EntityManager;
 class GameStatePaused;
@@ -31,6 +32,7 @@ public:
 	void resetLevel();
 	void resetInventory();
 
+	void setupMission(const std::string& mapFilename, const std::string& jsonFilename);
 
 private:
 	EntityManager* mEntityM;
@@ -44,8 +46,10 @@ private:
 	Level* mLevel;
 	Spider* mSpider;
 	bool mInDialogue;
+	bool mResetView;
 	std::string mCurrentLevelFile;
-
+	int outputTime;
+	float timePassed;
 	PowerupDisplay* mPowerupDisplays[2];
 	struct CurrentInventory{
 		int dust;

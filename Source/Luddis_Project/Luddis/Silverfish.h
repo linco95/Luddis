@@ -36,6 +36,7 @@ private:
 	Type getCollisionType() override;
 	void collide(CollidableEntity *collidable) override;
 	int mLife;
+	bool mBefriend;
 	const float mActivate;
 	sf::Shape* mHitbox;
 	AnimationQueue mAnimation;

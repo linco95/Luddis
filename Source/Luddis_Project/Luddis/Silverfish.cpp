@@ -23,6 +23,7 @@ Silverfish::Silverfish(sf::RenderWindow* window, const sf::Vector2f& position, c
 mIsAlive(true),
 mIsActive(false),
 mSwimAway(false),
+mBefriend(false),
 mLife(LIFE),
 mActivate(activation),
 mWindow(window),
@@ -63,6 +64,10 @@ void Silverfish::tick(const sf::Time& deltaTime){
 		mIsActive = true;
 	}
 	if (!mIsActive) return;
+	if (mBefriend){
+		mAlignment = FRIEND;
+		mBefriend = false;
+	}
 	updateMovement(deltaTime);
 	mAnimation.tick(deltaTime);
 	// TODO: Cleanup, enable fishes to be outside while spawning
@@ -120,7 +125,7 @@ void Silverfish::collide(CollidableEntity *collidable){
 			mSwimAway = true;
 			mDirection = sf::Vector2f(0, -1);
 			SPEED = 120;
-			mAlignment = FRIEND;
+			mBefriend = true;
 			}
 		}
 	}

@@ -21,6 +21,7 @@ public:
 	//Volume is a value from 0-100
 	void setMusicVolume(float volume);
 	//Returns the channel that is playing the sound.
+	//Returns -1 if no channel was free.
 	int playSound(std::string filename);
 	void stopSound(int channel);
 	void playMusic(std::string filename);
