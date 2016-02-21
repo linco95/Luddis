@@ -18,16 +18,14 @@
 #include "GameStatePaused.h"
 #include "GameStateMap.h"
 #include "ViewUtility.h"
-
+#include "Debug.h"
 #include <iostream>
 
 using namespace sf;
 
 static const std::string APPNAME = "Luddis";
 static const std::string ICONPATH = "resources/images/luddisicon.png";
-static const int WIDTH = 1920;
-static const int HEIGHT = 1080;
-static const float DESIRED_ASPECTRATIO = (float)WIDTH / (float)HEIGHT;
+static const float DESIRED_ASPECTRATIO = (float)ViewUtility::VIEW_WIDTH / (float)ViewUtility::VIEW_HEIGHT;
 static const Color BGCOLOR = Color::Black;
 static const std::string TEXTURE_CHIPSCOUNTER = "Resources/Images/GUI/HUD_Chips_Icon.png";
 static const std::string TEXTURE_LUDDCOUNTER = "Resources/Images/GUI/HUD_Ludd_Icon.png";
@@ -60,19 +58,19 @@ struct GameManagerImp : public EventObserver {
 	void initializeEntities(){
 
 
-		mChipsCounter = new ScoreCounter(&mMainWindow, TEXTURE_CHIPSCOUNTER, sf::Vector2f(WIDTH*0.7f, HEIGHT-60), ScoreCounter::ScoreType::CHIPS);
+		mChipsCounter = new ScoreCounter(&mMainWindow, TEXTURE_CHIPSCOUNTER, sf::Vector2f(ViewUtility::VIEW_WIDTH*0.7f, ViewUtility::VIEW_HEIGHT-60), ScoreCounter::ScoreType::CHIPS);
 		mGUIManager.addInterfaceElement(mChipsCounter);
 
-		mLuddCounter = new ScoreCounter(&mMainWindow, TEXTURE_LUDDCOUNTER, sf::Vector2f(WIDTH*0.3f, HEIGHT - 60), ScoreCounter::ScoreType::DUST);
+		mLuddCounter = new ScoreCounter(&mMainWindow, TEXTURE_LUDDCOUNTER, sf::Vector2f(ViewUtility::VIEW_WIDTH * 0.3f, ViewUtility::VIEW_HEIGHT - 60), ScoreCounter::ScoreType::DUST);
 		mGUIManager.addInterfaceElement(mLuddCounter);
 
-		mLuddGauge = new ScoreGauge(&mMainWindow, TEXTURE_LUDDGAUGE_FRAME, TEXTURE_LUDDGAUGE_BAR, sf::Vector2f(WIDTH*0.45f, HEIGHT - 60));
+		mLuddGauge = new ScoreGauge(&mMainWindow, TEXTURE_LUDDGAUGE_FRAME, TEXTURE_LUDDGAUGE_BAR, sf::Vector2f(ViewUtility::VIEW_WIDTH * 0.45f, ViewUtility::VIEW_HEIGHT - 60));
 		mGUIManager.addInterfaceElement(mLuddGauge);
 
 		mMainWindow.setMouseCursorVisible(false);
 		// Temporary splash screen
-		sf::RectangleShape splashScreen(sf::Vector2f((float)WIDTH, (float)HEIGHT));
-		splashScreen.setTexture(&ResourceManager::getInstance().getTexture("resources/images/splash.png"));
+		sf::RectangleShape splashScreen(sf::Vector2f((float)ViewUtility::VIEW_WIDTH, (float)ViewUtility::VIEW_HEIGHT));
+		splashScreen.setTexture(&ResourceManager::getInstance().getTexture("Resources/Images/splash.png"));
 		mMainWindow.draw(splashScreen);
 		mMainWindow.display();
 		
@@ -88,10 +86,27 @@ struct GameManagerImp : public EventObserver {
 	// http://acamara.es/blog/2012/02/keep-screen-aspect-ratio-with-different-resolutions-using-libgdx/
 	void initializeWindow(){
 		// Create the window
-		mMainWindow.create(VideoMode(WIDTH, HEIGHT), APPNAME, Style::Fullscreen);
+		mMainWindow.create(VideoMode(ViewUtility::VIEW_WIDTH, ViewUtility::VIEW_HEIGHT), APPNAME, Style::Fullscreen);
 		mMainWindow.setVerticalSyncEnabled(VSYNCENABLED);
 
+		// Set up the viewport
+		auto actualSize = mMainWindow.getView().getSize();
+		auto desiredSize = ViewUtility::getViewSize().getSize();
+		sf::FloatRect viewport(0, 0, 0, 0);
+
+		//mMainWindow.getView().setViewport()
+		/*decltype(desiredSize) viewport(0, 0, 1, 1);
+		if (actualSize.width > actualSize.height) {
+
+		}
+		if (actualSize.width < desiredSize.width) {
+
+		}
+		else if (actualSize.height < desiredSize.height) {
+
+		}*/
 		mMainWindow.setView(ViewUtility::getViewSize());
+
 
 		// Set up icon
 		Image icon;
