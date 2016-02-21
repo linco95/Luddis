@@ -12,6 +12,7 @@ mGauge(mResourceManager->getTexture(gaugeFilename)),
 mGaugeRectSize(mGauge.getTextureRect()){
 	setPosition(screenPos);
 	setOrigin(0, (float)mGaugeRectSize.height / 2);
+	mGauge.move(6, 0); //Offset needed to prevent the image from going outside the frame
 }
 
 ScoreGauge::~ScoreGauge(){
