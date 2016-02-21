@@ -49,9 +49,11 @@ void ScoreGauge::updateGauge(){
 		int maxDust = mInventory->getMaxDust();
 		int currentDust = mInventory->getDust();
 		int offset = maxDust / 5;
-		int gaugeWidth = (int)((float)mGaugeRectSize.width * ((float)(currentDust+offset) / (float)(maxDust+offset)));
+		int gaugeWidth = (int)((float)(mGaugeRectSize.width - (mGaugeRectSize.width * ((float)(currentDust + offset)) / (float)(maxDust + offset))));
 		int gaugeHeight = mGaugeRectSize.height;
-		sf::IntRect gaugeRect(0, 0, gaugeWidth, gaugeHeight);
+		int maxX = mGaugeRectSize.width;
+		int maxY = mGaugeRectSize.height;
+		sf::IntRect gaugeRect(gaugeWidth, 0, maxX, maxY);
 		mGauge.setTextureRect(gaugeRect);
 	}
 }

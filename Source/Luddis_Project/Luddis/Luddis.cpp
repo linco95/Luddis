@@ -188,7 +188,7 @@ void Luddis::updateRotation(){
 void Luddis::attack(){
 	sf::Vector2f direction = VectorMath::rotateVector(FRONTVECTOR, getRotation());
 	sf::Vector2f muzzlePoint = getPosition() + direction * MUZZLEOFFSET;
-	mProjectileCooldown = PROJECTILE_RELOAD;
+	mProjectileCooldown += PROJECTILE_RELOAD;
 	int randValue = std::rand() % PROJECTILE_FILENAME.max_size();
 	Projectile *proj = new Projectile(PROJECTILE_FILENAME[randValue], direction  * PROJECTILE_SPEED, muzzlePoint, PROJECTILE_TIMER, HAIR);
 	

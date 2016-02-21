@@ -105,7 +105,7 @@ void GameStateLevel::handleEvents(){
 
 //TODO: Dialogue will not be reset as it is in the GUI vector. Fix.
 void GameStateLevel::createDialogue(std::string dialogueFilename){
-	sf::Vector2f pos((float)ViewUtility::VIEW_WIDTH*0.3f, (float)ViewUtility::VIEW_HEIGHT - 100);
+	sf::Vector2f pos(0.0f, (float)ViewUtility::VIEW_HEIGHT);
 	Dialogue* dialogue = new Dialogue(dialogueFilename, mWindow, mGUIM, &mEventM, pos, this);
 	mGUIM->addInterfaceElement(dialogue);
 	if (dialogueFilename.substr() == "SpiderDialogue"){
