@@ -52,7 +52,8 @@ void GUIManager::renderElements(sf::RenderWindow& window){
 }
 
 void GUIManager::updateElements(const sf::Time& deltaTime){
-	for (auto e : mElements){
+	InterfaceElementVector temp(mElements);
+	for (auto e : temp){
 		if (e->isActive()){
 			e->tick(deltaTime);
 		}

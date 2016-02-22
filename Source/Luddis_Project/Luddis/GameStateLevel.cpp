@@ -16,7 +16,6 @@
 #include "EventZone.h"
 #include "Inventory.h"
 #include "Luddis.h"
-#include "Debug.h"
 
 static const std::string LUDDIS_TEXTURE = "Resources/Images/Grafik_Luddis120x80_s1d3v1.png";
 
@@ -31,6 +30,7 @@ mCM(&CollisionManager::getInstance()),
 mGUIView(ViewUtility::getViewSize()),
 mWindow(window),
 mInDialogue(false),
+mSetupLevel(false),
 mResetView(false){
 	mEventM.attatch(this, sf::Event::EventType::KeyPressed);
 }
@@ -51,7 +51,6 @@ void GameStateLevel::update(sf::Clock& clock){
 		mEntityM->updateEntities(clock.getElapsedTime());
 		mCM->detectCollisions();
 	}
-	//Debug::log(std::to_string( clock.getElapsedTime().asSeconds())+ "\n" );
 	if (mResetView) {
 		mMapView = mWindow->getView();
 		mWindow->setView(mGUIView);
@@ -109,7 +108,7 @@ void GameStateLevel::createDialogue(std::string dialogueFilename){
 	Dialogue* dialogue = new Dialogue(dialogueFilename, mWindow, mGUIM, &mEventM, pos, this);
 	mGUIM->addInterfaceElement(dialogue);
 	if (dialogueFilename.substr() == "SpiderDialogue"){
-		mSpider = new Spider(mWindow, sf::Vector2f(400, 5));
+		mSpider = new Spider(mWindow, sf::Vector2f(400, 0));
 		mGUIM->addInterfaceElement(mSpider);
 	}
 	mInDialogue = true;
@@ -123,10 +122,7 @@ bool GameStateLevel::getInDialogue() const{
 
 void GameStateLevel::setInDialogue(bool inDialogue){
 	mInDialogue = inDialogue;
-	if (mSpider != nullptr){
-		mSpider->turn();
-		mSpider = nullptr;
-	}
+	
 }
 
 void GameStateLevel::setupLevel(std::string levelFile){
@@ -141,6 +137,13 @@ void GameStateLevel::setupLevel(std::string levelFile){
 	mLevel = new Level(mEntityM, this);
 	mEntityM->addEntity(mLevel);
 	mLevel->initializeLevel(*mWindow, mPlayer, levelFile);
+
+	if (!mSetupLevel) {
+		mSetupLevel = false;
+		std::string setupFile = levelFile.substr(0, 32);
+		setupFile += "Setup.json";
+		readSetupFiles(setupFile);
+	}
 }
 
 void GameStateLevel::resetLevel(){
@@ -168,4 +171,68 @@ void GameStateLevel::setupMission(const std::string& mapFilename, const std::str
 
 	mLevel->initializeEntities(mWindow, configDoc);
 	mLevel->readInitMap(mapFilename);
+	if (mSpider != nullptr) {
+		mSpider->turn();
+		mSpider = nullptr;
+	}
+}
+
+void GameStateLevel::readSetupFiles(const std::string& filename) {
+	ResourceManager* rm = &ResourceManager::getInstance();
+	rapidjson::Document configDoc;
+	std::string configText = rm->loadJsonFile(filename);
+	configDoc.Parse(configText.c_str());
+
+	assert(configDoc.IsObject());
+	assert(configDoc.HasMember("Audio") && configDoc["Audio"].IsArray());
+	const rapidjson::Value& audio = configDoc["Audio"];
+	for (rapidjson::Value::ConstValueIterator itr = audio.Begin(); itr != audio.End(); itr++) {
+		assert(itr->IsObject());
+		assert(itr->HasMember("filename"));
+		std::string file = (*itr)["filename"].GetString();
+		rm->loadSoundBuffer(file);
+	}
+
+	assert(configDoc.HasMember("Graphics"));
+	const rapidjson::Value& graphics = configDoc["Graphics"];
+	assert(graphics.HasMember("Background") && graphics["Background"].IsString());
+	assert(graphics.HasMember("Segments")&&graphics["Segments"].IsInt());
+	int seg = graphics["Segments"].GetInt();
+	for (int i = 0; i < seg; i++) {
+		std::string file = graphics["Background"].GetString() + std::to_string(i+1) + ".png";
+		rm->loadTexture(file);
+	}
+
+	assert(graphics.HasMember("Enemies")&&graphics["Enemies"].IsArray());
+	const rapidjson::Value& enemies = graphics["Enemies"];
+
+	for (rapidjson::Value::ConstValueIterator itr = enemies.Begin(); itr != enemies.End(); itr++) {
+		assert(itr->IsObject());
+		assert(itr->HasMember("filename"));
+		std::string file = (*itr)["filename"].GetString();
+		rm->loadTexture(file);
+	}
+
+	assert(configDoc.HasMember("Setup_files"));
+	const rapidjson::Value& setupFiles = configDoc["Setup_files"];
+	assert(setupFiles.HasMember("JSON_files")&& setupFiles["JSON_files"].IsArray());
+	const rapidjson::Value& jsonFiles = setupFiles["JSON_files"];
+
+	for (rapidjson::Value::ConstValueIterator itr = jsonFiles.Begin(); itr != jsonFiles.End(); itr++) {
+		assert(itr->IsObject());
+		assert(itr->HasMember("filename")&&(*itr)["filename"].IsString());
+		std::string file = (*itr)["filename"].GetString();
+		rm->loadJsonFile(file);
+	}
+
+	assert(setupFiles.HasMember("PNG_files") && setupFiles["PNG_files"].IsArray());
+	const rapidjson::Value& pngFiles = setupFiles["PNG_files"];
+
+	for (rapidjson::Value::ConstValueIterator itr = pngFiles.Begin(); itr != pngFiles.End(); itr++) {
+		assert(itr->IsObject());
+		assert(itr->HasMember("filename") && (*itr)["filename"].IsString());
+		std::string file = (*itr)["filename"].GetString();
+		rm->readMap(file);
+	}
+
 }

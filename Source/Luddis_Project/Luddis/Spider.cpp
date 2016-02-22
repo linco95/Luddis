@@ -17,14 +17,12 @@ static const std::string ANIMATION_ENTER = "resources/images/spritesheets/Grafik
 static const std::string ANIMATION_IDLE = "resources/images/spritesheets/Grafik_spindel_SpriteIdle";
 static const std::string ANIMATION_LEAVE = "resources/images/spritesheets/Grafik_spindel_SpriteClimbv2";
 
-//TODO: Put in constructor or something to have the spider display
-//level sensitive dialogues.
-
 Spider::Spider(sf::RenderWindow* window, const sf::Vector2f& position) :
 mIsAlive(true),
 mIsActive(true),
 mIdleAnimation(false),
 mTurn(false),
+mLeaving(false),
 mWindow(window),
 mAnimation(ANIMATION_ENTER)
 {
@@ -44,13 +42,14 @@ void Spider::tick(const sf::Time& deltaTime){
 	mAnimation.tick(deltaTime);
 	updateMovement(deltaTime);
 	
-	if (getPosition().y<(-mAnimation.getCurrAnimation().getSprite().getGlobalBounds().height / 2) || getPosition().y > mWindow->getView().getSize().y + mAnimation.getCurrAnimation().getSprite().getGlobalBounds().height / 2){
+	if (getPosition().y<(-mAnimation.getCurrAnimation().getSprite().getGlobalBounds().height) || 
+		getPosition().y > mWindow->getView().getSize().y + mAnimation.getCurrAnimation().getSprite().getGlobalBounds().height){
 		mIsAlive = false;
 	}
 }
 
 void Spider::updateMovement(const sf::Time& deltaTime){
-	if (getPosition().y >= 500){
+	if (getPosition().y >= 500 && !mLeaving){
 		if (!mIdleAnimation){
 			mWaiting = true;
 			mAnimation.setDefaultAnimation(ANIMATION_IDLE);
@@ -59,6 +58,7 @@ void Spider::updateMovement(const sf::Time& deltaTime){
 
 		if (mTurn){
 			mTurn = false;
+			mLeaving = true;
 			mAnimation.setDefaultAnimation(ANIMATION_LEAVE);
 			sf::Vector2f dir2{0, -1};
 			mDirection = dir2;

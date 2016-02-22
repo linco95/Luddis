@@ -32,6 +32,8 @@ mSoundEngine(&SoundEngine::getInstance()),
 mGUIManager(guiManager),
 mEventManager(eventManager),
 mGameStateLevel(gameStateLevel),
+mCharacterDisplayLeft(nullptr),
+mCharacterDisplayRight(nullptr),
 mActivePage(0),
 mBackground(),
 mDialogueTexts(){
@@ -40,7 +42,7 @@ mDialogueTexts(){
 	mBackground.setPosition(offset);
 	mBackground.setTexture(&mResourceManager->getTexture(BACKGROUND_TEXTURE));
 	mBackground.setFillColor(sf::Color(255, 255, 255));
-	mBackground.setOutlineThickness((float)INDENT / 2);
+	//mBackground.setOutlineThickness((float)INDENT / 2);
 	initialize(dialogueFile);
 }
 
@@ -71,7 +73,6 @@ void Dialogue::initialize(std::string dialogueFile){
 
 		mCharacterDisplayLeft = new CharacterPortrait(textureFilename, characterName, pos);
 		mGUIManager->addInterfaceElement(mCharacterDisplayLeft);
-		mCharacterDisplayLeft->setActive(false);
 	}
 	//So is the second one
 	if (configDoc.HasMember("Right_character_filename") &&
@@ -85,7 +86,6 @@ void Dialogue::initialize(std::string dialogueFile){
 		rightPos.x += 600;
 		mCharacterDisplayRight = new CharacterPortrait(textureFilename, characterName, rightPos);
 		mGUIManager->addInterfaceElement(mCharacterDisplayRight);
-		mCharacterDisplayRight->setActive(false);
 	}
 
 	const rapidjson::Value& pages = configDoc["Pages"];
@@ -149,8 +149,10 @@ void Dialogue::tick(const sf::Time& deltaTime){
 	}
 	else if(!mDrawContents){
 		mDrawContents = true;
-		mCharacterDisplayRight->setActive(true);
-		mCharacterDisplayLeft->setActive(true);
+		if(mCharacterDisplayRight!= nullptr)
+			mCharacterDisplayRight->setActive(true);
+		if(mCharacterDisplayLeft!= nullptr)
+			mCharacterDisplayLeft->setActive(true);
 		if(mSoundFiles[mActivePage].size() != 0)
 			mCurrentVoiceDialogue = mSoundEngine->playSound(mSoundFiles[mActivePage]);
 		for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++){
@@ -199,8 +201,14 @@ void Dialogue::addButton(std::string buttonFile, std::string buttonText, std::st
 }
 
 void Dialogue::internalClear(){
-	mCharacterDisplayRight->kill();
-	mCharacterDisplayLeft->kill();
+	if (mCharacterDisplayRight != nullptr) {
+		mCharacterDisplayRight->kill();
+		mCharacterDisplayRight = nullptr;
+	}
+	if (mCharacterDisplayLeft != nullptr) {
+		mCharacterDisplayLeft->kill();
+		mCharacterDisplayLeft = nullptr;
+	}
 	for (TextBoxVector::size_type i = 0; i < mDialogueTexts.size(); i++){
 		for (ButtonVector::size_type j = 0; j < mButtons[i].size(); j++){
 			mButtons[i][j]->kill();
@@ -223,7 +231,6 @@ void Dialogue::changePageButton(int value){
 	}
 	if (mSoundFiles[mActivePage].size() != 0)
 		mCurrentVoiceDialogue = mSoundEngine->playSound(mSoundFiles[mActivePage]);
-
 }
 
 void Dialogue::closeButton(){

@@ -6,6 +6,8 @@ static const int DEFAULT_FONTSIZE = 24;
 
 CharacterPortrait::CharacterPortrait(std::string textureFilename, std::string characterName, sf::Vector2f pos) :
 mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
+mIsAlive(true),
+mIsActive(false),
 mName(characterName, ResourceManager::getInstance().getFont(DEFAULT_FONT), DEFAULT_FONTSIZE){
 	setPosition(pos);
 	float spriteOrigoX = (float)mSprite.getTextureRect().width / 2;

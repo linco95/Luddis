@@ -31,6 +31,7 @@ private:
 	bool mIsAlive;
 	bool mIsActive;
 	bool mWaiting;
+	bool mLeaving;
 	bool mIdleAnimation;
 	bool mTurn;
 	sf::Sprite mSprite;
