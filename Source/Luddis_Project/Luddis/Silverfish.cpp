@@ -136,6 +136,7 @@ sf::FloatRect Silverfish::getHitBox(){
 		return getTransform().transformRect(mAnimation.getCurrAnimation().getSprite().getGlobalBounds());
 	}
 	else {
+		// Not a good way to disable collision as all silverfishes would still collide with each other (if they can collide with an area of 0)
 		return sf::FloatRect(-999, -999, 0, 0);
 	}
 }
