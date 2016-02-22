@@ -17,11 +17,11 @@
 #include <string>
 #include <array>
 
-static const std::string ANIMATION_FILEPATH = "resources/images/spritesheets/Luddis_ walkcykle";
+static const std::string ANIMATION_FILEPATH = "Resources/Images/Spritesheets/Luddis_ walkcykle";
 static const std::string ANIMATION_ALMOSTDEAD = "Resources/Images/Spritesheets/luddis_CriticalHealth";
 //static const Animation ANIMATION_FILEPATH = Animation("resources/images/spritesheets/Sprite_Debug_480x205");
-static const std::string HIT_ANIMATION = "resources/images/spritesheets/Grafik_Luddis_hit_sprite_s2d2v1";
-static const std::string SHOT_ANIMATION = "resources/images/spritesheets/Grafik_Luddis shot120x90treframes_s2d3v1";
+static const std::string HIT_ANIMATION = "Resources/Images/Spritesheets/Grafik_Luddis_hit_sprite_s2d2v1";
+static const std::string SHOT_ANIMATION = "Resources/Images/Spritesheets/Grafik_Luddis shot120x90treframes_s2d3v1";
 static const std::string SOUND_FILENAME1 = "Resources/Audio/Skott_Blås_Små_01.wav";
 static const std::string SOUND_FILENAME2 = "Resources/Audio/Skott_Blås_Små_02.wav";
 static const std::string SOUND_FILENAME3 = "Resources/Audio/Skott_Blås_Små_03.wav";
@@ -55,8 +55,7 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window, EntityMana
 	mColliding(false),
 	mPrevPos(0, 0),
 	mHitbox(new sf::CircleShape(HITBOX_SHAPE)),
-	mScaleX(1),
-	mScaleY(1),
+	mScale(1,1),
 	mIsFlipped(false),
 	mLife(2)
 {
@@ -279,32 +278,32 @@ void Luddis::collide(CollidableEntity *collidable){
 // Change luddis' size depending on the amount of dust that the inventory has
 void Luddis::changeScale(){
 	int dust = Inventory::getInstance().getDust();
-	if (dust < 2){
-		mScaleX = 1.0f;
-		mScaleY = 1.0f;
+	if (dust < 2 && mScale != sf::Vector2f(1.f, 1.f)){
+		mScale.x = 1.0f;
+		mScale.y = 1.0f;
 		mAnimation.setDefaultAnimation(ANIMATION_ALMOSTDEAD);
 	}
-	else if (dust < 4 && dust > 1){
-		mScaleX = 1.25f;
-		mScaleY = 1.25f;
+	else if (dust < 4 && dust > 1 && mScale != sf::Vector2f(1.25f, 1.25f)){
+		mScale.x = 1.25f;
+		mScale.y = 1.25f;
 		mAnimation.setDefaultAnimation(ANIMATION_FILEPATH);
 	}
-	else if (dust < 6 && dust > 3){
-		mScaleX = 1.5f;
-		mScaleY = 1.5f;
+	else if (dust < 6 && dust > 3 && mScale != sf::Vector2f(1.5f, 1.5f)){
+		mScale.x = 1.5f;
+		mScale.y = 1.5f;
 	}
-	else if (dust < 8 && dust > 5){
-		mScaleX = 1.75f;
-		mScaleY = 1.75f;
+	else if (dust < 8 && dust > 5 && mScale != sf::Vector2f(175.f, 1.75f)){
+		mScale.x = 1.75f;
+		mScale.y = 1.75f;
 	}
-	else if (dust > 7){
-		mScaleX = 2.0f;
-		mScaleY = 2.0f;
+	else if (dust > 7 && mScale != sf::Vector2f(2.f, 2.f)){
+		mScale.x = 2.0f;
+		mScale.y = 2.0f;
 	}
 	if (mIsFlipped == false)
-		setScale(mScaleY, mScaleY);
+		setScale(mScale.y, mScale.y);
 	if (mIsFlipped == true)
-		setScale(mScaleY, -mScaleY);
+		setScale(mScale.y, -mScale.y);
 }
 
 sf::FloatRect Luddis::getHitBox(){
