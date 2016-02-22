@@ -4,12 +4,12 @@
 #include "GameState.h"
 #include "EventManager.h"
 #include "CollisionManager.h"
+#include "GUIManager.h"
 #include <rapidjson\document.h>
 
 class EntityManager;
 class GameStatePaused;
 class PowerupDisplay;
-class GUIManager;
 class Level;
 class Spider;
 
@@ -35,10 +35,11 @@ public:
 	void setupMission(const std::string& mapFilename, const std::string& jsonFilename);
 
 private:
-	void readSetupFiles(const std::string& filename);
+	void readSetupFiles(const std::string& filename, bool allocate = true);
 
 	EntityManager* mEntityM;
 	GUIManager* mGUIM;
+	GUIManager mResettableGUI;
 	CollisionManager* mCM;
 	EventManager mEventM;
 	GameStatePaused* mGameStatePaused;

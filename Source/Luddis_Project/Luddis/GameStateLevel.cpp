@@ -2,7 +2,6 @@
 #include "GameStatePaused.h"
 #include "ViewUtility.h"
 #include "EntityManager.h"
-#include "GUIManager.h"
 #include "GameManager.h"
 #include "ResourceManager.h"
 #include "PowerupDisplay.h"
@@ -18,14 +17,16 @@
 #include "Luddis.h"
 
 static const std::string LUDDIS_TEXTURE = "Resources/Images/Grafik_Luddis120x80_s1d3v1.png";
-
 static const std::string POWER_DISPLAY = "Resources/Images/GUI/PowerButton.png";
 static const std::string BUTTON_TEXTURE = "Resources/Images/GUI/Button.png";
+static const std::string COMMON_RESOURCES = "Resources/Configs/Levels/CommonResources.json";
+
 
 GameStateLevel::GameStateLevel(sf::RenderWindow* window, EntityManager* entityManager, GUIManager* guiManager) :
 mEntityM(entityManager),
 mEventM(),
 mGUIM(guiManager),
+mResettableGUI(),
 mCM(&CollisionManager::getInstance()),
 mGUIView(ViewUtility::getViewSize()),
 mWindow(window),
@@ -33,6 +34,7 @@ mInDialogue(false),
 mSetupLevel(false),
 mResetView(false){
 	mEventM.attatch(this, sf::Event::EventType::KeyPressed);
+	readSetupFiles(COMMON_RESOURCES);
 }
 
 GameStateLevel::~GameStateLevel(){
@@ -59,6 +61,7 @@ void GameStateLevel::update(sf::Clock& clock){
 	//Change the view when updating GUI elements
 	mMapView = mWindow->getView();
 	mWindow->setView(mGUIView);
+	mResettableGUI.updateElements(clock.getElapsedTime());
 	mGUIM->updateElements(clock.restart());
 	//Then change it back
 	mWindow->setView(mMapView);
@@ -67,6 +70,7 @@ void GameStateLevel::update(sf::Clock& clock){
 	mCM->removeDeadCollidables();
 	mEntityM->removeDeadEntities();
 	mGUIM->removeObsoleteElements();
+	mResettableGUI.removeObsoleteElements();
 }
 
 void GameStateLevel::render(){
@@ -75,6 +79,7 @@ void GameStateLevel::render(){
 	//Change the view when drawing GUI elements
 	mMapView = mWindow->getView();
 	mWindow->setView(mGUIView);
+	mResettableGUI.renderElements(*mWindow);
 	mGUIM->renderElements(*mWindow);
 	//Then change it back
 	mWindow->setView(mMapView);
@@ -106,10 +111,10 @@ void GameStateLevel::handleEvents(){
 void GameStateLevel::createDialogue(std::string dialogueFilename){
 	sf::Vector2f pos(0.0f, (float)ViewUtility::VIEW_HEIGHT);
 	Dialogue* dialogue = new Dialogue(dialogueFilename, mWindow, mGUIM, &mEventM, pos, this);
-	mGUIM->addInterfaceElement(dialogue);
-	if (dialogueFilename.substr() == "SpiderDialogue"){
+	mResettableGUI.addInterfaceElement(dialogue);
+	if (dialogueFilename.find("SpiderDialogue") != std::string::npos){
 		mSpider = new Spider(mWindow, sf::Vector2f(400, 0));
-		mGUIM->addInterfaceElement(mSpider);
+		mResettableGUI.addInterfaceElement(mSpider);
 	}
 	mInDialogue = true;
 }
@@ -152,6 +157,7 @@ void GameStateLevel::resetLevel(){
 		resetInventory();
 		mCM->emptyVector();
 		mEntityM->emptyVector();
+		mResettableGUI.clearInterfaceElements();
 		setupLevel(mCurrentLevelFile);
 	}
 }
@@ -177,7 +183,7 @@ void GameStateLevel::setupMission(const std::string& mapFilename, const std::str
 	}
 }
 
-void GameStateLevel::readSetupFiles(const std::string& filename) {
+void GameStateLevel::readSetupFiles(const std::string& filename, bool allocate) {
 	ResourceManager* rm = &ResourceManager::getInstance();
 	rapidjson::Document configDoc;
 	std::string configText = rm->loadJsonFile(filename);
@@ -195,44 +201,86 @@ void GameStateLevel::readSetupFiles(const std::string& filename) {
 
 	assert(configDoc.HasMember("Graphics"));
 	const rapidjson::Value& graphics = configDoc["Graphics"];
-	assert(graphics.HasMember("Background") && graphics["Background"].IsString());
-	assert(graphics.HasMember("Segments")&&graphics["Segments"].IsInt());
-	int seg = graphics["Segments"].GetInt();
-	for (int i = 0; i < seg; i++) {
-		std::string file = graphics["Background"].GetString() + std::to_string(i+1) + ".png";
-		rm->loadTexture(file);
+	if (graphics.HasMember("Background") && graphics["Background"].IsString()) {
+		assert(graphics.HasMember("Segments") && graphics["Segments"].IsInt());
+		int seg = graphics["Segments"].GetInt();
+		for (int i = 0; i < seg; i++) {
+			std::string file = graphics["Background"].GetString() + std::to_string(i + 1) + ".png";
+			rm->loadTexture(file);
+		}
 	}
 
-	assert(graphics.HasMember("Enemies")&&graphics["Enemies"].IsArray());
-	const rapidjson::Value& enemies = graphics["Enemies"];
+	if (graphics.HasMember("Sprites") && graphics["Sprites"].IsArray()) {
+		const rapidjson::Value& sprites = graphics["Sprites"];
 
-	for (rapidjson::Value::ConstValueIterator itr = enemies.Begin(); itr != enemies.End(); itr++) {
-		assert(itr->IsObject());
-		assert(itr->HasMember("filename"));
-		std::string file = (*itr)["filename"].GetString();
-		rm->loadTexture(file);
+		for (rapidjson::Value::ConstValueIterator itr = sprites.Begin(); itr != sprites.End(); itr++) {
+			assert(itr->IsObject());
+			assert(itr->HasMember("filename"));
+			std::string file = (*itr)["filename"].GetString();
+			if (allocate)
+				rm->loadTexture(file);
+			else {
+				rm->clearTexture(file);
+			}
+		}
 	}
 
-	assert(configDoc.HasMember("Setup_files"));
-	const rapidjson::Value& setupFiles = configDoc["Setup_files"];
-	assert(setupFiles.HasMember("JSON_files")&& setupFiles["JSON_files"].IsArray());
-	const rapidjson::Value& jsonFiles = setupFiles["JSON_files"];
+	if (graphics.HasMember("Spritesheets") && graphics["Spritesheets"].IsArray()) {
+		const rapidjson::Value& spritesheets = graphics["Spritesheets"];
 
-	for (rapidjson::Value::ConstValueIterator itr = jsonFiles.Begin(); itr != jsonFiles.End(); itr++) {
-		assert(itr->IsObject());
-		assert(itr->HasMember("filename")&&(*itr)["filename"].IsString());
-		std::string file = (*itr)["filename"].GetString();
-		rm->loadJsonFile(file);
+		for (rapidjson::Value::ConstValueIterator itr = spritesheets.Begin(); itr != spritesheets.End(); itr++) {
+			assert(itr->IsObject());
+			assert(itr->HasMember("filename"));
+			std::string file((*itr)["filename"].GetString());
+			if (allocate) {
+				rm->loadJsonFile(file + ".json");
+				rm->loadTexture(file + ".png");
+			}
+			else {
+				rm->clearJsonFile(file + ".json");
+				rm->clearTexture(file + ".png");
+			}
+		}
 	}
 
-	assert(setupFiles.HasMember("PNG_files") && setupFiles["PNG_files"].IsArray());
-	const rapidjson::Value& pngFiles = setupFiles["PNG_files"];
+	if (graphics.HasMember("Sprites") && graphics["Sprites"].IsArray()) {
+		const rapidjson::Value& sprites = graphics["Sprites"];
 
-	for (rapidjson::Value::ConstValueIterator itr = pngFiles.Begin(); itr != pngFiles.End(); itr++) {
-		assert(itr->IsObject());
-		assert(itr->HasMember("filename") && (*itr)["filename"].IsString());
-		std::string file = (*itr)["filename"].GetString();
-		rm->readMap(file);
+		for (rapidjson::Value::ConstValueIterator itr = sprites.Begin(); itr != sprites.End(); itr++) {
+			assert(itr->IsObject());
+			assert(itr->HasMember("filename"));
+			std::string file = (*itr)["filename"].GetString();
+			if (allocate)
+				rm->loadTexture(file);
+			else {
+				rm->clearTexture(file);
+			}
+		}
 	}
+	if (configDoc.HasMember("Setup_files")) {
+		const rapidjson::Value& setupFiles = configDoc["Setup_files"];
+		assert(setupFiles.HasMember("JSON_files") && setupFiles["JSON_files"].IsArray());
+		const rapidjson::Value& jsonFiles = setupFiles["JSON_files"];
 
+		for (rapidjson::Value::ConstValueIterator itr = jsonFiles.Begin(); itr != jsonFiles.End(); itr++) {
+			assert(itr->IsObject());
+			assert(itr->HasMember("filename") && (*itr)["filename"].IsString());
+			std::string file = (*itr)["filename"].GetString();
+			if (allocate)
+				rm->loadJsonFile(file);
+			else
+				rm->clearJsonFile(file);
+		}
+
+		assert(setupFiles.HasMember("PNG_files") && setupFiles["PNG_files"].IsArray());
+		const rapidjson::Value& pngFiles = setupFiles["PNG_files"];
+
+		for (rapidjson::Value::ConstValueIterator itr = pngFiles.Begin(); itr != pngFiles.End(); itr++) {
+			assert(itr->IsObject());
+			assert(itr->HasMember("filename") && (*itr)["filename"].IsString());
+			std::string file = (*itr)["filename"].GetString();
+
+			rm->readMap(file);
+		}
+	}
 }

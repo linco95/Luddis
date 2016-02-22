@@ -7,9 +7,9 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-static const std::string ANIMATION_SWIM = "resources/images/spritesheets/Grafik_silverfisk_SwimSprite_s1d5v2";
-static const std::string ANIMATION_HIT = "resources/images/spritesheets/Grafik_silverfisk_DeathSprite_s1d5v2";
-static const std::string ANIMATION_DEAD = "resources/images/spritesheets/Grafik_silverfisk_deadSprite_s1d5v2";
+static const std::string ANIMATION_SWIM = "resources/images/spritesheets/Silverfish_Swim";
+static const std::string ANIMATION_HIT = "resources/images/spritesheets/Silverfish_death";
+static const std::string ANIMATION_DEAD = "resources/images/spritesheets/Silverfish_dead";
 
 static float SPEED = 80;
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;

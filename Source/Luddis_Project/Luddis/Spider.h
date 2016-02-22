@@ -3,6 +3,7 @@
 
 #include "InterfaceElement.h"
 #include "AnimationQueue.h"
+#include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
@@ -39,6 +40,7 @@ private:
 	GameStateLevel* mGameStateLevel;
 	sf::Vector2f mDirection;
 	AnimationQueue mAnimation;
+	sf::RectangleShape mWeb;
 };
 
 #endif

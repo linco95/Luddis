@@ -14,8 +14,8 @@ public:
 	void removeObsoleteElements();
 	void renderElements(sf::RenderWindow& window);
 	void updateElements(const sf::Time& deltaTime);
-private:
 	void clearInterfaceElements();
+private:
 
 	typedef std::vector<InterfaceElement*> InterfaceElementVector;
 	InterfaceElementVector mElements;

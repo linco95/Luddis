@@ -17,18 +17,18 @@
 #include <string>
 #include <array>
 
-static const std::string ANIMATION_FILEPATH = "Resources/Images/Spritesheets/Luddis_ walkcykle";
+static const std::string ANIMATION_FILEPATH = "Resources/Images/Spritesheets/Luddis_walkcykle";
 static const std::string ANIMATION_ALMOSTDEAD = "Resources/Images/Spritesheets/luddis_CriticalHealth";
 //static const Animation ANIMATION_FILEPATH = Animation("resources/images/spritesheets/Sprite_Debug_480x205");
-static const std::string HIT_ANIMATION = "Resources/Images/Spritesheets/Grafik_Luddis_hit_sprite_s2d2v1";
-static const std::string SHOT_ANIMATION = "Resources/Images/Spritesheets/Grafik_Luddis shot120x90treframes_s2d3v1";
+static const std::string HIT_ANIMATION = "Resources/Images/Spritesheets/Luddis_hit";
+static const std::string SHOT_ANIMATION = "Resources/Images/Spritesheets/Luddis_shot";
 static const std::string SOUND_FILENAME1 = "Resources/Audio/Skott_Blås_Små_01.wav";
 static const std::string SOUND_FILENAME2 = "Resources/Audio/Skott_Blås_Små_02.wav";
 static const std::string SOUND_FILENAME3 = "Resources/Audio/Skott_Blås_Små_03.wav";
 //This should be dynamic later to determine what texture to use for projectiles
-static const std::array<std::string, 3> PROJECTILE_FILENAME = { "Resources/Images/Grafik_Attack 1_35x35_s1d3v1.png",
-												   "Resources/Images/Grafik_Attack 2_35x35_s1d3v1.png",
-												   "Resources/Images/Grafik_Attack 3_35x35_s1d3v1.png"
+static const std::array<std::string, 3> PROJECTILE_FILENAME = { "Resources/Images/Luddis_attack1.png",
+												   "Resources/Images/Luddis_attack2.png",
+												   "Resources/Images/Luddis_attack3.png"
 												 };
 
 //All float times are in seconds
