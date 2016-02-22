@@ -182,8 +182,8 @@ void narrowCollision(std::stack<std::pair<CollidableEntity*, CollidableEntity*>>
 		}
 		// If no gaps were found, collide. We give the smallestOverlap vector in the direction that the shape has to move to not be colliding anymore.
 		if (isColliding){
-			pair.first->collide(pair.second/*, smallestOverlap*/);
-			pair.second->collide(pair.first/*, -smallestOverlap*/);
+			pair.first->collide(pair.second, smallestOverlap);
+			pair.second->collide(pair.first, -smallestOverlap);
 		}
 	}
 }
@@ -200,8 +200,6 @@ void CollisionManager::detectCollisions(){
 			CollidableEntity *collidable1 = collidables.at(j);
 			if (!collidable1->isActive()) continue;
 			if (collidable0->getHitBox().intersects(collidable1->getHitBox()) && (collidable0->getCollisionCategory() != collidable1->getCollisionCategory())){
-				/*	collidable0->collide(collidable1);
-					collidable1->collide(collidable0);*/
 				colliding.push(std::make_pair(collidable0, collidable1));
 			}
 		}
