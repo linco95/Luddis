@@ -9,9 +9,9 @@ mInventory(&Inventory::getInstance()),
 mResourceManager(&ResourceManager::getInstance()),
 mFrame(mResourceManager->getTexture(backgroundFilename)),
 mGauge(mResourceManager->getTexture(gaugeFilename)),
-mGaugeRectSize(mGauge.getTextureRect()){
+mFrameRectSize(mFrame.getTextureRect()){
 	setPosition(screenPos);
-	setOrigin(0, (float)mGaugeRectSize.height / 2);
+	setOrigin(0, (float)mFrameRectSize.height / 2);
 	mGauge.move(6, 0); //Offset needed to prevent the image from going outside the frame
 }
 
@@ -50,10 +50,11 @@ void ScoreGauge::updateGauge(){
 		int maxDust = mInventory->getMaxDust();
 		int currentDust = mInventory->getDust();
 		int offset = maxDust / 5;
-		int gaugeWidth = (int)((float)(mGaugeRectSize.width - (mGaugeRectSize.width * ((float)(currentDust + offset)) / (float)(maxDust + offset))));
-		int gaugeHeight = mGaugeRectSize.height;
-		int maxX = mGaugeRectSize.width;
-		int maxY = mGaugeRectSize.height;
+
+		int gaugeWidth = (int)((float)(mFrameRectSize.width - (mFrameRectSize.width * ((float)(currentDust + offset)) / (float)(maxDust + offset))));
+		int gaugeHeight = mFrameRectSize.height;
+		int maxX = mFrameRectSize.width - 8;
+		int maxY = mFrameRectSize.height;
 		sf::IntRect gaugeRect(gaugeWidth, 0, maxX, maxY);
 		mGauge.setTextureRect(gaugeRect);
 	}

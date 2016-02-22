@@ -29,7 +29,7 @@ private:
 	ResourceManager* mResourceManager;
 	sf::Sprite mFrame;
 	sf::Sprite mGauge;
-	sf::IntRect mGaugeRectSize;
+	sf::IntRect mFrameRectSize;
 
 	bool mIsAlive;
 	bool mIsActive;
