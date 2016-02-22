@@ -234,7 +234,7 @@ Luddis::Type Luddis::getCollisionType(){
 	return REC;
 }
 
-void Luddis::collide(CollidableEntity *collidable){
+void Luddis::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway){
 	// Collision with solid object
 	if (collidable->getCollisionCategory() == BG_SOLID){
 		mColliding = true;
