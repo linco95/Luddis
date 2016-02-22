@@ -11,6 +11,7 @@
 #include "SpiderEgg.h"
 #include "TutorialText.h"
 #include "ViewUtility.h"
+#include "VectorMath.h"
 #include "EntityManager.h"
 #include "CollisionManager.h"
 #include "ResourceManager.h"
@@ -26,6 +27,11 @@ static const float X_OFFSET = 200.f,
 				   Y_OFFSET = 50.f,
 				   SCROLLSPEED = 200;
 
+static const float EFFECT_INTERVAL = 0.7f,
+				   EFFECT_SPEED = 400,
+				   EFFECT_LIFETIME = 7.5f;
+
+static const char* EFFECT_FILEPATH = "Resources/Images/Grafik_TrasanProjektil_S2D5V1.png";
 static const char* mapfilepath = "Resources/Configs/Levels/Level1Gatherables.png";
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::BACKGROUND;
 
@@ -324,8 +330,9 @@ void Level::draw(RenderTarget& target, RenderStates states) const {
 
 void Level::createEffects() {
 	//Background effect
-	for (int i = 0; i <= rand() % 20; i++){
-	BackgroundEffect* eff = new BackgroundEffect(EFFECT_FILEPATH, vec*EFFECT_SPEED, sf::Vector2f((float)(rand() %15000),-100) + vec*EFFECT_SPEED / 3.0f, EFFECT_LIFETIME, mTarget);
-	mEntityManager->addEntity(eff);
+	sf::Vector2f vec = VectorMath::normalizeVector(sf::Vector2f(-0.5f, 1.0f));
+	for (int i = 0; i <= rand() % 20; i++) {
+		BackgroundEffect* eff = new BackgroundEffect(EFFECT_FILEPATH, vec*EFFECT_SPEED, sf::Vector2f((float)(rand() % 15000), -100) + vec*EFFECT_SPEED / 3.0f, EFFECT_LIFETIME, mTarget);
+		mEntityManager->addEntity(eff);
 	}
 }

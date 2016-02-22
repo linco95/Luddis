@@ -87,7 +87,7 @@ void Menu::initializeButtons(MenuType menuType){
 void Menu::addButton(std::string buttonFile, std::string buttonText, std::string buttonFunc, sf::Vector2f pos){
 	Button* button = new Button(buttonFile, buttonText, buttonFunc, mWindow, mEventManager, pos, this);
 	button->setActive(true);
-	button->setScale(0.8f, 0.8f);
+	button->setScale(0.5f, 0.5f);
 	mButtons.push_back(button);
 	mGUIManager->addInterfaceElement(button);
 }

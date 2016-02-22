@@ -31,7 +31,8 @@ Projectile::~Projectile(){
 }
 void fadeProjectile(sf::Sprite& a_Sprite, const sf::Time& a_TimeLeft){
 	sf::Color curColor = a_Sprite.getColor();
-	curColor.a *= 1; // fadingfactor / timeleft -ish
+	curColor.a *= (sf::Uint8) (1  - FADINGFACTOR / a_TimeLeft.asSeconds()); // fadingfactor / timeleft -ish
+	a_Sprite.setColor(curColor);
 }
 
 void Projectile::tick(const sf::Time& deltaTime){

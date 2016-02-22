@@ -3,6 +3,7 @@
 #include "GUIManager.h"
 #include "GameStateLevel.h"
 #include "SoundEngine.h"
+#include "ViewUtility.h"
 #include <rapidjson/document.h>
 #include <cmath>
 #include <array>
@@ -12,11 +13,11 @@ static const std::string BACKGROUND_TEXTURE = "Resources/Images/GUI/DialogueFram
 static const std::string FILENAME = "Resources/Configs/Levels/Level";
 
 static const float ANIMATION_TIME = 1.5f;
-static const float RECT_WIDTH = 1000;
+static const float RECT_WIDTH = ViewUtility::VIEW_WIDTH;
 static const float RECT_HEIGHT = 600;
 static const int INDENT = 30;
 static sf::Vector2f DialogueBoxMaxSize(RECT_WIDTH, RECT_HEIGHT);
-static sf::IntRect DEFAULT_RECT(INDENT, INDENT, (int)RECT_WIDTH-INDENT*2, 0);
+static sf::IntRect DEFAULT_RECT(INDENT*6, INDENT, (int)RECT_WIDTH-INDENT*2, 0);
 
 Dialogue::Dialogue(const std::string& dialogueFile, sf::RenderWindow* window, GUIManager* guiManager, EventManager* eventManager, sf::Vector2f pos, GameStateLevel* gameStateLevel) :
 mButtonCount(0),
@@ -105,7 +106,7 @@ void Dialogue::initialize(std::string dialogueFile){
 			std::string buttonImage = buttonInfo["Button_image"].GetString();
 			assert(buttonInfo.HasMember("Button_func") && buttonInfo["Button_func"].IsString());
 			std::string buttonFunc = buttonInfo["Button_func"].GetString();
-			addButton(buttonImage, buttonText, buttonFunc, mBackground.getPosition() +  sf::Vector2f(80 + (float)i * 100, RECT_HEIGHT-(float)INDENT*2.0f), (int)itr);
+			addButton(buttonImage, buttonText, buttonFunc, mBackground.getPosition() +  sf::Vector2f((float)INDENT*2, (float)INDENT*2 + (float)i * 60.0f), (int)itr);
 
 		}
 		TextBox textBox(DEFAULT_RECT, pages[itr]["Text"].GetString(), 24, true);

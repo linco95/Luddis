@@ -12,19 +12,13 @@
 #include "Level.h"
 #include "Button.h"
 #include <vector>
-#include "BossDishCloth.h"
-#include "Silverfish.h"
-#include "Dust.h"
-#include "Chips.h"
-#include "Spider.h"
-#include "Obstacle.h"
 #include "ScoreCounter.h"
 #include "ScoreGauge.h"
 #include "GameStateLevel.h"
 #include "GameStatePaused.h"
 #include "GameStateMap.h"
 #include "ViewUtility.h"
-
+#include "Debug.h"
 #include <iostream>
 
 using namespace sf;
@@ -76,7 +70,7 @@ struct GameManagerImp : public EventObserver {
 		mMainWindow.setMouseCursorVisible(false);
 		// Temporary splash screen
 		sf::RectangleShape splashScreen(sf::Vector2f((float)ViewUtility::VIEW_WIDTH, (float)ViewUtility::VIEW_HEIGHT));
-		splashScreen.setTexture(&ResourceManager::getInstance().getTexture("resources/images/splash.png"));
+		splashScreen.setTexture(&ResourceManager::getInstance().getTexture("Resources/Images/splash.png"));
 		mMainWindow.draw(splashScreen);
 		mMainWindow.display();
 		
@@ -96,11 +90,12 @@ struct GameManagerImp : public EventObserver {
 		mMainWindow.setVerticalSyncEnabled(VSYNCENABLED);
 
 		// Set up the viewport
-		auto actualSize = mMainWindow.getView().getViewport();
-		auto desiredSize = ViewUtility::getViewSize().getViewport();
-		
+		auto actualSize = mMainWindow.getView().getSize();
+		auto desiredSize = ViewUtility::getViewSize().getSize();
+		sf::FloatRect viewport(0, 0, 0, 0);
+
 		//mMainWindow.getView().setViewport()
-		decltype(desiredSize) viewport(0, 0, 1, 1);
+		/*decltype(desiredSize) viewport(0, 0, 1, 1);
 		if (actualSize.width > actualSize.height) {
 
 		}
@@ -109,7 +104,7 @@ struct GameManagerImp : public EventObserver {
 		}
 		else if (actualSize.height < desiredSize.height) {
 
-		}
+		}*/
 		mMainWindow.setView(ViewUtility::getViewSize());
 
 
