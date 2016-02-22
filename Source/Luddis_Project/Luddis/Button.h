@@ -31,6 +31,8 @@ public:
 	bool isActive() const override;
 	void setActive(const bool& active) override;
 	void kill();
+	void setScale(sf::Vector2f& scale);
+	void setScale(float x, float y);
 
 private:
 	void updateInput();

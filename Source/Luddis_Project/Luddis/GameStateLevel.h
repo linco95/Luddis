@@ -35,6 +35,8 @@ public:
 	void setupMission(const std::string& mapFilename, const std::string& jsonFilename);
 
 private:
+	void readSetupFiles(const std::string& filename);
+
 	EntityManager* mEntityM;
 	GUIManager* mGUIM;
 	CollisionManager* mCM;
@@ -47,6 +49,7 @@ private:
 	Spider* mSpider;
 	bool mInDialogue;
 	bool mResetView;
+	bool mSetupLevel;
 	std::string mCurrentLevelFile;
 	int outputTime;
 	float timePassed;

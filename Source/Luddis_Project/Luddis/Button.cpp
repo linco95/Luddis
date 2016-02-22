@@ -36,7 +36,7 @@ mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 	mButtonText.setColor(sf::Color::Black);
 	mButtonText.setOrigin(textRect.width / 2, textRect.height / 2);
 	mSprite.setOrigin((float)spriteRect.width / 2, (float)spriteRect.height / 2);
-	mEventManager->attatch(this, std::vector < sf::Event::EventType > { sf::Event::MouseButtonReleased, sf::Event::MouseButtonPressed, sf::Event::MouseMoved });
+	mEventManager->attatch(this, std::vector < sf::Event::EventType > { sf::Event::MouseButtonReleased, sf::Event::MouseButtonPressed/*, sf::Event::MouseMoved*/ });
 
 #ifdef LUDDIS_DEBUG_DRAW_HITBOXES
 	//Debug info
@@ -140,4 +140,24 @@ void Button::onEvent(const sf::Event &aEvent){
 
 void Button::kill(){
 	mIsAlive = false;
+}
+
+void Button::setScale(sf::Vector2f& scale) {
+	mSprite.setScale(scale);
+	mButtonText.setScale(scale);
+
+#ifdef LUDDIS_DEBUG_DRAW_HITBOXES
+	mDebugCircle.setScale(scale);
+	mDebugRect.setScale(scale);
+#endif
+}
+
+void Button::setScale(float x, float y) {
+	mSprite.setScale(x, y);
+	mButtonText.setScale(x, y);
+
+#ifdef LUDDIS_DEBUG_DRAW_HITBOXES
+	mDebugCircle.setScale(x, y);
+	mDebugRect.setScale(x, y);
+#endif
 }

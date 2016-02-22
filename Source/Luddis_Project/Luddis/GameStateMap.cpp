@@ -9,11 +9,11 @@ mWindow(window),
 mEntityM(),
 mGUIM(),
 mEventM(){
-	mEventM.attatch(this, sf::Event::EventType::KeyPressed);
+	mEventM.attatch(this, std::vector < sf::Event::EventType > { sf::Event::MouseButtonReleased, sf::Event::MouseButtonPressed, sf::Event::MouseMoved });
 }
 
 GameStateMap::~GameStateMap(){
-
+	mEventM.detatch(this, std::vector < sf::Event::EventType > { sf::Event::MouseButtonReleased, sf::Event::MouseButtonPressed, sf::Event::MouseMoved });
 }
 
 void GameStateMap::update(sf::Clock& clock){
