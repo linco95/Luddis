@@ -26,7 +26,7 @@ public:
 private:
 	Category getCollisionCategory() override;
 	Type getCollisionType() override;
-	void collide(CollidableEntity* collidable) override;
+	void collide(CollidableEntity* collidable, const sf::Vector2f& moveAway) override;
 
 	sf::Shape* mHitbox;
 	sf::FloatRect mBigHitbox;

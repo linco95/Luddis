@@ -185,7 +185,7 @@ BossDishCloth::Type BossDishCloth::getCollisionType(){
 	return REC;
 }
 
-void BossDishCloth::collide(CollidableEntity* collidable){
+void BossDishCloth::collide(CollidableEntity* collidable, const sf::Vector2f& moveAway){
 	if (collidable->getCollisionCategory() == HAIR){
 		if (!mShooting){
 		mLife -= 15;

@@ -34,7 +34,7 @@ private:
 	sf::Vector2f mDirection;
 	Category getCollisionCategory() override;
 	Type getCollisionType() override;
-	void collide(CollidableEntity *collidable) override;
+	void collide(CollidableEntity *collidable, const sf::Vector2f& moveAway) override;
 	int mLife;
 	bool mBefriend;
 	const float mActivate;

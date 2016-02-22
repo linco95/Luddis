@@ -34,7 +34,7 @@ private:
 	void attack();
 	Category getCollisionCategory() override;
 	Type getCollisionType() override;
-	void collide(CollidableEntity *collidable) override;
+	void collide(CollidableEntity *collidable, const sf::Vector2f& moveAway) override;
 	void changeScale();
 
 	AnimationQueue mAnimation;

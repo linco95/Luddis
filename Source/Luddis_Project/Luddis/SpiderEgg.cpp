@@ -61,7 +61,7 @@ SpiderEgg::Type SpiderEgg::getCollisionType(){
 	return CIRCLE;
 }
 
-void SpiderEgg::collide(CollidableEntity *collidable){
+void SpiderEgg::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway){
 	if (collidable->getCollisionCategory() == FRIEND){
 		mIsAlive = false;
 		Inventory::getInstance().changeEggs(1);

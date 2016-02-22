@@ -65,7 +65,7 @@ EventZone::Type EventZone::getCollisionType(){
 	return mCollisionType;
 }
 
-void EventZone::collide(CollidableEntity* collidable){
+void EventZone::collide(CollidableEntity* collidable, const sf::Vector2f& moveAway){
 	if (collidable->getCollisionCategory() == FRIEND){
 		mIsAlive = false;
 		switch (mEventType)

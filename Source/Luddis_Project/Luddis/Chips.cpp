@@ -66,7 +66,7 @@ Chips::Type Chips::getCollisionType(){
 }
 
 
-void Chips::collide(CollidableEntity *collidable){
+void Chips::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway){
 	if (collidable->getCollisionCategory() == FRIEND){
 		mIsAlive = false;
 		Inventory::getInstance().changeChips(1);
