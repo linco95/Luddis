@@ -1,4 +1,5 @@
 #include "EntityManager.h"
+#include <cassert>
 #include <SFML\Graphics.hpp>
 
 // Constructor for the entity manager
@@ -14,6 +15,7 @@ EntityManager::~EntityManager(){
 
 // Function to add entities to the manager (an entity pointer)
 void EntityManager::addEntity(Entity* entity){
+	assert(entity != nullptr);
 	mEntities.push_back(entity);
 }
 
@@ -21,6 +23,7 @@ void EntityManager::addEntity(Entity* entity){
 void EntityManager::removeDeadEntities(){
 	EntitiesVector temp;
 	for (auto e : mEntities){
+		assert(e != nullptr);
 		if (e->isAlive()) {
 			temp.push_back(e);
 		}

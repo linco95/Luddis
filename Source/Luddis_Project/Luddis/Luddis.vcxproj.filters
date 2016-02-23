@@ -130,10 +130,13 @@
     <ClCompile Include="GameStateMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TutorialText.cpp" />
     <ClCompile Include="EventZone.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="TutorialText.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="BackgroundEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">

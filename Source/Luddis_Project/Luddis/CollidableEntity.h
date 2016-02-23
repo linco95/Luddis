@@ -33,7 +33,7 @@ public:
 	// Check the shape of the object
 	virtual Type getCollisionType() = 0;
 	// Collide the object with "collidable"
-	virtual void collide(CollidableEntity *collidable) = 0;
+	virtual void collide(CollidableEntity *collidable, const sf::Vector2f& moveAway) = 0;
 	virtual sf::FloatRect getHitBox() = 0;
 	virtual sf::Shape* getNarrowHitbox() const = 0;
 };

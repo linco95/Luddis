@@ -7,9 +7,9 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-static const std::string ANIMATION_SWIM = "resources/images/spritesheets/Grafik_silverfisk_SwimSprite_s1d5v2";
-static const std::string ANIMATION_HIT = "resources/images/spritesheets/Grafik_silverfisk_DeathSprite_s1d5v2";
-static const std::string ANIMATION_DEAD = "resources/images/spritesheets/Grafik_silverfisk_deadSprite_s1d5v2";
+static const std::string ANIMATION_SWIM = "resources/images/spritesheets/Silverfish_Swim";
+static const std::string ANIMATION_HIT = "resources/images/spritesheets/Silverfish_death";
+static const std::string ANIMATION_DEAD = "resources/images/spritesheets/Silverfish_dead";
 
 static float SPEED = 80;
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
@@ -23,6 +23,7 @@ Silverfish::Silverfish(sf::RenderWindow* window, const sf::Vector2f& position, c
 mIsAlive(true),
 mIsActive(false),
 mSwimAway(false),
+mBefriend(false),
 mLife(LIFE),
 mActivate(activation),
 mWindow(window),
@@ -63,6 +64,10 @@ void Silverfish::tick(const sf::Time& deltaTime){
 		mIsActive = true;
 	}
 	if (!mIsActive) return;
+	if (mBefriend){
+		mAlignment = FRIEND;
+		mBefriend = false;
+	}
 	updateMovement(deltaTime);
 	mAnimation.tick(deltaTime);
 	// TODO: Cleanup, enable fishes to be outside while spawning
@@ -110,7 +115,7 @@ Silverfish::Type Silverfish::getCollisionType(){
 	return REC;
 }
 
-void Silverfish::collide(CollidableEntity *collidable){
+void Silverfish::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway){
 	if (collidable->getCollisionCategory() == HAIR){
 		if (mSwimAway== false){
 		mLife -= 5;
@@ -120,7 +125,7 @@ void Silverfish::collide(CollidableEntity *collidable){
 			mSwimAway = true;
 			mDirection = sf::Vector2f(0, -1);
 			SPEED = 120;
-			mAlignment = FRIEND;
+			mBefriend = true;
 			}
 		}
 	}

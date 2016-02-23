@@ -34,7 +34,7 @@ private:
 	void attack();
 	Category getCollisionCategory() override;
 	Type getCollisionType() override;
-	void collide(CollidableEntity *collidable) override;
+	void collide(CollidableEntity *collidable, const sf::Vector2f& moveAway) override;
 	void changeScale();
 
 	AnimationQueue mAnimation;
@@ -53,10 +53,9 @@ private:
 	sf::FloatRect mCollideBox;
 	sf::Vector2f mDirectionVector;
 	sf::Vector2f mPrevPos;
+	sf::Vector2f mScale;
 	sf::Shape* mHitbox;
 
-	float mScaleX;
-	float mScaleY;
 };
 
 #endif // !_INCLUDED_LUDDIS_

@@ -8,6 +8,8 @@
 #include "GameManager.h"
 #include "VectorMath.h"
 
+//THIS IS A CHANGE SO FUCKING NOTICE IT YOU MICROSOFT PIECE OF SHIT!!
+
 static const std::string MENUBUTTON_TEXTURE = "Resources/Images/GUI/MenuButton.png";
 static const std::string MENUBUTTON_TEXTURE_SETTINGS = "Resources/Images/GUI/ButtonSettings.png";
 static const std::string MENUBUTTON_TEXTURE_RETURN = "Resources/Images/GUI/ButtonReturn.png";
@@ -85,6 +87,7 @@ void Menu::initializeButtons(MenuType menuType){
 void Menu::addButton(std::string buttonFile, std::string buttonText, std::string buttonFunc, sf::Vector2f pos){
 	Button* button = new Button(buttonFile, buttonText, buttonFunc, mWindow, mEventManager, pos, this);
 	button->setActive(true);
+	button->setScale(0.5f, 0.5f);
 	mButtons.push_back(button);
 	mGUIManager->addInterfaceElement(button);
 }

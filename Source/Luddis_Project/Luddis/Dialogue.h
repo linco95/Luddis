@@ -9,6 +9,8 @@
 
 class GUIManager;
 class GameStateLevel;
+class ResourceManager;
+class SoundEngine;
 
 class Dialogue : public InterfaceElement{
 public:
@@ -25,7 +27,7 @@ public:
 	bool isAlive() const override;
 	bool isActive() const  override;
 	void setActive(const bool& active) override;
-	void setText(std::string newTextString);
+	void setText(std::string text);
 	void onClick(std::string buttonFunc) override;
 
 private:
@@ -37,7 +39,11 @@ private:
 	void spiderButton2();
 	void spiderButton3();
 	void closeButton();
+
+	static const int MAX_PAGES = 10;
 	
+	ResourceManager* mResourceManager;
+	SoundEngine* mSoundEngine;
 	sf::RenderWindow* mWindow;
 	GameStateLevel* mGameStateLevel;
 	GUIManager* mGUIManager;
@@ -51,12 +57,14 @@ private:
 	float mAnimationTimer;
 	int mButtonCount;
 	int mActivePage;
+	int mCurrentVoiceDialogue;
 	sf::RectangleShape mBackground;
 	typedef std::vector<TextBox> TextBoxVector;
-	TextBox* mHeaders[10];
+	TextBox* mHeaders[MAX_PAGES];
 	TextBoxVector mDialogueTexts;
 	typedef std::vector<Button*> ButtonVector;
-	ButtonVector mButtons[10];
+	ButtonVector mButtons[MAX_PAGES];
+	std::string mSoundFiles[MAX_PAGES];
 };
 
 #endif // !_INCLUDED_DIALOGUE_

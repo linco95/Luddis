@@ -9,21 +9,21 @@
 
 //Different states depending on how damaged the boss is.
 //State 1
-static const std::string ANIMATION_IDLE = ("Resources/Images/Spritesheets/Grafik_TrasanFas1_S2D3V2");
-static const std::string SHOOTING_ANIMATION = ("Resources/Images/Spritesheets/Grafik_TrasanAttackFas1_S2D4V3");
+static const std::string ANIMATION_IDLE = ("Resources/Images/Spritesheets/RagIdle_P1");
+static const std::string SHOOTING_ANIMATION = ("Resources/Images/Spritesheets/RagAttack_P1");
 //State 2
-static const std::string ANIMATION_IDLE_2 = ("Resources/Images/Spritesheets/Grafik_TrasanFas2_S2D3V2");
-static const std::string SHOOTING_ANIMATION_2 = ("Resources/Images/Spritesheets/Grafik_TrasanAttackFas2_S2D4V3");
+static const std::string ANIMATION_IDLE_2 = ("Resources/Images/Spritesheets/RagIdle_P2");
+static const std::string SHOOTING_ANIMATION_2 = ("Resources/Images/Spritesheets/RagAttack_P2");
 //State 3
-static const std::string ANIMATION_IDLE_3 = ("Resources/Images/Spritesheets/Grafik_TrasanFas3_S2D3V1");
-static const std::string SHOOTING_ANIMATION_3 = ("Resources/Images/Spritesheets/Grafik_TrasanAttackFas3_S2D4V1");
+static const std::string ANIMATION_IDLE_3 = ("Resources/Images/Spritesheets/RagIdle_P3");
+static const std::string SHOOTING_ANIMATION_3 = ("Resources/Images/Spritesheets/RagAttack_P3");
 //State 4
-static const std::string ANIMATION_IDLE_4 = ("Resources/Images/Spritesheets/Grafik_TrasanFas4_S2D3V2");
-static const std::string SHOOTING_ANIMATION_4 = ("Resources/Images/Spritesheets/Grafik_TrasanAttackFas4_S2D4V1");
+static const std::string ANIMATION_IDLE_4 = ("Resources/Images/Spritesheets/RagIdle_P4");
+static const std::string SHOOTING_ANIMATION_4 = ("Resources/Images/Spritesheets/RagAttack_P4");
 
-static const std::string PROJECTILE_FILEPATH = "Resources/Images/Grafik_TrasanProjektil_S2D5V1.png";
+static const std::string PROJECTILE_FILEPATH = "Resources/Images/Rag_projectile.png";
 
-static const std::string POWERUP1_FILEPATH = "Resources/Images/Grafik_TrasanProjektil_S2D5V1.png";
+static const std::string POWERUP1_FILEPATH = "Resources/Images/Rag_projectile.png";
 
 static const int MAX_LIFE = 100;
 static const float ATTACK_INTERVAL = 3.5f;
@@ -185,7 +185,7 @@ BossDishCloth::Type BossDishCloth::getCollisionType(){
 	return REC;
 }
 
-void BossDishCloth::collide(CollidableEntity* collidable){
+void BossDishCloth::collide(CollidableEntity* collidable, const sf::Vector2f& moveAway){
 	if (collidable->getCollisionCategory() == HAIR){
 		if (!mShooting){
 		mLife -= 15;

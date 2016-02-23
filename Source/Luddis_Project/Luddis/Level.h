@@ -27,13 +27,13 @@ public:
 	bool isActive() const override;
 	void setActive(const bool& active) override;
 	Entity::RenderLayer getRenderLayer() const override;
+	void initializeEntities(sf::RenderWindow* window, const rapidjson::Document& configDoc);
+	void readInitMap(const std:: string& filename);
 
 private:
 	void updateView(const sf::Time& deltaTime);
 	void createEffects();
 	void increaseMapBounds(sf::IntRect size);
-	void initializeEntities(sf::RenderWindow* window, const rapidjson::Document& configDoc);
-	void readInitMap();
 
 	EntityManager* mEntityManager;
 	GameStateLevel* mGameStateLevel;

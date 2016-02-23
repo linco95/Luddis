@@ -127,5 +127,5 @@ Obstacle::Type Obstacle::getCollisionType(){
 	return REC;
 }
 
-void Obstacle::collide(CollidableEntity *collidable){
+void Obstacle::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway){
 }

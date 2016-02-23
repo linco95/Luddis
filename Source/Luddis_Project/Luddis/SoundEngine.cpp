@@ -49,6 +49,10 @@ int SoundEngine::playSound(std::string filename){
 	return -1;
 }
 
+void SoundEngine::stopSound(int channel) {
+	mSoundChannels[channel].stop();
+}
+
 void SoundEngine::playMusic(std::string filename){
 	if (mCurrentMusic != 0) {
 		mCurrentMusic->stop();
