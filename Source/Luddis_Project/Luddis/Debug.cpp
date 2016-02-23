@@ -48,7 +48,7 @@ namespace WINDOWS{
 	}
 }
 void Debug::log(const string& aMsg, const ERRORLEVEL& aLvl){
-#if defined _DEBUG || !LOG_IN_RELEASE
+#if defined _DEBUG || LOG_IN_RELEASE
 	cout << "[";
 	WINDOWS::printInColor(getErrorLevelStr(aLvl).color, getErrorLevelStr(aLvl).asString);
 	cout <<  "]: " << aMsg << endl;
