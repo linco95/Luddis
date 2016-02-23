@@ -9,10 +9,13 @@ class GameStateLevel;
 class EventZone: public CollidableEntity{
 public:
 	enum EventType{
-		SPIDER
+		SPIDER,
+		SPIDER_EASY_END,
+		SPIDER_MEDIUM_END,
+		SPIDER_HARD_END
 	};
 	//The sf::Shape used will be deleted in destructor.
-	EventZone(GameStateLevel* gameStateLevel, EventType, sf::Vector2f pos, sf::Shape* shape, float rotation, int level);
+	EventZone(GameStateLevel* gameStateLevel, EventType eventType, sf::Vector2f pos, sf::Shape* shape, float rotation, int level);
 	~EventZone();
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

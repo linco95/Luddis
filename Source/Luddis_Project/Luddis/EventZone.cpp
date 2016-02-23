@@ -4,9 +4,10 @@
 static const std::string SPIDER_DIALOGUE = "Resources/Configs/Dialogue/SpiderDialogue";
 
 
-EventZone::EventZone(GameStateLevel* gameStateLevel, EventType, sf::Vector2f pos, sf::Shape* shape, float rotation, int level) :
+EventZone::EventZone(GameStateLevel* gameStateLevel, EventType eventType, sf::Vector2f pos, sf::Shape* shape, float rotation, int level) :
 mIsActive(true),
 mIsAlive(true),
+mEventType(eventType),
 mLevel(level),
 mHitbox(shape),
 mGameStateLevel(gameStateLevel){
@@ -68,12 +69,26 @@ EventZone::Type EventZone::getCollisionType(){
 void EventZone::collide(CollidableEntity* collidable, const sf::Vector2f& moveAway){
 	if (collidable->getCollisionCategory() == FRIEND){
 		mIsAlive = false;
+		std::string filename = SPIDER_DIALOGUE;
 		switch (mEventType)
 		{
 		case SPIDER:
-			std::string filename = SPIDER_DIALOGUE;
-			filename.insert(filename.size(), std::to_string(mLevel) + ".json");
+			filename += std::to_string(mLevel) + ".json";
+			mGameStateLevel->createDialogue(filename);
+			break;
 
+		case SPIDER_EASY_END:
+			filename += std::to_string(mLevel) + "easyend.json";
+			mGameStateLevel->createDialogue(filename);
+			break;
+
+		case SPIDER_MEDIUM_END:
+			filename += std::to_string(mLevel) + "mediumend.json";
+			mGameStateLevel->createDialogue(filename);
+			break;
+
+		case SPIDER_HARD_END:
+			filename += std::to_string(mLevel) + "hardend.json";
 			mGameStateLevel->createDialogue(filename);
 			break;
 		}
