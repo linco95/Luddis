@@ -35,10 +35,10 @@ static const char* EFFECT_FILEPATH = "Resources/Images/Rag_projectile.png";
 static const char* mapfilepath = "Resources/Configs/Levels/Level1Gatherables.png";
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::BACKGROUND;
 
-Level::Level(EntityManager* entityManager, GameStateLevel* gameStateLevel) :
+Level::Level(EntityManager* entityManager) :
 mIsActive(true),
 mEntityManager(entityManager),
-mGameStateLevel(gameStateLevel),
+mGameStateLevel(&GameStateLevel::getInstance()),
 mEffectInterval(EFFECT_INTERVAL)
 {
 
@@ -191,7 +191,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 			Vector2f position(x, y);
 			Shape* shape = new RectangleShape(size);
 
-			EventZone* zone = new EventZone(mGameStateLevel, EventZone::EventType(eventType), position, shape, 0, level);
+			EventZone* zone = new EventZone(EventZone::EventType(eventType), position, shape, 0, level);
 			cm->addCollidable(zone);
 			Debug::log("Spawning Event zone at: [" + std::to_string(x) + ", " + std::to_string(y) + "], with the dimensions (" + std::to_string(width) + ", " + std::to_string(height) + ")", Debug::INFO);
 		}
@@ -244,7 +244,6 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget, s
 	//SoundEngine::getInstance().playMusic("resources/music/musik16.wav");
 
 }
-
 
 void Level::tick(const sf::Time& deltaTime) {
 	updateView(deltaTime);

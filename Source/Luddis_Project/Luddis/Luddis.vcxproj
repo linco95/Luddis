@@ -107,6 +107,7 @@
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="PowerUp.cpp" />
     <ClCompile Include="PowerupDisplay.cpp" />
+    <ClCompile Include="Room.cpp" />
     <ClCompile Include="ScoreCounter.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityManager.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="PowerUp.h" />
     <ClInclude Include="PowerupDisplay.h" />
+    <ClInclude Include="Room.h" />
     <ClInclude Include="ScoreCounter.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityManager.h" />

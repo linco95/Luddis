@@ -1,8 +1,8 @@
 #include "Menu.h"
 #include "GameStateLevel.h"
+#include "GameStateMap.h"
 #include "ViewUtility.h"
 #include "ResourceManager.h"
-#include "EntityManager.h"
 #include "EventManager.h"
 #include "GUIManager.h"
 #include "GameManager.h"
@@ -22,7 +22,6 @@ mIsAlive(true),
 mMenuType(menuType),
 mWindow(window),
 mEventManager(eventManager),
-mEntityManager(entityManager),
 mGUIManager(gUIManager){
 }
 
@@ -37,8 +36,8 @@ void Menu::internalClear(){
 	delete mBackground;
 }
 
-void Menu::initialize(GameStateLevel* gameStateLevel){
-	mGameStateLevel = gameStateLevel;
+void Menu::initialize(){
+	mGameStateLevel = &GameStateLevel::getInstance();
 	sf::Vector2f vector(mWindow->getView().getSize());
 	vector = vector*(2.0f / 3.0f);
 	mBackground->setSize(vector);
@@ -181,11 +180,12 @@ void Menu::buttonFuncContinue(){
 }
 
 void Menu::buttonFuncExitLevel(){
-
+	GameManager::getInstance().setGameState(&GameStateMap::getInstance());
+	mIsAlive = false;
 }
 
 void Menu::buttonFuncSettings(){
-
+	//TODO: Implement functionality
 }
 
 void Menu::buttonFuncQuitGame(){

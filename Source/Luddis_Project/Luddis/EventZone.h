@@ -14,8 +14,7 @@ public:
 		SPIDER_MEDIUM_END,
 		SPIDER_HARD_END
 	};
-	//The sf::Shape used will be deleted in destructor.
-	EventZone(GameStateLevel* gameStateLevel, EventType eventType, sf::Vector2f pos, sf::Shape* shape, float rotation, int level);
+	EventZone(EventType eventType, sf::Vector2f pos, sf::Shape* shape, float rotation, int level);
 	~EventZone();
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

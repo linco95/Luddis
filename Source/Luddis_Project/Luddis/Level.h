@@ -16,7 +16,7 @@ class GameStateLevel;
 class Level : public Entity {
 
 public:
-	Level(EntityManager* entityManager, GameStateLevel* gameStateLevel);
+	Level(EntityManager* entityManager);
 	~Level();
 
 	void initializeLevel(sf::RenderWindow& aWindow, sf::Transformable* aTarget, std::string levelFilename);

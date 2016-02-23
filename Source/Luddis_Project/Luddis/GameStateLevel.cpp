@@ -22,14 +22,11 @@ static const std::string BUTTON_TEXTURE = "Resources/Images/GUI/Button.png";
 static const std::string COMMON_RESOURCES = "Resources/Configs/Levels/CommonResources.json";
 
 
-GameStateLevel::GameStateLevel(sf::RenderWindow* window, EntityManager* entityManager, GUIManager* guiManager) :
-mEntityM(entityManager),
+GameStateLevel::GameStateLevel() :
 mEventM(),
-mGUIM(guiManager),
 mResettableGUI(),
 mCM(&CollisionManager::getInstance()),
 mGUIView(ViewUtility::getViewSize()),
-mWindow(window),
 mInDialogue(false),
 mSetupLevel(false),
 mResetView(false){
@@ -41,10 +38,18 @@ GameStateLevel::~GameStateLevel(){
 	mEventM.detatch(this, sf::Event::EventType::KeyPressed);
 }
 
-void GameStateLevel::initialize(GameStatePaused* gameStateLevel){
-	mGameStatePaused = gameStateLevel;
+GameStateLevel& GameStateLevel::getInstance() {
+	static GameStateLevel gs;
+	return gs;
+}
+
+void GameStateLevel::initialize(sf::RenderWindow* window, EntityManager* entityManager, GUIManager* guiManager){
 	mPowerupDisplays[0] = new PowerupDisplay(POWER_DISPLAY, sf::Vector2f((float)ViewUtility::VIEW_WIDTH*0.8f, (float)ViewUtility::VIEW_HEIGHT - 60), 15.0f);
+	mWindow = window;
+	mEntityM = entityManager;
+	mGUIM = guiManager;
 	mGUIM->addInterfaceElement(mPowerupDisplays[0]);
+	mGameStatePaused = &GameStatePaused::getInstance();
 }
 
 void GameStateLevel::update(sf::Clock& clock){
@@ -117,7 +122,7 @@ void GameStateLevel::handleEvents(){
 
 void GameStateLevel::createDialogue(std::string dialogueFilename){
 	sf::Vector2f pos(0.0f, (float)ViewUtility::VIEW_HEIGHT);
-	Dialogue* dialogue = new Dialogue(dialogueFilename, mWindow, &mResettableGUI, &mEventM, pos, this);
+	Dialogue* dialogue = new Dialogue(dialogueFilename, mWindow, &mResettableGUI, &mEventM, pos);
 	mResettableGUI.addInterfaceElement(dialogue);
 	if (dialogueFilename.find("SpiderDialogue") != std::string::npos){
 		mSpider = new Spider(mWindow, sf::Vector2f(400, 0));
@@ -153,7 +158,7 @@ void GameStateLevel::setupLevel(std::string levelFile){
 	mPlayer = new Luddis(LUDDIS_TEXTURE, mWindow, mEntityM);
 	mEntityM->addEntity(mPlayer);
 	mCM->addCollidable(mPlayer);
-	mLevel = new Level(mEntityM, this);
+	mLevel = new Level(mEntityM);
 	mEntityM->addEntity(mLevel);
 	mLevel->initializeLevel(*mWindow, mPlayer, levelFile);
 

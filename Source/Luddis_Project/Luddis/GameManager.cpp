@@ -141,11 +141,12 @@ struct GameManagerImp : public EventObserver {
 		CollisionManager* cm = &CollisionManager::getInstance();
 		SoundEngine* se = &SoundEngine::getInstance();
 		
-		mGameStatePaused = new GameStatePaused(&mMainWindow, Menu::PAUSEMENU, &mEntityManager, &mGUIManager);
-		mGameStateLevel = new GameStateLevel(&mMainWindow, &mEntityManager, &mGUIManager);
-		mGameStateMap = new GameStateMap(&mMainWindow);
-		mGameStatePaused->initialize(mGameStateLevel);
-		mGameStateLevel->initialize(mGameStatePaused);
+		mGameStatePaused = &GameStatePaused::getInstance();
+		mGameStateLevel = &GameStateLevel::getInstance();
+		mGameStateMap = &GameStateMap::getInstance();
+		mGameStatePaused->initialize(&mMainWindow, &mEntityManager, &mGUIManager);
+		mGameStateLevel->initialize(&mMainWindow, &mEntityManager, &mGUIManager);
+		mGameStateMap->initialize(&mMainWindow);
 		mGameStatePaused->createMenu(Menu::MenuType::PAUSEMENU);
 		mGameStateLevel->setupLevel(TEST_LEVEL);
 		mCurrentGameState = mGameStateLevel;

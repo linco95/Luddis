@@ -8,7 +8,6 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <vector>
 
-class EntityManager;
 class EventManager;
 class GUIManager;
 class GameStateLevel;
@@ -23,7 +22,7 @@ public:
 	Menu(sf::RenderWindow* window, EventManager* eventManager, GUIManager* gUIManager, MenuType menuType, EntityManager* entityManager);
 	virtual ~Menu();
 
-	void initialize(GameStateLevel* gameStateLevel);
+	void initialize();
 	void initializeButtons();
 
 	void tick(const sf::Time& deltaTime) override;
@@ -51,7 +50,6 @@ private:
 	sf::RectangleShape* mBackground;
 	typedef std::vector<Button*> ButtonVector;
 	ButtonVector mButtons;
-	EntityManager* mEntityManager;
 	EventManager* mEventManager;
 	GUIManager* mGUIManager;
 	GameStateLevel* mGameStateLevel;

@@ -14,11 +14,7 @@ class SoundEngine;
 
 class Dialogue : public InterfaceElement{
 public:
-	//The dialogue will want to have a pointer to a GameStateLevel
-	//which is used to remove the inDialogue status.
-	//If not in the GameStateLevel, then no pointer will
-	//have to be passed on.
-	Dialogue(const std::string& dialogueFile, sf::RenderWindow* window, GUIManager* guiManager, EventManager* eventManager, sf::Vector2f pos, GameStateLevel* gameStateLevel = nullptr);
+	Dialogue(const std::string& dialogueFile, sf::RenderWindow* window, GUIManager* guiManager, EventManager* eventManager, sf::Vector2f pos);
 	~Dialogue();
 
 	void tick(const sf::Time& deltaTime) override;

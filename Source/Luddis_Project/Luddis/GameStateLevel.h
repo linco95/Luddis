@@ -16,10 +16,10 @@ class Luddis;
 
 class GameStateLevel : public GameState{
 public:
-	GameStateLevel(sf::RenderWindow* window, EntityManager* entityManager, GUIManager* guiManager);
 	~GameStateLevel();
 
-	void initialize(GameStatePaused* gameStatePaused);
+	static GameStateLevel& getInstance();
+	void initialize(sf::RenderWindow* window, EntityManager* entityManager, GUIManager* guiManager);
 
 	void update(sf::Clock& clock) override;
 	void render() override;
@@ -38,6 +38,8 @@ public:
 	bool playable() const;
 
 private:
+	GameStateLevel();
+
 	void readSetupFiles(const std::string& filename, bool allocate = true);
 
 	EntityManager* mEntityM;

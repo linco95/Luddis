@@ -12,10 +12,16 @@ class GameStateLevel;
 
 class GameStatePaused : public GameState{
 public:
-	GameStatePaused(sf::RenderWindow* window, Menu::MenuType menuType, EntityManager* entityManager, GUIManager* guiManager);
+	GameStatePaused(GameStatePaused&) = delete;
+	GameStatePaused& operator=(GameStatePaused&) = delete;
 	virtual ~GameStatePaused();
 
-	void initialize(GameStateLevel* gameStateLevel);
+	//Might want to not have pause be a singleton
+	//and instead create a new instance each time a
+	//pause is invoked.
+	static GameStatePaused& getInstance();
+
+	void initialize(sf::RenderWindow* window, EntityManager* entityManager, GUIManager* guiManager);
 	void createMenu(Menu::MenuType menuType);
 
 	void update(sf::Clock& clock) override;
@@ -24,6 +30,8 @@ public:
 	void handleEvents() override;
 
 private:
+	GameStatePaused();
+
 	EntityManager* mEntityM;
 	GUIManager* mLevelGUIM;
 	GUIManager mMenuGUIM;
