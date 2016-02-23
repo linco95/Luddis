@@ -195,7 +195,7 @@ Dialogue::RenderLayer Dialogue::getRenderLayer() const{
 }
 
 void Dialogue::addButton(std::string buttonFile, std::string buttonText, std::string buttonFunc, sf::Vector2f pos, int index){
-	Button* button = new Button(buttonFile, buttonText, buttonFunc, mWindow, mEventManager, pos + getPosition(), this);
+	Button* button = new Button(buttonFile, buttonText, buttonFunc, mWindow, mEventManager, pos + getPosition(), this, Button::ButtonType::RECTANGLE);
 	mButtons[index].push_back(button);
 	mGUIManager->addInterfaceElement(button);
 }

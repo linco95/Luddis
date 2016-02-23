@@ -2,15 +2,17 @@
 #include "ResourceManager.h"
 #include "EventManager.h"
 #include "ViewUtility.h"
+#include "VectorMath.h"
 #include <vector>
 #include "GUIManager.h"
 
 static const std::string DEFAULT_FONTTYPE = "resources/fonts/arial.ttf";
 static bool CLICKED = false;
 
-Button::Button(std::string graphicFilename, std::string buttonText, std::string buttonFunc, sf::RenderWindow* window, EventManager* eventManager, sf::Vector2f pos, InterfaceElement* owner) :
+Button::Button(std::string graphicFilename, std::string buttonText, std::string buttonFunc, sf::RenderWindow* window, EventManager* eventManager, sf::Vector2f pos, InterfaceElement* owner, ButtonType buttonType) :
 mWindow(window),
 mEventManager(eventManager),
+mButtonType(buttonType),
 mIsAlive(true),
 mIsActive(false),
 mOwner(owner),
@@ -33,6 +35,7 @@ mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 	if ((float)textRect.width+5.0f> spriteRect.width){
 		mSprite.setScale(xScale+0.5f, 1);
 	}
+	
 	mButtonText.setColor(sf::Color::Black);
 	mButtonText.setOrigin(textRect.width / 2, textRect.height / 2);
 	mSprite.setOrigin((float)spriteRect.width / 2, (float)spriteRect.height / 2);
@@ -42,11 +45,8 @@ mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 	//Debug info
 	mDebugCircle.setPointCount(6);
 	mDebugCircle.setRadius(15.0f);
-	mDebugRect.setSize((sf::Vector2f(mSprite.getGlobalBounds().width, mSprite.getGlobalBounds().height)));
-	mDebugRect.setOrigin(mDebugRect.getSize().x/2, mDebugRect.getSize().y/2);
 	mDebugCircle.setFillColor(sf::Color(0, 255, 0, 120));
 	mDebugCircle.setOutlineColor(sf::Color(0, 255, 0, 120));
-	mDebugRect.setFillColor(sf::Color(0, 255, 0, 120));
 #endif
 }
 
@@ -78,7 +78,6 @@ void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 
 #ifdef LUDDIS_DEBUG_DRAW_HITBOXES
 	target.draw(mDebugCircle, states);
-	target.draw(mDebugRect, states);
 #endif
 }
 
@@ -91,13 +90,29 @@ void Button::updateInput(){
 	static sf::Vector2f vector(0,0);
 	vector = mWindow->mapPixelToCoords(sf::Mouse::getPosition(*mWindow)) - getPosition();
 
-	if (mSprite.getGlobalBounds().contains(vector)){
-		//Default
-		mSprite.setTextureRect(mRects[1]);
-	}
-	else{
-		//Mouse over
-		mSprite.setTextureRect(mRects[0]);
+	switch(mButtonType) {
+	case RECTANGLE:
+		if (mSprite.getGlobalBounds().contains(vector)) {
+			//Default
+			mSprite.setTextureRect(mRects[1]);
+		}
+		else {
+			//Mouse over
+			mSprite.setTextureRect(mRects[0]);
+		}
+		break;
+
+	case CIRCLE:
+		sf::Vector2f distance = getPosition() - vector;
+		if (VectorMath::getVectorLength(distance)<=mSprite.getGlobalBounds().height/2) {
+			//Default
+			mSprite.setTextureRect(mRects[1]);
+		}
+		else {
+			//Mouse over
+			mSprite.setTextureRect(mRects[0]);
+		}
+		break;
 	}
 }
 
@@ -145,19 +160,9 @@ void Button::kill(){
 void Button::setScale(sf::Vector2f& scale) {
 	mSprite.setScale(scale);
 	mButtonText.setScale(scale);
-
-#ifdef LUDDIS_DEBUG_DRAW_HITBOXES
-	mDebugCircle.setScale(scale);
-	mDebugRect.setScale(scale);
-#endif
 }
 
 void Button::setScale(float x, float y) {
 	mSprite.setScale(x, y);
 	mButtonText.setScale(x, y);
-
-#ifdef LUDDIS_DEBUG_DRAW_HITBOXES
-	mDebugCircle.setScale(x, y);
-	mDebugRect.setScale(x, y);
-#endif
 }

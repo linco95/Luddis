@@ -38,7 +38,7 @@ public:
 
 private:
 	void internalClear();
-	void addButton(std::string buttonFile, std::string buttonText, std::string buttonFunc, sf::Vector2f pos);
+	void addButton(std::string buttonFile, std::string buttonText, std::string buttonFunc, sf::Vector2f pos, Button::ButtonType buttonType);
 
 	void buttonFuncNewGame();
 	void buttonFuncLoadGame();

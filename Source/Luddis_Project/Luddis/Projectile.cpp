@@ -1,5 +1,6 @@
 #include "Projectile.h"
 #include "ResourceManager.h"
+#include <cassert>
 #define _USE_MATH_DEFINES
 #include <math.h>
 
@@ -50,7 +51,7 @@ void fadeProjectile(sf::Sprite& a_Sprite, const sf::Time& a_TimeLeft){
 	//curColor.a *= percentOfTimeLeft;
 	
 	// Linearilly lowers the opacity (255 is max size of an unsigned int with 8 bytes (sf::Uint8))
-	curColor.a = 255 * percentOfTimeLeft;
+	curColor.a = 255 * (unsigned)percentOfTimeLeft;
 
 	// This print takes a lot of resources (only use if needed to debug, will slow down the game even in release)
 	//Debug::log("Projectile alpha value: " + std::to_string(curColor.a) + ", percentOfTimeLeft: " + std::to_string(percentOfTimeLeft), Debug::INFO);
