@@ -7,6 +7,7 @@
 #include <SFML/Graphics/Shape.hpp>
 #ifdef LUDDIS_DEBUG_DRAW_HITBOXES
 #include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 #endif
 #include "InterfaceElement.h"
 #include "EventObserver.h"
@@ -51,6 +52,7 @@ private:
 	ButtonType mButtonType;
 #ifdef LUDDIS_DEBUG_DRAW_HITBOXES
 	sf::CircleShape mDebugCircle;
+	sf::RectangleShape mDebugRect;
 #endif
 
 	bool mIsAlive;

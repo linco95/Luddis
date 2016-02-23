@@ -27,6 +27,7 @@ public:
 	void handleEvents() override;
 
 	void createDialogue(std::string dialogueFile);
+	void fuckOffSpider();
 	bool getInDialogue() const;
 	void setInDialogue(bool inDialogue);
 	void setupLevel(std::string levelFile);

@@ -63,7 +63,7 @@ void Spider::updateMovement(const sf::Time& deltaTime){
 		sf::Vector2f dir2{ 0, -1 };
 		mDirection = dir2;
 	}
-	else if (!mLeaving&&getPosition().y >= 500) {
+	else if (!mLeaving&&getPosition().y >= 300) {
 		if (!mIdleAnimation) {
 			mWaiting = true;
 			mAnimation.setDefaultAnimation(ANIMATION_IDLE);
