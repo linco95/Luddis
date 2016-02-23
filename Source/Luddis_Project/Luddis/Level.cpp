@@ -147,7 +147,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		float sX = (float)(*itr)["width"].GetInt();
 		float sY = (float)(*itr)["height"].GetInt();
 		sf::Vector2f size(sX, sY);
-		// Debug (draw) mode
+		// Debug (draw) mode - probably redundant!
 		bool debug = false;
 		if ((int)(*itr)["debug"].GetInt() == 1){
 			debug = true;
