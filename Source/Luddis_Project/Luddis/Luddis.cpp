@@ -1,3 +1,4 @@
+#define _USE_MATH_DEFINES
 #include "Luddis.h"
 #include "Inventory.h"
 #include "ResourceManager.h"
@@ -12,14 +13,14 @@
 #include "Dialogue.h"
 #include "ViewUtility.h"
 #include <SFML/System.hpp>
-#define _USE_MATH_DEFINES
-#include <math.h>
+#include <cmath>
 #include <string>
 #include <array>
 
+// All of these should maybe be loaded from file instead, to avoid hard coded variables
 static const std::string ANIMATION_FILEPATH = "Resources/Images/Spritesheets/Luddis_walkcykle";
 static const std::string ANIMATION_ALMOSTDEAD = "Resources/Images/Spritesheets/luddis_CriticalHealth";
-//static const Animation ANIMATION_FILEPATH = Animation("resources/images/spritesheets/Sprite_Debug_480x205");
+
 static const std::string HIT_ANIMATION = "Resources/Images/Spritesheets/Luddis_hit";
 static const std::string SHOT_ANIMATION = "Resources/Images/Spritesheets/Luddis_shot";
 static const std::string SOUND_FILENAME1 = "Resources/Audio/Skott_Blås_Små_01.wav";
@@ -118,9 +119,9 @@ sf::Vector2f Luddis::getVectorMouseToSprite() const{
 }
 
 void Luddis::updateMovement(const sf::Time& deltaTime){
-	sf::Vector2f direction = getVectorMouseToSprite();
-	if (VectorMath::getVectorLengthSq(direction) == 0) return;
-	sf::Vector2f offset(VectorMath::normalizeVector(direction));
+	mDirectionVector = getVectorMouseToSprite();
+	if (VectorMath::getVectorLengthSq(mDirectionVector) == 0) return;
+	sf::Vector2f offset(VectorMath::normalizeVector(mDirectionVector));
 	float moveX(offset.x*deltaTime.asSeconds()*MOVESPEED);
 	float moveY(offset.y*deltaTime.asSeconds()*MOVESPEED);
 	
@@ -129,101 +130,106 @@ void Luddis::updateMovement(const sf::Time& deltaTime){
 	// Not colliding
 	if (mColliding == false){
 		//Only move if not close to the cursor position
-		if (VectorMath::getVectorLengthSq(direction) > GRACEAREA){
+		if (VectorMath::getVectorLengthSq(mDirectionVector) > GRACEAREA){
 			move(moveX, moveY);
 		}
 	}
 
-	// Colliding
-	else if (mColliding == true){
-		// mCollideBox - variable to handle the object luddis collides with
-		
-		// Get sides of obstacle as vectors
-		//Top left (1)
-		sf::Vector2f tl(mCollideBox.top, mCollideBox.left);
-		//Top right (2)
-		sf::Vector2f tr(mCollideBox.top, mCollideBox.left + mCollideBox.width);
+	//// Colliding
+	//else if (mColliding == true){
+	//	// mCollideBox - variable to handle the object luddis collides with
+	//	
+	//	// Get sides of obstacle as vectors
+	//	//Top left (1)
+	//	sf::Vector2f tl(mCollideBox.top, mCollideBox.left);
+	//	//Top right (2)
+	//	sf::Vector2f tr(mCollideBox.top, mCollideBox.left + mCollideBox.width);
 
-		//Normalize vectors
-		sf::Vector2f temp1 = VectorMath::normalizeVector(tl);
-		sf::Vector2f temp2 = VectorMath::normalizeVector(tr);
+	//	//Normalize vectors
+	//	sf::Vector2f temp1 = VectorMath::normalizeVector(tl);
+	//	sf::Vector2f temp2 = VectorMath::normalizeVector(tr);
 
-		// Check which side luddis is crashing into and move along the other one
-		if (!mCollideBox.contains(mPrevPos + temp1)){
-			// Use temp2
-			moveX = (temp2.x*deltaTime.asSeconds()*MOVESPEED);
-			moveY = (temp2.y*deltaTime.asSeconds()*MOVESPEED);
-			}
-		else if (!mCollideBox.contains(mPrevPos + temp2)){
-			// Use temp1
-			moveX = (temp1.x*deltaTime.asSeconds()*MOVESPEED);
-			moveY = (temp1.y*deltaTime.asSeconds()*MOVESPEED);
-		}
-		move(moveX, moveY);
-	}
+	//	// Check which side luddis is crashing into and move along the other one
+	//	if (!mCollideBox.contains(mPrevPos + temp1)){
+	//		// Use temp2
+	//		moveX = (temp2.x*deltaTime.asSeconds()*MOVESPEED);
+	//		moveY = (temp2.y*deltaTime.asSeconds()*MOVESPEED);
+	//		}
+	//	else if (!mCollideBox.contains(mPrevPos + temp2)){
+	//		// Use temp1
+	//		moveX = (temp1.x*deltaTime.asSeconds()*MOVESPEED);
+	//		moveY = (temp1.y*deltaTime.asSeconds()*MOVESPEED);
+	//	}
+	//	move(moveX, moveY);
+	//}
 	mColliding = false;
 
 	mPrevPos = tempPos;
 }
 
-#include <iostream>
-
 void Luddis::updateRotation(){
-	
 	sf::Vector2f direction = getVectorMouseToSprite();
-	//float rotation = std::atan2f(direction.x, -direction.y) * 180 / (float)M_PI;
+	if (VectorMath::getVectorLengthSq(direction) == 0) return;
 	float rotation = VectorMath::getAngle(FRONTVECTOR, direction) * 180 / (float)M_PI;
 	setRotation(rotation);
 
-	if (direction.x <= 0 && !mIsFlipped){
-		scale(sf::Vector2f(1, -1));
-		mIsFlipped = true;
-	}
-	else if (direction.x > 0 && mIsFlipped){
-		scale(sf::Vector2f(1, -1));
-		mIsFlipped = false;
+	if ((direction.x <= 0 && !mIsFlipped) || (direction.x > 0 && mIsFlipped)){
+		mIsFlipped = !mIsFlipped;
 	}
 }
 
 void Luddis::attack(){
-	sf::Vector2f direction = VectorMath::rotateVector(FRONTVECTOR, getRotation());
-	sf::Vector2f muzzlePoint = getPosition() + direction * MUZZLEOFFSET;
-	mProjectileCooldown += PROJECTILE_RELOAD;
-	int randValue = std::rand() % PROJECTILE_FILENAME.max_size();
-	Projectile *proj = new Projectile(PROJECTILE_FILENAME[randValue], direction  * PROJECTILE_SPEED, muzzlePoint, PROJECTILE_TIMER, HAIR);
+	// If the projectile is on cooldown, return
+	if (mProjectileCooldown > 0) return;
+	// If not, shoot
 	
+	// Get the current direction of luddis based on his frontvector and rotation
+	sf::Vector2f direction = VectorMath::rotateVector(FRONTVECTOR, getRotation());
+
+	// Replace the current animation with an shooting animation and play a shooting sound
+	mAnimation.replaceAnimation(SHOT_ANIMATION);
+	// TODO Pull out constant variable
+	SoundEngine::getInstance().playSound("Resources/Audio/Luddis_skott_16bit.wav");
+
+	// Set the muzzlepoint where the projectile will get created
+	sf::Vector2f muzzlePoint = getPosition() + direction * MUZZLEOFFSET;
+	// Set the projectile cooldown
+	mProjectileCooldown = PROJECTILE_RELOAD;
+
+	// Choose a random projectile sprite
+	int randValue = std::rand() % PROJECTILE_FILENAME.max_size();
+	
+	// create the projectile
+	Projectile *proj = new Projectile(PROJECTILE_FILENAME[randValue], direction * PROJECTILE_SPEED, muzzlePoint, PROJECTILE_TIMER, HAIR);
 	mEntityManager->addEntity(proj);
 	CollisionManager::getInstance().addCollidable(proj);
-	// Pull out constant variable
-	SoundEngine::getInstance().playSound("resources/audio/Luddis_skott_16bit.wav");
 
 }
 
 void Luddis::handleInput(const sf::Time& deltaTime){
 	//Handle mouse clicks
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) == true){
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)){
 		updateMovement(deltaTime);
 	}
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right) == true
-		&& mProjectileCooldown <= 0){
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)){
 		attack();
-		mAnimation.replaceAnimation(SHOT_ANIMATION);
 	}
 	//Handle keyboard presses
+	// TODO make this an event instead
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
 		if (mPowerups[0] != 0 && mPowerups[0]->getCooldown() <= 0){
 			mPowerups[0]->activateCooldown();
 		}
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
-		
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)){
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
+	//	
+	//}
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)){
 
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
+	//}
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
 
-	}
+	//}
 }
 
 Luddis::Category Luddis::getCollisionCategory(){
@@ -237,22 +243,13 @@ Luddis::Type Luddis::getCollisionType(){
 void Luddis::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway){
 	// Collision with solid object
 	if (collidable->getCollisionCategory() == BG_SOLID){
-		mColliding = true;
-		mCollideBox = collidable->getHitBox();
+		//mColliding = true;
+		//mCollideBox = collidable->getHitBox();
+		if (VectorMath::getVectorLengthSq(moveAway) != 0) 
+			move(moveAway);
 	}
 	// Collision with damaging object
-	if (collidable->getCollisionCategory() == BG_DAMAGE){
-		mAnimation.replaceAnimation(HIT_ANIMATION);
-		if (mLoseDust < 0) {
-			Inventory::getInstance().addDust(-1);
-			mLoseDust = 1.0f;
-			if (Inventory::getInstance().getDust() <= 0){
-				mIsAlive = false;
-			}
-		}
-	}
-	// Collision with an enemy
-	if (collidable->getCollisionCategory() == ENEMY) {
+	if (collidable->getCollisionCategory() == BG_DAMAGE || collidable->getCollisionCategory() == ENEMY) {
 		mAnimation.replaceAnimation(HIT_ANIMATION);
 		if (mLoseDust < 0){
 			Inventory::getInstance().addDust(-1);
@@ -263,9 +260,9 @@ void Luddis::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway)
 		}
 	}
 	// Collision with an collectible
-	if (collidable->getCollisionCategory() == COLLECT){
-		
-	}
+	/*if (collidable->getCollisionCategory() == COLLECT){
+		// NO-OP
+	}*/
 	// Collision with a stunning entity
 	if (collidable->getCollisionCategory() == ENEMY_STUN){
 		if (mStunDuration <= 0){

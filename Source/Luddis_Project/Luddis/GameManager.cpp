@@ -66,13 +66,6 @@ struct GameManagerImp : public EventObserver {
 
 		mLuddGauge = new ScoreGauge(&mMainWindow, TEXTURE_LUDDGAUGE_FRAME, TEXTURE_LUDDGAUGE_BAR, sf::Vector2f(ViewUtility::VIEW_WIDTH * 0.45f, ViewUtility::VIEW_HEIGHT - 60));
 		mGUIManager.addInterfaceElement(mLuddGauge);
-
-		mMainWindow.setMouseCursorVisible(false);
-		// Temporary splash screen
-		sf::RectangleShape splashScreen(sf::Vector2f((float)ViewUtility::VIEW_WIDTH, (float)ViewUtility::VIEW_HEIGHT));
-		splashScreen.setTexture(&ResourceManager::getInstance().getTexture("Resources/Images/splash.png"));
-		mMainWindow.draw(splashScreen);
-		mMainWindow.display();
 		
 		mMainWindow.setMouseCursorVisible(true);
 	}
@@ -114,7 +107,13 @@ struct GameManagerImp : public EventObserver {
 		sf::Vector2u iconSize(icon.getSize());
 		mMainWindow.setIcon(iconSize.x, iconSize.y, icon.getPixelsPtr());
 
-		
+		// Temporary splash screen
+		mMainWindow.setMouseCursorVisible(false);
+		sf::RectangleShape splashScreen(sf::Vector2f((float)ViewUtility::VIEW_WIDTH, (float)ViewUtility::VIEW_HEIGHT));
+		splashScreen.setTexture(&ResourceManager::getInstance().getTexture("Resources/Images/splash.png"));
+		mMainWindow.draw(splashScreen);
+		mMainWindow.display();
+
 	}
 
 	void onEvent(const Event& aEvent) override{
@@ -147,6 +146,7 @@ struct GameManagerImp : public EventObserver {
 		mGameStateMap = new GameStateMap(&mMainWindow);
 		mGameStatePaused->initialize(mGameStateLevel);
 		mGameStateLevel->initialize(mGameStatePaused);
+		mGameStatePaused->createMenu(Menu::MenuType::PAUSEMENU);
 		mGameStateLevel->setupLevel(TEST_LEVEL);
 		mCurrentGameState = mGameStateLevel;
 
@@ -154,7 +154,7 @@ struct GameManagerImp : public EventObserver {
 		se->setMainVolume(100);
 		Clock gameClock;
 		while (mMainWindow.isOpen()){
-			
+
 
 			// Handle Events       
 			mCurrentGameState->handleEvents();

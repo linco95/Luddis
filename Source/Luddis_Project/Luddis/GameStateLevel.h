@@ -12,6 +12,7 @@ class GameStatePaused;
 class PowerupDisplay;
 class Level;
 class Spider;
+class Luddis;
 
 class GameStateLevel : public GameState{
 public:
@@ -33,6 +34,7 @@ public:
 	void resetInventory();
 
 	void setupMission(const std::string& mapFilename, const std::string& jsonFilename);
+	bool playable() const;
 
 private:
 	void readSetupFiles(const std::string& filename, bool allocate = true);
@@ -48,6 +50,9 @@ private:
 	sf::RenderWindow* mWindow;
 	Level* mLevel;
 	Spider* mSpider;
+	Luddis* mPlayer;
+
+	bool mPlayable;
 	bool mInDialogue;
 	bool mResetView;
 	bool mSetupLevel;

@@ -17,13 +17,14 @@ class Menu: public InterfaceElement{
 public:
 	enum MenuType{
 		MAINMENU,
-		PAUSEMENU
+		PAUSEMENU,
+		DEATHMENU
 	};
 	Menu(sf::RenderWindow* window, EventManager* eventManager, GUIManager* gUIManager, MenuType menuType, EntityManager* entityManager);
 	virtual ~Menu();
 
 	void initialize(GameStateLevel* gameStateLevel);
-	void initializeButtons(MenuType menuType);
+	void initializeButtons();
 
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -32,11 +33,12 @@ public:
 	bool isActive() const  override;
 	void setActive(const bool& active) override;
 	void onClick(std::string) override;
-
+	MenuType getMenuType() const;
+	void kill();
 
 private:
 	void internalClear();
-	void addButton(std::string buttonFile, std::string buttonText, std::string buttonFunc, sf::Vector2f pos);
+	void addButton(std::string buttonFile, std::string buttonText, std::string buttonFunc, sf::Vector2f pos, Button::ButtonType buttonType);
 
 	void buttonFuncNewGame();
 	void buttonFuncLoadGame();
@@ -54,6 +56,7 @@ private:
 	GUIManager* mGUIManager;
 	GameStateLevel* mGameStateLevel;
 	sf::RenderWindow* mWindow;
+	MenuType mMenuType;
 
 	bool mIsAlive;
 	bool mIsActive;

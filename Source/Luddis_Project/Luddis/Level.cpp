@@ -19,7 +19,7 @@
 #include <SFML\Audio.hpp>
 #include <array>
 #include <map>
-#include <iostream>
+#include "Debug.h"
 
 using namespace sf;
 
@@ -98,7 +98,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		Silverfish* fish = new Silverfish(mWindow, pos, angle, act, mTarget);
 		mEntityManager->addEntity(fish);
 		cm->addCollidable(fish);
-		std::cout << x << " " << y << std::endl;
+		Debug::log("Spawning silverfish at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
 	}
 	}
 
@@ -119,7 +119,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 
 			TutorialText* tut = new TutorialText(mWindow, pos, act, text, mTarget);
 			mEntityManager->addEntity(tut);
-			std::cout << x << " " << y << std::endl;
+			Debug::log("Spawning tutorial text at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
 		}
 	}
 
@@ -156,7 +156,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		Obstacle* obstacle = new Obstacle(mWindow, Obstacle::ObstacleType(type),pos, angle, size, debug);
 		mEntityManager->addEntity(obstacle);
 		cm->addCollidable(obstacle);
-		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
+		Debug::log("Spawning obstacle at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
 	}
 	}
 
@@ -178,7 +178,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		BossDishCloth* boss = new BossDishCloth(mWindow, pos, act, mTarget, mEntityManager);
 		mEntityManager->addEntity(boss);
 		cm->addCollidable(boss);
-		std::cout << x << " " << y << std::endl;
+		Debug::log("Spawning boss at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
 	}
 	}
 
@@ -205,7 +205,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 
 			EventZone* zone = new EventZone(mGameStateLevel, EventZone::EventType(eventType), position, shape, 0, level);
 			cm->addCollidable(zone);
-			std::cout << x << " " << y << width << " " << height << std::endl;
+			Debug::log("Spawning Event zone at: [" + std::to_string(x) + ", " + std::to_string(y) + "], with the dimensions (" + std::to_string(width) + ", " + std::to_string(height) + ")", Debug::INFO);
 		}
 	}
 
@@ -347,6 +347,6 @@ void Level::createEffects() {
 	sf::Vector2f vec = VectorMath::normalizeVector(sf::Vector2f(-0.5f, 1.0f));
 	for (int i = 0; i <= rand() % 20; i++) {
 		BackgroundEffect* eff = new BackgroundEffect(EFFECT_FILEPATH, vec*EFFECT_SPEED, sf::Vector2f((float)(rand() % 15000), -100) + vec*EFFECT_SPEED / 3.0f, EFFECT_LIFETIME, mTarget);
-	mEntityManager->addEntity(eff);
+		mEntityManager->addEntity(eff);
 	}
 }

@@ -1,4 +1,5 @@
 #include "GUIManager.h"
+#include <cassert>
 #include <map>
 
 GUIManager::GUIManager() :
@@ -11,6 +12,7 @@ GUIManager::~GUIManager(){
 }
 
 void GUIManager::addInterfaceElement(InterfaceElement* ie){
+	assert(ie != nullptr);
 	mElements.push_back(ie);
 }
 
