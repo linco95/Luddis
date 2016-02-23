@@ -3,10 +3,12 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
+static const Entity::RenderLayer LAYER = Entity::RenderLayer::ITEM;
 static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 static const float ROTATIONSPEED = 1.f;
-static const float FADINGFACTOR = 0.5f;
+static const float FADINGFACTOR = 0.4f; /// < Fade the factor towards this value according to its lifetime
+// Temporary variable for max time, should be saved for all instances and used in fading. Every projectile should know its total lifetime, to be able to calculate how long they've been alive (% of total)
+static const sf::Time MAXLIFETIME = sf::seconds(3);
 
 //The max life time should be entered in milliseconds
 Projectile::Projectile(std::string textureFilename, sf::Vector2f direction, sf::Vector2f position, float maxLifeTimeMS, Projectile::Category collisionCategory):
@@ -29,16 +31,37 @@ Projectile::Projectile(std::string textureFilename, sf::Vector2f direction, sf::
 Projectile::~Projectile(){
 	delete mHitbox;
 }
+#include "Debug.h"
+#include <cassert>
 void fadeProjectile(sf::Sprite& a_Sprite, const sf::Time& a_TimeLeft){
+	// Get the current color of the sprite (mainly the alpha value is of interest here, but we could also tint the projectiles)
 	sf::Color curColor = a_Sprite.getColor();
-	// TODO
-	curColor.a *= (sf::Uint8) (1  - FADINGFACTOR / a_TimeLeft.asSeconds()); // fadingfactor / timeleft -ish
+	// Calculate the precent of time left. 1 = just initialized, 0 = deallocated
+	float percentOfTimeLeft = a_TimeLeft / MAXLIFETIME;
+	assert(percentOfTimePassed >= 0); // We don't want negative values (i.e. we expect that the timeleft is always smaller than or equal the maxlife)
+
+	// TODO: Could we make it fade proportionally to FADINGFACTOR, instead of a_TimeLeft?
+
+	// Clamp the percentOfTimeLeft to the FADINGFACTOR variable
+	if (percentOfTimeLeft < FADINGFACTOR)
+		percentOfTimeLeft = FADINGFACTOR;
+
+	// Exponentially lowers the opacity
+	//curColor.a *= percentOfTimeLeft;
+	
+	// Linearilly lowers the opacity (255 is max size of an unsigned int with 8 bytes (sf::Uint8))
+	curColor.a = 255 * percentOfTimeLeft;
+
+	// This print takes a lot of resources (only use if needed to debug, will slow down the game even in release)
+	//Debug::log("Projectile alpha value: " + std::to_string(curColor.a) + ", percentOfTimeLeft: " + std::to_string(percentOfTimeLeft), Debug::INFO);
+	
 	a_Sprite.setColor(curColor);
 }
 
 void Projectile::tick(const sf::Time& deltaTime){
 	mLifeTime -= deltaTime.asSeconds();
 	checkLifeTime();
+	fadeProjectile(mSprite, sf::seconds(mLifeTime));
 	updateMovement(deltaTime);
 	rotate(ROTATIONSPEED);
 }

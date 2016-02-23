@@ -19,7 +19,7 @@
 #include <SFML\Audio.hpp>
 #include <array>
 #include <map>
-#include <iostream>
+#include "Debug.h"
 
 using namespace sf;
 
@@ -98,7 +98,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		Silverfish* fish = new Silverfish(mWindow, pos, angle, act, mTarget);
 		mEntityManager->addEntity(fish);
 		cm->addCollidable(fish);
-		std::cout << x << " " << y << std::endl;
+		Debug::log("Spawning silverfish at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
 	}
 	}
 
@@ -119,7 +119,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 
 			TutorialText* tut = new TutorialText(mWindow, pos, act, text, mTarget);
 			mEntityManager->addEntity(tut);
-			std::cout << x << " " << y << std::endl;
+			Debug::log("Spawning tutorial text at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
 		}
 	}
 
@@ -135,17 +135,17 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		assert(itr->HasMember("angle") && (*itr)["angle"].IsDouble());
 
 		std::string filename = (*itr)["filename"].GetString();
-			int type = (*itr)["type"].GetInt();
+		int type = (*itr)["type"].GetInt();
 		float x = (float)(*itr)["x"].GetInt();
 		float y = (float)(*itr)["y"].GetInt();
 		sf::Vector2f pos(x, y);
 		float angle = (float)(*itr)["angle"].GetDouble();
 
-			Obstacle* obstacle = new Obstacle(mWindow, filename, Obstacle::ObstacleType(type), pos, angle);
+		Obstacle* obstacle = new Obstacle(mWindow, filename, Obstacle::ObstacleType(type), pos, angle);
 		mEntityManager->addEntity(obstacle);
 		cm->addCollidable(obstacle);
-		std::cout << (*itr)["x"].GetDouble() << " " << (*itr)["y"].GetDouble() << std::endl;
-	}
+		Debug::log("Spawning obstacle at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
+		}
 	}
 
 
@@ -166,8 +166,8 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		BossDishCloth* boss = new BossDishCloth(mWindow, pos, act, mTarget, mEntityManager);
 		mEntityManager->addEntity(boss);
 		cm->addCollidable(boss);
-		std::cout << x << " " << y << std::endl;
-	}
+		Debug::log("Spawning boss at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
+		}
 	}
 
 	//Event zones
@@ -193,7 +193,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 
 			EventZone* zone = new EventZone(mGameStateLevel, EventZone::EventType(eventType), position, shape, 0, level);
 			cm->addCollidable(zone);
-			std::cout << x << " " << y << width << " " << height << std::endl;
+			Debug::log("Spawning Event zone at: [" + std::to_string(x) + ", " + std::to_string(y) + "], with the dimensions (" + std::to_string(width) + ", " + std::to_string(height) + ")", Debug::INFO);
 		}
 	}
 
