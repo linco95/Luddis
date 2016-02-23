@@ -29,10 +29,10 @@ static const int MAX_LIFE = 100;
 static const float ATTACK_INTERVAL = 3.5f;
 static const float PROJECTILE_LIFETIME = 2.5f;
 static const float PROJECTILE_SPEED = 300;
-static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(250, 250));
+static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(225, 225));
 
 void loadResources(){
-	//ResourceManager::getInstance().loadTexture(ANIMATION_IDLE + ".png");
+	ResourceManager::getInstance().loadTexture(ANIMATION_IDLE + ".png");
 	ResourceManager::getInstance().loadTexture(SHOOTING_ANIMATION + ".png");
 	ResourceManager::getInstance().loadTexture(ANIMATION_IDLE_2 + ".png");
 	ResourceManager::getInstance().loadTexture(SHOOTING_ANIMATION_2 + ".png");

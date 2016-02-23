@@ -8,7 +8,7 @@
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::ITEM;
 static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 static const float ROTATIONSPEED = 1.f;
-static const float FADINGFACTOR = 0.4f; /// < Fade the factor towards this value according to its lifetime
+static const float FADINGFACTOR = 0.2f; /// < Fade the factor towards this value according to its lifetime
 // Temporary variable for max time, should be saved for all instances and used in fading. Every projectile should know its total lifetime, to be able to calculate how long they've been alive (% of total)
 static const sf::Time MAXLIFETIME = sf::seconds(3);
 

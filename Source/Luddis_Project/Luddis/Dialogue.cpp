@@ -61,7 +61,7 @@ void Dialogue::initialize(std::string dialogueFile){
 	assert(configDoc.IsObject());
 
 	sf::Vector2f offset(0, -RECT_HEIGHT);
-	sf::Vector2f pos = getPosition() + offset;
+	sf::Vector2f portraitPos(ViewUtility::VIEW_WIDTH*0.4f, offset.y+getPosition().y);
 
 	//A character portrait is optional.
 	if (configDoc.HasMember("Left_character_filename") &&
@@ -71,7 +71,7 @@ void Dialogue::initialize(std::string dialogueFile){
 		std::string characterName = configDoc["Left_character_displayname"].GetString();
 
 
-		mCharacterDisplayLeft = new CharacterPortrait(textureFilename, characterName, pos);
+		mCharacterDisplayLeft = new CharacterPortrait(textureFilename, characterName, portraitPos);
 		mGUIManager->addInterfaceElement(mCharacterDisplayLeft);
 	}
 	//So is the second one
@@ -82,9 +82,9 @@ void Dialogue::initialize(std::string dialogueFile){
 		std::string characterName = configDoc["Right_character_displayname"].GetString();
 
 
-		sf::Vector2f rightPos = pos;
-		rightPos.x += 600;
-		mCharacterDisplayRight = new CharacterPortrait(textureFilename, characterName, rightPos);
+		sf::Vector2f rightPortraitPos = portraitPos;
+		rightPortraitPos.x = ViewUtility::VIEW_WIDTH*0.6f;
+		mCharacterDisplayRight = new CharacterPortrait(textureFilename, characterName, rightPortraitPos);
 		mGUIManager->addInterfaceElement(mCharacterDisplayRight);
 	}
 
@@ -195,7 +195,7 @@ Dialogue::RenderLayer Dialogue::getRenderLayer() const{
 }
 
 void Dialogue::addButton(std::string buttonFile, std::string buttonText, std::string buttonFunc, sf::Vector2f pos, int index){
-	Button* button = new Button(buttonFile, buttonText, buttonFunc, mWindow, mEventManager, pos + getPosition(), this);
+	Button* button = new Button(buttonFile, buttonText, buttonFunc, mWindow, mEventManager, pos + getPosition(), this, Button::ButtonType::RECTANGLE);
 	mButtons[index].push_back(button);
 	mGUIManager->addInterfaceElement(button);
 }
@@ -235,6 +235,7 @@ void Dialogue::changePageButton(int value){
 
 void Dialogue::closeButton(){
 	mIsAlive = false;
+	mGameStateLevel->fuckOffSpider();
 }
 
 void Dialogue::spiderButton1(){

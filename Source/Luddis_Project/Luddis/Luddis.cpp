@@ -245,7 +245,8 @@ void Luddis::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway)
 	if (collidable->getCollisionCategory() == BG_SOLID){
 		//mColliding = true;
 		//mCollideBox = collidable->getHitBox();
-		move(moveAway);
+		if (VectorMath::getVectorLengthSq(moveAway) != 0) 
+			move(moveAway);
 	}
 	// Collision with damaging object
 	if (collidable->getCollisionCategory() == BG_DAMAGE || collidable->getCollisionCategory() == ENEMY) {

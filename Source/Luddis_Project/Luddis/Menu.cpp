@@ -53,53 +53,52 @@ void Menu::initialize(GameStateLevel* gameStateLevel){
 void Menu::initializeButtons(){
 	int maxButtons;
 	sf::Vector2f position(getPosition());
-	sf::Vector2f offset(0, mBackground->getSize().y / 2.5f);
+	sf::Vector2f offset(0, mBackground->getSize().y / 3.0f);
 	switch (mMenuType)
 	{
 	case Menu::MAINMENU:
 		maxButtons = 4;
 		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
-		addButton(MENUBUTTON_TEXTURE, "Stara Nytt Spel", "NewGame", position+offset);
+		addButton(MENUBUTTON_TEXTURE, "Stara Nytt Spel", "NewGame", position+offset, Button::ButtonType::RECTANGLE);
 		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
-		addButton(MENUBUTTON_TEXTURE, "Ladda Spel", "LoadGame", position + offset);
+		addButton(MENUBUTTON_TEXTURE, "Ladda Spel", "LoadGame", position + offset, Button::ButtonType::RECTANGLE);
 		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
-		addButton(MENUBUTTON_TEXTURE_SETTINGS, "", "Settings", position + offset);
+		addButton(MENUBUTTON_TEXTURE_SETTINGS, "", "Settings", position + offset, Button::ButtonType::CIRCLE);
 		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
-		addButton(MENUBUTTON_TEXTURE_QUITGAME, "", "Quit", position + offset);
+		addButton(MENUBUTTON_TEXTURE_QUITGAME, "", "Quit", position + offset, Button::ButtonType::CIRCLE);
 		break;
 
 	case Menu::PAUSEMENU:
 		maxButtons = 5;
 		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
-		addButton(MENUBUTTON_TEXTURE_RETURN, "", "Continue", position + offset);
+		addButton(MENUBUTTON_TEXTURE_RETURN, "", "Continue", position + offset, Button::ButtonType::RECTANGLE);
 		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
-		addButton(MENUBUTTON_TEXTURE, "Starta Om Nivå", "ResetLevel", position + offset);
+		addButton(MENUBUTTON_TEXTURE, "Starta Om Nivå", "ResetLevel", position + offset, Button::ButtonType::RECTANGLE);
 		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
-		addButton(MENUBUTTON_TEXTURE_SETTINGS, "", "Settings", position + offset);
+		addButton(MENUBUTTON_TEXTURE_SETTINGS, "", "Settings", position + offset, Button::ButtonType::RECTANGLE);
 		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
-		addButton(MENUBUTTON_TEXTURE_EXITLEVEL, "", "ExitLevel", position + offset);
+		addButton(MENUBUTTON_TEXTURE_EXITLEVEL, "", "ExitLevel", position + offset, Button::ButtonType::CIRCLE);
 		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
-		addButton(MENUBUTTON_TEXTURE_QUITGAME, "", "QuitGame", position + offset);
+		addButton(MENUBUTTON_TEXTURE_QUITGAME, "", "QuitGame", position + offset, Button::ButtonType::CIRCLE);
 		break;
 
 	case Menu::DEATHMENU:
 		maxButtons = 4;
 		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
-		addButton(MENUBUTTON_TEXTURE_RETURN, "", "Continue", position + offset);
+		addButton(MENUBUTTON_TEXTURE_RETURN, "", "Continue", position + offset, Button::ButtonType::CIRCLE);
 		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
-		addButton(MENUBUTTON_TEXTURE, "Starta Om Nivå", "ResetLevel", position + offset);
+		addButton(MENUBUTTON_TEXTURE, "Starta Om Nivå", "ResetLevel", position + offset, Button::ButtonType::RECTANGLE);
 		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
-		addButton(MENUBUTTON_TEXTURE_EXITLEVEL, "", "ExitLevel", position + offset);
+		addButton(MENUBUTTON_TEXTURE_EXITLEVEL, "", "ExitLevel", position + offset, Button::ButtonType::CIRCLE);
 		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
-		addButton(MENUBUTTON_TEXTURE_QUITGAME, "", "QuitGame", position + offset);
+		addButton(MENUBUTTON_TEXTURE_QUITGAME, "", "QuitGame", position + offset, Button::ButtonType::CIRCLE);
 		break;
 	}
 }
 
-void Menu::addButton(std::string buttonFile, std::string buttonText, std::string buttonFunc, sf::Vector2f pos){
-	Button* button = new Button(buttonFile, buttonText, buttonFunc, mWindow, mEventManager, pos, this);
+void Menu::addButton(std::string buttonFile, std::string buttonText, std::string buttonFunc, sf::Vector2f pos, Button::ButtonType buttonType){
+	Button* button = new Button(buttonFile, buttonText, buttonFunc, mWindow, mEventManager, pos, this, buttonType);
 	button->setActive(true);
-	button->setScale(0.5f, 0.5f);
 	mButtons.push_back(button);
 	mGUIManager->addInterfaceElement(button);
 }

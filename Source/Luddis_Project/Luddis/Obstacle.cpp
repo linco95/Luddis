@@ -4,34 +4,54 @@
 
 const Entity::RenderLayer LAYER = Entity::RenderLayer::OBSTACLES;
 const int DAMAGE = 0;
-static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
+//static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 static const float IDLE_TIME = 4;
 static const float DAMAGE_TIME = 2;
 
 static const Animation ANIMATION_IDLE = Animation("Resources/Images/Spritesheets/Grafik_steam_AnimationIdleSprite");
 static const Animation ANIMATION_DAMAGE = Animation("Resources/Images/Spritesheets/Grafik_steam_AnimationSprite");
 
-Obstacle::Obstacle(sf::RenderWindow* window, std::string textureFilename, ObstacleType type, const sf::Vector2f& position, const float& angle) :
+Obstacle::Obstacle(sf::RenderWindow* window, ObstacleType type, const sf::Vector2f& position, const float& angle, const sf::Vector2f& size, bool debug) :
 mIsAlive(true),
 mIsActive(true),
 mWindow(window),
 mType(type),
-mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
-mHitbox(new sf::CircleShape(HITBOX_SHAPE)),
+//mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
+mHitbox(new sf::RectangleShape(size)),
+mIdleHitbox(new sf::RectangleShape(sf::Vector2f(53, 35))),
+mActiveHitbox(new sf::RectangleShape(sf::Vector2f(150, 300))),
 mIsDamaging(false),
 mDamageTime(DAMAGE_TIME),
 mIdleTime(IDLE_TIME),
 mAnimation(ANIMATION_IDLE),
-mAngle(angle)
+mAngle(angle),
+mDebug(debug)
 {
-	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
+	//mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	setPosition(position);
 	rotate(angle);
+	if (type == 1) {
+		
+		mIdleHitbox->setOrigin(mIdleHitbox->getLocalBounds().width / 2, mIdleHitbox->getLocalBounds().height);
+		mIdleHitbox->setPosition(getPosition());
+		mIdleHitbox->setScale(getScale());
+		mIdleHitbox->setRotation(getRotation());
 
-	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
-	mHitbox->setPosition(getPosition());
-	mHitbox->setScale(getScale());
-	mHitbox->setRotation(getRotation());
+		mActiveHitbox->setOrigin(mActiveHitbox->getLocalBounds().width / 2, mActiveHitbox->getLocalBounds().height);
+		mActiveHitbox->setPosition(getPosition());
+		mActiveHitbox->setScale(getScale());
+		mActiveHitbox->setRotation(getRotation());
+		
+		mHitbox = mIdleHitbox;
+
+		move(((float)mIdleHitbox->getLocalBounds().height / 2.0f) * VectorMath::getNormal(sf::Vector2f(cos(mAngle), sin(mAngle))));
+	}
+	else {
+		mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
+		mHitbox->setPosition(getPosition());
+		mHitbox->setScale(getScale());
+		mHitbox->setRotation(getRotation());
+	}
 }
 
 Obstacle::~Obstacle(){
@@ -41,6 +61,9 @@ Obstacle::~Obstacle(){
 void Obstacle::tick(const sf::Time& deltaTime){
 	// Changing obstacle
 	if (mType == DAMAGE){
+		float toMove = (float)mActiveHitbox->getLocalBounds().height;
+		mAnimation.getCurrAnimation().setOrigin(mAnimation.getCurrAnimation().getSprite().getLocalBounds().width / 2, mAnimation.getCurrAnimation().getSprite().getLocalBounds().height);
+		mAnimation.getCurrAnimation().setPosition(getPosition());
 		// Active obstacle (damaging)
 		if (mIsDamaging == true){
 			mDamageTime -= float(deltaTime.asSeconds());
@@ -48,9 +71,10 @@ void Obstacle::tick(const sf::Time& deltaTime){
 				mIsDamaging = false;
 				mDamageTime = DAMAGE_TIME;
 				// Move to start idle animation
-				sf::Vector2f moving = -((float)mSprite.getTextureRect().height / 3.7f) * VectorMath::getNormal(sf::Vector2f(cos(mAngle), sin(mAngle)));
+				float temp = toMove - (float)mIdleHitbox->getLocalBounds().height;
+				sf::Vector2f moving = -(temp / 2.0f) * VectorMath::getNormal(sf::Vector2f(cos(mAngle), sin(mAngle)));
 				move(moving);
-
+				mHitbox = mIdleHitbox;
 				mAnimation.setDefaultAnimation(ANIMATION_IDLE);
 			}
 		}
@@ -61,12 +85,15 @@ void Obstacle::tick(const sf::Time& deltaTime){
 				mIsDamaging = true;
 				mIdleTime = IDLE_TIME;
 				// Move to start damaging animation
-				sf::Vector2f moving = ((float)mSprite.getTextureRect().height / 3.7f) * VectorMath::getNormal(sf::Vector2f(cos(mAngle), sin(mAngle)));
+				float temp = toMove - (float)mIdleHitbox->getLocalBounds().height;
+				sf::Vector2f moving = (temp / 2.0f) * VectorMath::getNormal(sf::Vector2f(cos(mAngle), sin(mAngle)));
 				move(moving);
-
+				mHitbox = mActiveHitbox;
 				mAnimation.setDefaultAnimation(ANIMATION_DAMAGE);
 			}
 		}
+		
+		
 		mAnimation.tick(deltaTime);
 	}
 	// Solid obstacle
@@ -101,7 +128,12 @@ Entity::RenderLayer Obstacle::getRenderLayer() const{
 }
 
 sf::FloatRect Obstacle::getHitBox(){
-	return getTransform().transformRect(mSprite.getGlobalBounds());
+	if (mType == DAMAGE) {
+		return getTransform().transformRect(mAnimation.getCurrAnimation().getSprite().getGlobalBounds());
+	}
+	else {
+		return getNarrowHitbox()->getGlobalBounds();
+	}
 }
 
 sf::Shape* Obstacle::getNarrowHitbox() const{

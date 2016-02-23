@@ -50,7 +50,7 @@ void GameStateMap::onEvent(const sf::Event &aEvent){
 			if (aEvent.key.code == sf::Keyboard::Escape){
 			//GameManager::getInstance().setGameState(mGameStatePaused);
 			}
-												break;
+			break;
 		}
 	}
 }
