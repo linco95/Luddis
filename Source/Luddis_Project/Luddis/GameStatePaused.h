@@ -16,6 +16,7 @@ public:
 	virtual ~GameStatePaused();
 
 	void initialize(GameStateLevel* gameStateLevel);
+	void createMenu(Menu::MenuType menuType);
 
 	void update(sf::Clock& clock) override;
 	void render() override;
