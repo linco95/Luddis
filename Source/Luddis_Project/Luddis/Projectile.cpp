@@ -1,7 +1,9 @@
+#define _USE_MATH_DEFINES
 #include "Projectile.h"
 #include "ResourceManager.h"
-#define _USE_MATH_DEFINES
-#include <math.h>
+#include <cmath>
+#include "Debug.h"
+#include <cassert>
 
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::ITEM;
 static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
@@ -31,26 +33,31 @@ Projectile::Projectile(std::string textureFilename, sf::Vector2f direction, sf::
 Projectile::~Projectile(){
 	delete mHitbox;
 }
-#include "Debug.h"
-#include <cassert>
 void fadeProjectile(sf::Sprite& a_Sprite, const sf::Time& a_TimeLeft){
 	// Get the current color of the sprite (mainly the alpha value is of interest here, but we could also tint the projectiles)
 	sf::Color curColor = a_Sprite.getColor();
-	// Calculate the precent of time left. 1 = just initialized, 0 = deallocated
+	// Calculate the percent of time left. 1 = just initialized, 0 = deallocated
 	float percentOfTimeLeft = a_TimeLeft / MAXLIFETIME;
-	assert(percentOfTimePassed >= 0); // We don't want negative values (i.e. we expect that the timeleft is always smaller than or equal the maxlife)
 
 	// TODO: Could we make it fade proportionally to FADINGFACTOR, instead of a_TimeLeft?
+	// example: percentOfTimeLeft = (a_TimeLeft - FADINGFACTOR * MAXLIFETIME) / (MAXLIFETIME * FADINGFACTOR)
+
+	// We don't want negative values (i.e. we expect that the timeleft is always smaller than or equal the maxlife)
+	assert(percentOfTimeLeft >= 0); 
 
 	// Clamp the percentOfTimeLeft to the FADINGFACTOR variable
 	if (percentOfTimeLeft < FADINGFACTOR)
 		percentOfTimeLeft = FADINGFACTOR;
 
-	// Exponentially lowers the opacity
+	// Exponentially lowers the opacity. "Ränta på ränta"
 	//curColor.a *= percentOfTimeLeft;
 	
+	// MAXVALUE of an Uint8 (~ is a bitwise operator, flips all the bits from 0000 0000 to 1111 1111)
+	static const sf::Uint8 MAXVALUE = ~0;
+	
 	// Linearilly lowers the opacity (255 is max size of an unsigned int with 8 bytes (sf::Uint8))
-	curColor.a = 255 * percentOfTimeLeft;
+	curColor.a = sf::Uint8(MAXVALUE * percentOfTimeLeft);
+
 
 	// This print takes a lot of resources (only use if needed to debug, will slow down the game even in release)
 	//Debug::log("Projectile alpha value: " + std::to_string(curColor.a) + ", percentOfTimeLeft: " + std::to_string(percentOfTimeLeft), Debug::INFO);
@@ -89,6 +96,7 @@ void Projectile::updateMovement(const sf::Time& deltaTime){
 
 void Projectile::checkLifeTime(){
 	if (mLifeTime<=0){
+		mLifeTime = 0;
 		mIsAlive = false;
 	}
 }

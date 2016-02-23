@@ -1,11 +1,11 @@
+#define _USE_MATH_DEFINES
 #include "Silverfish.h"
 #include "ResourceManager.h"
 #include "EntityManager.h"
 #include <SFML/System.hpp>
 #include <stdlib.h>
 #include "VectorMath.h"
-#define _USE_MATH_DEFINES
-#include <math.h>
+#include <cmath>
 
 static const std::string ANIMATION_SWIM = "resources/images/spritesheets/Silverfish_Swim";
 static const std::string ANIMATION_HIT = "resources/images/spritesheets/Silverfish_death";
@@ -44,6 +44,7 @@ mTarget(aTarget)
 	dir = VectorMath::rotateVector(dir, angle);
 	mDirection = VectorMath::normalizeVector(dir);
 
+	// TODO flip if changing direction when swimming aways
 
 	if (mDirection.x > 0){
 		scale(sf::Vector2f(1, -1));
@@ -82,7 +83,13 @@ void Silverfish::tick(const sf::Time& deltaTime){
 void Silverfish::updateMovement(const sf::Time& deltaTime){
 	float rotation = VectorMath::getAngle(sf::Vector2f(FRONTVECTOR), mDirection) * 180 / (float)M_PI;
 	setRotation(rotation);
-	move(mDirection * SPEED * deltaTime.asSeconds());
+
+	// Make the fishes swim faster when swimming away
+	float speed = SPEED;
+	if (mSwimAway) {
+		speed = 250;
+	}
+	move(mDirection * speed * deltaTime.asSeconds());
 }
 
 void Silverfish::draw(sf::RenderTarget& target, sf::RenderStates states) const{
@@ -123,8 +130,8 @@ void Silverfish::collide(CollidableEntity *collidable, const sf::Vector2f& moveA
 			mAnimation.replaceAnimation(ANIMATION_HIT);
 			mAnimation.setDefaultAnimation(ANIMATION_DEAD);
 			mSwimAway = true;
-			mDirection = sf::Vector2f(0, -1);
-			SPEED = 120;
+			mDirection = VectorMath::normalizeVector(getPosition() - collidable->getPosition());
+			//SPEED = 220;
 			mBefriend = true;
 			}
 		}
@@ -143,5 +150,6 @@ sf::FloatRect Silverfish::getHitBox(){
 
 sf::Shape* Silverfish::getNarrowHitbox() const{
 	mHitbox->setPosition(getPosition());
+	
 	return mHitbox;
 }
