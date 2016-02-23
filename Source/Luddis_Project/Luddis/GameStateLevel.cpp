@@ -126,6 +126,13 @@ void GameStateLevel::createDialogue(std::string dialogueFilename){
 	mInDialogue = true;
 }
 
+void GameStateLevel::fuckOffSpider() {
+	if (mSpider != nullptr) {
+		mSpider->turn();
+		mSpider = nullptr;
+	}
+}
+
 //Retarded name, but it returns if there is currently a dialogue
 //playing or not.
 bool GameStateLevel::getInDialogue() const{
@@ -162,6 +169,7 @@ void GameStateLevel::setupLevel(std::string levelFile){
 void GameStateLevel::resetLevel(){
 	if (!mCurrentLevelFile.empty()){
 		mResetView = true;
+		mInDialogue = false;
 		resetInventory();
 		mCM->emptyVector();
 		mEntityM->emptyVector();
@@ -185,10 +193,6 @@ void GameStateLevel::setupMission(const std::string& mapFilename, const std::str
 
 	mLevel->initializeEntities(mWindow, configDoc);
 	mLevel->readInitMap(mapFilename);
-	if (mSpider != nullptr) {
-		mSpider->turn();
-		mSpider = nullptr;
-	}
 }
 
 void GameStateLevel::readSetupFiles(const std::string& filename, bool allocate) {

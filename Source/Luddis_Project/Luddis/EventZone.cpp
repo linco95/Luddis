@@ -3,7 +3,6 @@
 
 static const std::string SPIDER_DIALOGUE = "Resources/Configs/Dialogue/SpiderDialogue";
 
-
 EventZone::EventZone(GameStateLevel* gameStateLevel, EventType eventType, sf::Vector2f pos, sf::Shape* shape, float rotation, int level) :
 mIsActive(true),
 mIsAlive(true),
@@ -88,6 +87,7 @@ void EventZone::collide(CollidableEntity* collidable, const sf::Vector2f& moveAw
 			break;
 
 		case SPIDER_HARD_END:
+			//TODO: Add some kind of check to see if the mission has accually been completed
 			filename += std::to_string(mLevel) + "hardend.json";
 			mGameStateLevel->createDialogue(filename);
 			break;
