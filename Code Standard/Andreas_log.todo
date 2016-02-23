@@ -11,11 +11,13 @@ TODO:
    -  Save their max lifetime in a member variable
  ☐ Generally load in animations from json files instead of static variables in the code
 
+ ☐ We might need a way to replace animation, and guarantee that it replaces the animation (normally a call to replaceanimation only returns if there is already an rpelaced animation) in animationqueue (overrideAnimation())
+
  ☐ Replace collision enum, with a bitmap? 
  ☐ Collision handles weirdly, kinda works from below, but not from above
    -  Debug where the issue lies. Is it collision detection (don't think so), or the vector we get, or the handeling of collision (right now that is basically the vector)?
  ☐ Remove redundant collisiontype, as we now only handle axial aligned bounding boxes + convex shapes (sf::Shape)
-
+ ✔ Make the silverfish swim away from luddis when they die @done (16-02-23 09:36)
  ☐ Finish collision handeling @started(16-02-22 12:45)
  ☐ Implement states on the boss dishrag and luddis
   ✔ Ask if we should implement random intervals on boss stopping  @done
@@ -171,3 +173,8 @@ Fixed the collision. The points were just transformed to the shapes location, wi
   Tested stasis ring (looks)
   Cleaning up luddis code
   Finish up the fading of projectiles
+  ✔ ZZZZ @started(16-02-23 01:09) @done (16-02-23 09:11) @lasted(8:02)
+
+  23/2/16:
+  Tweaked the projectile 
+  Made the silverfish swim away from luddis when dying
