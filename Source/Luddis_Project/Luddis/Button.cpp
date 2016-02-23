@@ -103,8 +103,8 @@ void Button::updateInput(){
 		break;
 
 	case CIRCLE:
-		sf::Vector2f distance = getPosition() - vector;
-		if (VectorMath::getVectorLength(distance)<=mSprite.getGlobalBounds().height/2) {
+		float distance = VectorMath::getVectorLength(mSprite.getPosition() - vector);
+		if (distance<=mSprite.getGlobalBounds().height/2) {
 			//Default
 			mSprite.setTextureRect(mRects[1]);
 		}
@@ -126,26 +126,55 @@ void Button::onEvent(const sf::Event &aEvent){
 		static sf::Vector2f mousePos(0, 0);
 		mousePos = mWindow->mapPixelToCoords(sf::Vector2i(aEvent.mouseButton.x, aEvent.mouseButton.y)) - getPosition();
 		//Listen for mouse clicks
-		if (aEvent.type == sf::Event::MouseButtonPressed&&
-			aEvent.mouseButton.button == sf::Mouse::Left){
+		switch (mButtonType) {
+		case RECTANGLE:
+			if (aEvent.type == sf::Event::MouseButtonPressed&&
+				aEvent.mouseButton.button == sf::Mouse::Left) {
 
 #ifdef LUDDIS_DEBUG_DRAW_HITBOXES
-			mDebugCircle.setPosition(mousePos);
+				mDebugCircle.setPosition(mousePos);
 #endif
-			//Check to see if the mouse position is within the images bounds
-			if (mSprite.getGlobalBounds().contains(mousePos)){
-				mSprite.setTextureRect(mRects[2]);
+				//Check to see if the mouse position is within the images bounds
+				if (mSprite.getGlobalBounds().contains(mousePos)) {
+					mSprite.setTextureRect(mRects[2]);
+				}
 			}
-		}
-		//If the mouse is released within the bounds of the image,
-		//call the function of the owner object corresponding
-		//to the string passed on during inception
-		else if (aEvent.type == sf::Event::MouseButtonReleased&&
-			aEvent.mouseButton.button == sf::Mouse::Left){
-			sf::FloatRect rect(mSprite.getGlobalBounds());
-			if (rect.contains(mousePos) && CLICKED == false){
-				CLICKED = true;
-				mOwner->onClick(mButtonFunc);
+			//If the mouse is released within the bounds of the image,
+			//call the function of the owner object corresponding
+			//to the string passed on during inception
+			else if (aEvent.type == sf::Event::MouseButtonReleased&&
+				aEvent.mouseButton.button == sf::Mouse::Left) {
+				sf::FloatRect rect(mSprite.getGlobalBounds());
+				if (rect.contains(mousePos) && CLICKED == false) {
+					CLICKED = true;
+					mOwner->onClick(mButtonFunc);
+				}
+			}
+			break;
+
+		case CIRCLE:
+			float distance = VectorMath::getVectorLength(mSprite.getPosition() - mousePos);
+			if (aEvent.type == sf::Event::MouseButtonPressed&&
+				aEvent.mouseButton.button == sf::Mouse::Left) {
+
+#ifdef LUDDIS_DEBUG_DRAW_HITBOXES
+				mDebugCircle.setPosition(mousePos);
+#endif
+				//Check to see if the mouse position is within the images bounds
+				
+				if (distance <= mSprite.getGlobalBounds().height / 2) {
+					mSprite.setTextureRect(mRects[2]);
+				}
+			}
+			//If the mouse is released within the bounds of the image,
+			//call the function of the owner object corresponding
+			//to the string passed on during inception
+			else if (aEvent.type == sf::Event::MouseButtonReleased&&
+				aEvent.mouseButton.button == sf::Mouse::Left) {
+					if (distance <= mSprite.getGlobalBounds().height / 2 && CLICKED == false) {
+					CLICKED = true;
+					mOwner->onClick(mButtonFunc);
+				}
 			}
 		}
 		//Reset view afterwards

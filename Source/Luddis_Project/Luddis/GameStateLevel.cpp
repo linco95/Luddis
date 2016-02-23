@@ -117,7 +117,7 @@ void GameStateLevel::handleEvents(){
 
 void GameStateLevel::createDialogue(std::string dialogueFilename){
 	sf::Vector2f pos(0.0f, (float)ViewUtility::VIEW_HEIGHT);
-	Dialogue* dialogue = new Dialogue(dialogueFilename, mWindow, mGUIM, &mEventM, pos, this);
+	Dialogue* dialogue = new Dialogue(dialogueFilename, mWindow, &mResettableGUI, &mEventM, pos, this);
 	mResettableGUI.addInterfaceElement(dialogue);
 	if (dialogueFilename.find("SpiderDialogue") != std::string::npos){
 		mSpider = new Spider(mWindow, sf::Vector2f(400, 0));
