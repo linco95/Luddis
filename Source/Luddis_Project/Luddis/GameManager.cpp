@@ -146,6 +146,7 @@ struct GameManagerImp : public EventObserver {
 		mGameStateMap = new GameStateMap(&mMainWindow);
 		mGameStatePaused->initialize(mGameStateLevel);
 		mGameStateLevel->initialize(mGameStatePaused);
+		mGameStatePaused->createMenu(Menu::MenuType::PAUSEMENU);
 		mGameStateLevel->setupLevel(TEST_LEVEL);
 		mCurrentGameState = mGameStateLevel;
 
@@ -153,7 +154,7 @@ struct GameManagerImp : public EventObserver {
 		se->setMainVolume(100);
 		Clock gameClock;
 		while (mMainWindow.isOpen()){
-			
+
 
 			// Handle Events       
 			mCurrentGameState->handleEvents();

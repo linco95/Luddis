@@ -8,8 +8,6 @@
 #include "GameManager.h"
 #include "VectorMath.h"
 
-//THIS IS A CHANGE SO FUCKING NOTICE IT YOU MICROSOFT PIECE OF SHIT!!
-
 static const std::string MENUBUTTON_TEXTURE = "Resources/Images/GUI/MenuButton.png";
 static const std::string MENUBUTTON_TEXTURE_SETTINGS = "Resources/Images/GUI/ButtonSettings.png";
 static const std::string MENUBUTTON_TEXTURE_RETURN = "Resources/Images/GUI/ButtonReturn.png";
@@ -19,6 +17,9 @@ static const std::string MENU_BACKGROUND_TEXTURE = "Resources/Images/GUI/MenuBac
 
 Menu::Menu(sf::RenderWindow* window, EventManager* eventManager, GUIManager* gUIManager, MenuType menuType, EntityManager* entityManager) :
 mBackground(new sf::RectangleShape()),
+mIsActive(false),
+mIsAlive(true),
+mMenuType(menuType),
 mWindow(window),
 mEventManager(eventManager),
 mEntityManager(entityManager),
@@ -46,13 +47,14 @@ void Menu::initialize(GameStateLevel* gameStateLevel){
 	mBackground->setOutlineThickness(5.0f);
 	sf::Vector2f vector2 = mWindow->getView().getSize()*(0.5f);
 	setPosition(vector2);
+	initializeButtons();
 }
 
-void Menu::initializeButtons(MenuType menuType){
+void Menu::initializeButtons(){
 	int maxButtons;
 	sf::Vector2f position(getPosition());
 	sf::Vector2f offset(0, mBackground->getSize().y / 2.5f);
-	switch (menuType)
+	switch (mMenuType)
 	{
 	case Menu::MAINMENU:
 		maxButtons = 4;
@@ -65,6 +67,7 @@ void Menu::initializeButtons(MenuType menuType){
 		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
 		addButton(MENUBUTTON_TEXTURE_QUITGAME, "", "Quit", position + offset);
 		break;
+
 	case Menu::PAUSEMENU:
 		maxButtons = 5;
 		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
@@ -78,8 +81,17 @@ void Menu::initializeButtons(MenuType menuType){
 		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
 		addButton(MENUBUTTON_TEXTURE_QUITGAME, "", "QuitGame", position + offset);
 		break;
-	default:
 
+	case Menu::DEATHMENU:
+		maxButtons = 4;
+		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
+		addButton(MENUBUTTON_TEXTURE_RETURN, "", "Continue", position + offset);
+		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
+		addButton(MENUBUTTON_TEXTURE, "Starta Om Nivå", "ResetLevel", position + offset);
+		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
+		addButton(MENUBUTTON_TEXTURE_EXITLEVEL, "", "ExitLevel", position + offset);
+		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
+		addButton(MENUBUTTON_TEXTURE_QUITGAME, "", "QuitGame", position + offset);
 		break;
 	}
 }
@@ -141,6 +153,14 @@ void Menu::onClick(std::string buttonFunc){
 	}
 }
 
+Menu::MenuType Menu::getMenuType() const {
+	return mMenuType;
+}
+
+void Menu::kill() {
+	mIsAlive = false;
+}
+
 void Menu::buttonFuncNewGame(){
 
 }
@@ -150,8 +170,15 @@ void Menu::buttonFuncLoadGame(){
 }
 
 void Menu::buttonFuncContinue(){
-	GameManager::getInstance().setGameState(mGameStateLevel);
-	mIsAlive = false;
+	if (mGameStateLevel->playable()) {
+
+		GameManager::getInstance().setGameState(mGameStateLevel);
+		mIsAlive = false;
+	}
+	else {
+		//TODO: Implement restarting from a checkpoint.
+
+	}
 }
 
 void Menu::buttonFuncExitLevel(){

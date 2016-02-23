@@ -66,6 +66,13 @@ void GameStateLevel::update(sf::Clock& clock){
 	//Then change it back
 	mWindow->setView(mMapView);
 
+	//Look to see if Luddis is dead, before garbage collection
+	if (!mPlayer->isAlive()) {
+		mPlayable = false;
+		mGameStatePaused->createMenu(Menu::DEATHMENU);
+		GameManager::getInstance().setGameState(mGameStatePaused);
+	}
+
 	//Garbage collection
 	mCM->removeDeadCollidables();
 	mEntityM->removeDeadEntities();
@@ -93,6 +100,7 @@ void GameStateLevel::onEvent(const sf::Event &aEvent){
 		switch (aEvent.type){
 		case (sf::Event::EventType::KeyPressed) :
 			if (aEvent.key.code == sf::Keyboard::Escape){
+				mGameStatePaused->createMenu(Menu::PAUSEMENU);
 			GameManager::getInstance().setGameState(mGameStatePaused);
 			}
 			break;
@@ -107,7 +115,6 @@ void GameStateLevel::handleEvents(){
 	}
 }
 
-//TODO: Dialogue will not be reset as it is in the GUI vector. Fix.
 void GameStateLevel::createDialogue(std::string dialogueFilename){
 	sf::Vector2f pos(0.0f, (float)ViewUtility::VIEW_HEIGHT);
 	Dialogue* dialogue = new Dialogue(dialogueFilename, mWindow, mGUIM, &mEventM, pos, this);
@@ -136,7 +143,7 @@ void GameStateLevel::setupLevel(std::string levelFile){
 	mInv.dust = inv->getDust();
 	mInv.eggs = inv->getEggs();
 	mCurrentLevelFile = levelFile;
-	Luddis *mPlayer = new Luddis(LUDDIS_TEXTURE, mWindow, mEntityM);
+	mPlayer = new Luddis(LUDDIS_TEXTURE, mWindow, mEntityM);
 	mEntityM->addEntity(mPlayer);
 	mCM->addCollidable(mPlayer);
 	mLevel = new Level(mEntityM, this);
@@ -149,6 +156,7 @@ void GameStateLevel::setupLevel(std::string levelFile){
 		setupFile += "Setup.json";
 		readSetupFiles(setupFile);
 	}
+	mPlayable = true;
 }
 
 void GameStateLevel::resetLevel(){
@@ -283,4 +291,8 @@ void GameStateLevel::readSetupFiles(const std::string& filename, bool allocate) 
 			rm->readMap(file);
 		}
 	}
+}
+
+bool GameStateLevel::playable() const {
+	return mPlayable;
 }
