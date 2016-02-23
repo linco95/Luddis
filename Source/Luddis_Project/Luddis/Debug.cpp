@@ -32,7 +32,7 @@ const ErrorInfo getErrorLevelStr(const Debug::ERRORLEVEL& aErrLvl){
 }
 namespace WINDOWS{
 	void printInColor(const WORD& aColor, const char* aText) {
-
+	
 		HANDLE hstdin = GetStdHandle(STD_INPUT_HANDLE);
 		HANDLE hstdout = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -48,8 +48,9 @@ namespace WINDOWS{
 	}
 }
 void Debug::log(const string& aMsg, const ERRORLEVEL& aLvl){
-	
+#if defined _DEBUG || !LOG_IN_RELEASE
 	cout << "[";
 	WINDOWS::printInColor(getErrorLevelStr(aLvl).color, getErrorLevelStr(aLvl).asString);
 	cout <<  "]: " << aMsg << endl;
+#endif
 }
