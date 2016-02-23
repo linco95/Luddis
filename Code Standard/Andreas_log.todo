@@ -9,7 +9,7 @@ TODO:
  ✔ Fade out projectiles/ludd @started @done (16-02-23 00:38)
    -  Fading them out linearily now, maybe change that?
    -  Save their max lifetime in a member variable
- ☐ Generally load in animations from json files instead of static variables in the code
+ ✔ Generally load in animations from json files instead of static variables in the code @done (16-02-23 10:42)
 
  ☐ We might need a way to replace animation, and guarantee that it replaces the animation (normally a call to replaceanimation only returns if there is already an rpelaced animation) in animationqueue (overrideAnimation())
 
@@ -28,7 +28,7 @@ TODO:
   ☐ Check what mDirectionVector is actually used for. Maybe delete prevPos now that the collision handles itself?
 
  ☐ Implement a music queue for starting with an intro, and moving on to looping music
-
+ ☐ Test window mode
  ☐ Make the screen scale to the resolution used (Adding black bars)
  ☐ Make a naming convention for the files used in the program, and implement it
 
@@ -178,3 +178,6 @@ Fixed the collision. The points were just transformed to the shapes location, wi
   23/2/16:
   Tweaked the projectile 
   Made the silverfish swim away from luddis when dying
+  ✔ LUNCH @started(16-02-23 11:29) @done (16-02-23 13:17) @lasted(1:48)
+  Organizing resourcefiles
+  ☐ Make a temporary stasis ring that animates
