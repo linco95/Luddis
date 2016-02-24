@@ -1,8 +1,8 @@
 #include "Menu.h"
 #include "GameStateLevel.h"
+#include "GameStateMap.h"
 #include "ViewUtility.h"
 #include "ResourceManager.h"
-#include "EntityManager.h"
 #include "EventManager.h"
 #include "GUIManager.h"
 #include "GameManager.h"
@@ -15,15 +15,15 @@ static const std::string MENUBUTTON_TEXTURE_QUITGAME = "Resources/Images/GUI/But
 static const std::string MENUBUTTON_TEXTURE_EXITLEVEL = "Resources/Images/GUI/ButtonExitLevel.png";
 static const std::string MENU_BACKGROUND_TEXTURE = "Resources/Images/GUI/MenuBackground.png";
 
-Menu::Menu(sf::RenderWindow* window, EventManager* eventManager, GUIManager* gUIManager, MenuType menuType, EntityManager* entityManager) :
+Menu::Menu(sf::RenderWindow* window, EventManager* eventManager, GUIManager* gUIManager, MenuType menuType) :
 mBackground(new sf::RectangleShape()),
 mIsActive(false),
 mIsAlive(true),
 mMenuType(menuType),
 mWindow(window),
 mEventManager(eventManager),
-mEntityManager(entityManager),
 mGUIManager(gUIManager){
+
 }
 
 Menu::~Menu(){
@@ -37,8 +37,8 @@ void Menu::internalClear(){
 	delete mBackground;
 }
 
-void Menu::initialize(GameStateLevel* gameStateLevel){
-	mGameStateLevel = gameStateLevel;
+void Menu::initialize(){
+	mGameStateLevel = &GameStateLevel::getInstance();
 	sf::Vector2f vector(mWindow->getView().getSize());
 	vector = vector*(2.0f / 3.0f);
 	mBackground->setSize(vector);
@@ -181,11 +181,13 @@ void Menu::buttonFuncContinue(){
 }
 
 void Menu::buttonFuncExitLevel(){
-
+	GameStateLevel::getInstance().resetInventory();
+	GameManager::getInstance().setGameState(&GameStateMap::getInstance());
+	mIsAlive = false;
 }
 
 void Menu::buttonFuncSettings(){
-
+	//TODO: Implement functionality
 }
 
 void Menu::buttonFuncQuitGame(){

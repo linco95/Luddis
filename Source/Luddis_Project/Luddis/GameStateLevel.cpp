@@ -21,30 +21,38 @@ static const std::string POWER_DISPLAY = "Resources/Images/GUI/PowerButton.png";
 static const std::string BUTTON_TEXTURE = "Resources/Images/GUI/Button.png";
 static const std::string COMMON_RESOURCES = "Resources/Configs/Levels/CommonResources.json";
 
-
-GameStateLevel::GameStateLevel(sf::RenderWindow* window, EntityManager* entityManager, GUIManager* guiManager) :
-mEntityM(entityManager),
+GameStateLevel::GameStateLevel() :
 mEventM(),
-mGUIM(guiManager),
 mResettableGUI(),
 mCM(&CollisionManager::getInstance()),
 mGUIView(ViewUtility::getViewSize()),
-mWindow(window),
 mInDialogue(false),
-mSetupLevel(false),
+mFirstTime(true),
 mResetView(false){
 	mEventM.attatch(this, sf::Event::EventType::KeyPressed);
 	readSetupFiles(COMMON_RESOURCES);
 }
 
 GameStateLevel::~GameStateLevel(){
+
+	mGUIM->clearInterfaceElements();
+	mEntityM->emptyVector();
 	mEventM.detatch(this, sf::Event::EventType::KeyPressed);
 }
 
-void GameStateLevel::initialize(GameStatePaused* gameStateLevel){
-	mGameStatePaused = gameStateLevel;
+GameStateLevel& GameStateLevel::getInstance() {
+	static GameStateLevel gs;
+	return gs;
+}
+
+void GameStateLevel::initialize(sf::RenderWindow* window, EntityManager* entityManager, GUIManager* guiManager){
+	mWindow = window;
+	mEntityM = entityManager;
+	mGUIM = guiManager;
+	//TODO: Move to levelSetup(), as theese can change when selectig level.
 	mPowerupDisplays[0] = new PowerupDisplay(POWER_DISPLAY, sf::Vector2f((float)ViewUtility::VIEW_WIDTH*0.8f, (float)ViewUtility::VIEW_HEIGHT - 60), 15.0f);
 	mGUIM->addInterfaceElement(mPowerupDisplays[0]);
+	mGameStatePaused = &GameStatePaused::getInstance();
 }
 
 void GameStateLevel::update(sf::Clock& clock){
@@ -117,10 +125,10 @@ void GameStateLevel::handleEvents(){
 
 void GameStateLevel::createDialogue(std::string dialogueFilename){
 	sf::Vector2f pos(0.0f, (float)ViewUtility::VIEW_HEIGHT);
-	Dialogue* dialogue = new Dialogue(dialogueFilename, mWindow, &mResettableGUI, &mEventM, pos, this);
+	Dialogue* dialogue = new Dialogue(dialogueFilename, mWindow, &mResettableGUI, &mEventM, pos);
 	mResettableGUI.addInterfaceElement(dialogue);
 	if (dialogueFilename.find("SpiderDialogue") != std::string::npos){
-		mSpider = new Spider(mWindow, sf::Vector2f(400, 0));
+		mSpider = new Spider(mWindow, sf::Vector2f((float)ViewUtility::VIEW_WIDTH*0.6f, 0));
 		mResettableGUI.addInterfaceElement(mSpider);
 	}
 	mInDialogue = true;
@@ -144,36 +152,45 @@ void GameStateLevel::setInDialogue(bool inDialogue){
 	
 }
 
-void GameStateLevel::setupLevel(std::string levelFile){
+void GameStateLevel::setupLevel(std::string levelFile) {
+	if (mFirstTime) {
+		mFirstTime = false;
+		mCurrentLevelFile = levelFile;
+	}
+	mResetView = true;
+	mInDialogue = false;
+
 	Inventory* inv = &Inventory::getInstance();
+	mCM->emptyVector();
+	mEntityM->emptyVector();
+	mResettableGUI.clearInterfaceElements();
 	mInv.chips = inv->getChips();
 	mInv.dust = inv->getDust();
 	mInv.eggs = inv->getEggs();
-	mCurrentLevelFile = levelFile;
 	mPlayer = new Luddis(LUDDIS_TEXTURE, mWindow, mEntityM);
 	mEntityM->addEntity(mPlayer);
 	mCM->addCollidable(mPlayer);
-	mLevel = new Level(mEntityM, this);
+	mLevel = new Level(mEntityM);
 	mEntityM->addEntity(mLevel);
 	mLevel->initializeLevel(*mWindow, mPlayer, levelFile);
 
-	if (!mSetupLevel) {
-		mSetupLevel = false;
-		std::string setupFile = levelFile.substr(0, 32);
-		setupFile += "Setup.json";
+	//Pre-allocate files into memory if needed
+	std::string setupFile = levelFile.substr(0, 32) + "Setup.json";
+	std::string setupFileOld = mCurrentLevelFile.substr(0, 32) + "Setup.json";
+	if (levelFile == mCurrentLevelFile)
+		readSetupFiles(setupFile);
+	else {
+		readSetupFiles(setupFileOld, false);
 		readSetupFiles(setupFile);
 	}
+
+	mCurrentLevelFile = levelFile;
 	mPlayable = true;
 }
 
 void GameStateLevel::resetLevel(){
 	if (!mCurrentLevelFile.empty()){
-		mResetView = true;
-		mInDialogue = false;
 		resetInventory();
-		mCM->emptyVector();
-		mEntityM->emptyVector();
-		mResettableGUI.clearInterfaceElements();
 		setupLevel(mCurrentLevelFile);
 	}
 }
@@ -208,7 +225,10 @@ void GameStateLevel::readSetupFiles(const std::string& filename, bool allocate) 
 		assert(itr->IsObject());
 		assert(itr->HasMember("filename"));
 		std::string file = (*itr)["filename"].GetString();
-		rm->loadSoundBuffer(file);
+		if (allocate)
+			rm->loadSoundBuffer(file);
+		else
+			rm->clearSoundBuffer(file);
 	}
 
 	assert(configDoc.HasMember("Graphics"));
@@ -218,7 +238,10 @@ void GameStateLevel::readSetupFiles(const std::string& filename, bool allocate) 
 		int seg = graphics["Segments"].GetInt();
 		for (int i = 0; i < seg; i++) {
 			std::string file = graphics["Background"].GetString() + std::to_string(i + 1) + ".png";
-			rm->loadTexture(file);
+			if (allocate)
+				rm->loadTexture(file);
+			else
+				rm->clearTexture(file);
 		}
 	}
 
@@ -292,7 +315,10 @@ void GameStateLevel::readSetupFiles(const std::string& filename, bool allocate) 
 			assert(itr->HasMember("filename") && (*itr)["filename"].IsString());
 			std::string file = (*itr)["filename"].GetString();
 
-			rm->readMap(file);
+			if (allocate)
+				rm->readMap(file);
+			else
+				rm->clearMap(file);
 		}
 	}
 }

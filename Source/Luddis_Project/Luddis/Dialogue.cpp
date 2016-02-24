@@ -19,7 +19,7 @@ static const int INDENT = 30;
 static sf::Vector2f DialogueBoxMaxSize(RECT_WIDTH, RECT_HEIGHT);
 static sf::IntRect DEFAULT_RECT(INDENT*6, INDENT, (int)RECT_WIDTH-INDENT*2, 0);
 
-Dialogue::Dialogue(const std::string& dialogueFile, sf::RenderWindow* window, GUIManager* guiManager, EventManager* eventManager, sf::Vector2f pos, GameStateLevel* gameStateLevel) :
+Dialogue::Dialogue(const std::string& dialogueFile, sf::RenderWindow* window, GUIManager* guiManager, EventManager* eventManager, sf::Vector2f pos) :
 mButtonCount(0),
 mAnimationTimer(ANIMATION_TIME),
 mLevel(0),
@@ -31,7 +31,7 @@ mResourceManager(&ResourceManager::getInstance()),
 mSoundEngine(&SoundEngine::getInstance()),
 mGUIManager(guiManager),
 mEventManager(eventManager),
-mGameStateLevel(gameStateLevel),
+mGameStateLevel(&GameStateLevel::getInstance()),
 mCharacterDisplayLeft(nullptr),
 mCharacterDisplayRight(nullptr),
 mActivePage(0),

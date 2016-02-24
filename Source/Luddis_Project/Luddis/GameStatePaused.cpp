@@ -4,22 +4,29 @@
 #include "EntityManager.h"
 #include "GameManager.h"
 
-GameStatePaused::GameStatePaused(sf::RenderWindow* window, Menu::MenuType menuType, EntityManager* entityManager, GUIManager* guiManager) :
-mEntityM(entityManager),
+GameStatePaused::GameStatePaused() :
 mEventM(),
-mLevelGUIM(guiManager),
-mGUIView(ViewUtility::getViewSize()),
-mWindow(window){
+mGUIView(ViewUtility::getViewSize()){
 	mEventM.attatch(this, sf::Event::EventType::KeyPressed);
 }
 
 GameStatePaused::~GameStatePaused(){
 	mEventM.detatch(this, sf::Event::EventType::KeyPressed);
-	delete mMenu;
+	mMenu->kill();
+	mMenuGUIM.clearInterfaceElements();
+	mLevelGUIM->clearInterfaceElements();
 }
 
-void GameStatePaused::initialize(GameStateLevel* gameStateLevel){
-	mGameStateLevel = gameStateLevel;
+GameStatePaused& GameStatePaused::getInstance() {
+	static GameStatePaused gs;
+	return gs;
+}
+
+void GameStatePaused::initialize(sf::RenderWindow* window, EntityManager* entityManager, GUIManager* guiManager){
+	mGameStateLevel = &GameStateLevel::getInstance();
+	mWindow = window;
+	mEntityM = entityManager;
+	mLevelGUIM = guiManager;
 }
 
 void GameStatePaused::createMenu(Menu::MenuType menuType) {
@@ -27,10 +34,10 @@ void GameStatePaused::createMenu(Menu::MenuType menuType) {
 	if (mMenu != nullptr)
 		mMenu->kill();
 
-	mMenu = new Menu(mWindow, &mEventM, &mMenuGUIM, menuType, mEntityM);
+	mMenu = new Menu(mWindow, &mEventM, &mMenuGUIM, menuType);
 	mMenuGUIM.addInterfaceElement(mMenu);
 	mMenu->setActive(true);
-	mMenu->initialize(mGameStateLevel);
+	mMenu->initialize();
 
 }
 

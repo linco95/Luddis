@@ -3,13 +3,13 @@
 
 static const std::string SPIDER_DIALOGUE = "Resources/Configs/Dialogue/SpiderDialogue";
 
-EventZone::EventZone(GameStateLevel* gameStateLevel, EventType eventType, sf::Vector2f pos, sf::Shape* shape, float rotation, int level) :
+EventZone::EventZone(EventType eventType, sf::Vector2f pos, sf::Shape* shape, float rotation, int level) :
 mIsActive(true),
 mIsAlive(true),
 mEventType(eventType),
 mLevel(level),
 mHitbox(shape),
-mGameStateLevel(gameStateLevel){
+mGameStateLevel(&GameStateLevel::getInstance()){
 	setPosition(pos);
 	if (mHitbox->getPointCount() == 4){
 		mCollisionType = REC;
