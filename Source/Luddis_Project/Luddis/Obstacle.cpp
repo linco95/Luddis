@@ -8,8 +8,8 @@ const int DAMAGE = 0;
 static const float IDLE_TIME = 4;
 static const float DAMAGE_TIME = 2;
 
-static const Animation ANIMATION_IDLE = Animation("Resources/Images/Spritesheets/Grafik_steam_AnimationIdleSprite");
-static const Animation ANIMATION_DAMAGE = Animation("Resources/Images/Spritesheets/Grafik_steam_AnimationSprite");
+static const Animation ANIMATION_IDLE = Animation("Resources/Images/Spritesheets/Steam_idle");
+static const Animation ANIMATION_DAMAGE = Animation("Resources/Images/Spritesheets/Steam_active");
 
 Obstacle::Obstacle(sf::RenderWindow* window, ObstacleType type, const sf::Vector2f& position, const float& angle, const sf::Vector2f& size, bool debug) :
 mIsAlive(true),

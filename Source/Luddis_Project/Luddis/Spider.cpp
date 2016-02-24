@@ -26,16 +26,14 @@ mLeaving(false),
 mWaiting(false),
 mWindow(window),
 mWeb(sf::Vector2f(2, 0)),
-mAnimation(ANIMATION_ENTER)
+mAnimation(ANIMATION_ENTER),
+mDirection(0,1)
 {
 	setPosition(position);
-	sf::Vector2f dir;
-	dir = { 0, 1 };
-	mDirection = VectorMath::normalizeVector(dir);
 	sf::Vector2f webPointTop = getTransform().transformPoint(getPosition().x, 0);
 	mWeb.setOutlineThickness(1.5f);
 	mWeb.setOrigin(mWeb.getSize().x/2, 0);
-	mWeb.setFillColor(sf::Color::Black);
+	mWeb.setFillColor(sf::Color::White);
 	mWeb.setOutlineColor(sf::Color::Black);
 }
 

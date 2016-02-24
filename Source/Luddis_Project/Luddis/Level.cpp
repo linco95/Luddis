@@ -55,13 +55,13 @@ void Level::readInitMap(const std::string& filename){
 
 	for (auto e : pixelVector) {
 		if (e.color == sf::Color(0, 0, 0)) {//Black
-			obj = new Dust(mWindow, "Resources/Images/Grafik_damm4_s1d4v1.png", e.position, 0);
+			obj = new Dust(mWindow, "Resources/Images/Dust.png", e.position, 0);
 				}
 		else if (e.color == sf::Color(255, 255, 0)) {//Yellow
-			obj = new Chips(mWindow, "Resources/Images/Grafik_smula1_s1d4v1.png", e.position, 0);
+			obj = new Chips(mWindow, "Resources/Images/Chips.png", e.position, 0);
 				}
 		else if (e.color == sf::Color(0, 0, 255)) {//Blue
-			obj = new SpiderEgg(mWindow, "Resources/Images/Grafik_TrasanProjektil_S2D5V1.png",e.position);
+			obj = new SpiderEgg(mWindow, "Resources/Images/Spritesheets/Spider_egg",e.position);
 			}
 		if (obj != 0) {
 			mEntityManager->addEntity(obj);
