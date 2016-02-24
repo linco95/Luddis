@@ -4,6 +4,7 @@
 #include <SFML/Window.hpp>
 #include "Entity.h"
 #include <string>
+#include <SFML/Graphics/Sprite.hpp>
 
 class BackgroundEffect : public Entity {
 public:

@@ -19,7 +19,7 @@
 #include "GameStateMap.h"
 #include "ViewUtility.h"
 #include "Debug.h"
-#include <iostream>
+#include "MouseCursor.h"
 
 using namespace sf;
 
@@ -32,6 +32,7 @@ static const std::string TEXTURE_LUDDCOUNTER = "Resources/Images/GUI/HUD_Ludd_Ic
 static const std::string TEXTURE_LUDDGAUGE_FRAME = "Resources/Images/GUI/LuddGaugeFrame.png";
 static const std::string TEXTURE_LUDDGAUGE_BAR = "Resources/Images/GUI/LuddGaugeBar.png";
 static const std::string TEST_LEVEL = "Resources/Configs/Levels/Level01Entities.json";
+static const char* MOUSE_IMAGE = "Resources/Images/LuddisCursor.png";
 static const std::string FONT_NAME = "arial.ttf";
 static const bool VSYNCENABLED = true;
 
@@ -67,7 +68,11 @@ struct GameManagerImp : public EventObserver {
 		mLuddGauge = new ScoreGauge(&mMainWindow, TEXTURE_LUDDGAUGE_FRAME, TEXTURE_LUDDGAUGE_BAR, sf::Vector2f(ViewUtility::VIEW_WIDTH * 0.45f, ViewUtility::VIEW_HEIGHT - 60));
 		mGUIManager.addInterfaceElement(mLuddGauge);
 		
-		mMainWindow.setMouseCursorVisible(true);
+
+		// Initialize the custom mouse pointer
+		mCursor.initialize(MOUSE_IMAGE, mMainWindow);
+		//mEntityManager.addEntity(new MouseCursor(MOUSE_IMAGE, mMainWindow));
+		//mMainWindow.setMouseCursorVisible(true);
 	}
 
 	void initializeGame(){
@@ -165,6 +170,12 @@ struct GameManagerImp : public EventObserver {
 			// Render according to the game's state
 			mMainWindow.clear();
 			mCurrentGameState->render();
+
+			// Render the mouse on top of everything, always
+			mCursor.tick();
+			mMainWindow.draw(mCursor);
+
+			// Swap the buffers
 			mMainWindow.display();
 		}
 	}
@@ -179,6 +190,7 @@ struct GameManagerImp : public EventObserver {
 	GameState* mCurrentGameState;
 	RenderWindow mMainWindow;
 	
+	MouseCursor mCursor;
 	// Needs to be moved to corresponding level later.
 
 	ScoreCounter *mChipsCounter;

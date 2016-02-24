@@ -5,12 +5,14 @@ TODO:
 	- Add multi-layered background (lights man, lights!)
 
  ☐ Don't remove dust from level if Luddis are full
-
+ ☐ Add a way to get the amount of sprites in the sheet from the animation
  ✔ Fade out projectiles/ludd @started @done (16-02-23 00:38)
    -  Fading them out linearily now, maybe change that?
    -  Save their max lifetime in a member variable
  ✔ Generally load in animations from json files instead of static variables in the code @done (16-02-23 10:42)
-
+ ✔ Add custom mousepointer @started(16-02-24 12:49) @done (16-02-24 14:31) @lasted(1:42)
+ ☐ Make the mouse cursor singelton, or make it accesible from gamemanager (Actually makes sense as we only have one mouse at a time), and add functionality for other classes to replace the cursor
+ ☐ Replace the sprite of the cursor with an animation (If we're going to use that)
  ☐ We might need a way to replace animation, and guarantee that it replaces the animation (normally a call to replaceanimation only returns if there is already an rpelaced animation) in animationqueue (overrideAnimation())
  ☐ Maybe make the updates with an fixed timestamp
  ☐ Replace collision enum, with a bitmap? 
@@ -184,3 +186,4 @@ Fixed the collision. The points were just transformed to the shapes location, wi
   ☐ Make a temporary stasis ring that animates
   24/2/16:
     Continuing the organizing of resources
+    Started implementing a custom mouse cursor
