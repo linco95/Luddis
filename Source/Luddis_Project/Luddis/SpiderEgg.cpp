@@ -9,12 +9,14 @@ SpiderEgg::SpiderEgg(sf::RenderWindow* window, const std::string& textureFilenam
 mIsAlive(true),
 mIsActive(true),
 mWindow(window),
-mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
+mAnimation(textureFilename),
 mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 {
-	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
+	mAnimation.setOrigin(mAnimation.getSprite().getTextureRect().width / 2.f, mAnimation.getSprite().getTextureRect().height / 2.f);
+	mAnimation.setFrame(std::rand() % 4);
 	setPosition(aPos);
-	//mHitbox.setPosition(getPosition());
+	mHitbox->setPosition(getPosition());
+	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
 }
 
 SpiderEgg::~SpiderEgg(){
@@ -22,12 +24,12 @@ SpiderEgg::~SpiderEgg(){
 }
 
 void SpiderEgg::tick(const sf::Time& deltaTime){
-
+	mAnimation.tick(deltaTime);
 }
 
 void SpiderEgg::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	states.transform *= getTransform();
-	target.draw(mSprite, states);
+	target.draw(mAnimation, states);
 }
 
 bool SpiderEgg::isAlive() const{
@@ -47,7 +49,7 @@ Entity::RenderLayer SpiderEgg::getRenderLayer() const{
 }
 
 sf::FloatRect SpiderEgg::getHitBox(){
-	return getTransform().transformRect(mSprite.getGlobalBounds());
+	return getTransform().transformRect(mAnimation.getSprite().getGlobalBounds());
 }
 
 sf::Shape* SpiderEgg::getNarrowHitbox() const{

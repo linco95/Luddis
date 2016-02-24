@@ -55,13 +55,13 @@ void Level::readInitMap(const std::string& filename){
 
 	for (auto e : pixelVector) {
 		if (e.color == sf::Color(0, 0, 0)) {//Black
-			obj = new Dust(mWindow, "Resources/Images/Grafik_damm4_s1d4v1.png", e.position, 0);
+			obj = new Dust(mWindow, "Resources/Images/Dust.png", e.position, 0);
 				}
 		else if (e.color == sf::Color(255, 255, 0)) {//Yellow
-			obj = new Chips(mWindow, "Resources/Images/Grafik_smula1_s1d4v1.png", e.position, 0);
+			obj = new Chips(mWindow, "Resources/Images/Chips.png", e.position, 0);
 				}
 		else if (e.color == sf::Color(0, 0, 255)) {//Blue
-			obj = new SpiderEgg(mWindow, "Resources/Images/Grafik_TrasanProjektil_S2D5V1.png",e.position);
+			obj = new SpiderEgg(mWindow, "Resources/Images/Spritesheets/Spider_egg",e.position);
 			}
 		if (obj != 0) {
 			mEntityManager->addEntity(obj);
@@ -128,24 +128,36 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 	const rapidjson::Value& obstacleSpawns = configDoc["Obstacle_spawns"];
 		for (rapidjson::Value::ConstValueIterator itr = obstacleSpawns.Begin(); itr != obstacleSpawns.End(); itr++) {
 		assert(itr->IsObject());
-		assert(itr->HasMember("filename") && (*itr)["filename"].IsString());
 		assert(itr->HasMember("type") && (*itr)["type"].IsInt());
 		assert(itr->HasMember("x") && (*itr)["x"].IsInt());
 		assert(itr->HasMember("y") && (*itr)["y"].IsInt());
 		assert(itr->HasMember("angle") && (*itr)["angle"].IsDouble());
+		assert(itr->HasMember("height") && (*itr)["height"].IsInt());
+		assert(itr->HasMember("width") && (*itr)["width"].IsInt());
+		assert(itr->HasMember("debug") && (*itr)["debug"].IsInt());
 
-		std::string filename = (*itr)["filename"].GetString();
-		int type = (*itr)["type"].GetInt();
+		int type =(*itr)["type"].GetInt();
+		//Position
 		float x = (float)(*itr)["x"].GetInt();
 		float y = (float)(*itr)["y"].GetInt();
 		sf::Vector2f pos(x, y);
-		float angle = (float)(*itr)["angle"].GetDouble();
 
-		Obstacle* obstacle = new Obstacle(mWindow, filename, Obstacle::ObstacleType(type), pos, angle);
+		float angle = (float)(*itr)["angle"].GetDouble();
+		// Size
+		float sX = (float)(*itr)["width"].GetInt();
+		float sY = (float)(*itr)["height"].GetInt();
+		sf::Vector2f size(sX, sY);
+		// Debug (draw) mode - probably redundant!
+		bool debug = false;
+		if ((int)(*itr)["debug"].GetInt() == 1){
+			debug = true;
+		}
+
+		Obstacle* obstacle = new Obstacle(mWindow, Obstacle::ObstacleType(type),pos, angle, size, debug);
 		mEntityManager->addEntity(obstacle);
 		cm->addCollidable(obstacle);
 		Debug::log("Spawning obstacle at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
-		}
+	}
 	}
 
 
@@ -167,7 +179,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		mEntityManager->addEntity(boss);
 		cm->addCollidable(boss);
 		Debug::log("Spawning boss at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
-		}
+	}
 	}
 
 	//Event zones

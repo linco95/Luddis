@@ -2,6 +2,7 @@
 #include "CollidableEntity.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <string>
+#include "Animation.h"
 
 class SpiderEgg : public CollidableEntity{
 public:
@@ -23,7 +24,7 @@ private:
 
 	bool mIsAlive;
 	bool mIsActive;
-	sf::Sprite mSprite;
+	Animation mAnimation;
 	sf::RenderWindow* mWindow;
 	sf::Shape* mHitbox;
 };

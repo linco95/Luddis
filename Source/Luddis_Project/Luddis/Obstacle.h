@@ -16,7 +16,7 @@ public:
 		DAMAGE
 	};
 
-	Obstacle(sf::RenderWindow* window, std::string textureFilename, ObstacleType type, const sf::Vector2f& position, const float& angle);
+	Obstacle(sf::RenderWindow* window, ObstacleType type, const sf::Vector2f& position, const float& angle, const sf::Vector2f& size, bool debug);
 	~Obstacle();
 
 	void tick(const sf::Time& deltaTime) override;
@@ -36,6 +36,8 @@ private:
 	Type getCollisionType() override;
 	void collide(CollidableEntity *collidable, const sf::Vector2f& moveAway) override;
 
+	sf::Shape* mActiveHitbox;
+	sf::Shape* mIdleHitbox;
 	sf::Shape* mHitbox;
 	ObstacleType mType;
 
@@ -46,6 +48,8 @@ private:
 
 	float mAngle;
 	AnimationQueue mAnimation;
+
+	bool mDebug;
 };
 
 #endif
