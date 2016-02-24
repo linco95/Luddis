@@ -16,7 +16,7 @@ GraphicManager(), SoundManager(){
 
 std::string& ResourceManager::getJsonFile(const std::string& filename){
 	if (mTextFiles.find(filename) == mTextFiles.end()){
-		Debug::log("Could not find the file : " + filename + ". Will load it for you.", Debug::ERRORLEVEL::WARNING);
+		Debug::log("File not loaded: " + filename + ". Will load it for you.", Debug::ERRORLEVEL::WARNING);
 		loadJsonFile(filename);
 	}
 	return mTextFiles[filename];
@@ -53,7 +53,7 @@ ResourceManager::~ResourceManager(){
 
 ResourceManager::PixelVector ResourceManager::getMap(const std::string& filename) {
 	if (mMapFiles.find(filename) == mMapFiles.end()) {
-		Debug::log("Could not find the file : " + filename + ". Will load it for you.", Debug::ERRORLEVEL::WARNING);
+		Debug::log("File not loaded: " + filename + ". Will load it for you.", Debug::ERRORLEVEL::WARNING);
 		readMap(filename);
 	}
 	return mMapFiles[filename];
