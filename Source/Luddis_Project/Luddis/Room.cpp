@@ -2,27 +2,40 @@
 #include "ViewUtility.h"
 #include "GUIManager.h"
 #include "ResourceManager.h"
+#include "GameStateLevel.h"
+#include "GameStateMap.h"
+#include "GameManager.h"
+#include "Debug.h"
 #include <SFML/Graphics/Rect.hpp>
 
-Room::Room(sf::Vector2f position, GUIManager* guiManager, std::string textureFilename):
-mView(ViewUtility::getViewSize()),
+static const std::string LEVEL_CONFIG_PATH = "Resources/Configs/Levels/";
+static const std::string DOOR_TEXTURE = "Resources/Images/Rooms/Its_a_door_ok.png";
+static const std::string LEVEL1_TEXTURE = "Resources/Images/Rooms/Level1.png";
+
+Room::Room(GUIManager* guiManager, std::string textureFilename, EventManager* eventManager, sf::RenderWindow* window):
+mIsActive(true),
+mIsAlive(true),
 mBackground(ResourceManager::getInstance().getTexture(textureFilename)),
-mGUIManager(guiManager){
-	setPosition(position);
-	mView.setCenter(mView.getCenter() + getPosition());
+mGUIManager(guiManager),
+mEventManager(eventManager),
+mWindow(window){
 }
 
 Room::~Room() {
-	
+	for (auto b : mLevelButtons) {
+		b->kill();
+	}
 }
 
 void Room::tick(const sf::Time& deltaTime) {
-
+	sf::Vector2f position = getPosition();
 }
 
 void Room::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-	states.transform *= getTransform();
-	target.draw(mBackground, states);
+	if (mIsActive) {
+		states.transform *= getTransform();
+		target.draw(mBackground, states);
+	}
 }
 
 Room::RenderLayer Room::getRenderLayer() const {
@@ -38,11 +51,9 @@ bool Room::isActive() const{
 }
 
 void Room::setActive(const bool& active) {
+	for (auto b : mLevelButtons)
+		b->setActive(active);
 	mIsActive = active;
-}
-
-sf::View Room::getView() const {
-	return mView;
 }
 
 void Room::kill() {
@@ -57,8 +68,7 @@ void Room::onClick(std::string buttonFunc) {
 	}
 	else if (levelSubstr == "Level") {
 		std::string string = buttonFunc.substr(levelSubstr.length(), buttonFunc.length());
-		int value = std::stoi(string);
-		buttonFuncLevel(value);
+		buttonFuncLevel(string);
 	}
 	else if (roomSubstr == "Room") {
 		std::string string = buttonFunc.substr(roomSubstr.length(), buttonFunc.length());
@@ -67,14 +77,45 @@ void Room::onClick(std::string buttonFunc) {
 	}
 }
 
+void Room::createButtons(int room) {
+	sf::Vector2f position(0, 0);
+	switch (room) {
+	case 1:
+		position = ViewUtility::getViewSize().getSize()*0.6f + getPosition();
+		addButton(LEVEL1_TEXTURE, "", "Level01", position, Button::RECTANGLE);
+		position.x = ViewUtility::getViewSize().getSize().x*0.85f + getPosition().x;
+		addButton(DOOR_TEXTURE, "", "Room2", position, Button::RECTANGLE);
+		break;
+
+	case 2:
+		position.x = ViewUtility::getViewSize().getSize().x*0.15f + getPosition().x;
+		addButton(DOOR_TEXTURE, "", "Room1", position, Button::RECTANGLE);
+		mLevelButtons.back()->setScale(-1.0f, 1.0f);
+		break;
+
+	default:
+		Debug::log("Room index not found! Cannot load room layout.", Debug::ERRORLEVEL::FATAL);
+		break;
+	}
+}
+
+void Room::addButton(std::string buttonFile, std::string buttonText, std::string buttonFunc, sf::Vector2f pos, Button::ButtonType buttonType) {
+	Button* button = new Button(buttonFile, "", buttonFunc, mWindow, mEventManager, pos, this, buttonType);
+	button->setActive(false);
+	mGUIManager->addInterfaceElement(button);
+	mLevelButtons.push_back(button);
+}
+
 void Room::buttonFuncShop() {
 
 }
 
-void Room::buttonFuncLevel(int level) {
-
+void Room::buttonFuncLevel(std::string level) {
+	std::string filename = LEVEL_CONFIG_PATH + "Level" + level + "Entities.json";
+	GameStateLevel::getInstance().setupLevel(filename);
+	GameManager::getInstance().setGameState(&GameStateLevel::getInstance());
 }
 
 void Room::buttonFuncRoom(int room) {
-
+	GameStateMap::getInstance().changeRoom(room);
 }

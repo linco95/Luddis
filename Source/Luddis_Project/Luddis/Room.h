@@ -7,10 +7,13 @@
 #include <SFML/Graphics/View.hpp>
 
 class GUIManager;
+class EventManager;
 
 class Room : public InterfaceElement{
 public:
-	Room(sf::Vector2f position, GUIManager* guiManager, std::string textureFilename);
+	typedef std::vector<Button*> ButtonVector;
+
+	Room(GUIManager* guiManager, std::string textureFilename, EventManager* eventManager, sf::RenderWindow* window);
 	~Room();
 
 	void tick(const sf::Time& deltaTime) override;
@@ -21,18 +24,20 @@ public:
 	void setActive(const bool& active) override;
 	void onClick(std::string buttonFunc) override;
 
+	void createButtons(int room);
+	void addButton(std::string buttonFile, std::string buttonText, std::string buttonFunc, sf::Vector2f pos, Button::ButtonType buttonType);
+
 	void buttonFuncShop();
-	void buttonFuncLevel(int level);
+	void buttonFuncLevel(std::string level);
 	void buttonFuncRoom(int room);
-	sf::View getView() const;
 	void kill();
 
 private:
-	typedef std::vector<Button*> ButtonVector;
 	sf::Sprite mBackground;
-	sf::View mView;
+	sf::RenderWindow* mWindow;
 	ButtonVector mLevelButtons;
 	GUIManager* mGUIManager;
+	EventManager* mEventManager;
 
 	bool mIsActive;
 	bool mIsAlive;

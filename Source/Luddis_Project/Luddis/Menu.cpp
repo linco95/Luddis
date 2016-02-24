@@ -15,7 +15,7 @@ static const std::string MENUBUTTON_TEXTURE_QUITGAME = "Resources/Images/GUI/But
 static const std::string MENUBUTTON_TEXTURE_EXITLEVEL = "Resources/Images/GUI/ButtonExitLevel.png";
 static const std::string MENU_BACKGROUND_TEXTURE = "Resources/Images/GUI/MenuBackground.png";
 
-Menu::Menu(sf::RenderWindow* window, EventManager* eventManager, GUIManager* gUIManager, MenuType menuType, EntityManager* entityManager) :
+Menu::Menu(sf::RenderWindow* window, EventManager* eventManager, GUIManager* gUIManager, MenuType menuType) :
 mBackground(new sf::RectangleShape()),
 mIsActive(false),
 mIsAlive(true),
@@ -23,6 +23,7 @@ mMenuType(menuType),
 mWindow(window),
 mEventManager(eventManager),
 mGUIManager(gUIManager){
+
 }
 
 Menu::~Menu(){
@@ -180,6 +181,7 @@ void Menu::buttonFuncContinue(){
 }
 
 void Menu::buttonFuncExitLevel(){
+	GameStateLevel::getInstance().resetInventory();
 	GameManager::getInstance().setGameState(&GameStateMap::getInstance());
 	mIsAlive = false;
 }

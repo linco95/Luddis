@@ -19,7 +19,7 @@ public:
 		PAUSEMENU,
 		DEATHMENU
 	};
-	Menu(sf::RenderWindow* window, EventManager* eventManager, GUIManager* gUIManager, MenuType menuType, EntityManager* entityManager);
+	Menu(sf::RenderWindow* window, EventManager* eventManager, GUIManager* gUIManager, MenuType menuType);
 	virtual ~Menu();
 
 	void initialize();

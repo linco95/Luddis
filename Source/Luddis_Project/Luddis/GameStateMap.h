@@ -20,6 +20,7 @@ public:
 
 	void initialize(sf::RenderWindow* window);
 	void createMenu(Menu::MenuType menuType);
+	void changeRoom(int room);
 
 	void update(sf::Clock& clock) override;
 	void render() override;
@@ -31,6 +32,7 @@ private:
 
 	typedef std::vector<Room*> RoomVector;
 	RoomVector mRooms;
+	int mCurrentRoom;
 	Menu* mMenu;
 	EntityManager mEntityM;
 	GUIManager mGUIM;

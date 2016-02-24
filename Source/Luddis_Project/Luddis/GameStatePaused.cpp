@@ -12,7 +12,9 @@ mGUIView(ViewUtility::getViewSize()){
 
 GameStatePaused::~GameStatePaused(){
 	mEventM.detatch(this, sf::Event::EventType::KeyPressed);
-	delete mMenu;
+	mMenu->kill();
+	mMenuGUIM.clearInterfaceElements();
+	mLevelGUIM->clearInterfaceElements();
 }
 
 GameStatePaused& GameStatePaused::getInstance() {
@@ -32,7 +34,7 @@ void GameStatePaused::createMenu(Menu::MenuType menuType) {
 	if (mMenu != nullptr)
 		mMenu->kill();
 
-	mMenu = new Menu(mWindow, &mEventM, &mMenuGUIM, menuType, mEntityM);
+	mMenu = new Menu(mWindow, &mEventM, &mMenuGUIM, menuType);
 	mMenuGUIM.addInterfaceElement(mMenu);
 	mMenu->setActive(true);
 	mMenu->initialize();

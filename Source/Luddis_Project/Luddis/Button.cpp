@@ -1,10 +1,10 @@
 #include "Button.h"
 #include "ResourceManager.h"
+#include "GUIManager.h"
 #include "EventManager.h"
 #include "ViewUtility.h"
 #include "VectorMath.h"
 #include <vector>
-#include "GUIManager.h"
 
 static const std::string DEFAULT_FONTTYPE = "resources/fonts/arial.ttf";
 static bool CLICKED = false;
@@ -60,7 +60,7 @@ mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 }
 
 Button::~Button(){
-	mEventManager->detatch(this, std::vector < sf::Event::EventType > { sf::Event::MouseButtonReleased, sf::Event::MouseButtonPressed, sf::Event::MouseMoved});
+	mEventManager->detatch(this, std::vector < sf::Event::EventType > { sf::Event::MouseButtonReleased, sf::Event::MouseButtonPressed/*, sf::Event::MouseMoved*/ });
 }
 
 void Button::tick(const sf::Time& deltaTime){

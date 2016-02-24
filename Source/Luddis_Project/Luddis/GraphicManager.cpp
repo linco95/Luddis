@@ -1,4 +1,5 @@
 #include "GraphicManager.h"
+#include "Debug.h"
 #include <cassert>
 
 GraphicManager::GraphicManager() :
@@ -13,8 +14,10 @@ GraphicManager::~GraphicManager(){
 
 //Returns a texture associated with the filename. If there is none, it will create one
 sf::Texture& GraphicManager::getTexture(const std::string& filename){
-	if (mTextures.find(filename) == mTextures.end())
+	if (mTextures.find(filename) == mTextures.end()) {
+		Debug::log("Could not find the file : " + filename +". Will load it for you.", Debug::ERRORLEVEL::WARNING);
 		loadTexture(filename, sf::IntRect());
+	}
 	return mTextures[filename];
 }
 
@@ -41,8 +44,10 @@ void GraphicManager::clearAllTextures(){
 
 //Returns a font associated with the filename. If there is none, it will create one
 sf::Font& GraphicManager::getFont(const std::string& filename){
-	if (mFonts.find(filename) == mFonts.end())
+	if (mFonts.find(filename) == mFonts.end()) {
+		Debug::log("Could not find the file : " + filename + ". Will load it for you.", Debug::ERRORLEVEL::WARNING);
 		loadFont(filename);
+	}
 	return mFonts[filename];
 }
 
