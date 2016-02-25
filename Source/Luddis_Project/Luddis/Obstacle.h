@@ -16,7 +16,7 @@ public:
 		DAMAGE
 	};
 
-	Obstacle(sf::RenderWindow* window, ObstacleType type, const sf::Vector2f& position, const float& angle, const sf::Vector2f& size, bool debug);
+	Obstacle(sf::RenderWindow* window, ObstacleType type, const sf::Vector2f& position, const float& angle, const sf::Vector2f& size);
 	~Obstacle();
 
 	void tick(const sf::Time& deltaTime) override;
@@ -50,8 +50,6 @@ private:
 
 	float mAngle;
 	AnimationQueue mAnimation;
-
-	bool mDebug;
 };
 
 #endif
