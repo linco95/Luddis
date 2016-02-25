@@ -1,5 +1,5 @@
-#ifndef INCLUDED_POWERUP
-#define INCLUDED_POWERUP
+#ifndef INCLUDED_POWERUPITEM
+#define INCLUDED_POWERUPITEM
 
 #include <string>
 
@@ -8,10 +8,10 @@
 #include <SFML/Audio/Sound.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
-class PowerUp : public CollidableEntity {
+class PowerUpItem : public CollidableEntity {
 public:
-	PowerUp(std::string textureFilename, const sf::Vector2f& position);
-	~PowerUp();
+	PowerUpItem(std::string textureFilename, const sf::Vector2f& position);
+	~PowerUpItem();
 
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

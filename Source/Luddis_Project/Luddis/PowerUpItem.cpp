@@ -1,4 +1,4 @@
-#include "PowerUp.h"
+#include "PowerUpItem.h"
 #include "ResourceManager.h"
 #include "EntityManager.h"
 #include <SFML/System.hpp>
@@ -9,7 +9,7 @@
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 
-PowerUp::PowerUp(std::string textureFilename, const sf::Vector2f& position) :
+PowerUpItem::PowerUpItem(std::string textureFilename, const sf::Vector2f& position) :
 mIsAlive(true),
 mIsActive(true),
 mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
@@ -26,55 +26,55 @@ mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 	mHitbox->setRotation(getRotation());
 }
 
-PowerUp::~PowerUp(){
+PowerUpItem::~PowerUpItem(){
 	delete mHitbox;
 }
 
-void PowerUp::tick(const sf::Time& deltaTime){
+void PowerUpItem::tick(const sf::Time& deltaTime){
 }
 
 
-void PowerUp::draw(sf::RenderTarget& target, sf::RenderStates states) const{
+void PowerUpItem::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	states.transform *= getTransform();
 	target.draw(mSprite, states);
 }
 
-bool PowerUp::isAlive() const{
+bool PowerUpItem::isAlive() const{
 	return mIsAlive;
 }
 
-bool PowerUp::isActive() const{
+bool PowerUpItem::isActive() const{
 	return mIsActive;
 }
 
-void PowerUp::setActive(const bool& active){
+void PowerUpItem::setActive(const bool& active){
 	mIsActive = active;
 }
 
-Entity::RenderLayer PowerUp::getRenderLayer() const{
+Entity::RenderLayer PowerUpItem::getRenderLayer() const{
 	return LAYER;
 }
 
-PowerUp::Category PowerUp::getCollisionCategory(){
+PowerUpItem::Category PowerUpItem::getCollisionCategory(){
 	return COLLECT;
 }
 
-PowerUp::Type PowerUp::getCollisionType(){
+PowerUpItem::Type PowerUpItem::getCollisionType(){
 	return REC;
 }
 
 
-void PowerUp::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway){
+void PowerUpItem::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway){
 	if (collidable->getCollisionCategory() == FRIEND){
 		mIsAlive = false;
 		Inventory::getInstance().changePowerUp(1);
 	}
 }
 
-sf::FloatRect PowerUp::getHitBox(){
+sf::FloatRect PowerUpItem::getHitBox(){
 	return getTransform().transformRect(mSprite.getGlobalBounds());
 }
 
-sf::Shape* PowerUp::getNarrowHitbox() const{
+sf::Shape* PowerUpItem::getNarrowHitbox() const{
 	return mHitbox;
 }

@@ -134,7 +134,6 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 			assert(itr->HasMember("angle") && (*itr)["angle"].IsDouble());
 			assert(itr->HasMember("height") && (*itr)["height"].IsInt());
 			assert(itr->HasMember("width") && (*itr)["width"].IsInt());
-			assert(itr->HasMember("debug") && (*itr)["debug"].IsInt());
 
 			int type = (*itr)["type"].GetInt();
 			//Position
@@ -280,7 +279,7 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget, s
 	//Initialize entites from a JSON doc
 	initializeEntities(mWindow, configDoc);
 	// Initialize eggs, chips and ludd from a map
-	readInitMap(mapfilepath);
+	//readInitMap(mapfilepath);
 
 	mPointsOfNoReturn.push_back(mWindow->getSize().x / 2 + 1000.f);
 	mCurrentPONR = mWindow->getView().getSize().x / 2;

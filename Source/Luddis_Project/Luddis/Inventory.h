@@ -3,6 +3,7 @@
 
 #include "Entity.h"
 #include <vector>
+#include "PowerUps.h"
 
 class Inventory {
 public:
@@ -39,12 +40,14 @@ private:
 	Inventory();
 
 	typedef std::vector<Entity*> InventoryVector;
+	typedef std::vector<PowerUps*> PowerUpVector;
 
 	int mChips;
 	int mDust;
 	int mMaxDust;
 	int mEggs;
 	int mPowerUp;
+	PowerUpVector mPowerUps;
 };
 
 #endif
