@@ -11,7 +11,7 @@ static const float DAMAGE_TIME = 2;
 static const Animation ANIMATION_IDLE = Animation("Resources/Images/Spritesheets/Steam_idle");
 static const Animation ANIMATION_DAMAGE = Animation("Resources/Images/Spritesheets/Steam_active");
 
-Obstacle::Obstacle(sf::RenderWindow* window, ObstacleType type, const sf::Vector2f& position, const float& angle, const sf::Vector2f& size, bool debug) :
+Obstacle::Obstacle(sf::RenderWindow* window, ObstacleType type, const sf::Vector2f& position, const float& angle, const sf::Vector2f& size) :
 mIsAlive(true),
 mIsActive(true),
 mWindow(window),
@@ -24,8 +24,7 @@ mIsDamaging(false),
 mDamageTime(DAMAGE_TIME),
 mIdleTime(IDLE_TIME),
 mAnimation(ANIMATION_IDLE),
-mAngle(angle),
-mDebug(debug)
+mAngle(angle)
 {
 	//mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	setPosition(position);

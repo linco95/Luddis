@@ -1,6 +1,6 @@
 #include "BossDishCloth.h"
 #include "Projectile.h"
-#include "PowerUp.h"
+#include "PowerUpItem.h"
 #include "EntityManager.h"
 #include "CollisionManager.h"
 #include "VectorMath.h"
@@ -73,7 +73,7 @@ void BossDishCloth::tick(const sf::Time& deltaTime){
 	}
 	if (!mIsActive) return;
 	if (mLife <= 0){
-		PowerUp* pow1 = new PowerUp(POWERUP1_FILEPATH, getPosition());
+		PowerUpItem* pow1 = new PowerUpItem(POWERUP1_FILEPATH, getPosition());
 		mEntityManager->addEntity(pow1);
 		CollisionManager::getInstance().addCollidable(pow1);
 		mIsAlive = false;

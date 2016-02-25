@@ -86,9 +86,14 @@ void Silverfish::updateMovement(const sf::Time& deltaTime){
 
 	// Make the fishes swim faster when swimming away
 	float speed = SPEED;
-	if (mSwimAway) {
+	if (mSwimAway && mAnimation.getCurrAnimation().hasLooped()) {
+		if (mDirection != mNextDir) mDirection = mNextDir;
 		speed = 250;
 	}
+	else if (mSwimAway && !mAnimation.getCurrAnimation().hasLooped()) {
+		speed = 0;
+	}
+
 	move(mDirection * speed * deltaTime.asSeconds());
 }
 
@@ -130,7 +135,7 @@ void Silverfish::collide(CollidableEntity *collidable, const sf::Vector2f& moveA
 			mAnimation.replaceAnimation(ANIMATION_HIT);
 			mAnimation.setDefaultAnimation(ANIMATION_DEAD);
 			mSwimAway = true;
-			mDirection = VectorMath::normalizeVector(getPosition() - collidable->getPosition());
+			mNextDir = VectorMath::normalizeVector(getPosition() - collidable->getPosition());
 			//SPEED = 220;
 			mBefriend = true;
 			}

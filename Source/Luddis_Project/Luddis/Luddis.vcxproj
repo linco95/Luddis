@@ -106,8 +106,8 @@
     <ClCompile Include="InterfaceElement.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="MouseCursor.cpp" />
-    <ClCompile Include="PowerUp.cpp" />
     <ClCompile Include="PowerupDisplay.cpp" />
+    <ClCompile Include="PowerUps.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="ScoreCounter.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -129,6 +129,7 @@
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="Spider.cpp" />
     <ClCompile Include="SpiderEgg.cpp" />
+    <ClCompile Include="SpiderWeb.cpp" />
     <ClCompile Include="TextBox.cpp" />
     <ClCompile Include="TutorialText.cpp" />
     <ClCompile Include="VectorMath.cpp" />
@@ -156,8 +157,9 @@
     <ClInclude Include="InterfaceElement.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="MouseCursor.h" />
-    <ClInclude Include="PowerUp.h" />
+    <ClInclude Include="PowerUpItem.h" />
     <ClInclude Include="PowerupDisplay.h" />
+    <ClInclude Include="PowerUps.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="ScoreCounter.h" />
     <ClInclude Include="Entity.h" />
@@ -178,6 +180,7 @@
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="Spider.h" />
     <ClInclude Include="SpiderEgg.h" />
+    <ClInclude Include="SpiderWeb.h" />
     <ClInclude Include="TextBox.h" />
     <ClInclude Include="TutorialText.h" />
     <ClInclude Include="VectorMath.h" />
