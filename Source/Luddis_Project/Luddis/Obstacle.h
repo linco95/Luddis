@@ -36,8 +36,10 @@ private:
 	Type getCollisionType() override;
 	void collide(CollidableEntity *collidable, const sf::Vector2f& moveAway) override;
 
+	//Two steam hitboxes
 	sf::Shape* mActiveHitbox;
 	sf::Shape* mIdleHitbox;
+	//One solid hitbox
 	sf::Shape* mHitbox;
 	ObstacleType mType;
 

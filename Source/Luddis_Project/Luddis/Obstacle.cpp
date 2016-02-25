@@ -30,7 +30,8 @@ mDebug(debug)
 	//mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	setPosition(position);
 	rotate(angle);
-	if (type == 1) {
+	//If damaging obstacle (steam)
+	if (type == DAMAGE) {
 		
 		mIdleHitbox->setOrigin(mIdleHitbox->getLocalBounds().width / 2, mIdleHitbox->getLocalBounds().height);
 		mIdleHitbox->setPosition(getPosition());
@@ -46,6 +47,7 @@ mDebug(debug)
 
 		move(((float)mIdleHitbox->getLocalBounds().height / 2.0f) * VectorMath::getNormal(sf::Vector2f(cos(mAngle), sin(mAngle))));
 	}
+	//Else solid hitbox
 	else {
 		mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
 		mHitbox->setPosition(getPosition());
