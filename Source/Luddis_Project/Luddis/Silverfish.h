@@ -40,6 +40,7 @@ private:
 	const float mActivate;
 	sf::Shape* mHitbox;
 	AnimationQueue mAnimation;
+	sf::Vector2f mNextDir;
 	Category mAlignment;
 };
 

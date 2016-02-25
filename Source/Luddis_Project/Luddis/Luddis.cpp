@@ -43,6 +43,9 @@ static const sf::Vector2f FRONTVECTOR(1, 0);
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(35, 8);
 
+//TEMP
+static Animation STASISANIMATION("Resources/Images/Spritesheets/Stasis_ring");
+
 
 Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window, EntityManager* entityManager) :
 	mIsAlive(true), 
@@ -102,14 +105,29 @@ void Luddis::tick(const sf::Time& deltaTime){
 		mLoseDust -= deltaTime.asSeconds();
 	}
 	mAnimation.tick(deltaTime);
+
+	// Temporary
+	static const float ROTATIONSPEED = 75.f;
+	static int x = 0;
+	static const float interval = 1.f;
+	static const float pulseSpeed = 0.5f;
+
+	STASISANIMATION.setScale(mScale + sf::Vector2f(1,1) * interval * ((float)std::sin(x * pulseSpeed) + 0.5f) * deltaTime.asSeconds());
+	STASISANIMATION.setPosition(getPosition());
+	STASISANIMATION.rotate(ROTATIONSPEED * deltaTime.asSeconds());
+	STASISANIMATION.tick(deltaTime);
+	x++;
+	/*(x >= 10) ? x = 0 : x++;*/
 	// Update scale
 	changeScale();
 
 }
 
 void Luddis::draw(sf::RenderTarget& target, sf::RenderStates states) const{
+	target.draw(STASISANIMATION, states);
 	states.transform *= getTransform();
 	target.draw(mAnimation.getCurrAnimation(), states);
+
 }
 
 sf::Vector2f Luddis::getVectorMouseToSprite() const{
