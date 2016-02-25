@@ -10,6 +10,7 @@ public:
 
 	void activate() override;
 private:
+	float mPauseTime;
 
 };
 
