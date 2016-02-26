@@ -23,7 +23,6 @@ public:
 	bool isActive() const override;
 	void setActive(const bool& active) override;
 	RenderLayer getRenderLayer() const override;
-
 	void turn();
 
 private:

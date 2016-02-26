@@ -142,3 +142,7 @@ sf::Shape* Projectile::getNarrowHitbox() const{
 	mHitbox->setRotation(getRotation());
 	return mHitbox;
 }
+
+void Projectile::stun(const sf::Time& deltatime) {
+
+}

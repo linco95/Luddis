@@ -250,3 +250,7 @@ sf::Shape* BossDishCloth::getNarrowHitbox() const{
 	mHitbox->setRotation(getRotation());
 	return mHitbox;
 }
+
+void BossDishCloth::stun(const sf::Time& deltatime) {
+
+}

@@ -36,6 +36,8 @@ public:
 	virtual bool isActive() const = 0;
 	// Set an entities "active" state
 	virtual void setActive(const bool& active) = 0;
+	// Stun the entity
+	virtual void stun(const sf::Time& deltaTime) = 0;
 };
 
 #endif

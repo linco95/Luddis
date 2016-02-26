@@ -235,19 +235,15 @@ void Luddis::handleInput(const sf::Time& deltaTime){
 	//Handle keyboard presses
 	// TODO make this an event instead
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
-		if (mPowerups[0] != 0 && mPowerups[0]->getCooldown() <= 0){
-			mPowerups[0]->activateCooldown();
-		}
+		SoundEngine::getInstance().setMainVolume(1);
 	}
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
-	//	
-	//}
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)){
-
-	//}
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
-
-	//}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
+		SoundEngine::getInstance().setMainVolume(20);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)){
+		SoundEngine::getInstance().setMainVolume(40);
+	}
+	
 }
 
 Luddis::Category Luddis::getCollisionCategory(){
@@ -337,4 +333,8 @@ Entity::RenderLayer Luddis::getRenderLayer() const {
 void Luddis::reset(GameStateLevel* gameStateLevel) {
 	mGameStateLevel->resetLevel();
 	GameManager::getInstance().setGameState(mGameStateLevel);
+}
+
+void Luddis::stun(const sf::Time& deltatime) {
+
 }

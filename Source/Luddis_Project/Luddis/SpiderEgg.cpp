@@ -70,3 +70,7 @@ void SpiderEgg::collide(CollidableEntity *collidable, const sf::Vector2f& moveAw
 		Inventory::getInstance().changeEggs(1);
 	}
 }
+
+void SpiderEgg::stun(const sf::Time& deltatime) {
+	return;
+}

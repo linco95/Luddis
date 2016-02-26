@@ -127,7 +127,6 @@ void Dialogue::initialize(std::string dialogueFile){
 		if (pages[itr].HasMember("Voice_file")) {
 			assert(pages[itr]["Voice_file"].IsString());
 			mSoundFiles[itr] = pages[itr]["Voice_file"].GetString();
-			mResourceManager->loadSoundBuffer(mSoundFiles[itr]);
 		}
 	}
 	if (configDoc.HasMember("Level")){
@@ -153,8 +152,8 @@ void Dialogue::tick(const sf::Time& deltaTime){
 			mCharacterDisplayRight->setActive(true);
 		if(mCharacterDisplayLeft!= nullptr)
 			mCharacterDisplayLeft->setActive(true);
-		if(mSoundFiles[mActivePage].size() != 0)
-			mCurrentVoiceDialogue = mSoundEngine->playSound(mSoundFiles[mActivePage]);
+		if (mSoundFiles[mActivePage].size() != 0)
+			mCurrentVoiceDialogue = mSoundEngine->playSound(mSoundFiles[mActivePage].c_str());
 		for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++){
 			mButtons[mActivePage].at(i)->setActive(true);
 		}
@@ -229,8 +228,9 @@ void Dialogue::changePageButton(int value){
 	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++){
 		mButtons[mActivePage][i]->setActive(true);
 	}
-	if (mSoundFiles[mActivePage].size() != 0)
-		mCurrentVoiceDialogue = mSoundEngine->playSound(mSoundFiles[mActivePage]);
+	if (mSoundFiles[mActivePage].size() != 0) {
+		mCurrentVoiceDialogue = mSoundEngine->playSound(mSoundFiles[mActivePage].c_str());
+	}
 }
 
 void Dialogue::closeButton(){

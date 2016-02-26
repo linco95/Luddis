@@ -24,7 +24,7 @@ public:
 	RenderLayer getRenderLayer() const override;
 	sf::FloatRect getHitBox() override;
 	sf::Shape* getNarrowHitbox() const override;
-
+	void stun(const sf::Time& deltatime) override;
 private:
 	Category getCollisionCategory() override;
 	Type getCollisionType() override;

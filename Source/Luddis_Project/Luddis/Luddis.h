@@ -25,7 +25,7 @@ public:
 	sf::FloatRect getHitBox() override;
 	sf::Shape* getNarrowHitbox() const override;
 	void reset(GameStateLevel* gameStateLevel);
-
+	void stun(const sf::Time& deltatime) override;
 private:
 	sf::Vector2f getVectorMouseToSprite() const;
 	void handleInput(const sf::Time& deltaTime);

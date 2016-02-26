@@ -22,7 +22,8 @@ public:
 	void setActive(const bool& active) override;
 	RenderLayer getRenderLayer() const override;
 	sf::FloatRect getHitBox() override;
-	sf::Shape* getNarrowHitbox() const override; 
+	sf::Shape* getNarrowHitbox() const override;
+	void stun(const sf::Time& deltatime) override;
 private:
 	void updateMovement(const sf::Time& deltaTime);
 	sf::Transformable* mTarget;

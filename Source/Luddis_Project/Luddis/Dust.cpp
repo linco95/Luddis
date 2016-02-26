@@ -81,3 +81,7 @@ sf::FloatRect Dust::getHitBox(){
 sf::Shape* Dust::getNarrowHitbox() const{
 	return mHitbox;
 }
+
+void Dust::stun(const sf::Time& deltatime) {
+	return;
+}

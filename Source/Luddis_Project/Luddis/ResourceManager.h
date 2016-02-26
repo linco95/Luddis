@@ -2,12 +2,11 @@
 #define _INCLUDED_RESOURCEMANAGER_
 
 #include "GraphicManager.h"
-#include "SoundManager.h"
 #include <vector>
 #include <string>
 #include <map>
 
-class ResourceManager: public GraphicManager, public SoundManager{
+class ResourceManager: public GraphicManager{
 public:
 	static ResourceManager& getInstance();
 

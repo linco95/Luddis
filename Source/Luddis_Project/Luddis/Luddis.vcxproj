@@ -53,14 +53,14 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>LUDDIS_DEBUG_DRAW_HITBOXES;WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\Rapidjson\include;..\SFML-2.3.2\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Rapidjson\include;..\FMOD-1.07\Studio\include;..\FMOD-1.07\Lowlevel\include;..\FMOD-1.07\FSbank\include;..\SFML-2.3.2\include</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\SFML-2.3.2\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\SFML-2.3.2\lib;..\FMOD-1.07\Studio\lib;..\FMOD-1.07\Lowlevel\lib;..\FMOD-1.07\FSbank\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;fsbank_vc.lib;fmodstudio_vc.lib;fmodstudioL_vc.lib;fmod_vc.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -73,15 +73,15 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>LOG_IN_RELEASE;WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\Rapidjson\include;..\SFML-2.3.2\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Rapidjson\include;..\SFML-2.3.2\include;..\FMOD-1.07\Studio\include;..\FMOD-1.07\Lowlevel\include;..\FMOD-1.07\FSbank\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>..\SFML-2.3.2\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-audio.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\SFML-2.3.2\lib;..\FMOD-1.07\FSbank\lib;..\FMOD-1.07\Lowlevel\lib;..\FMOD-1.07\Studio\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib;fsbank_vc.lib;fmod_vc.lib;fmodL_vc.lib;fmodstudio_vc.lib;fmodstudioL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -107,6 +107,7 @@
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="MouseCursor.cpp" />
     <ClCompile Include="PowerupDisplay.cpp" />
+    <ClCompile Include="PowerUpItem.cpp" />
     <ClCompile Include="PowerUps.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="ScoreCounter.cpp" />
@@ -126,7 +127,6 @@
     <ClCompile Include="ScoreGauge.cpp" />
     <ClCompile Include="Silverfish.cpp" />
     <ClCompile Include="SoundEngine.cpp" />
-    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="Spider.cpp" />
     <ClCompile Include="SpiderEgg.cpp" />
     <ClCompile Include="SpiderWeb.cpp" />
@@ -177,7 +177,6 @@
     <ClInclude Include="ScoreGauge.h" />
     <ClInclude Include="Silverfish.h" />
     <ClInclude Include="SoundEngine.h" />
-    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="Spider.h" />
     <ClInclude Include="SpiderEgg.h" />
     <ClInclude Include="SpiderWeb.h" />
