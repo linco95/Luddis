@@ -1,11 +1,17 @@
 #include "SoundEngine.h"
 #include "ResourceManager.h"
-#include <SFML/Audio.hpp>
-#include <SFML/System/Time.hpp>
+#include "Debug.h"
+#include <cassert>
 
 SoundEngine::SoundEngine():
-mMainVolume(100), mSoundVolume(100), mMusicVolume(100), mFading(false){
+mMainVolume(100), mSoundVolume(100), mMusicVolume(100),
+mStudioSystem(NULL), mLowLvlSystem(NULL),
+mSounds(), mChannel(NULL){
+	initialize();
+}
 
+SoundEngine::~SoundEngine() {
+	finalize();
 }
 
 SoundEngine& SoundEngine::getInstance(){
@@ -13,85 +19,189 @@ SoundEngine& SoundEngine::getInstance(){
 	return se;
 }
 
+void SoundEngine::initialize() {
+	FMOD_RESULT result;
+	void *extraDriverData1 = NULL, *extraDriverData2 = NULL;
+	result = FMOD::Studio::System::create(&mStudioSystem);
+	if (result != FMOD_OK) {
+		Debug::log(("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result)), Debug::FATAL);
+		exit(-1);
+	}
+	result = FMOD::System_Create(&mLowLvlSystem);
+	if (result != FMOD_OK) {
+		Debug::log(("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result)), Debug::FATAL);
+		exit(-1);
+	}
+	result = mStudioSystem->initialize(MAX_SOUND_CHANNELS, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, extraDriverData1);
+	result = mLowLvlSystem->init(MAX_SOUND_CHANNELS, FMOD_INIT_NORMAL, extraDriverData2);
+}
+
+void SoundEngine::finalize() {
+	mLowLvlSystem->close();
+	mLowLvlSystem->release();
+	mStudioSystem->unloadAll();
+	mStudioSystem->flushCommands();
+	mStudioSystem->release();
+}
+
 void SoundEngine::setMainVolume(float volume){
 	mMainVolume = volume;
-	for (int i = 0; i < MAX_SOUND_CHANNELS; i++){
-		mSoundChannels[i].setVolume(mMainVolume*mSoundVolume / 100);
-	}
-	if (mCurrentMusic != nullptr){
-		mCurrentMusic->setVolume(mMainVolume*mMusicVolume / 100);
-	}
+	setSoundVolume(mSoundVolume);
+	setMusicVolume(mMusicVolume);
 }
 
 void SoundEngine::setSoundVolume(float volume){
 	mSoundVolume = volume;
-	for (int i = 0; i < MAX_SOUND_CHANNELS; i++){
-		mSoundChannels[i].setVolume(mMainVolume*mSoundVolume / 100);
+	mFinalVolume = mMainVolume*mSoundVolume / 100;
+	//Studio instances
+	for (auto se: mSoundEventInstances){
+		se.second->setVolume(mFinalVolume);
 	}
+	FMOD_RESULT result;
+	result = mChannel->setVolume(mFinalVolume);
+	//Low level instances
+	mChannel->setVolume(mFinalVolume);
 }
 
 void SoundEngine::setMusicVolume(float volume){
 	mMusicVolume = volume;
-	if (mCurrentMusic != nullptr){
-		mCurrentMusic->setVolume(mMainVolume*mMusicVolume / 100);
+	mFinalVolume = mMainVolume*mMusicVolume / 100;
+	//Studio instances
+	for (auto s : mMusicEventInstances) {
+		s.second->setVolume(mFinalVolume);
 	}
 }
 
-int SoundEngine::playSound(std::string filename){
-	//Might have to change this around to disallow the same buffert from playing two different sounds
-	for (int i = 0; i < MAX_SOUND_CHANNELS; i++){
-		if (mSoundChannels[i].getStatus() != sf::Sound::Playing){
-			mSoundChannels[i].setBuffer(ResourceManager::getInstance().getSoundBuffer(filename));
-			mSoundChannels[i].play();
-			return i;
-		}
+
+int SoundEngine::playSound(const char* filename){
+	if (mSounds.find(filename) == mSounds.end()) {
+		createSound(filename);
 	}
-	return -1;
+	FMOD_RESULT result;
+	result = mLowLvlSystem->playSound(mSounds[filename], 0, false, &mChannel);
+	result = mChannel->setVolume(mMainVolume*mSoundVolume / 100);
+	float volume = 0;
+	mChannel->getVolume(&volume);
+	int channelIndex = 0;
+	mChannel->getIndex(&channelIndex);
+	return channelIndex;
 }
 
-void SoundEngine::stopSound(int channel) {
-	mSoundChannels[channel].stop();
+FMOD_RESULT SoundEngine::playEvent(const char * path){
+	FMOD_RESULT result;
+	//See if it can be found in the sound map,
+	//otherwise assume that its in the music map.
+	if (mSoundEventInstances.find(path) != mSoundEventInstances.end()) {
+		result = mMusicEventInstances[path]->start();
+		result = mMusicEventInstances[path]->setVolume(mMainVolume* mSoundVolume / 100);
+	}
+	else {
+		result = mMusicEventInstances[path]->start();
+		result = mMusicEventInstances[path]->setVolume(mMainVolume* mMusicVolume / 100);
+	}
+	return result;
 }
 
-void SoundEngine::playMusic(std::string filename){
-	if (mCurrentMusic != 0) {
-		mCurrentMusic->stop();
-	}
-	mCurrentMusic = &ResourceManager::getInstance().getMusic(filename);
-	mCurrentMusic->setLoop(true);
-	setMusicVolume(mMusicVolume);
-	mCurrentMusic->play();
+FMOD_RESULT SoundEngine::stopSound(int channelIndex) {
+	FMOD::Channel* channel;
+	mLowLvlSystem->getChannel(channelIndex, &channel);
+	return channel->stop();
 }
-static sf::Clock actualTime;
+
+FMOD_RESULT SoundEngine::stopEvent(const char* path, FMOD_STUDIO_STOP_MODE stopMode) {
+	//See if it can be found in the sound map,
+	//otherwise assume that its in the music map.
+	if(mSoundEventInstances.find(path) != mSoundEventInstances.end())
+		return mSoundEventInstances[path]->stop(stopMode);
+	else
+		return mMusicEventInstances[path]->stop(stopMode);
+}
+
+FMOD_RESULT SoundEngine::setEventParameter(const char* path, const char* parameter, float value) {
+	FMOD_RESULT result;
+	//See if it can be found in the sound map,
+	//otherwise assume that its in the music map.
+	if (mSoundEventInstances.find(path) != mSoundEventInstances.end())
+		result = mSoundEventInstances[path]->setParameterValue(parameter, value);
+	else 
+		result = mMusicEventInstances[path]->setParameterValue(parameter, value);
+	return result;
+}
+
+FMOD_RESULT SoundEngine::loadBank(const char* filename) {
+	FMOD::Studio::Bank* bank = NULL;
+	FMOD_RESULT result;
+	result = mStudioSystem->loadBankFile(filename, FMOD_STUDIO_LOAD_BANK_NORMAL, &bank);
+	return result;
+}
+
+FMOD::Studio::Bank* SoundEngine::getBank(const char* filename) {
+	FMOD::Studio::Bank* bank = NULL;
+	mStudioSystem->getBank(filename, &bank);
+	loadBank(filename);
+	return bank;
+}
+
+FMOD_RESULT SoundEngine::unloadBank(const char* filename){
+	FMOD::Studio::Bank* bank;
+	FMOD_RESULT result = mStudioSystem->getBank(filename, &bank);
+	result = bank->unload();
+	
+	return result;
+}
+
+FMOD_RESULT SoundEngine::createEvent(const char* path, EventType eventType) {
+	int bankCount;
+	mStudioSystem->getBankCount(&bankCount);
+	SoundEventDesc* desc = NULL;
+	FMOD_RESULT result;
+	result = mStudioSystem->getEvent(path, &desc);
+	SoundEventInst** inst = NULL;
+	if (eventType == SOUND)
+		inst = &mSoundEventInstances[path];
+	else
+		inst = &mMusicEventInstances[path];
+	result = desc->createInstance(inst);
+	if(eventType == SOUND)
+		(*inst)->setVolume(mMainVolume*mSoundVolume/100);
+	else
+		(*inst)->setVolume(mMainVolume*mMusicVolume / 100);
+	return result;
+}
+
+FMOD_RESULT SoundEngine::releaseSoundEvent(const char* path) {
+	FMOD_RESULT result;
+	result = mSoundEventInstances[path]->release();
+	mSoundEventInstances.erase(path);
+	return result;
+}
+
+FMOD_RESULT SoundEngine::releaseMusicEvent(const char* path) {
+	FMOD_RESULT result;
+	result = mMusicEventInstances[path]->release();
+	mSoundEventInstances.erase(path);
+	return result;
+}
+
+FMOD_RESULT SoundEngine::createSound(const char* filepath, bool loop) {
+	FMOD_RESULT result;
+	FMOD::Sound** sound = &mSounds[filepath];
+	result = mLowLvlSystem->createSound(filepath, FMOD_DEFAULT, 0, sound);
+	//if(!loop)
+		(*sound)->setMode(FMOD_LOOP_OFF);
+	sound;
+	return result;
+}
+
+FMOD_RESULT SoundEngine::releaseSound(const char* filepath) {
+	FMOD_RESULT result;
+	result = mSounds[filepath]->release();
+	mSounds.erase(filepath);
+	return result;
+}
+
+//static sf::Clock actualTime;
 void SoundEngine::update(const sf::Time& deltaTime){
-	//sf::Time aDT = actualTime.restart();
-	//float pitch = deltaTime.asSeconds() / aDT.asSeconds();
-	if (mFading == true){
-		fadeTransition(deltaTime);
-		//mFadingMusic->setPitch(1 + pitch);
-	}
-	//mCurrentMusic->setPitch(1 + pitch);
-}
-
-void SoundEngine::fadeTransition(const sf::Time& deltaTime){
-	mFadeTimeLeft -= deltaTime.asSeconds();
-	if (mFadeTimeLeft > 0){
-		mFadingMusic->setVolume(mMainVolume*mMusicVolume*(mFadeTimeLeft / mFadeTime) / 100);
-		mCurrentMusic->setVolume(mMainVolume*mMusicVolume*((mFadeTime - mFadeTimeLeft) / mFadeTime) / 100);
-	}
-	else{
-		mFading = false;
-		mCurrentMusic->setVolume(mMainVolume*mMusicVolume / 100);
-		mFadingMusic->stop();
-	}
-}
-
-void SoundEngine::fadeToNewMusic(std::string filename, float fadeTime){
-	if (fadeTime != 0 && mFading==false){
-		mFading = true;
-		mFadeTime = fadeTime;
-		mFadeTimeLeft = fadeTime;
-		playMusic(filename);
-		mFadingMusic->setVolume(0.0f);
-	}
+	mStudioSystem->update();
+	mLowLvlSystem->update();
 }

@@ -34,6 +34,11 @@ static const std::string TEXTURE_LUDDGAUGE_BAR = "Resources/Images/GUI/LuddGauge
 static const std::string TEST_LEVEL = "Resources/Configs/Levels/Level01Entities.json";
 static const char* MOUSE_IMAGE = "Resources/Images/LuddisCursor.png";
 static const std::string FONT_NAME = "arial.ttf";
+
+static const char* MASTER_BANK = "Resources/Audio/FMOD/Build/Desktop/Master Bank.bank";
+static const char* MASTER_BANK_STRINGS = "Resources/Audio/FMOD/Build/Desktop/Master Bank.strings.bank";
+static const char* EVENT_MUSIC1 = "event:/MUSIK/Bana_1";
+
 static const bool VSYNCENABLED = true;
 
 struct GameManagerImp : public EventObserver {
@@ -145,6 +150,11 @@ struct GameManagerImp : public EventObserver {
 		// To avoid multiple functioncalls every iteration of gameloop
 		CollisionManager* cm = &CollisionManager::getInstance();
 		SoundEngine* se = &SoundEngine::getInstance();
+
+		se->loadBank(MASTER_BANK);
+		se->loadBank(MASTER_BANK_STRINGS);
+		se->createEvent(EVENT_MUSIC1, SoundEngine::EventType::MUSIC);
+		se->playEvent(EVENT_MUSIC1);
 		
 		mGameStatePaused = &GameStatePaused::getInstance();
 		mGameStateLevel = &GameStateLevel::getInstance();
@@ -157,10 +167,11 @@ struct GameManagerImp : public EventObserver {
 		mCurrentGameState = mGameStateLevel;
 
 		View mapView;
-		se->setMainVolume(100);
+		se->setMainVolume(10);
 		Clock gameClock;
 		while (mMainWindow.isOpen()){
-
+			//Update soundengine
+			se->update(gameClock.getElapsedTime());
 
 			// Handle Events       
 			mCurrentGameState->handleEvents();

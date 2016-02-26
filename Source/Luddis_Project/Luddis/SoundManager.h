@@ -10,7 +10,6 @@ public:
 	SoundManager(const SoundManager&) = delete;
 	SoundManager& operator =(const SoundManager&) = delete;
 	~SoundManager();
-
 	//SoundBuffer related functions
 	sf::SoundBuffer& getSoundBuffer(const std::string& filename);
 	sf::SoundBuffer& loadSoundBuffer(const std::string& filename);
