@@ -161,3 +161,12 @@ Obstacle::Type Obstacle::getCollisionType(){
 
 void Obstacle::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway){
 }
+
+void Obstacle::stun(const sf::Time& deltatime) {
+	if (mType == DAMAGE) {
+
+	}
+	else {
+		return;
+	}
+}

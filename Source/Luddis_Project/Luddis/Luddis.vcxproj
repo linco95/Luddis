@@ -107,6 +107,7 @@
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="MouseCursor.cpp" />
     <ClCompile Include="PowerupDisplay.cpp" />
+    <ClCompile Include="PowerUpItem.cpp" />
     <ClCompile Include="PowerUps.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="ScoreCounter.cpp" />

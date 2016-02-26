@@ -58,3 +58,7 @@ bool TutorialText::isActive() const{
 void TutorialText::setActive(const bool& active){
 	mIsActive = active;
 }
+
+void TutorialText::stun(const sf::Time& deltatime) {
+	return;
+}

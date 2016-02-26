@@ -142,14 +142,14 @@
     <ClCompile Include="Room.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="PowerUpItem.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="PowerUps.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SpiderWeb.cpp">
       <Filter>Source Files\PowerUps</Filter>
+    </ClCompile>
+    <ClCompile Include="PowerUpItem.cpp">
+      <Filter>Source Files\Entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

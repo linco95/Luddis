@@ -338,3 +338,7 @@ void Luddis::reset(GameStateLevel* gameStateLevel) {
 	mGameStateLevel->resetLevel();
 	GameManager::getInstance().setGameState(mGameStateLevel);
 }
+
+void Luddis::stun(const sf::Time& deltatime) {
+
+}

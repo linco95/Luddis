@@ -78,3 +78,7 @@ sf::FloatRect PowerUpItem::getHitBox(){
 sf::Shape* PowerUpItem::getNarrowHitbox() const{
 	return mHitbox;
 }
+
+void PowerUpItem::stun(const sf::Time& deltatime) {
+	return;
+}
