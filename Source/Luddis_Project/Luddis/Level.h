@@ -44,6 +44,7 @@ private:
 	sf::Music *mLevelMusic;
 	sf::IntRect mMapBounds;
 	std::vector<float> mPointsOfNoReturn;
+	int mProgress;
 	// PONR = Point Of No Return
 	float mCurrentPONR;
 	bool mIsActive;

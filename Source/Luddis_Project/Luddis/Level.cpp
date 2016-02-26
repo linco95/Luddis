@@ -37,6 +37,7 @@ static const Entity::RenderLayer LAYER = Entity::RenderLayer::BACKGROUND;
 
 Level::Level(EntityManager* entityManager) :
 mIsActive(true),
+mProgress(0),
 mEntityManager(entityManager),
 mGameStateLevel(&GameStateLevel::getInstance()),
 mEffectInterval(EFFECT_INTERVAL)
@@ -134,7 +135,6 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		assert(itr->HasMember("angle") && (*itr)["angle"].IsDouble());
 		assert(itr->HasMember("height") && (*itr)["height"].IsInt());
 		assert(itr->HasMember("width") && (*itr)["width"].IsInt());
-		assert(itr->HasMember("debug") && (*itr)["debug"].IsInt());
 
 		int type =(*itr)["type"].GetInt();
 		//Position
@@ -147,13 +147,8 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		float sX = (float)(*itr)["width"].GetInt();
 		float sY = (float)(*itr)["height"].GetInt();
 		sf::Vector2f size(sX, sY);
-		// Debug (draw) mode - probably redundant!
-		bool debug = false;
-		if ((int)(*itr)["debug"].GetInt() == 1){
-			debug = true;
-		}
-
-		Obstacle* obstacle = new Obstacle(mWindow, Obstacle::ObstacleType(type),pos, angle, size, debug);
+		
+		Obstacle* obstacle = new Obstacle(mWindow, Obstacle::ObstacleType(type),pos, angle, size, false);
 		mEntityManager->addEntity(obstacle);
 		cm->addCollidable(obstacle);
 		Debug::log("Spawning obstacle at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
@@ -306,6 +301,14 @@ void Level::updateView(const Time& deltaTime){
 		view.move(0, deltaMove.y);
 		view.getCenter().y < minY ? view.setCenter(view.getCenter().x, minY) : 0;
 		view.getCenter().y > maxY ? view.setCenter(view.getCenter().x, maxY) : 0;
+	}
+
+	int progress = (int)((mTarget->getPosition().x / mMapBounds.width)*7);
+	if (mProgress != progress) {
+		mProgress = progress;
+		//TODO: make dynamic (add current level event to setup file)
+		static const char* parameter = "Progress";
+		SoundEngine::getInstance().setEventParameter("event:/MUSIK/Bana_1", parameter, (float)mProgress);
 	}
 	mWindow->setView(view);
 }

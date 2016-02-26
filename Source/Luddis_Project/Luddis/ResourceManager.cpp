@@ -10,7 +10,7 @@ ResourceManager& ResourceManager::getInstance(){
 }
 
 ResourceManager::ResourceManager() :
-GraphicManager(), SoundManager(){
+GraphicManager(){
 
 }
 
@@ -45,8 +45,6 @@ void ResourceManager::clearAllJsonFiles(){
 ResourceManager::~ResourceManager(){
 	clearAllTextures();
 	clearAllFonts();
-	clearAllSoundBuffers();
-	clearAllMusic();
 	clearAllJsonFiles();
 	clearAllMaps();
 }

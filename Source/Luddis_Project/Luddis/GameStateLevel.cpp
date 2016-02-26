@@ -225,10 +225,10 @@ void GameStateLevel::readSetupFiles(const std::string& filename, bool allocate) 
 		assert(itr->IsObject());
 		assert(itr->HasMember("filename"));
 		std::string file = (*itr)["filename"].GetString();
-		if (allocate)
+		/*if (allocate) TODO : RE-implement.
 			rm->loadSoundBuffer(file);
 		else
-			rm->clearSoundBuffer(file);
+			rm->clearSoundBuffer(file);*/
 	}
 
 	assert(configDoc.HasMember("Graphics"));
