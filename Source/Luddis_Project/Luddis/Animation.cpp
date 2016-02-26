@@ -147,6 +147,7 @@ void Animation::tick(const Time& aElapsedTime){
 	mAImp->tick(aElapsedTime);
 }
 void Animation::draw(RenderTarget& target, RenderStates states) const {
+	states.transform *= getTransform();
 	target.draw(*mAImp, states);
 }
 

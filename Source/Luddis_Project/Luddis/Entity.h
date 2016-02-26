@@ -1,9 +1,8 @@
 #ifndef INCLUDED_ENTITY
 #define INCLUDED_ENTITY
 
-#include <SFML\Graphics\Transformable.hpp>
-#include <SFML\Graphics\Drawable.hpp>
-#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Transformable.hpp>
+#include <SFML/Graphics/Drawable.hpp>
 
 
 // Forwarddeclaration
@@ -18,7 +17,8 @@ public:
 		OBSTACLES,
 		ITEM,
 		PLAYER,
-		FOREGROUND
+		FOREGROUND,
+		MOUSE
 	};
 
 	Entity();

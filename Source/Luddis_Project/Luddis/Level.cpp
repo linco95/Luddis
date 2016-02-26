@@ -45,11 +45,11 @@ mEffectInterval(EFFECT_INTERVAL)
 
 }
 
-Level::~Level(){
+Level::~Level() {
 	
 }
 
-void Level::readInitMap(const std::string& filename){
+void Level::readInitMap(const std::string& filename) {
 	CollisionManager* cm = &CollisionManager::getInstance();
 	ResourceManager::PixelVector pixelVector = ResourceManager::getInstance().readMap(filename);
 	CollidableEntity* obj = 0;
@@ -62,7 +62,7 @@ void Level::readInitMap(const std::string& filename){
 			obj = new Chips(mWindow, "Resources/Images/Chips.png", e.position, 0);
 				}
 		else if (e.color == sf::Color(0, 0, 255)) {//Blue
-			obj = new SpiderEgg(mWindow, "Resources/Images/Spritesheets/Spider_egg",e.position);
+			obj = new SpiderEgg(mWindow, "Resources/Images/Spritesheets/Spider_egg", e.position);
 			}
 		if (obj != 0) {
 			mEntityManager->addEntity(obj);
@@ -72,12 +72,12 @@ void Level::readInitMap(const std::string& filename){
 	}
 }
 
-void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Document& configDoc){
+void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Document& configDoc) {
 	CollisionManager* cm = &CollisionManager::getInstance();
 	ResourceManager* rm = &ResourceManager::getInstance();
 
 	int level = 0;
-	if(configDoc.HasMember("Level"))
+	if (configDoc.HasMember("Level"))
 		level = configDoc["Level"].GetInt();
 
 	// Silverfishes
@@ -104,9 +104,9 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 	}
 
 	//TutorialTexts
-	if (configDoc.HasMember("TutorialText_spawns") && configDoc["TutorialText_spawns"].IsArray()){
+	if (configDoc.HasMember("TutorialText_spawns") && configDoc["TutorialText_spawns"].IsArray()) {
 		const rapidjson::Value& tutorialSpawns = configDoc["TutorialText_spawns"];
-		for (rapidjson::Value::ConstValueIterator itr = tutorialSpawns.Begin(); itr != tutorialSpawns.End(); itr++){
+		for (rapidjson::Value::ConstValueIterator itr = tutorialSpawns.Begin(); itr != tutorialSpawns.End(); itr++) {
 			assert(itr->IsObject());
 			assert(itr->HasMember("x") && (*itr)["x"].IsInt());
 			assert(itr->HasMember("y") && (*itr)["y"].IsInt());
@@ -136,7 +136,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		assert(itr->HasMember("height") && (*itr)["height"].IsInt());
 		assert(itr->HasMember("width") && (*itr)["width"].IsInt());
 
-		int type =(*itr)["type"].GetInt();
+			int type = (*itr)["type"].GetInt();
 		//Position
 		float x = (float)(*itr)["x"].GetInt();
 		float y = (float)(*itr)["y"].GetInt();
@@ -147,8 +147,8 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		float sX = (float)(*itr)["width"].GetInt();
 		float sY = (float)(*itr)["height"].GetInt();
 		sf::Vector2f size(sX, sY);
-		
-		Obstacle* obstacle = new Obstacle(mWindow, Obstacle::ObstacleType(type),pos, angle, size, false);
+
+			Obstacle* obstacle = new Obstacle(mWindow, Obstacle::ObstacleType(type), pos, angle, size);
 		mEntityManager->addEntity(obstacle);
 		cm->addCollidable(obstacle);
 		Debug::log("Spawning obstacle at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
@@ -178,10 +178,10 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 	}
 
 	//Event zones
-	if (configDoc.HasMember("EventZone_rect_spawns")){
+	if (configDoc.HasMember("EventZone_rect_spawns")) {
 		const rapidjson::Value& eventZoneRectSpawns = configDoc["EventZone_rect_spawns"];
 		assert(eventZoneRectSpawns.IsArray());
-		for (rapidjson::Value::ConstValueIterator itr = eventZoneRectSpawns.Begin(); itr != eventZoneRectSpawns.End(); itr++){
+		for (rapidjson::Value::ConstValueIterator itr = eventZoneRectSpawns.Begin(); itr != eventZoneRectSpawns.End(); itr++) {
 			assert(itr->IsObject());
 			assert(itr->HasMember("x") && (*itr)["x"].IsInt());
 			assert(itr->HasMember("y") && (*itr)["y"].IsInt());
@@ -223,14 +223,50 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		mBackgroundImages.push_back(sprite);
 		increaseMapBounds(rect);
 	}
+	}
+	//Dust
+	if (configDoc.HasMember("Dust_spawns") && configDoc["Dust_spawns"].IsArray()) {
+		const rapidjson::Value& dustSpawns = configDoc["Dust_spawns"];
+		for (rapidjson::Value::ConstValueIterator itr = dustSpawns.Begin(); itr != dustSpawns.End(); itr++) {
+			assert(itr->IsObject());
+			assert(itr->HasMember("x") && (*itr)["x"].IsInt());
+			assert(itr->HasMember("y") && (*itr)["y"].IsInt());
+
+			float x = (float)(*itr)["x"].GetInt();
+			float y = (float)(*itr)["y"].GetInt();
+			sf::Vector2f pos(x, y);
+
+			Dust* dust = new Dust(mWindow, "Resources/Images/Dust.png", pos, 0);
+			mEntityManager->addEntity(dust);
+			cm->addCollidable(dust);
+			Debug::log("Spawning dust at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
+		}
+	}
+	//Chips
+	if (configDoc.HasMember("Chips_spawns") && configDoc["Chips_spawns"].IsArray()) {
+		const rapidjson::Value& chipsSpawns = configDoc["Chips_spawns"];
+		for (rapidjson::Value::ConstValueIterator itr = chipsSpawns.Begin(); itr != chipsSpawns.End(); itr++) {
+			assert(itr->IsObject());
+			assert(itr->HasMember("x") && (*itr)["x"].IsInt());
+			assert(itr->HasMember("y") && (*itr)["y"].IsInt());
+
+			float x = (float)(*itr)["x"].GetInt();
+			float y = (float)(*itr)["y"].GetInt();
+			sf::Vector2f pos(x, y);
+
+			Chips* chips = new Chips(mWindow, "Resources/Images/Chips.png", pos, 0);
+			mEntityManager->addEntity(chips);
+			cm->addCollidable(chips);
+			Debug::log("Spawning chips at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
+}
 }
 }
 
-void Level::increaseMapBounds(sf::IntRect size){
+void Level::increaseMapBounds(sf::IntRect size) {
 	mMapBounds.width += size.width;
 }
 
-void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget, std::string levelFilename){
+void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget, std::string levelFilename) {
 	//assert(aTarget != 0);
 
 	mTarget = aTarget;
@@ -244,7 +280,7 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget, s
 	//Initialize entites from a JSON doc
 	initializeEntities(mWindow, configDoc);
 	// Initialize eggs, chips and ludd from a map
-	readInitMap(mapfilepath);
+	//readInitMap(mapfilepath);
 
 	mPointsOfNoReturn.push_back(mWindow->getSize().x / 2 + 1000.f);
 	mCurrentPONR = mWindow->getView().getSize().x / 2;
@@ -261,7 +297,7 @@ void Level::tick(const sf::Time& deltaTime) {
 	}
 }
 
-void Level::updateView(const Time& deltaTime){
+void Level::updateView(const Time& deltaTime) {
 	View view = mWindow->getView();
 	float xPos = mTarget->getPosition().x;
 	float yPos = mTarget->getPosition().y;
@@ -274,22 +310,22 @@ void Level::updateView(const Time& deltaTime){
 	float minY = view.getSize().y / 2;
 	float maxY = mMapBounds.height - view.getSize().y / 2;
 	
-	if (xPos < screenXPos - X_OFFSET / 2){
+	if (xPos < screenXPos - X_OFFSET / 2) {
 		deltaMove.x *= -1;
 	}
-	else if (xPos < screenXPos + X_OFFSET / 2){
+	else if (xPos < screenXPos + X_OFFSET / 2) {
 		deltaMove.x = 0;
 	}
 
-	if (yPos < screenYPos - Y_OFFSET / 2){
+	if (yPos < screenYPos - Y_OFFSET / 2) {
 		deltaMove.y *= -1;
 	}
-	else if (yPos < screenYPos + Y_OFFSET / 2){
+	else if (yPos < screenYPos + Y_OFFSET / 2) {
 		deltaMove.y = 0;
 	}
 
 	if (screenXPos >= minX && screenXPos <= maxX) {
-		if (!mPointsOfNoReturn.empty() && screenXPos >= mPointsOfNoReturn.back()){
+		if (!mPointsOfNoReturn.empty() && screenXPos >= mPointsOfNoReturn.back()) {
 			mCurrentPONR = mPointsOfNoReturn.back();
 			mPointsOfNoReturn.pop_back();
 		}
@@ -312,15 +348,15 @@ void Level::updateView(const Time& deltaTime){
 	}
 	mWindow->setView(view);
 }
-bool Level::isAlive() const{
+bool Level::isAlive() const {
 	return true;
 }
 
-bool Level::isActive() const{
+bool Level::isActive() const {
 	return mIsActive;
 }
 
-void Level::setActive(const bool& active){
+void Level::setActive(const bool& active) {
 	mIsActive = active;
 }
 
@@ -333,10 +369,10 @@ void Level::draw(RenderTarget& target, RenderStates states) const {
 	for (int i = 0; i < max; i++)
 	{
 		float x = mWindow->getView().getCenter().x;
-		float xMin = (mMapBounds.width / max) * (i + 1) - mWindow->getView().getSize().x*3;
-		float xMax = (mMapBounds.width / max) * (i + 1) + mWindow->getView().getSize().x*3;
+		float xMin = (mMapBounds.width / max) * (i + 1) - mWindow->getView().getSize().x * 3;
+		float xMax = (mMapBounds.width / max) * (i + 1) + mWindow->getView().getSize().x * 3;
 
-		if (x < xMax && x >= xMin){
+		if (x < xMax && x >= xMin) {
 			target.draw(mBackgroundImages[i]);
 		}
 	}

@@ -118,9 +118,6 @@
     <ClCompile Include="ScoreCounter.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="PowerUp.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="ScoreGauge.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
@@ -133,11 +130,23 @@
     <ClCompile Include="TutorialText.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="MouseCursor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="BackgroundEffect.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="Room.cpp">
       <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="PowerUpItem.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="PowerUps.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpiderWeb.cpp">
+      <Filter>Source Files\PowerUps</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -255,9 +264,6 @@
     <ClInclude Include="ViewUtility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PowerUp.h">
-      <Filter>Header Files\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="ScoreCounter.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
@@ -278,6 +284,18 @@
     </ClInclude>
     <ClInclude Include="Room.h">
       <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="PowerUpItem.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="PowerUps.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpiderWeb.h">
+      <Filter>Header Files\PowerUps</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseCursor.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -307,6 +325,12 @@
     </Filter>
     <Filter Include="Header Files\GUI">
       <UniqueIdentifier>{552173e4-367d-4e60-a497-9cde76ca1fcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\PowerUps">
+      <UniqueIdentifier>{c024cc2b-d77a-4e8c-af08-a9250c49416b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PowerUps">
+      <UniqueIdentifier>{7fb265d6-c6d7-46c9-9719-19c3de83c148}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

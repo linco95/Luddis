@@ -1,7 +1,7 @@
+#define _USE_MATH_DEFINES
 #include "BackgroundEffect.h"
 #include "ResourceManager.h"
-#define _USE_MATH_DEFINES
-#include <math.h>
+#include <cmath>
 
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 static const float ROTATIONSPEED = 0.5f;

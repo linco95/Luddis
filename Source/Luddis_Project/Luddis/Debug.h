@@ -19,18 +19,27 @@ public:
 	};
 	
 	typedef std::vector<sf::Shape*> ShapeVector;
-
-
+	
+	// Functionality to draw debug shapes?
 	//void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	//static ShapeVector mShapes;
+
+	static void finalize();
+	static void initialize();
 
 	static void log(const std::string& aMsg, const ERRORLEVEL& aLvl = DEFAULT);
 
 	Debug(const Debug&) = delete;
-	//Debug& Debug(const Debug&) = delete;
+	Debug& operator=(const Debug&) = delete;
+	Debug() = delete;
 private:
-	Debug();
+	/*static struct Log { 
+		std::string message; 
+		std::string filename; 
+	} mLog;*/
+	static std::string mLog;
+	//static std::string mLog;
 
-	static ShapeVector mShapes;
 
 };
 

@@ -209,7 +209,7 @@ void GameStateLevel::setupMission(const std::string& mapFilename, const std::str
 	assert(configDoc.IsObject());
 
 	mLevel->initializeEntities(mWindow, configDoc);
-	mLevel->readInitMap(mapFilename);
+	//mLevel->readInitMap(mapFilename);
 }
 
 void GameStateLevel::readSetupFiles(const std::string& filename, bool allocate) {

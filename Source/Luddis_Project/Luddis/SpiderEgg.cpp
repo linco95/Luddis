@@ -13,6 +13,7 @@ mAnimation(textureFilename),
 mHitbox(new sf::CircleShape(HITBOX_SHAPE))
 {
 	mAnimation.setOrigin(mAnimation.getSprite().getTextureRect().width / 2.f, mAnimation.getSprite().getTextureRect().height / 2.f);
+	// Set the animation to start at a random frame. Should be read from the animation TODO
 	mAnimation.setFrame(std::rand() % 4);
 	setPosition(aPos);
 	mHitbox->setPosition(getPosition());
