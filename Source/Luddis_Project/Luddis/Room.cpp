@@ -13,7 +13,7 @@ static const std::string DOOR_TEXTURE = "Resources/Images/Rooms/Its_a_door_ok.pn
 static const std::string LEVEL1_TEXTURE = "Resources/Images/Rooms/Level1.png";
 
 Room::Room(GUIManager* guiManager, std::string textureFilename, EventManager* eventManager, sf::RenderWindow* window):
-mIsActive(true),
+mIsActive(false),
 mIsAlive(true),
 mBackground(ResourceManager::getInstance().getTexture(textureFilename)),
 mGUIManager(guiManager),

@@ -2,7 +2,8 @@
 #include "Inventory.h"
 #include "ResourceManager.h"
 
-ScoreGauge::ScoreGauge(sf::RenderWindow* aWindow, std::string backgroundFilename, std::string gaugeFilename, sf::Vector2f screenPos) :
+ScoreGauge::ScoreGauge(sf::RenderWindow* aWindow, std::string backgroundFilename, std::string gaugeFilename, sf::Vector2f screenPos, bool distort) :
+mDistort(distort),
 mIsActive(true),
 mIsAlive(true),
 mInventory(&Inventory::getInstance()),
@@ -20,7 +21,7 @@ ScoreGauge::~ScoreGauge(){
 }
 
 void ScoreGauge::tick(const sf::Time& deltaTime){
-	updateGauge();
+
 }
 
 void ScoreGauge::draw(sf::RenderTarget& target, sf::RenderStates states) const{
@@ -45,13 +46,18 @@ ScoreGauge::RenderLayer ScoreGauge::getRenderLayer() const{
 	return FOREGROUND;
 }
 
-void ScoreGauge::updateGauge(){
-	if (mInventory->getMaxDust() != 0){
-		int maxDust = mInventory->getMaxDust();
-		int currentDust = mInventory->getDust();
-		int offset = maxDust / 5;
+void ScoreGauge::kill() {
+	mIsAlive = false;
+}
 
-		int gaugeWidth = (int)((float)(mFrameRectSize.width - (mFrameRectSize.width * ((float)(currentDust + offset)) / (float)(maxDust + offset))));
+void ScoreGauge::updateGauge(float fillPercent) {
+	if (mInventory->getMaxDust() != 0) {
+
+		float offset = 0;
+		if (mDistort)
+			offset = fillPercent / 5;
+
+		int gaugeWidth = (int)((float)(mFrameRectSize.width - (mFrameRectSize.width * ((fillPercent + offset)) / (1 + offset))));
 		int gaugeHeight = mFrameRectSize.height;
 		int maxX = mFrameRectSize.width - 8;
 		int maxY = mFrameRectSize.height;

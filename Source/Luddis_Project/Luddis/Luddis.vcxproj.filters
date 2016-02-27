@@ -49,9 +49,6 @@
     <ClCompile Include="Level.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="Luddis.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="Obstacle.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
@@ -75,9 +72,6 @@
     </ClCompile>
     <ClCompile Include="Inventory.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Spider.cpp">
-      <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="SpiderEgg.cpp">
       <Filter>Source Files\Entities</Filter>
@@ -139,14 +133,26 @@
     <ClCompile Include="Room.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="PowerUpItem.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="PowerUps.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SpiderWeb.cpp">
       <Filter>Source Files\PowerUps</Filter>
+    </ClCompile>
+    <ClCompile Include="PowerUpItem.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Spider.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Luddis.cpp">
+      <Filter>Source Files\Entities\Luddis</Filter>
+    </ClCompile>
+    <ClCompile Include="LuddisStatePlayable.cpp">
+      <Filter>Source Files\Entities\Luddis</Filter>
+    </ClCompile>
+    <ClCompile Include="LuddisStateStunned.cpp">
+      <Filter>Source Files\Entities\Luddis</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -198,9 +204,6 @@
     <ClInclude Include="Level.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="Luddis.h">
-      <Filter>Header Files\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="Obstacle.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
@@ -218,9 +221,6 @@
     </ClInclude>
     <ClInclude Include="Inventory.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Spider.h">
-      <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="SpiderEgg.h">
       <Filter>Header Files\Entities</Filter>
@@ -297,6 +297,21 @@
     <ClInclude Include="MouseCursor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Spider.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Luddis.h">
+      <Filter>Header Files\Entities\Luddis</Filter>
+    </ClInclude>
+    <ClInclude Include="LuddisState.h">
+      <Filter>Header Files\Entities\Luddis</Filter>
+    </ClInclude>
+    <ClInclude Include="LuddisStatePlayable.h">
+      <Filter>Header Files\Entities\Luddis</Filter>
+    </ClInclude>
+    <ClInclude Include="LuddisStateStunned.h">
+      <Filter>Header Files\Entities\Luddis</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -331,6 +346,12 @@
     </Filter>
     <Filter Include="Header Files\PowerUps">
       <UniqueIdentifier>{7fb265d6-c6d7-46c9-9719-19c3de83c148}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entities\Luddis">
+      <UniqueIdentifier>{565854a2-a227-43c0-8dab-7f0f019ec235}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Luddis">
+      <UniqueIdentifier>{e700d876-6ad8-421e-b981-18569eb54871}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

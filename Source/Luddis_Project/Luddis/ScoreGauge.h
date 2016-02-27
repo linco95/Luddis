@@ -11,7 +11,7 @@ class Inventory;
 
 class ScoreGauge : public InterfaceElement{
 public:
-	ScoreGauge(sf::RenderWindow* aWindow, std::string backgroundFilename, std::string gaugeFilename, sf::Vector2f screenPos);
+	ScoreGauge(sf::RenderWindow* aWindow, std::string backgroundFilename, std::string gaugeFilename, sf::Vector2f screenPos, bool distort = true);
 	virtual ~ScoreGauge();
 
 	void tick(const sf::Time& deltaTime) override;
@@ -20,10 +20,10 @@ public:
 	bool isActive() const  override;
 	void setActive(const bool& active) override;
 	RenderLayer getRenderLayer() const override;
+	void kill();
+	void updateGauge(float fillPercent);
 
 private:
-	void updateGauge();
-
 	sf::RenderWindow* mWindow;
 	Inventory* mInventory;
 	ResourceManager* mResourceManager;
@@ -31,6 +31,7 @@ private:
 	sf::Sprite mGauge;
 	sf::IntRect mFrameRectSize;
 
+	bool mDistort;
 	bool mIsAlive;
 	bool mIsActive;
 };

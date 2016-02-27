@@ -53,13 +53,12 @@ void Menu::initialize(){
 }
 
 void Menu::initializeButtons(){
-	int maxButtons;
+	int maxButtons = 4;
 	sf::Vector2f position(getPosition());
 	sf::Vector2f offset(0, 0);
 	switch (mMenuType)
 	{
 	case Menu::MAINMENU:
-		maxButtons = 4;
 		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
 		addButton(MENUBUTTON_TEXTURE, "Stara Nytt Spel", "NewGame", position+offset, Button::ButtonType::RECTANGLE);
 		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
@@ -71,28 +70,26 @@ void Menu::initializeButtons(){
 		break;
 
 	case Menu::PAUSEMENU:
-		maxButtons = 5;
 		offset = {-450, 0};
 		addButton(MENUBUTTON_TEXTURE_QUITGAME, "", "QuitGame", position + offset, Button::ButtonType::CIRCLE);
 		offset = { -150, 50 };
-		addButton(MENUBUTTON_TEXTURE_DERP, "", "ResetLevel", position + offset, Button::ButtonType::RECTANGLE);
+		addButton(MENUBUTTON_TEXTURE_DERP, "", "ResetLevel", position + offset, Button::ButtonType::CIRCLE);
 		offset = { 150, 50 };
-		addButton(MENUBUTTON_TEXTURE_SETTINGS, "", "Settings", position + offset, Button::ButtonType::RECTANGLE);
+		addButton(MENUBUTTON_TEXTURE_SETTINGS, "", "Settings", position + offset, Button::ButtonType::CIRCLE);
 		offset = { 450, 0 };
 		addButton(MENUBUTTON_TEXTURE_EXITLEVEL, "", "ExitLevel", position + offset, Button::ButtonType::CIRCLE);
 		offset = { 0, 275 };
-		addButton(MENUBUTTON_TEXTURE_RETURN, "", "Continue", position + offset, Button::ButtonType::RECTANGLE);
+		addButton(MENUBUTTON_TEXTURE_RETURN, "", "Continue", position + offset, Button::ButtonType::CIRCLE);
 		break;
 
 	case Menu::DEATHMENU:
-		maxButtons = 4;
-		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
+		offset = { -200,-150 };
 		addButton(MENUBUTTON_TEXTURE_RETURN, "", "Continue", position + offset, Button::ButtonType::CIRCLE);
-		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
-		addButton(MENUBUTTON_TEXTURE, "Starta Om Nivå", "ResetLevel", position + offset, Button::ButtonType::RECTANGLE);
-		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
+		offset = { 200,-150 };
+		addButton(MENUBUTTON_TEXTURE, "Starta Om Nivå", "ResetLevel", position + offset, Button::ButtonType::CIRCLE);
+		offset = { -200,150 };
 		addButton(MENUBUTTON_TEXTURE_EXITLEVEL, "", "ExitLevel", position + offset, Button::ButtonType::CIRCLE);
-		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
+		offset = { -200,150 };
 		addButton(MENUBUTTON_TEXTURE_QUITGAME, "", "QuitGame", position + offset, Button::ButtonType::CIRCLE);
 		break;
 	}

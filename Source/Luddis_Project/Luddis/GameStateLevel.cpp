@@ -13,6 +13,7 @@
 #include "Silverfish.h"
 #include "Spider.h"
 #include "EventZone.h"
+#include "ScoreGauge.h"
 #include "Inventory.h"
 #include "Luddis.h"
 
@@ -20,6 +21,13 @@ static const std::string LUDDIS_TEXTURE = "Resources/Images/Grafik_Luddis120x80_
 static const std::string POWER_DISPLAY = "Resources/Images/GUI/PowerButton.png";
 static const std::string BUTTON_TEXTURE = "Resources/Images/GUI/Button.png";
 static const std::string COMMON_RESOURCES = "Resources/Configs/Levels/CommonResources.json";
+
+static const char* TEXTURE_LUDDGAUGE_FRAME = "Resources/Images/GUI/LuddGaugeFrame.png";
+static const char* TEXTURE_LUDDGAUGE_BAR = "Resources/Images/GUI/LuddGaugeBar.png";
+
+
+static const char* LOADINGBAR_FRAME = "Resources/Images/GUI/Loadingbar_Frame.png";
+static const char* LOADINGBAR_BAR = "Resources/Images/GUI/Loadingbar_Bar.png";
 
 GameStateLevel::GameStateLevel() :
 mEventM(),
@@ -45,18 +53,31 @@ GameStateLevel& GameStateLevel::getInstance() {
 	return gs;
 }
 
+void GameStateLevel::updateLuddGauge() {
+	int maxDust = Inventory::getInstance().getMaxDust();
+	int currentDust = Inventory::getInstance().getDust();
+	float fillPercent = (float)currentDust / (float)maxDust;
+
+	mLuddGauge->updateGauge(fillPercent);
+}
+
 void GameStateLevel::initialize(sf::RenderWindow* window, EntityManager* entityManager, GUIManager* guiManager){
 	mWindow = window;
 	mEntityM = entityManager;
 	mGUIM = guiManager;
-	//TODO: Move to levelSetup(), as theese can change when selectig level.
+	//TODO: Move to levelSetup(), as theese can change when selecting level.
 	mPowerupDisplays[0] = new PowerupDisplay(POWER_DISPLAY, sf::Vector2f((float)ViewUtility::VIEW_WIDTH*0.8f, (float)ViewUtility::VIEW_HEIGHT - 60), 15.0f);
+
+	mLuddGauge = new ScoreGauge(mWindow, TEXTURE_LUDDGAUGE_FRAME, TEXTURE_LUDDGAUGE_BAR, sf::Vector2f(ViewUtility::VIEW_WIDTH * 0.45f, ViewUtility::VIEW_HEIGHT - 60));
+	mGUIM->addInterfaceElement(mLuddGauge);
+
 	mGUIM->addInterfaceElement(mPowerupDisplays[0]);
 	mGameStatePaused = &GameStatePaused::getInstance();
 }
 
 void GameStateLevel::update(sf::Clock& clock){
 	//Do game logic
+	updateLuddGauge();
 	if (!mInDialogue){
 		mEntityM->updateEntities(clock.getElapsedTime());
 		mCM->detectCollisions();
@@ -157,6 +178,8 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 		mFirstTime = false;
 		mCurrentLevelFile = levelFile;
 	}
+	
+
 	mResetView = true;
 	mInDialogue = false;
 
@@ -217,6 +240,11 @@ void GameStateLevel::readSetupFiles(const std::string& filename, bool allocate) 
 	rapidjson::Document configDoc;
 	std::string configText = rm->loadJsonFile(filename);
 	configDoc.Parse(configText.c_str());
+
+	//Create a pretty loading bar
+	
+	//ScoreGauge* loadingbar = new ScoreGauge(mWindow, LOADINGBAR_FRAME, LOADINGBAR_BAR, ViewUtility::getViewSize().getSize()/0.5f, false);
+	//mGUIM->addInterfaceElement(loadingbar);
 
 	assert(configDoc.IsObject());
 	assert(configDoc.HasMember("Audio") && configDoc["Audio"].IsArray());
@@ -321,6 +349,7 @@ void GameStateLevel::readSetupFiles(const std::string& filename, bool allocate) 
 				rm->clearMap(file);
 		}
 	}
+	//loadingbar->kill();
 }
 
 bool GameStateLevel::playable() const {

@@ -29,8 +29,6 @@ static const float DESIRED_ASPECTRATIO = (float)ViewUtility::VIEW_WIDTH / (float
 static const Color BGCOLOR = Color::Black;
 static const std::string TEXTURE_CHIPSCOUNTER = "Resources/Images/GUI/HUD_Chips_Icon.png";
 static const std::string TEXTURE_LUDDCOUNTER = "Resources/Images/GUI/HUD_Ludd_Icon.png";
-static const std::string TEXTURE_LUDDGAUGE_FRAME = "Resources/Images/GUI/LuddGaugeFrame.png";
-static const std::string TEXTURE_LUDDGAUGE_BAR = "Resources/Images/GUI/LuddGaugeBar.png";
 static const std::string TEST_LEVEL = "Resources/Configs/Levels/Level01Entities.json";
 static const char* MOUSE_IMAGE = "Resources/Images/LuddisCursor.png";
 static const std::string FONT_NAME = "arial.ttf";
@@ -68,11 +66,7 @@ struct GameManagerImp : public EventObserver {
 		mGUIManager.addInterfaceElement(mChipsCounter);
 
 		mLuddCounter = new ScoreCounter(&mMainWindow, TEXTURE_LUDDCOUNTER, sf::Vector2f(ViewUtility::VIEW_WIDTH * 0.3f, ViewUtility::VIEW_HEIGHT - 60), ScoreCounter::ScoreType::DUST);
-		mGUIManager.addInterfaceElement(mLuddCounter);
-
-		mLuddGauge = new ScoreGauge(&mMainWindow, TEXTURE_LUDDGAUGE_FRAME, TEXTURE_LUDDGAUGE_BAR, sf::Vector2f(ViewUtility::VIEW_WIDTH * 0.45f, ViewUtility::VIEW_HEIGHT - 60));
-		mGUIManager.addInterfaceElement(mLuddGauge);
-		
+		mGUIManager.addInterfaceElement(mLuddCounter);		
 
 		// Initialize the custom mouse pointer
 		mCursor.initialize(MOUSE_IMAGE, mMainWindow);

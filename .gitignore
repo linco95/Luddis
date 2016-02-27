@@ -12,6 +12,10 @@ SFML-2.3.2/
 *.userosscache
 *.sln.docstates
 
+##!!TEMOPRARY FIX FOR VISUAL STUDIO 2015 UPDATE1 BUG!!
+*.VC.opendb
+##!!TEMOPRARY FIX FOR VISUAL STUDIO 2015 UPDATE1 BUG!!
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

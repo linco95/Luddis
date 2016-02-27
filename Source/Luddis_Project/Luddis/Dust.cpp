@@ -68,7 +68,7 @@ Dust::Type Dust::getCollisionType(){
 }
 
 void Dust::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway){
-	if (collidable->getCollisionCategory() == FRIEND){
+	if (collidable->getCollisionCategory() == PLAYER_OBJECT){
 		mIsAlive = false;
 		Inventory::getInstance().addDust(1);
 		SoundEngine::getInstance().playSound("resources/audio/Damm_Slurp_01.wav");

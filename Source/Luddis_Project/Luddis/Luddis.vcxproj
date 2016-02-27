@@ -101,12 +101,15 @@
     <ClCompile Include="GameStateLevel.cpp" />
     <ClCompile Include="GameStateMap.cpp" />
     <ClCompile Include="GameStatePaused.cpp" />
+    <ClCompile Include="LuddisStatePlayable.cpp" />
+    <ClCompile Include="LuddisStateStunned.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="GUIManager.cpp" />
     <ClCompile Include="InterfaceElement.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="MouseCursor.cpp" />
     <ClCompile Include="PowerupDisplay.cpp" />
+    <ClCompile Include="PowerUpItem.cpp" />
     <ClCompile Include="PowerUps.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="ScoreCounter.cpp" />
@@ -151,6 +154,9 @@
     <ClInclude Include="GameStateLevel.h" />
     <ClInclude Include="GameStateMap.h" />
     <ClInclude Include="GameStatePaused.h" />
+    <ClInclude Include="LuddisState.h" />
+    <ClInclude Include="LuddisStatePlayable.h" />
+    <ClInclude Include="LuddisStateStunned.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="GUIManager.h" />
     <ClInclude Include="InterfaceElement.h" />

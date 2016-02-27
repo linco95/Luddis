@@ -63,8 +63,6 @@ void Obstacle::tick(const sf::Time& deltaTime){
 	// Changing obstacle
 	if (mType == DAMAGE){
 		float toMove = (float)mActiveHitbox->getLocalBounds().height;
-		mAnimation.getCurrAnimation().setOrigin(mAnimation.getCurrAnimation().getSprite().getLocalBounds().width / 2, mAnimation.getCurrAnimation().getSprite().getLocalBounds().height);
-		mAnimation.getCurrAnimation().setPosition(getPosition());
 		// Active obstacle (damaging)
 		if (mIsDamaging == true){
 			mDamageTime -= float(deltaTime.asSeconds());
@@ -93,8 +91,6 @@ void Obstacle::tick(const sf::Time& deltaTime){
 				mAnimation.setDefaultAnimation(ANIMATION_DAMAGE);
 			}
 		}
-		
-		
 		mAnimation.tick(deltaTime);
 	}
 	// Solid obstacle
@@ -160,4 +156,5 @@ Obstacle::Type Obstacle::getCollisionType(){
 }
 
 void Obstacle::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway){
+
 }
