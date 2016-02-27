@@ -388,3 +388,7 @@ void Level::createEffects() {
 		mEntityManager->addEntity(eff);
 	}
 }
+
+void Level::stun(const sf::Time& deltatime) {
+	return;
+}

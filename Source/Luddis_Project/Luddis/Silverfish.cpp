@@ -158,3 +158,7 @@ sf::Shape* Silverfish::getNarrowHitbox() const{
 	
 	return mHitbox;
 }
+
+void Silverfish::stun(const sf::Time& deltatime) {
+
+}

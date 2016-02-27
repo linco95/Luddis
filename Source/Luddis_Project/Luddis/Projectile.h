@@ -21,6 +21,7 @@ public:
 	sf::FloatRect getHitBox() override;
 	sf::Shape* getNarrowHitbox() const override;
 	void setTexture(std::string filename);
+	void stun(const sf::Time& deltatime) override;
 private:
 	void updateMovement(const sf::Time& deltaTime);
 	void checkLifeTime();

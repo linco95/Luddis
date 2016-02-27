@@ -77,3 +77,6 @@ void BackgroundEffect::setTexture(std::string filename) {
 	mSprite.setTexture(ResourceManager::getInstance().getTexture(filename), true);
 }
 
+void BackgroundEffect::stun(const sf::Time& deltatime) {
+
+}

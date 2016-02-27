@@ -18,12 +18,13 @@ public:
 	const Animation& getCurrAnimation() const;
 	void replaceAnimation(const Animation& aAnim);
 	void setDefaultAnimation(const Animation& aAnim);
-
+	void setOrigin(const sf::Vector2f& a_Origin);
 	AnimationQueue(const AnimationQueue&) = delete;
 	AnimationQueue& operator=(const AnimationQueue&) = delete;
 
 private:
 	bool mIsReplaced;
+	sf::Vector2f mOrigin;
 	Animation mDefaultAnim;
 	Animation mReplacingAnim;
 };

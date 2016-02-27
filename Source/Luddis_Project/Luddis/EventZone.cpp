@@ -94,3 +94,7 @@ void EventZone::collide(CollidableEntity* collidable, const sf::Vector2f& moveAw
 		}
 	}
 }
+
+void EventZone::stun(const sf::Time& deltatime) {
+	return;
+}

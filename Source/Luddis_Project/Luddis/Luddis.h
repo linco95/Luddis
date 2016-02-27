@@ -28,6 +28,7 @@ public:
 	void reset(GameStateLevel* gameStateLevel);
 	AnimationQueue* getAnimation();
 	void setPlayerState(LuddisState* luddisState);
+	void stun(const sf::Time& deltatime) override;
 private:
 
 	Category getCollisionCategory() override;

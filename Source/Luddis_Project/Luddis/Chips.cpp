@@ -81,3 +81,7 @@ sf::FloatRect Chips::getHitBox(){
 sf::Shape* Chips::getNarrowHitbox() const{
 	return mHitbox;
 }
+
+void Chips::stun(const sf::Time& deltatime) {
+	return;
+}

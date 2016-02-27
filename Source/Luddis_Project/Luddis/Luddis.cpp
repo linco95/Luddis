@@ -29,9 +29,9 @@ static Animation STASISANIMATION("Resources/Images/Spritesheets/Stasis_ring");
 
 
 Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window, EntityManager* entityManager) :
-	mIsAlive(true),
+	mIsAlive(true), 
 	mIsActive(true),
-	mWindow(window),
+	mWindow(window), 
 	mEntityManager(entityManager),
 	mAnimation(ANIMATION_FILEPATH),
 	mPrevPos(0, 0),
@@ -66,7 +66,7 @@ void Luddis::tick(const sf::Time& deltaTime){
 	//Update the currently active state, unless null pointer.
 	if(mCurrentLuddState!= nullptr)
 		mCurrentLuddState->tick(deltaTime);
-	
+
 	
 	mAnimation.tick(deltaTime);
 
@@ -105,7 +105,7 @@ void Luddis::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway)
 	if (mCurrentLuddState != nullptr)
 		mCurrentLuddState->collide(collidable, moveAway);
 
-}
+			}
 
 // Change luddis' size depending on the amount of dust that the inventory has
 
@@ -137,4 +137,8 @@ void Luddis::reset(GameStateLevel* gameStateLevel) {
 
 AnimationQueue* Luddis::getAnimation(){
 	return &mAnimation;
+}
+
+void Luddis::stun(const sf::Time& deltatime) {
+
 }
