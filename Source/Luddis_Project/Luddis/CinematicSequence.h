@@ -6,7 +6,6 @@
 
 class CinematicSequence {
 public:
-
 	virtual const sf::Vector2f tick(const sf::Time& deltaTime) = 0;
 	virtual bool getFinished() const = 0;
 	virtual CinematicSequence* copy() const = 0;

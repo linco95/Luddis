@@ -30,17 +30,17 @@ mAngle(angle)
 	rotate(angle);
 	//If damaging obstacle (steam)
 	if (type == DAMAGE) {
-		
-		mIdleHitbox->setOrigin(mIdleHitbox->getLocalBounds().width / 2,/* mIdleHitbox->getLocalBounds().height*/0);
+
+		mIdleHitbox->setOrigin(mIdleHitbox->getLocalBounds().width / 2, mIdleHitbox->getLocalBounds().height);
 		mIdleHitbox->setPosition(getPosition());
 		mIdleHitbox->setScale(getScale());
 		mIdleHitbox->setRotation(getRotation());
 
-		mActiveHitbox->setOrigin(mActiveHitbox->getLocalBounds().width / 2, /*mActiveHitbox->getLocalBounds().height*/0);
+		mActiveHitbox->setOrigin(mActiveHitbox->getLocalBounds().width / 2, mActiveHitbox->getLocalBounds().height);
 		mActiveHitbox->setPosition(getPosition());
 		mActiveHitbox->setScale(getScale());
 		mActiveHitbox->setRotation(getRotation());
-		
+
 		mHitbox = mIdleHitbox;
 
 		move(((float)mIdleHitbox->getLocalBounds().height / 2.0f) * VectorMath::getNormal(sf::Vector2f(cos(mAngle), sin(mAngle))));
