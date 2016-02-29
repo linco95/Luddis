@@ -31,12 +31,8 @@ public:
 
 	Debug(const Debug&) = delete;
 	Debug& operator=(const Debug&) = delete;
-	Debug() = delete;
 private:
-	/*static struct Log { 
-		std::string message; 
-		std::string filename; 
-	} mLog;*/
+	Debug();
 	static std::string mLog;
 	//static std::string mLog;
 

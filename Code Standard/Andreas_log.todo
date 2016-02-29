@@ -4,7 +4,7 @@ TODO:
 	- Loading obstacles narrow hitbox form config
 	- Add multi-layered background (lights man, lights!)
   -  Look at parallaxing
-  
+
  ☐ Don't remove dust from level if Luddis are full
  ☐ Add a way to get the amount of sprites in the sheet from the animation
  ✔ Fade out projectiles/ludd @started @done (16-02-23 00:38)
@@ -15,7 +15,9 @@ TODO:
  ✔ Add custom mousepointer @started(16-02-24 12:49) @done (16-02-24 14:31) @lasted(1:42)
  ☐ Make the mouse cursor singelton, or make it accesible from gamemanager (Actually makes sense as we only have one mouse at a time), and add functionality for other classes to replace the cursor
  ☐ Replace the sprite of the cursor with an animation (If we're going to use that)
- ☐ We might need a way to replace animation, and guarantee that it replaces the animation (normally a call to replaceanimation only returns if there is already an rpelaced animation) in animationqueue (overrideAnimation())
+ 
+ ☐ We might need a way to replace animation, and guarantee that it replaces the animation (normally a call to replaceanimation only returns if there is already an replaced animation) in animationqueue (overrideAnimation()) Maybe prioritized?
+ 
  ☐ Maybe make the updates with an fixed timestamp
  ☐ Replace collision enum, with a bitmap? 
  ☐ Collision handles weirdly, kinda works from below, but not from above
@@ -32,12 +34,12 @@ TODO:
  ✔ Make sure luddis doesnt move use mouseposition when they are equal (zero vector does not give pleasant results) @done (16-02-22 09:38)
   ✔ Make sure luddis loads in the correct position (rotation) @done (16-02-23 00:38)
   ✘ Give luddis a direction vector, and use that to give him a default rotation, and maybe use it combined with prevpos, to do collision better? @cancelled (16-02-23 00:38)
-  ☐ Check what mDirectionVector is actually used for. Maybe delete prevPos now that the collision handles itself?
+  ✔ Check what mDirectionVector is actually used for. Maybe delete prevPos now that the collision handles itself? @done (16-02-26 14:18)
 
- ☐ Implement a music queue for starting with an intro, and moving on to looping music
+ ✔ Implement a music queue for starting with an intro, and moving on to looping music @done (16-02-26 14:18)
  ☐ Test window mode
  ☐ Make the screen scale to the resolution used (Adding black bars)
- ☐ Make a naming convention for the files used in the program, and implement it
+ ✔ Make a naming convention for the files used in the program, and implement it @done (16-02-26 14:18)
 
  ✔ Check that my math for checking gaps in SAT is correct / not redundant @done (16-02-22 09:38)
  ✔ Align the collision check to the actual shape @done (16-02-22 09:38)
@@ -51,7 +53,7 @@ TODO:
   ✘ Skriva en lista med beteenden, och en lista med data som behövs, i Luddis @cancelled (16-02-22 09:40)
   ✘ Konvertera listan med data till primitiva datatyper (dubletter hanteras senare) @cancelled (16-02-22 09:40)
 
- ☐ Implement FMOD?  Implement it after finishing the collision!
+ ✔ Implement FMOD?  Implement it after finishing the collision! @done (16-02-26 14:18)
 
  ☐ Generally assert pre-requirements (zeropointer etc). DbC
 
@@ -187,8 +189,19 @@ Fixed the collision. The points were just transformed to the shapes location, wi
   Made the silverfish swim away from luddis when dying
   ✔ LUNCH @started(16-02-23 11:29) @done (16-02-23 13:17) @lasted(1:48)
   Organizing resourcefiles
-  ☐ Make a temporary stasis ring that animates
+  ✔ Make a temporary stasis ring that animates @done (16-02-25 22:10)
   24/2/16:
     Continuing the organizing of resources
     Started implementing a custom mouse cursor
     Made the debug class save the log to a file
+  25/2/16:
+    Continued work on debug saving log to file
+    Rewriting the level to load from config file instead of map Gabriel did that
+    Implemented a stasis ring for Johanna
+  26/2/16:
+    Implementing a more proper graphics for the pause menu
+  27/2/16:
+    Started planning out a level editor
+  28/2/16:
+    Started trying to implement level editor
+    
