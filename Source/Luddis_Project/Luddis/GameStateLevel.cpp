@@ -16,6 +16,8 @@
 #include "ScoreGauge.h"
 #include "Inventory.h"
 #include "Luddis.h"
+#include "LuddisStateCinematic.h"
+#include "CinematicPause.h"
 
 static const std::string LUDDIS_TEXTURE = "Resources/Images/Grafik_Luddis120x80_s1d3v1.png";
 static const std::string POWER_DISPLAY = "Resources/Images/GUI/PowerButton.png";
@@ -191,6 +193,28 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	mInv.dust = inv->getDust();
 	mInv.eggs = inv->getEggs();
 	mPlayer = new Luddis(LUDDIS_TEXTURE, mWindow, mEntityM);
+	//CINEMATIC TEST
+	Polynomial poly;
+	poly.addTerm(1, 3);
+	poly.addTerm(-1, 2);
+	poly.addTerm(-2, 1);
+	poly.addTerm(1, 0);
+	Tween tween(poly, 0, 2);
+	CinematicPause pauseCin(2);
+	LuddisStateCinematic* cinState = new LuddisStateCinematic(100, mPlayer, mWindow, mEntityM);
+	cinState->addCinematicSequence(&tween);
+	cinState->addCinematicSequence(&tween);
+	cinState->addCinematicSequence(&pauseCin);
+	cinState->addCinematicSequence(&tween);
+	cinState->addSpeedShift(50, 1);
+	cinState->addSpeedShift(200, 1);
+	cinState->addSpeedShift(50, 1);
+	cinState->addSpeedShift(200, 1);
+	cinState->addSpeedShift(50, 1);
+	cinState->addSpeedShift(200, 1);
+	mPlayer->setPlayerState(cinState);
+	mPlayer->setPosition(-50.0f, (float)ViewUtility::VIEW_HEIGHT/2.0f);
+	//END CINEMATIC TEST
 	mEntityM->addEntity(mPlayer);
 	mCM->addCollidable(mPlayer);
 	mLevel = new Level(mEntityM);
@@ -241,7 +265,7 @@ void GameStateLevel::readSetupFiles(const std::string& filename, bool allocate) 
 	std::string configText = rm->loadJsonFile(filename);
 	configDoc.Parse(configText.c_str());
 
-	//Create a pretty loading bar
+	//TODO: Create a pretty loading bar
 	
 	//ScoreGauge* loadingbar = new ScoreGauge(mWindow, LOADINGBAR_FRAME, LOADINGBAR_BAR, ViewUtility::getViewSize().getSize()/0.5f, false);
 	//mGUIM->addInterfaceElement(loadingbar);

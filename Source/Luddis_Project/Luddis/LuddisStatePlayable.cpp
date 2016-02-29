@@ -1,6 +1,7 @@
 #define _USE_MATH_DEFINES
 #include "LuddisStatePlayable.h"
 #include "LuddisStateStunned.h"
+#include "LuddisStateDead.h"
 #include "Luddis.h"
 #include "Projectile.h"
 #include "VectorMath.h"
@@ -81,12 +82,10 @@ void LuddisStatePlayable::collide(CollidableEntity * collidable, const sf::Vecto
 		if (collidable->getCollisionCategory() == CollidableEntity::BG_DAMAGE || collidable->getCollisionCategory() == CollidableEntity::ENEMY) {
 			mPlayerPtr->getAnimation()->replaceAnimation(HIT_ANIMATION);
 			mInvincibility += INVINCIBILITY_TIMER;
-			Inventory::getInstance().addDust(-1);
 			if (Inventory::getInstance().getDust() == 0) {
-
-				//TODO: add dead state here
-
+				mPlayerPtr->setPlayerState(new LuddisStateDead(mPlayerPtr));
 			}
+			Inventory::getInstance().addDust(-1);
 		}
 		// Collision with a collectible
 		/*if (collidable->getCollisionCategory() == COLLECT){
@@ -96,7 +95,8 @@ void LuddisStatePlayable::collide(CollidableEntity * collidable, const sf::Vecto
 		if (collidable->getCollisionCategory() == CollidableEntity::ENEMY_STUN) {
 			//Replace animation before changing state or a crash will occur.
 			mPlayerPtr->getAnimation()->replaceAnimation(HIT_ANIMATION);
-			mPlayerPtr->setPlayerState(new LuddisStateStunned(mPlayerPtr, 1.0f, mWindow, mEntityManager)); //TODO: add a way to make stun timers modular.
+			//TODO: add a way to make stun timers modular.
+			mPlayerPtr->setPlayerState(new LuddisStateStunned(mPlayerPtr, 1.0f, mWindow, mEntityManager));
 			mInvincibility += INVINCIBILITY_TIMER;
 		}
 	}
@@ -136,14 +136,10 @@ void LuddisStatePlayable::updateMovement(const sf::Time & deltaTime){
 
 	sf::Vector2f tempPos = mPlayerPtr->getPosition();
 
-	
-		//Only move if not close to the cursor position
+		//Only move if not too close to the cursor position
 		if (VectorMath::getVectorLengthSq(mDirectionVector) > GRACEAREA) {
 			mPlayerPtr->move(moveX, moveY);
 		}
-	
-
-
 	mPrevPos = tempPos;
 }
 
@@ -161,7 +157,7 @@ void LuddisStatePlayable::attack(){
 	SoundEngine::getInstance().playSound("Resources/Audio/Luddis_skott_16bit.wav");
 
 	// Set the muzzlepoint where the projectile will get created
-	sf::Vector2f muzzlePoint = mPlayerPtr-> getPosition() + direction * MUZZLEOFFSET*mPlayerPtr->getScale().y;
+	sf::Vector2f muzzlePoint = mPlayerPtr->getPosition() + direction * MUZZLEOFFSET*mPlayerPtr->getScale().x;
 	// Set the projectile cooldown
 	mProjectileCooldown = PROJECTILE_RELOAD;
 

@@ -1,5 +1,6 @@
 #define _USE_MATH_DEFINES
 #include "VectorMath.h"
+#include "Debug.h"
 #include <cmath>
 #include <cassert>
 
@@ -19,7 +20,11 @@ sf::Vector2f VectorMath::projectVector(const sf::Vector2f& aVector, const sf::Ve
 }
 
 sf::Vector2f VectorMath::normalizeVector(const sf::Vector2f& vector){
-	assert(getVectorLengthSq(vector) != 0);
+	if (getVectorLengthSq(vector) == 0) {
+		Debug::log("Division by zero detected.", Debug::WARNING);
+		return sf::Vector2f(0, 0);
+	}
+	//assert(getVectorLengthSq(vector) != 0);
 	if (getVectorLengthSq(vector) == 1) return vector;
 	float factor = 1 / getVectorLength(vector);
 	 return sf::Vector2f(vector.x*factor, vector.y*factor);

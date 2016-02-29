@@ -3,7 +3,7 @@
 
 Inventory::Inventory():
 mChips(0),
-mDust(0),
+mDust(2),
 mEggs(0),
 mPowerUp(0),
 mMaxDust(15)
