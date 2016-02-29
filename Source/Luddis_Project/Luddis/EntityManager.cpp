@@ -83,3 +83,10 @@ void EntityManager::emptyVector(){
 		mEntities.pop_back();
 	}
 }
+
+void EntityManager::stunEntities(const sf::Time deltatime) {
+	EntitiesVector temp(mEntities);
+	for (auto e : temp) {
+		e->stun(deltatime);
+	}
+}

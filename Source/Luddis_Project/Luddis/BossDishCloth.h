@@ -40,6 +40,7 @@ private:
 	sf::Vector2f mDirection;
 	int mLife;
 	sf::Shape* mHitbox;
+	float mTimeStunned;
 };
 
 #endif // !_INCLUDED_BOSSDISHCLOTH

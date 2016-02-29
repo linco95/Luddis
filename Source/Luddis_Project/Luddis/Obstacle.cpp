@@ -61,36 +61,41 @@ Obstacle::~Obstacle(){
 void Obstacle::tick(const sf::Time& deltaTime){
 	// Changing obstacle
 	if (mType == DAMAGE){
-		float toMove = (float)mActiveHitbox->getLocalBounds().height;
-		// Active obstacle (damaging)
-		if (mIsDamaging == true){
-			mDamageTime -= float(deltaTime.asSeconds());
-			if (mDamageTime <= 0){
-				mIsDamaging = false;
-				mDamageTime = DAMAGE_TIME;
-				// Move to start idle animation
-				float temp = toMove - (float)mIdleHitbox->getLocalBounds().height;
-				sf::Vector2f moving = -(temp / 2.0f) * VectorMath::getNormal(sf::Vector2f(cos(mAngle), sin(mAngle)));
-				move(moving);
-				mHitbox = mIdleHitbox;
-				mAnimation.setDefaultAnimation(ANIMATION_IDLE);
+		if (mTimeStunned <= 0) {
+			float toMove = (float)mActiveHitbox->getLocalBounds().height;
+			// Active obstacle (damaging)
+			if (mIsDamaging == true) {
+				mDamageTime -= float(deltaTime.asSeconds());
+				if (mDamageTime <= 0) {
+					mIsDamaging = false;
+					mDamageTime = DAMAGE_TIME;
+					// Move to start idle animation
+					float temp = toMove - (float)mIdleHitbox->getLocalBounds().height;
+					sf::Vector2f moving = -(temp / 2.0f) * VectorMath::getNormal(sf::Vector2f(cos(mAngle), sin(mAngle)));
+					move(moving);
+					mHitbox = mIdleHitbox;
+					mAnimation.setDefaultAnimation(ANIMATION_IDLE);
+				}
 			}
-		}
-		// Inactive
-		else if (mIsDamaging == false){
-			mIdleTime -= float(deltaTime.asSeconds());
-			if (mIdleTime <= 0){
-				mIsDamaging = true;
-				mIdleTime = IDLE_TIME;
-				// Move to start damaging animation
-				float temp = toMove - (float)mIdleHitbox->getLocalBounds().height;
-				sf::Vector2f moving = (temp / 2.0f) * VectorMath::getNormal(sf::Vector2f(cos(mAngle), sin(mAngle)));
-				move(moving);
-				mHitbox = mActiveHitbox;
-				mAnimation.setDefaultAnimation(ANIMATION_DAMAGE);
+			// Inactive
+			else if (mIsDamaging == false) {
+				mIdleTime -= float(deltaTime.asSeconds());
+				if (mIdleTime <= 0) {
+					mIsDamaging = true;
+					mIdleTime = IDLE_TIME;
+					// Move to start damaging animation
+					float temp = toMove - (float)mIdleHitbox->getLocalBounds().height;
+					sf::Vector2f moving = (temp / 2.0f) * VectorMath::getNormal(sf::Vector2f(cos(mAngle), sin(mAngle)));
+					move(moving);
+					mHitbox = mActiveHitbox;
+					mAnimation.setDefaultAnimation(ANIMATION_DAMAGE);
+				}
 			}
+			mAnimation.tick(deltaTime);
 		}
-		mAnimation.tick(deltaTime);
+		else {
+			mTimeStunned -= deltaTime.asSeconds();
+		}
 	}
 	// Solid obstacle
 	else {
@@ -160,7 +165,7 @@ void Obstacle::collide(CollidableEntity *collidable, const sf::Vector2f& moveAwa
 
 void Obstacle::stun(const sf::Time& deltatime) {
 	if (mType == DAMAGE) {
-
+		mTimeStunned = float(deltatime.asSeconds());
 	}
 	else {
 		return;

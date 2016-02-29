@@ -38,6 +38,8 @@ private:
 	float mInvincibility;
 	bool mIsFlipped;
 
+	float mStunTimer;
+	bool mStunning;
 };
 
 #endif // !_INCLUDED_LUDDISSTATEPLAYABLE_

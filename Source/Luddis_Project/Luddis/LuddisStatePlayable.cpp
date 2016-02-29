@@ -14,6 +14,7 @@
 #include <SFML/Window/Mouse.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include "PowerupDisplay.h"
 
 // All of these should maybe be loaded from file instead, to avoid hard coded variables
 //All float times are in seconds
@@ -25,6 +26,7 @@ static const float MOVESPEED = 200;
 static const float PROJECTILE_SPEED = 300;
 static const float MUZZLEOFFSET = 50.0f;
 static const sf::Vector2f FRONTVECTOR(1, 0);
+static const float STUNTIME = 3.0f;
 
 static const std::string ANIMATION_FILEPATH = "Resources/Images/Spritesheets/Luddis_walkcykle";
 static const std::string ANIMATION_ALMOSTDEAD = "Resources/Images/Spritesheets/luddis_CriticalHealth";
@@ -47,7 +49,10 @@ LuddisStatePlayable::LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* wi
 	mIsFlipped(false),
 	mPlayerPtr(playerPtr),
 	mEntityManager(entityManager),
-	mWindow(window){
+	mWindow(window),
+	mStunTimer(0),
+	mStunning(false)
+{
 
 }
 
@@ -62,6 +67,16 @@ void LuddisStatePlayable::tick(const sf::Time& deltaTime){
 	if (mInvincibility >= 0) {
 		mInvincibility -= deltaTime.asSeconds();
 	}
+	// Handle stunning of hostiles
+	if (mStunning == true && mStunTimer > 0) {
+		mStunTimer -= deltaTime.asSeconds();
+		mEntityManager->stunEntities(sf::seconds(mStunTimer));
+	}
+	else if (mStunTimer <= 0 && mStunning == true) {
+		mStunTimer = STUNTIME;
+		mStunning = false;
+	}
+
 	handleInput(deltaTime);
 	updateRotation();
 
@@ -123,7 +138,12 @@ void LuddisStatePlayable::handleInput(const sf::Time & deltaTime){
 	//Handle keyboard presses
 	// TODO make this an event instead
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
-		SoundEngine::getInstance().setMainVolume(1);
+		if (true) {
+			mStunning = true;
+		}
+		else {
+			return;
+		}
 	}
 }
 

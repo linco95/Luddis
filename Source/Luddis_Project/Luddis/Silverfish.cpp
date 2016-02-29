@@ -61,22 +61,27 @@ Silverfish::~Silverfish(){
 }
 
 void Silverfish::tick(const sf::Time& deltaTime){
-	if (mTarget->getPosition().x >= mActivate){
-		mIsActive = true;
+	if (mTimeStunned <= 0) {
+		if (mTarget->getPosition().x >= mActivate) {
+			mIsActive = true;
+		}
+		if (!mIsActive) return;
+		if (mBefriend) {
+			mAlignment = FRIEND;
+			mBefriend = false;
+		}
+		updateMovement(deltaTime);
+		mAnimation.tick(deltaTime);
+		// TODO: Cleanup, enable fishes to be outside while spawning
+		if (getPosition().y<(
+			-mAnimation.getCurrAnimation().getSprite().getGlobalBounds().height / 2) ||
+			getPosition().y > mWindow->getView().getSize().y + mAnimation.getCurrAnimation().getSprite().getGlobalBounds().height / 2
+			) {
+			mIsAlive = false;
+		}
 	}
-	if (!mIsActive) return;
-	if (mBefriend){
-		mAlignment = FRIEND;
-		mBefriend = false;
-	}
-	updateMovement(deltaTime);
-	mAnimation.tick(deltaTime);
-	// TODO: Cleanup, enable fishes to be outside while spawning
-	if (getPosition().y<(
-		-mAnimation.getCurrAnimation().getSprite().getGlobalBounds().height / 2) ||
-		getPosition().y > mWindow->getView().getSize().y + mAnimation.getCurrAnimation().getSprite().getGlobalBounds().height / 2
-		){
-		mIsAlive = false;
+	else {
+		mTimeStunned -= deltaTime.asSeconds();
 	}
 }
 
@@ -138,6 +143,7 @@ void Silverfish::collide(CollidableEntity *collidable, const sf::Vector2f& moveA
 			mNextDir = VectorMath::normalizeVector(getPosition() - collidable->getPosition());
 			//SPEED = 220;
 			mBefriend = true;
+			mTimeStunned = 0;
 			}
 		}
 	}
@@ -160,5 +166,10 @@ sf::Shape* Silverfish::getNarrowHitbox() const{
 }
 
 void Silverfish::stun(const sf::Time& deltatime) {
-
+	if (mSwimAway == false) {
+		mTimeStunned = float(deltatime.asSeconds());
+	}
+	else {
+		return;
+	}
 }

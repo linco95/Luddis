@@ -66,11 +66,16 @@ void fadeProjectile(sf::Sprite& a_Sprite, const sf::Time& a_TimeLeft){
 }
 
 void Projectile::tick(const sf::Time& deltaTime){
-	mLifeTime -= deltaTime.asSeconds();
-	checkLifeTime();
-	fadeProjectile(mSprite, sf::seconds(mLifeTime));
-	updateMovement(deltaTime);
-	rotate(ROTATIONSPEED);
+	if (mTimeStunned <= 0) {
+		mLifeTime -= deltaTime.asSeconds();
+		checkLifeTime();
+		fadeProjectile(mSprite, sf::seconds(mLifeTime));
+		updateMovement(deltaTime);
+		rotate(ROTATIONSPEED);
+	}
+	else {
+		mTimeStunned -= deltaTime.asSeconds();
+	}
 }
 
 void Projectile::draw(sf::RenderTarget& target, sf::RenderStates states) const{
@@ -144,5 +149,10 @@ sf::Shape* Projectile::getNarrowHitbox() const{
 }
 
 void Projectile::stun(const sf::Time& deltatime) {
-
+	if (mCollisionCategory == ENEMY || mCollisionCategory == ENEMY_STUN || mCollisionCategory == ENEMY_PROJECTILE) {
+		mTimeStunned = float(deltatime.asSeconds());
+	}
+	else {
+		return;
+	}
 }

@@ -43,6 +43,7 @@ private:
 	AnimationQueue mAnimation;
 	sf::Vector2f mNextDir;
 	Category mAlignment;
+	float mTimeStunned;
 };
 
 #endif

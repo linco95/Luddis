@@ -36,6 +36,7 @@ private:
 	Type getCollisionType() override;
 	void collide(CollidableEntity *collidable, const sf::Vector2f& moveAway) override;
 	sf::Shape* mHitbox;
+	float mTimeStunned;
 };
 
 #endif // !_INCLUDED_PROJECTILE_
