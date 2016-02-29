@@ -124,7 +124,7 @@ void Projectile::collide(CollidableEntity *collidable, const sf::Vector2f& moveA
 	if (collidable->getCollisionCategory() == ENEMY_STUN && mCollisionCategory == HAIR){
 		mIsAlive = false;
 	}
-	if (collidable->getCollisionCategory() == FRIEND && mCollisionCategory == ENEMY_STUN){
+	if (collidable->getCollisionCategory() == PLAYER_OBJECT && mCollisionCategory == ENEMY_STUN){
 		mIsAlive = false;
 	}
 
@@ -141,4 +141,8 @@ sf::Shape* Projectile::getNarrowHitbox() const{
 	mHitbox->setPosition(getPosition());
 	mHitbox->setRotation(getRotation());
 	return mHitbox;
+}
+
+void Projectile::stun(const sf::Time& deltatime) {
+
 }

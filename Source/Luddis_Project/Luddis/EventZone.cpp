@@ -66,7 +66,7 @@ EventZone::Type EventZone::getCollisionType(){
 }
 
 void EventZone::collide(CollidableEntity* collidable, const sf::Vector2f& moveAway){
-	if (collidable->getCollisionCategory() == FRIEND){
+	if (collidable->getCollisionCategory() == PLAYER_OBJECT){
 		mIsAlive = false;
 		std::string filename = SPIDER_DIALOGUE;
 		switch (mEventType)
@@ -93,4 +93,8 @@ void EventZone::collide(CollidableEntity* collidable, const sf::Vector2f& moveAw
 			break;
 		}
 	}
+}
+
+void EventZone::stun(const sf::Time& deltatime) {
+	return;
 }

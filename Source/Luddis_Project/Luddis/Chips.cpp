@@ -67,7 +67,7 @@ Chips::Type Chips::getCollisionType(){
 
 
 void Chips::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway){
-	if (collidable->getCollisionCategory() == FRIEND){
+	if (collidable->getCollisionCategory() == PLAYER_OBJECT){
 		mIsAlive = false;
 		Inventory::getInstance().changeChips(1);
 		SoundEngine::getInstance().playSound("resources/audio/luddis_crumbgather_s1d2v1.wav");
@@ -80,4 +80,8 @@ sf::FloatRect Chips::getHitBox(){
 
 sf::Shape* Chips::getNarrowHitbox() const{
 	return mHitbox;
+}
+
+void Chips::stun(const sf::Time& deltatime) {
+	return;
 }

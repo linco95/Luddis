@@ -24,28 +24,29 @@
 using namespace sf;
 
 static const float X_OFFSET = 200.f,
-Y_OFFSET = 50.f,
-SCROLLSPEED = 200;
+				   Y_OFFSET = 50.f,
+				   SCROLLSPEED = 200;
 
 static const float EFFECT_INTERVAL = 0.7f,
-EFFECT_SPEED = 400,
-EFFECT_LIFETIME = 7.5f;
+				   EFFECT_SPEED = 400,
+				   EFFECT_LIFETIME = 7.5f;
 
 static const char* EFFECT_FILEPATH = "Resources/Images/Rag_projectile.png";
 static const char* mapfilepath = "Resources/Configs/Levels/Level1Gatherables.png";
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::BACKGROUND;
 
 Level::Level(EntityManager* entityManager) :
-	mIsActive(true),
-	mEntityManager(entityManager),
-	mGameStateLevel(&GameStateLevel::getInstance()),
-	mEffectInterval(EFFECT_INTERVAL)
+mIsActive(true),
+mProgress(0),
+mEntityManager(entityManager),
+mGameStateLevel(&GameStateLevel::getInstance()),
+mEffectInterval(EFFECT_INTERVAL)
 {
 
 }
 
 Level::~Level() {
-
+	
 }
 
 void Level::readInitMap(const std::string& filename) {
@@ -56,13 +57,13 @@ void Level::readInitMap(const std::string& filename) {
 	for (auto e : pixelVector) {
 		if (e.color == sf::Color(0, 0, 0)) {//Black
 			obj = new Dust(mWindow, "Resources/Images/Dust.png", e.position, 0);
-		}
+				}
 		else if (e.color == sf::Color(255, 255, 0)) {//Yellow
 			obj = new Chips(mWindow, "Resources/Images/Chips.png", e.position, 0);
-		}
+				}
 		else if (e.color == sf::Color(0, 0, 255)) {//Blue
 			obj = new SpiderEgg(mWindow, "Resources/Images/Spritesheets/Spider_egg", e.position);
-		}
+			}
 		if (obj != 0) {
 			mEntityManager->addEntity(obj);
 			cm->addCollidable(obj);
@@ -81,25 +82,25 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 
 	// Silverfishes
 	if (configDoc.HasMember("Silverfish_spawns") && configDoc["Silverfish_spawns"].IsArray()) {
-		const rapidjson::Value& fishSpawns = configDoc["Silverfish_spawns"];
+	const rapidjson::Value& fishSpawns = configDoc["Silverfish_spawns"];
 		for (rapidjson::Value::ConstValueIterator itr = fishSpawns.Begin(); itr != fishSpawns.End(); itr++) {
-			assert(itr->IsObject());
-			assert(itr->HasMember("x") && (*itr)["x"].IsInt());
-			assert(itr->HasMember("y") && (*itr)["y"].IsInt());
-			assert(itr->HasMember("angle") && (*itr)["angle"].IsDouble());
-			assert(itr->HasMember("activationpos") && (*itr)["activationpos"].IsInt());
+		assert(itr->IsObject());
+		assert(itr->HasMember("x") && (*itr)["x"].IsInt());
+		assert(itr->HasMember("y") && (*itr)["y"].IsInt());
+		assert(itr->HasMember("angle") && (*itr)["angle"].IsDouble());
+		assert(itr->HasMember("activationpos") && (*itr)["activationpos"].IsInt());
 
-			float x = (float)(*itr)["x"].GetInt();
-			float y = (float)(*itr)["y"].GetInt();
-			sf::Vector2f pos(x, y);
-			float angle = (float)(*itr)["angle"].GetDouble();
-			float act = (float)(*itr)["activationpos"].GetInt();
+		float x = (float)(*itr)["x"].GetInt();
+		float y = (float)(*itr)["y"].GetInt();
+		sf::Vector2f pos(x, y);
+		float angle = (float)(*itr)["angle"].GetDouble();
+		float act = (float)(*itr)["activationpos"].GetInt();
 
-			Silverfish* fish = new Silverfish(mWindow, pos, angle, act, mTarget);
-			mEntityManager->addEntity(fish);
-			cm->addCollidable(fish);
-			Debug::log("Spawning silverfish at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
-		}
+		Silverfish* fish = new Silverfish(mWindow, pos, angle, act, mTarget);
+		mEntityManager->addEntity(fish);
+		cm->addCollidable(fish);
+		Debug::log("Spawning silverfish at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
+	}
 	}
 
 	//TutorialTexts
@@ -124,56 +125,56 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 	}
 
 	if (configDoc.HasMember("Obstacle_spawns") && configDoc["Obstacle_spawns"].IsArray()) {
-		// Obstacles
-		const rapidjson::Value& obstacleSpawns = configDoc["Obstacle_spawns"];
+	// Obstacles
+	const rapidjson::Value& obstacleSpawns = configDoc["Obstacle_spawns"];
 		for (rapidjson::Value::ConstValueIterator itr = obstacleSpawns.Begin(); itr != obstacleSpawns.End(); itr++) {
-			assert(itr->IsObject());
-			assert(itr->HasMember("type") && (*itr)["type"].IsInt());
-			assert(itr->HasMember("x") && (*itr)["x"].IsInt());
-			assert(itr->HasMember("y") && (*itr)["y"].IsInt());
-			assert(itr->HasMember("angle") && (*itr)["angle"].IsDouble());
-			assert(itr->HasMember("height") && (*itr)["height"].IsInt());
-			assert(itr->HasMember("width") && (*itr)["width"].IsInt());
+		assert(itr->IsObject());
+		assert(itr->HasMember("type") && (*itr)["type"].IsInt());
+		assert(itr->HasMember("x") && (*itr)["x"].IsInt());
+		assert(itr->HasMember("y") && (*itr)["y"].IsInt());
+		assert(itr->HasMember("angle") && (*itr)["angle"].IsDouble());
+		assert(itr->HasMember("height") && (*itr)["height"].IsInt());
+		assert(itr->HasMember("width") && (*itr)["width"].IsInt());
 
 			int type = (*itr)["type"].GetInt();
-			//Position
-			float x = (float)(*itr)["x"].GetInt();
-			float y = (float)(*itr)["y"].GetInt();
-			sf::Vector2f pos(x, y);
+		//Position
+		float x = (float)(*itr)["x"].GetInt();
+		float y = (float)(*itr)["y"].GetInt();
+		sf::Vector2f pos(x, y);
 
-			float angle = (float)(*itr)["angle"].GetDouble();
-			// Size
-			float sX = (float)(*itr)["width"].GetInt();
-			float sY = (float)(*itr)["height"].GetInt();
-			sf::Vector2f size(sX, sY);
+		float angle = (float)(*itr)["angle"].GetDouble();
+		// Size
+		float sX = (float)(*itr)["width"].GetInt();
+		float sY = (float)(*itr)["height"].GetInt();
+		sf::Vector2f size(sX, sY);
 
 			Obstacle* obstacle = new Obstacle(mWindow, Obstacle::ObstacleType(type), pos, angle, size);
-			mEntityManager->addEntity(obstacle);
-			cm->addCollidable(obstacle);
-			Debug::log("Spawning obstacle at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
-		}
+		mEntityManager->addEntity(obstacle);
+		cm->addCollidable(obstacle);
+		Debug::log("Spawning obstacle at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
+	}
 	}
 
 
 	// The boss
 	if (configDoc.HasMember("Boss_spawns") && configDoc["Boss_spawns"].IsArray()) {
-		const rapidjson::Value& bossSpawns = configDoc["Boss_spawns"];
+	const rapidjson::Value& bossSpawns = configDoc["Boss_spawns"];
 		for (rapidjson::Value::ConstValueIterator itr = bossSpawns.Begin(); itr != bossSpawns.End(); itr++) {
-			assert(itr->IsObject());
-			assert(itr->HasMember("x") && (*itr)["x"].IsInt());
-			assert(itr->HasMember("y") && (*itr)["y"].IsInt());
-			assert(itr->HasMember("activationpos") && (*itr)["activationpos"].IsInt());
+		assert(itr->IsObject());
+		assert(itr->HasMember("x") && (*itr)["x"].IsInt());
+		assert(itr->HasMember("y") && (*itr)["y"].IsInt());
+		assert(itr->HasMember("activationpos") && (*itr)["activationpos"].IsInt());
 
-			float x = (float)(*itr)["x"].GetInt();
-			float y = (float)(*itr)["y"].GetInt();
-			sf::Vector2f pos(x, y);
-			float act = (float)(*itr)["activationpos"].GetInt();
+		float x = (float)(*itr)["x"].GetInt();
+		float y = (float)(*itr)["y"].GetInt();
+		sf::Vector2f pos(x, y);
+		float act = (float)(*itr)["activationpos"].GetInt();
 
-			BossDishCloth* boss = new BossDishCloth(mWindow, pos, act, mTarget, mEntityManager);
-			mEntityManager->addEntity(boss);
-			cm->addCollidable(boss);
-			Debug::log("Spawning boss at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
-		}
+		BossDishCloth* boss = new BossDishCloth(mWindow, pos, act, mTarget, mEntityManager);
+		mEntityManager->addEntity(boss);
+		cm->addCollidable(boss);
+		Debug::log("Spawning boss at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
+	}
 	}
 
 	//Event zones
@@ -205,23 +206,23 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 
 	//The background
 	if (configDoc.HasMember("Background")) {
-		const rapidjson::Value& background = configDoc["Background"];
-		assert(background.IsObject());
-		const rapidjson::Value& segments = background["segments"];
-		assert(segments.IsInt());
-		assert(background["filename"].IsString());
+	const rapidjson::Value& background = configDoc["Background"];
+	assert(background.IsObject());
+	const rapidjson::Value& segments = background["segments"];
+	assert(segments.IsInt());
+	assert(background["filename"].IsString());
 		for (int i = 0; i < segments.GetInt(); i++) {
-			std::string BGFILEPATH = background["filename"].GetString();
-			int position = background["filename"].GetStringLength() - 4;
+		std::string BGFILEPATH = background["filename"].GetString();
+		int position = background["filename"].GetStringLength() - 4;
 			BGFILEPATH.insert(position, std::to_string(i + 1));
-			rm->loadTexture(BGFILEPATH, IntRect(Vector2<int>(), Vector2<int>(Texture::getMaximumSize(), Texture::getMaximumSize())));
-			sf::IntRect rect(0, 0, (int)rm->getTexture(BGFILEPATH).getSize().x, (int)rm->getTexture(BGFILEPATH).getSize().y);
-			mMapBounds.height = rect.height;
-			sf::Sprite sprite(rm->getTexture(BGFILEPATH));
-			sprite.setPosition((float)mMapBounds.width, 0.0f);
-			mBackgroundImages.push_back(sprite);
-			increaseMapBounds(rect);
-		}
+		rm->loadTexture(BGFILEPATH, IntRect(Vector2<int>(), Vector2<int>(Texture::getMaximumSize(), Texture::getMaximumSize())));
+		sf::IntRect rect(0, 0, (int)rm->getTexture(BGFILEPATH).getSize().x, (int)rm->getTexture(BGFILEPATH).getSize().y);
+		mMapBounds.height = rect.height;
+		sf::Sprite sprite(rm->getTexture(BGFILEPATH));
+		sprite.setPosition((float)mMapBounds.width, 0.0f);
+		mBackgroundImages.push_back(sprite);
+		increaseMapBounds(rect);
+	}
 	}
 	//Dust
 	if (configDoc.HasMember("Dust_spawns") && configDoc["Dust_spawns"].IsArray()) {
@@ -257,8 +258,8 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 			mEntityManager->addEntity(chips);
 			cm->addCollidable(chips);
 			Debug::log("Spawning chips at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
-		}
-	}
+}
+}
 }
 
 void Level::increaseMapBounds(sf::IntRect size) {
@@ -308,7 +309,7 @@ void Level::updateView(const Time& deltaTime) {
 	float maxX = mMapBounds.width - view.getSize().x / 2;
 	float minY = view.getSize().y / 2;
 	float maxY = mMapBounds.height - view.getSize().y / 2;
-
+	
 	if (xPos < screenXPos - X_OFFSET / 2) {
 		deltaMove.x *= -1;
 	}
@@ -336,6 +337,14 @@ void Level::updateView(const Time& deltaTime) {
 		view.move(0, deltaMove.y);
 		view.getCenter().y < minY ? view.setCenter(view.getCenter().x, minY) : 0;
 		view.getCenter().y > maxY ? view.setCenter(view.getCenter().x, maxY) : 0;
+	}
+
+	int progress = (int)((mTarget->getPosition().x / mMapBounds.width)*7);
+	if (mProgress != progress) {
+		mProgress = progress;
+		//TODO: make dynamic (add current level event to setup file)
+		static const char* parameter = "Progress";
+		SoundEngine::getInstance().setEventParameter("event:/MUSIK/Bana_1", parameter, (float)mProgress);
 	}
 	mWindow->setView(view);
 }
@@ -378,4 +387,8 @@ void Level::createEffects() {
 		BackgroundEffect* eff = new BackgroundEffect(EFFECT_FILEPATH, vec*EFFECT_SPEED, sf::Vector2f((float)(rand() % 15000), -100) + vec*EFFECT_SPEED / 3.0f, EFFECT_LIFETIME, mTarget);
 		mEntityManager->addEntity(eff);
 	}
+}
+
+void Level::stun(const sf::Time& deltatime) {
+	return;
 }

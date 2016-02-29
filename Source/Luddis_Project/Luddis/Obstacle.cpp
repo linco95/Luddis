@@ -26,18 +26,17 @@ mIdleTime(IDLE_TIME),
 mAnimation(ANIMATION_IDLE),
 mAngle(angle)
 {
-	//mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	setPosition(position);
 	rotate(angle);
 	//If damaging obstacle (steam)
 	if (type == DAMAGE) {
 		
-		mIdleHitbox->setOrigin(mIdleHitbox->getLocalBounds().width / 2, mIdleHitbox->getLocalBounds().height);
+		mIdleHitbox->setOrigin(mIdleHitbox->getLocalBounds().width / 2,/* mIdleHitbox->getLocalBounds().height*/0);
 		mIdleHitbox->setPosition(getPosition());
 		mIdleHitbox->setScale(getScale());
 		mIdleHitbox->setRotation(getRotation());
 
-		mActiveHitbox->setOrigin(mActiveHitbox->getLocalBounds().width / 2, mActiveHitbox->getLocalBounds().height);
+		mActiveHitbox->setOrigin(mActiveHitbox->getLocalBounds().width / 2, /*mActiveHitbox->getLocalBounds().height*/0);
 		mActiveHitbox->setPosition(getPosition());
 		mActiveHitbox->setScale(getScale());
 		mActiveHitbox->setRotation(getRotation());
@@ -46,7 +45,7 @@ mAngle(angle)
 
 		move(((float)mIdleHitbox->getLocalBounds().height / 2.0f) * VectorMath::getNormal(sf::Vector2f(cos(mAngle), sin(mAngle))));
 	}
-	//Else solid hitbox
+	//else solid hitbox
 	else {
 		mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
 		mHitbox->setPosition(getPosition());
@@ -63,8 +62,6 @@ void Obstacle::tick(const sf::Time& deltaTime){
 	// Changing obstacle
 	if (mType == DAMAGE){
 		float toMove = (float)mActiveHitbox->getLocalBounds().height;
-		mAnimation.getCurrAnimation().setOrigin(mAnimation.getCurrAnimation().getSprite().getLocalBounds().width / 2, mAnimation.getCurrAnimation().getSprite().getLocalBounds().height);
-		mAnimation.getCurrAnimation().setPosition(getPosition());
 		// Active obstacle (damaging)
 		if (mIsDamaging == true){
 			mDamageTime -= float(deltaTime.asSeconds());
@@ -93,8 +90,6 @@ void Obstacle::tick(const sf::Time& deltaTime){
 				mAnimation.setDefaultAnimation(ANIMATION_DAMAGE);
 			}
 		}
-		
-		
 		mAnimation.tick(deltaTime);
 	}
 	// Solid obstacle
@@ -160,4 +155,14 @@ Obstacle::Type Obstacle::getCollisionType(){
 }
 
 void Obstacle::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway){
+
+}
+
+void Obstacle::stun(const sf::Time& deltatime) {
+	if (mType == DAMAGE) {
+
+	}
+	else {
+		return;
+	}
 }

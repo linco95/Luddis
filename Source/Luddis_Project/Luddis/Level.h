@@ -29,7 +29,7 @@ public:
 	Entity::RenderLayer getRenderLayer() const override;
 	void initializeEntities(sf::RenderWindow* window, const rapidjson::Document& configDoc);
 	void readInitMap(const std:: string& filename);
-
+	void stun(const sf::Time& deltatime) override;
 private:
 	void updateView(const sf::Time& deltaTime);
 	void createEffects();
@@ -44,6 +44,7 @@ private:
 	sf::Music *mLevelMusic;
 	sf::IntRect mMapBounds;
 	std::vector<float> mPointsOfNoReturn;
+	int mProgress;
 	// PONR = Point Of No Return
 	float mCurrentPONR;
 	bool mIsActive;

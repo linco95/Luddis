@@ -10,6 +10,7 @@ class CollidableEntity : public Entity {
 public:
 
 	enum Category{
+		PLAYER_OBJECT,
 		FRIEND,
 		ENEMY,
 		COLLECT,

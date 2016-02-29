@@ -9,6 +9,7 @@
 #include "PowerupDisplay.h"
 #include <SFML/Audio/Sound.hpp>
 
+class LuddisState;
 class EntityManager;
 class GameStateLevel;
 
@@ -25,35 +26,25 @@ public:
 	sf::FloatRect getHitBox() override;
 	sf::Shape* getNarrowHitbox() const override;
 	void reset(GameStateLevel* gameStateLevel);
-
+	AnimationQueue* getAnimation();
+	void setPlayerState(LuddisState* luddisState);
+	void stun(const sf::Time& deltatime) override;
 private:
-	sf::Vector2f getVectorMouseToSprite() const;
-	void handleInput(const sf::Time& deltaTime);
-	void updateMovement(const sf::Time& deltaTime);
-	void updateRotation();
-	void attack();
+
 	Category getCollisionCategory() override;
 	Type getCollisionType() override;
 	void collide(CollidableEntity *collidable, const sf::Vector2f& moveAway) override;
-	void changeScale();
 
 	AnimationQueue mAnimation;
 	EntityManager* mEntityManager;
 	sf::RenderWindow* mWindow;
 	GameStateLevel* mGameStateLevel;
-	float mProjectileCooldown;
-	float mStunDuration;
-	float mLoseDust;
+	LuddisState* mCurrentLuddState;
 	bool mIsAlive;
 	bool mIsActive;
-	bool mColliding;
-	bool mIsFlipped;
-	int mLife;
-	PowerupDisplay* mPowerups[4];
-	sf::FloatRect mCollideBox;
-	sf::Vector2f mDirectionVector;
 	sf::Vector2f mPrevPos;
-	sf::Vector2f mScale;
+	int mLife;
+	sf::FloatRect mCollideBox;
 	sf::Shape* mHitbox;
 
 };

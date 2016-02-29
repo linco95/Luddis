@@ -25,6 +25,7 @@ public:
 	// Set an entities "active" state
 	void setActive(const bool& active) override;
 
+	void stun(const sf::Time& deltatime) override;
 private:
 	void updateText(const sf::Time& deltaTime);
 

@@ -13,6 +13,7 @@ class PowerupDisplay;
 class Level;
 class Spider;
 class Luddis;
+class ScoreGauge;
 
 class GameStateLevel : public GameState{
 public:
@@ -44,6 +45,7 @@ public:
 
 private:
 	GameStateLevel();
+	void updateLuddGauge();
 
 	void readSetupFiles(const std::string& filename, bool allocate = true);
 
@@ -59,7 +61,7 @@ private:
 	Level* mLevel;
 	Spider* mSpider;
 	Luddis* mPlayer;
-
+	ScoreGauge* mLuddGauge;
 	bool mFirstTime;
 	bool mPlayable;
 	bool mInDialogue;
@@ -72,8 +74,7 @@ private:
 		int dust;
 		int chips;
 		int eggs;
-	};
-	CurrentInventory mInv;
+	} mInv;
 };
 
 #endif // !_INCLUDED_GAMESTATELEVEL_

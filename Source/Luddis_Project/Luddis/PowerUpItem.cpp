@@ -65,7 +65,7 @@ PowerUpItem::Type PowerUpItem::getCollisionType(){
 
 
 void PowerUpItem::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway){
-	if (collidable->getCollisionCategory() == FRIEND){
+	if (collidable->getCollisionCategory() == PLAYER_OBJECT){
 		mIsAlive = false;
 		Inventory::getInstance().changePowerUp(1);
 	}
@@ -77,4 +77,8 @@ sf::FloatRect PowerUpItem::getHitBox(){
 
 sf::Shape* PowerUpItem::getNarrowHitbox() const{
 	return mHitbox;
+}
+
+void PowerUpItem::stun(const sf::Time& deltatime) {
+	return;
 }
