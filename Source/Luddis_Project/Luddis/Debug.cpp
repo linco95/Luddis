@@ -88,7 +88,7 @@ void Debug::initialize() {
 
 
 
-	//mLog = "Luddis | Started " + day;
+	//mLog = "Luddis | Started " /*+ day*/;
 }
 
 void Debug::log(const string& aMsg, const ERRORLEVEL& aLvl){
@@ -96,7 +96,7 @@ void Debug::log(const string& aMsg, const ERRORLEVEL& aLvl){
 	string message = "[";
 	message += getErrorLevelStr(aLvl).asString;
 	message =+ "]: " + aMsg;
-	mLog += message;
+	//mLog += message;
 
 #ifdef _WIN32
 	cout << "[";
