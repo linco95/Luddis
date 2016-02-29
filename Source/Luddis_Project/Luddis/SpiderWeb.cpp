@@ -2,8 +2,9 @@
 
 float const PAUSE_TIME = 3.0f;
 
-SpiderWeb::SpiderWeb():
-mPauseTime(PAUSE_TIME)
+SpiderWeb::SpiderWeb(EntityManager* entityManager):
+mPauseTime(PAUSE_TIME),
+mEntityManager(entityManager)
 {
 
 }
@@ -12,8 +13,6 @@ SpiderWeb::~SpiderWeb() {
 
 }
 
-void SpiderWeb::activate() {
-
+void SpiderWeb::activate(sf::Time deltaTime) {
+	mEntityManager->stunEntities(deltaTime);
 }
-
-//const sf::Time& deltaTime

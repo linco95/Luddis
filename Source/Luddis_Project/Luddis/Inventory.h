@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include <vector>
 #include "PowerUps.h"
+#include "EntityManager.h"
 
 class Inventory {
 public:
@@ -25,13 +26,19 @@ public:
 	void setMaxDust(int maxDust);
 	void increaseMaxDust(int maxDust);
 
-	int getPowerUp() const;
-	void setPowerUp(int pow);
-	void changePowerUp(int pow);
-
 	int getEggs() const;
 	void setEggs(int eggs);
 	void changeEggs(int eggs);
+
+	void activateFirst(sf::Time deltaTime);
+	void activateSecond(sf::Time deltaTime);
+	void activateThird(sf::Time deltaTime);
+
+	void choseFirst(PowerUps* powerUp);
+	void choseSecond(PowerUps* powerUp);
+	void choseThird(PowerUps* powerUp);
+
+	void addEntityManager(EntityManager* entityManager);
 
 	//void addItem(Entity* item);
 	// Check mIsAlive
@@ -46,8 +53,9 @@ private:
 	int mDust;
 	int mMaxDust;
 	int mEggs;
-	int mPowerUp;
 	PowerUpVector mPowerUps;
+	PowerUps* mPowerOne;
+	EntityManager* mEntityManager;
 };
 
 #endif

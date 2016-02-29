@@ -14,6 +14,7 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "PowerupDisplay.h"
+#include "SpiderWeb.h"
 
 // All of these should maybe be loaded from file instead, to avoid hard coded variables
 //All float times are in seconds
@@ -52,7 +53,8 @@ LuddisStatePlayable::LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* wi
 	mStunTimer(0),
 	mStunning(false)
 {
-
+	//Inventory::getInstance().addEntityManager(entityManager);
+	
 }
 
 LuddisStatePlayable::~LuddisStatePlayable(){
@@ -69,7 +71,7 @@ void LuddisStatePlayable::tick(const sf::Time& deltaTime){
 	// Handle stunning of hostiles
 	if (mStunning == true && mStunTimer > 0) {
 		mStunTimer -= deltaTime.asSeconds();
-		mEntityManager->stunEntities(sf::seconds(mStunTimer));
+		Inventory::getInstance().activateFirst(deltaTime);
 	}
 	else if (mStunTimer <= 0 && mStunning == true) {
 		mStunTimer = STUNTIME;

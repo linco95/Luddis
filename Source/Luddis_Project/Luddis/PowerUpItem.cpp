@@ -67,7 +67,7 @@ PowerUpItem::Type PowerUpItem::getCollisionType(){
 void PowerUpItem::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway){
 	if (collidable->getCollisionCategory() == PLAYER_OBJECT){
 		mIsAlive = false;
-		Inventory::getInstance().changePowerUp(1);
+		//Inventory::getInstance().changePowerUp(1);
 	}
 }
 
