@@ -49,7 +49,8 @@ LuddisStatePlayable::LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* wi
 	mPlayerPtr(playerPtr),
 	mEntityManager(entityManager),
 	mWindow(window),
-	mStunTimer(sf::seconds(STUNTIME))
+	mStunTimer(0),
+	mStunning(false)
 {
 
 }
@@ -65,6 +66,16 @@ void LuddisStatePlayable::tick(const sf::Time& deltaTime){
 	if (mInvincibility >= 0) {
 		mInvincibility -= deltaTime.asSeconds();
 	}
+	// Handle stunning of hostiles
+	if (mStunning == true && mStunTimer > 0) {
+		mStunTimer -= deltaTime.asSeconds();
+		mEntityManager->stunEntities(sf::seconds(mStunTimer));
+	}
+	else if (mStunTimer <= 0 && mStunning == true) {
+		mStunTimer = STUNTIME;
+		mStunning = false;
+	}
+
 	handleInput(deltaTime);
 	updateRotation();
 
@@ -128,7 +139,7 @@ void LuddisStatePlayable::handleInput(const sf::Time & deltaTime){
 	// TODO make this an event instead
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
 		if (true) {
-			mEntityManager->stunEntities(mStunTimer);
+			mStunning = true;
 		}
 		else {
 			return;
