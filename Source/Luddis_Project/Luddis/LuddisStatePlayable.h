@@ -37,7 +37,7 @@ private:
 	float mProjectileCooldown;
 	float mInvincibility;
 	bool mIsFlipped;
-
+	sf::Time mStunTimer;
 };
 
 #endif // !_INCLUDED_LUDDISSTATEPLAYABLE_

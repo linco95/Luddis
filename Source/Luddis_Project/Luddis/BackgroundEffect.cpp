@@ -31,14 +31,19 @@ void fadeBackgroundEffect(sf::Sprite& a_Sprite, const sf::Time& a_TimeLeft) {
 }
 
 void BackgroundEffect::tick(const sf::Time& deltaTime) {
-	if (getPosition().x <= (mTarget->getPosition().x + 1000) && getPosition().x >= (mTarget->getPosition().x - 1000)) {
-		mIsActive = true;
+	if (mTimeStunned <= 0) {
+		if (getPosition().x <= (mTarget->getPosition().x + 1000) && getPosition().x >= (mTarget->getPosition().x - 1000)) {
+			mIsActive = true;
+		}
+		if (!mIsActive) return;
+		mLifeTime -= deltaTime.asSeconds();
+		checkLifeTime();
+		updateMovement(deltaTime);
+		rotate(ROTATIONSPEED);
 	}
-	if (!mIsActive) return;
-	mLifeTime -= deltaTime.asSeconds();
-	checkLifeTime();
-	updateMovement(deltaTime);
-	rotate(ROTATIONSPEED);
+	else {
+		mTimeStunned -= deltaTime.asSeconds();
+	}
 }
 
 void BackgroundEffect::draw(sf::RenderTarget& target, sf::RenderStates states) const {
@@ -78,5 +83,5 @@ void BackgroundEffect::setTexture(std::string filename) {
 }
 
 void BackgroundEffect::stun(const sf::Time& deltatime) {
-
+	mTimeStunned = float(deltatime.asSeconds());
 }

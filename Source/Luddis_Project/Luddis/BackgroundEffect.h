@@ -30,6 +30,7 @@ private:
 	bool mIsAlive;
 	bool mIsActive;
 	sf::Vector2f mDirection;
+	float mTimeStunned;
 };
 
 #endif 

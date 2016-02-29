@@ -51,6 +51,8 @@ private:
 
 	float mAngle;
 	AnimationQueue mAnimation;
+
+	float mTimeStunned;
 };
 
 #endif

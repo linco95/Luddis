@@ -68,22 +68,27 @@ BossDishCloth::~BossDishCloth(){
 }
 
 void BossDishCloth::tick(const sf::Time& deltaTime){
-	if (mTarget->getPosition().x >= mActivate){
-		mIsActive = true;
+	if (mTimeStunned <= 0) {
+		if (mTarget->getPosition().x >= mActivate) {
+			mIsActive = true;
+		}
+		if (!mIsActive) return;
+		if (mLife <= 0) {
+			/*PowerUpItem* pow1 = new PowerUpItem(POWERUP1_FILEPATH, getPosition());
+			mEntityManager->addEntity(pow1);
+			CollisionManager::getInstance().addCollidable(pow1);*/
+			mIsAlive = false;
+		}
+		mAttackInterval -= deltaTime.asSeconds();
+		updateMovement(deltaTime);
+		mAnimation.tick(deltaTime);
+		if (mAttackInterval <= 0) {
+			attack();
+			mAttackInterval = ATTACK_INTERVAL;
+		}
 	}
-	if (!mIsActive) return;
-	if (mLife <= 0){
-		/*PowerUpItem* pow1 = new PowerUpItem(POWERUP1_FILEPATH, getPosition());
-		mEntityManager->addEntity(pow1);
-		CollisionManager::getInstance().addCollidable(pow1);*/
-		mIsAlive = false;
-	}
-	mAttackInterval -= deltaTime.asSeconds();
-	updateMovement(deltaTime);
-	mAnimation.tick(deltaTime);
-	if (mAttackInterval <= 0){
-		attack();
-		mAttackInterval = ATTACK_INTERVAL;
+	else {
+		mTimeStunned -= deltaTime.asSeconds();
 	}
 }
 
@@ -252,5 +257,5 @@ sf::Shape* BossDishCloth::getNarrowHitbox() const{
 }
 
 void BossDishCloth::stun(const sf::Time& deltatime) {
-
+	mTimeStunned = float(deltatime.asSeconds());
 }
