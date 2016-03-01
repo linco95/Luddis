@@ -36,14 +36,10 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window, EntityMana
 	mAnimation(ANIMATION_FILEPATH),
 	mPrevPos(0, 0),
 	mHitbox(new sf::CircleShape(HITBOX_SHAPE)),
-	mLife(2)
+	mLife(Inventory::getInstance().getDust())
 {
 	setPosition(mWindow->getView().getSize().x / 2, mWindow->getView().getSize().y / 2);
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
-	//sf::Mouse::setPosition(mWindow->mapCoordsToPixel(getPosition()));
-	
-	Inventory::getInstance().addDust(mLife);
-	mCurrentLuddState = new LuddisStatePlayable(this, mWindow, mEntityManager);
 }
 
 Luddis::~Luddis(){
@@ -105,12 +101,13 @@ void Luddis::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway)
 	if (mCurrentLuddState != nullptr)
 		mCurrentLuddState->collide(collidable, moveAway);
 
-			}
-
-// Change luddis' size depending on the amount of dust that the inventory has
-
+}
 
 void Luddis::setPlayerState(LuddisState * luddisState){
+	//Right now each state handles the creation of new states.
+	//Perhaps it would be better if Luddis handles it instead?
+	//It would save having to pass on useless parameters, and also
+	//reduce dependence between the states. Less coupling.
 	delete mCurrentLuddState;
 	mCurrentLuddState = luddisState;
 }
@@ -125,6 +122,7 @@ sf::Shape* Luddis::getNarrowHitbox() const{
 	mHitbox->setScale(getScale());
 	return mHitbox;
 }
+
 Entity::RenderLayer Luddis::getRenderLayer() const {
 	return LAYER;
 }

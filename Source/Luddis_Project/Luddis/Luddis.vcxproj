@@ -92,6 +92,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CharacterPortrait.cpp" />
     <ClCompile Include="Chips.cpp" />
+    <ClCompile Include="CinematicPause.cpp" />
     <ClCompile Include="CollidableEntity.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Debug.cpp" />
@@ -101,6 +102,8 @@
     <ClCompile Include="GameStateLevel.cpp" />
     <ClCompile Include="GameStateMap.cpp" />
     <ClCompile Include="GameStatePaused.cpp" />
+    <ClCompile Include="LuddisStateCinematic.cpp" />
+    <ClCompile Include="LuddisStateDead.cpp" />
     <ClCompile Include="LuddisStatePlayable.cpp" />
     <ClCompile Include="LuddisStateStunned.cpp" />
     <ClCompile Include="Menu.cpp" />
@@ -108,6 +111,7 @@
     <ClCompile Include="InterfaceElement.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="MouseCursor.cpp" />
+    <ClCompile Include="Polynomial.cpp" />
     <ClCompile Include="PowerupDisplay.cpp" />
     <ClCompile Include="PowerUpItem.cpp" />
     <ClCompile Include="PowerUps.cpp" />
@@ -134,6 +138,7 @@
     <ClCompile Include="SpiderWeb.cpp" />
     <ClCompile Include="TextBox.cpp" />
     <ClCompile Include="TutorialText.cpp" />
+    <ClCompile Include="Tween.cpp" />
     <ClCompile Include="VectorMath.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -144,6 +149,8 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="CharacterPortrait.h" />
     <ClInclude Include="Chips.h" />
+    <ClInclude Include="CinematicPause.h" />
+    <ClInclude Include="CinematicSequence.h" />
     <ClInclude Include="CollidableEntity.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Debug.h" />
@@ -155,6 +162,8 @@
     <ClInclude Include="GameStateMap.h" />
     <ClInclude Include="GameStatePaused.h" />
     <ClInclude Include="LuddisState.h" />
+    <ClInclude Include="LuddisStateCinematic.h" />
+    <ClInclude Include="LuddisStateDead.h" />
     <ClInclude Include="LuddisStatePlayable.h" />
     <ClInclude Include="LuddisStateStunned.h" />
     <ClInclude Include="Menu.h" />
@@ -162,6 +171,7 @@
     <ClInclude Include="InterfaceElement.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="MouseCursor.h" />
+    <ClInclude Include="Polynomial.h" />
     <ClInclude Include="PowerUpItem.h" />
     <ClInclude Include="PowerupDisplay.h" />
     <ClInclude Include="PowerUps.h" />
@@ -187,6 +197,7 @@
     <ClInclude Include="SpiderWeb.h" />
     <ClInclude Include="TextBox.h" />
     <ClInclude Include="TutorialText.h" />
+    <ClInclude Include="Tween.h" />
     <ClInclude Include="VectorMath.h" />
     <ClInclude Include="ViewUtility.h" />
   </ItemGroup>

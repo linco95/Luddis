@@ -10,6 +10,7 @@ MouseCursor::MouseCursor() {
 
 void MouseCursor::initialize(const char* filepath, sf::RenderWindow& window) {
 	mSprite.setTexture(ResourceManager::getInstance().loadTexture(filepath));
+	mSprite.setScale(0.5f, 0.5f);
 	mWindow = &window;
 }
 

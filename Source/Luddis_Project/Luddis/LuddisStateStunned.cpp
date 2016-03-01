@@ -1,5 +1,6 @@
 #include "LuddisStateStunned.h"
 #include "LuddisStatePlayable.h"
+#include "LuddisStateDead.h"
 #include "EntityManager.h"
 #include "CollidableEntity.h"
 #include "Luddis.h"
@@ -40,12 +41,13 @@ void LuddisStateStunned::collide(CollidableEntity * collidable, const sf::Vector
 		if (collidable->getCollisionCategory() == CollidableEntity::BG_DAMAGE || collidable->getCollisionCategory() == CollidableEntity::ENEMY) {
 			mPlayerPtr->getAnimation()->replaceAnimation(HIT_ANIMATION);
 
-			Inventory::getInstance().addDust(-1);
 			if (Inventory::getInstance().getDust() == 0) {
 
 				//TODO: add dead state here
-
+				mPlayerPtr->setPlayerState(new LuddisStateDead(mPlayerPtr));
 			}
+			//Reduce afterwards, so that you still live on 0 dust.
+			Inventory::getInstance().addDust(-1);
 		}
 		// Collision with a stunning entity
 		if (collidable->getCollisionCategory() == CollidableEntity::ENEMY_STUN) {
