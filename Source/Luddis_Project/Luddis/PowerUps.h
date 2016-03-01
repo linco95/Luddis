@@ -2,6 +2,7 @@
 #define INCLUDED_POWERUPS
 
 #include <SFML\System.hpp>
+#include "PowerupDisplay.h"
 
 class PowerUps {
 public:

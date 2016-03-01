@@ -4,14 +4,16 @@
 #include "EntityManager.h"
 #include "VectorMath.h"
 #include <SFML/Graphics/RenderWindow.hpp>
+#include "PowerupDisplay.h"
 
 static const sf::Vector2f FRONTVECTOR(1, 0);
 
-LuddisStateCinematic::LuddisStateCinematic(float defaultSpeed, Luddis* playerPtr, sf::RenderWindow* window, EntityManager* entityManager):
+LuddisStateCinematic::LuddisStateCinematic(float defaultSpeed, Luddis* playerPtr, sf::RenderWindow* window, EntityManager* entityManager, PowerupDisplay* display):
 mPlayerPtr(playerPtr),
 mWindow(window),
 mEntityManager(entityManager),
-mDefaultSpeed(defaultSpeed){
+mDefaultSpeed(defaultSpeed),
+mDisplay(display){
 
 }
 
@@ -51,7 +53,7 @@ void LuddisStateCinematic::tick(const sf::Time & deltaTime){
 			mPlayerPtr->move(direction*mDefaultSpeed*deltaTime.asSeconds());
 	}
 	else
-		mPlayerPtr->setPlayerState(new LuddisStatePlayable(mPlayerPtr, mWindow, mEntityManager));
+		mPlayerPtr->setPlayerState(new LuddisStatePlayable(mPlayerPtr, mWindow, mEntityManager, mDisplay));
 }
 
 void LuddisStateCinematic::collide(CollidableEntity * collidable, const sf::Vector2f & moveAway){

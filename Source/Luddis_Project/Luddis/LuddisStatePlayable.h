@@ -2,6 +2,7 @@
 #define _INCLUDED_LUDDISSTATEPLAYABLE_
 
 #include "LuddisState.h"
+#include "PowerupDisplay.h"
 
 class Luddis;
 class EntityManager;
@@ -12,7 +13,7 @@ namespace sf {
 
 class LuddisStatePlayable : public LuddisState {
 public:
-	LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* window, EntityManager* entityManager);
+	LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* window, EntityManager* entityManager, PowerupDisplay* display);
 	virtual ~LuddisStatePlayable();
 	void tick(const sf::Time& deltaTime) override;
 	void collide(CollidableEntity *collidable, const sf::Vector2f& moveAway) override;
@@ -37,10 +38,7 @@ private:
 	float mProjectileCooldown;
 	float mInvincibility;
 	bool mIsFlipped;
-	/*
-	float mStunTimer;
-	bool mStunning;
-	*/
+	PowerupDisplay* mDisplay;
 };
 
 #endif // !_INCLUDED_LUDDISSTATEPLAYABLE_
