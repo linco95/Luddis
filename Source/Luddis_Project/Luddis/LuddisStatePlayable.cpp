@@ -82,15 +82,14 @@ void LuddisStatePlayable::tick(const sf::Time& deltaTime){
 
 	changeScale();
 }
-
+#include <cassert>
 void LuddisStatePlayable::collide(CollidableEntity * collidable, const sf::Vector2f& moveAway) {
 
 	// Collision with solid object
 	if (collidable->getCollisionCategory() == CollidableEntity::BG_SOLID) {
 		//mColliding = true;
 		//mCollideBox = collidable->getHitBox();
-		if (VectorMath::getVectorLengthSq(moveAway) != 0)
-			mPlayerPtr->move(moveAway);
+		mPlayerPtr->move(moveAway);
 	}
 	if (mInvincibility <= 0) {
 		// Collision with damaging object

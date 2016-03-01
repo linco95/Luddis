@@ -21,7 +21,7 @@ sf::Vector2f VectorMath::projectVector(const sf::Vector2f& aVector, const sf::Ve
 
 sf::Vector2f VectorMath::normalizeVector(const sf::Vector2f& vector){
 	if (getVectorLengthSq(vector) == 0) {
-		Debug::log("Division by zero detected.", Debug::WARNING);
+		Debug::log("Trying to normalize zero vector.", Debug::WARNING);
 		return sf::Vector2f(0, 0);
 	}
 	//assert(getVectorLengthSq(vector) != 0);
