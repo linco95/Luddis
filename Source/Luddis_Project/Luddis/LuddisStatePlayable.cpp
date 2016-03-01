@@ -49,12 +49,10 @@ LuddisStatePlayable::LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* wi
 	mIsFlipped(false),
 	mPlayerPtr(playerPtr),
 	mEntityManager(entityManager),
-	mWindow(window),
-	mStunTimer(0),
-	mStunning(false)
+	mWindow(window)
 {
 	//Inventory::getInstance().addEntityManager(entityManager);
-	
+	Inventory::getInstance().choseFirst(new SpiderWeb(entityManager));
 }
 
 LuddisStatePlayable::~LuddisStatePlayable(){
@@ -67,15 +65,6 @@ void LuddisStatePlayable::tick(const sf::Time& deltaTime){
 	}
 	if (mInvincibility >= 0) {
 		mInvincibility -= deltaTime.asSeconds();
-	}
-	// Handle stunning of hostiles
-	if (mStunning == true && mStunTimer > 0) {
-		mStunTimer -= deltaTime.asSeconds();
-		Inventory::getInstance().activateFirst(deltaTime);
-	}
-	else if (mStunTimer <= 0 && mStunning == true) {
-		mStunTimer = STUNTIME;
-		mStunning = false;
 	}
 
 	handleInput(deltaTime);
@@ -141,7 +130,7 @@ void LuddisStatePlayable::handleInput(const sf::Time & deltaTime){
 	// TODO make this an event instead
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
 		if (true) {
-			mStunning = true;
+			Inventory::getInstance().activateFirst(sf::seconds(STUNTIME));
 		}
 		else {
 			return;
@@ -158,13 +147,10 @@ void LuddisStatePlayable::updateMovement(const sf::Time & deltaTime){
 
 	sf::Vector2f tempPos = mPlayerPtr->getPosition();
 
-	
 		//Only move if not close to the cursor position
 		if (VectorMath::getVectorLengthSq(mDirectionVector) > GRACEAREA) {
 			mPlayerPtr->move(moveX, moveY);
 		}
-	
-
 
 	mPrevPos = tempPos;
 }

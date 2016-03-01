@@ -4,7 +4,9 @@ float const PAUSE_TIME = 3.0f;
 
 SpiderWeb::SpiderWeb(EntityManager* entityManager):
 mPauseTime(PAUSE_TIME),
-mEntityManager(entityManager)
+mEntityManager(entityManager),
+mStunTimer(0),
+mStunning(false)
 {
 
 }

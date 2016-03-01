@@ -13,6 +13,9 @@ public:
 private:
 	float mPauseTime;
 	EntityManager* mEntityManager;
+
+	float mStunTimer;
+	bool mStunning;
 };
 
 
