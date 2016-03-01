@@ -34,7 +34,6 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window, EntityMana
 	mWindow(window), 
 	mEntityManager(entityManager),
 	mAnimation(ANIMATION_FILEPATH),
-	mPrevPos(0, 0),
 	mHitbox(new sf::CircleShape(HITBOX_SHAPE)),
 	mLife(Inventory::getInstance().getDust())
 {

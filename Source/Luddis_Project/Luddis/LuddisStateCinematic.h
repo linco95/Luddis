@@ -32,6 +32,7 @@ private:
 	std::queue<float> mSpeed;
 	std::queue<float> mTimeElapsed;
 	float mDefaultSpeed;
+	bool mIsFlipped;
 };
 
 #endif // !_INCLUDED_LUDDISSTATECINEMATIC_

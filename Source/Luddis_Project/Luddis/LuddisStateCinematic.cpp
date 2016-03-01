@@ -1,3 +1,4 @@
+#define _USE_MATH_DEFINES
 #include "LuddisStateCinematic.h"
 #include "LuddisStatePlayable.h"
 #include "Luddis.h"
@@ -11,6 +12,7 @@ LuddisStateCinematic::LuddisStateCinematic(float defaultSpeed, Luddis* playerPtr
 mPlayerPtr(playerPtr),
 mWindow(window),
 mEntityManager(entityManager),
+mIsFlipped(false),
 mDefaultSpeed(defaultSpeed){
 
 }
@@ -43,8 +45,14 @@ void LuddisStateCinematic::tick(const sf::Time & deltaTime){
 
 	if (!mSequences.empty()) {
 		sf::Vector2f direction = VectorMath::normalizeVector(mSequences.front()->tick(deltaTime));
-		float angle = VectorMath::getAngle(FRONTVECTOR, direction);
-		mPlayerPtr->setRotation(angle*36);
+		if (VectorMath::getVectorLengthSq(direction) != 0) {
+
+			float angle = VectorMath::getAngle(FRONTVECTOR, direction) * 180 / (float)M_PI;
+			mPlayerPtr->setRotation(angle);
+			if ((direction.x <= 0 && !mIsFlipped) || (direction.x > 0 && mIsFlipped)) {
+				mIsFlipped = !mIsFlipped;
+			}
+		}
 		if (!mSpeed.empty())
 			mPlayerPtr->move(direction*mSpeed.front()*deltaTime.asSeconds());
 		else

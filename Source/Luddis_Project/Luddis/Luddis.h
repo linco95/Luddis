@@ -42,7 +42,6 @@ private:
 	LuddisState* mCurrentLuddState;
 	bool mIsAlive;
 	bool mIsActive;
-	sf::Vector2f mPrevPos;
 	int mLife;
 	sf::FloatRect mCollideBox;
 	sf::Shape* mHitbox;

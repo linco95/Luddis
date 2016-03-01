@@ -35,6 +35,5 @@ bool Tween::getFinished() const{
 }
 
 CinematicSequence* Tween::copy() const{
-	Tween* tween = new Tween(*this);
-	return tween;
+	return new Tween(*this);
 }

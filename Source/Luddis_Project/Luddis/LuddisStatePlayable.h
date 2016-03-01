@@ -37,6 +37,7 @@ private:
 	float mProjectileCooldown;
 	float mInvincibility;
 	bool mIsFlipped;
+	bool mMoved;
 
 	float mStunTimer;
 	bool mStunning;
