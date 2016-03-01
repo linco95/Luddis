@@ -52,7 +52,6 @@ LuddisStatePlayable::LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* wi
 	mEntityManager(entityManager),
 	mWindow(window)
 {
-	//Inventory::getInstance().addEntityManager(entityManager);
 	Inventory::getInstance().choseFirst(new SpiderWeb(entityManager));
 }
 

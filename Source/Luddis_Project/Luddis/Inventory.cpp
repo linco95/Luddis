@@ -93,7 +93,6 @@ void Inventory::activateThird(sf::Time deltaTime) {
 void Inventory::choseFirst(PowerUps* powerUp) {
 	//mPowerUps[0] = powerUp;
 	mPowerOne = powerUp;
-
 }
 
 void Inventory::choseSecond(PowerUps* powerUp) {
@@ -104,11 +103,3 @@ void Inventory::choseThird(PowerUps* powerUp) {
 	//mPowerUps[2] = powerUp;
 }
 #pragma endregion Power-up related functions
-
-void Inventory::addEntityManager(EntityManager* entityManager) {
-	mEntityManager = entityManager;
-	// VERY QUICKFIX SOLUTION
-	//mPowerUps[0] = new SpiderWeb(mEntityManager);
-	//mPowerUps[1] = new SpiderWeb(mEntityManager);
-	//mPowerUps[2] = new SpiderWeb(mEntityManager);
-}

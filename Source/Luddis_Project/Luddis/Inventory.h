@@ -38,8 +38,6 @@ public:
 	void choseSecond(PowerUps* powerUp);
 	void choseThird(PowerUps* powerUp);
 
-	void addEntityManager(EntityManager* entityManager);
-
 	//void addItem(Entity* item);
 	// Check mIsAlive
 	//void loseItems();
@@ -55,7 +53,6 @@ private:
 	int mEggs;
 	PowerUpVector mPowerUps;
 	PowerUps* mPowerOne;
-	EntityManager* mEntityManager;
 };
 
 #endif
