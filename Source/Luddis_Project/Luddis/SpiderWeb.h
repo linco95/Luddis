@@ -2,16 +2,20 @@
 #define INCLUDED_SIDERWEB
 
 #include "PowerUps.h"
+#include "EntityManager.h"
 
 class SpiderWeb :public PowerUps {
 public:
-	SpiderWeb();
+	SpiderWeb(EntityManager* entityManager);
 	~SpiderWeb();
 
-	void activate() override;
+	void activate(sf::Time deltaTime) override;
 private:
 	float mPauseTime;
+	EntityManager* mEntityManager;
 
+	float mStunTimer;
+	bool mStunning;
 };
 
 

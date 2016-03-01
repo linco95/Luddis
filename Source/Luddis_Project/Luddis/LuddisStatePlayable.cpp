@@ -15,6 +15,7 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "PowerupDisplay.h"
+#include "SpiderWeb.h"
 
 // All of these should maybe be loaded from file instead, to avoid hard coded variables
 //All float times are in seconds
@@ -49,11 +50,9 @@ LuddisStatePlayable::LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* wi
 	mIsFlipped(false),
 	mPlayerPtr(playerPtr),
 	mEntityManager(entityManager),
-	mWindow(window),
-	mStunTimer(0),
-	mStunning(false)
+	mWindow(window)
 {
-
+	Inventory::getInstance().choseFirst(new SpiderWeb(entityManager));
 }
 
 LuddisStatePlayable::~LuddisStatePlayable(){
@@ -66,15 +65,6 @@ void LuddisStatePlayable::tick(const sf::Time& deltaTime){
 	}
 	if (mInvincibility >= 0) {
 		mInvincibility -= deltaTime.asSeconds();
-	}
-	// Handle stunning of hostiles
-	if (mStunning == true && mStunTimer > 0) {
-		mStunTimer -= deltaTime.asSeconds();
-		mEntityManager->stunEntities(sf::seconds(mStunTimer));
-	}
-	else if (mStunTimer <= 0 && mStunning == true) {
-		mStunTimer = STUNTIME;
-		mStunning = false;
 	}
 
 	handleInput(deltaTime);
@@ -138,7 +128,7 @@ void LuddisStatePlayable::handleInput(const sf::Time & deltaTime){
 	// TODO make this an event instead
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
 		if (true) {
-			mStunning = true;
+			Inventory::getInstance().activateFirst(sf::seconds(STUNTIME));
 		}
 		else {
 			return;
