@@ -10,12 +10,13 @@
 static const float INVINCIBILITY_TIMER = 0.75f;
 static const std::string HIT_ANIMATION = "Resources/Images/Spritesheets/Luddis_hit";
 
-LuddisStateStunned::LuddisStateStunned(Luddis* playerPtr, float stunDuration, sf::RenderWindow* window, EntityManager* entityManager):
+LuddisStateStunned::LuddisStateStunned(Luddis* playerPtr, float stunDuration, sf::RenderWindow* window, EntityManager* entityManager, PowerupDisplay* display):
 mPlayerPtr(playerPtr),
 mWindow(window),
 mEntityManager(entityManager),
 mInvincibility(INVINCIBILITY_TIMER),
-mStunDuration(stunDuration){
+mStunDuration(stunDuration),
+mDisplay(display){
 
 }
 
@@ -28,7 +29,7 @@ void LuddisStateStunned::tick(const sf::Time & deltaTime) {
 		mStunDuration -= deltaTime.asSeconds();
 	}
 	else {
-		mPlayerPtr->setPlayerState(new LuddisStatePlayable(mPlayerPtr, mWindow, mEntityManager));
+		mPlayerPtr->setPlayerState(new LuddisStatePlayable(mPlayerPtr, mWindow, mEntityManager, mDisplay));
 	}
 	if (mInvincibility >= 0) {
 		mInvincibility -= deltaTime.asSeconds();

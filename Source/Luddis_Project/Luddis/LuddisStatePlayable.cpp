@@ -45,7 +45,7 @@ static const std::array<std::string, 3> PROJECTILE_FILENAME = { "Resources/Image
 "Resources/Images/Luddis_attack3.png"
 };
 
-LuddisStatePlayable::LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* window, EntityManager* entityManager) :
+LuddisStatePlayable::LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* window, EntityManager* entityManager, PowerupDisplay* display) :
 	mProjectileCooldown(0),
 	mInvincibility(INVINCIBILITY_TIMER),
 	mPrevPos(0, 0),
@@ -53,9 +53,10 @@ LuddisStatePlayable::LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* wi
 	mMoved(false),
 	mPlayerPtr(playerPtr),
 	mEntityManager(entityManager),
-	mWindow(window)
+	mWindow(window),
+	mDisplay(display)
 {
-	Inventory::getInstance().choseFirst(new SpiderWeb(entityManager));
+	Inventory::getInstance().choseFirst(new SpiderWeb(entityManager, display));
 }
 
 LuddisStatePlayable::~LuddisStatePlayable(){
@@ -104,7 +105,7 @@ void LuddisStatePlayable::collide(CollidableEntity * collidable, const sf::Vecto
 			//Replace animation before changing state or a crash will occur.
 			mPlayerPtr->getAnimation()->replaceAnimation(HIT_ANIMATION);
 			//TODO: add a way to make stun timers modular.
-			mPlayerPtr->setPlayerState(new LuddisStateStunned(mPlayerPtr, 1.0f, mWindow, mEntityManager));
+			mPlayerPtr->setPlayerState(new LuddisStateStunned(mPlayerPtr, 1.0f, mWindow, mEntityManager, mDisplay));
 			mInvincibility += INVINCIBILITY_TIMER;
 		}
 	}

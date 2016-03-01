@@ -3,10 +3,11 @@
 
 #include "PowerUps.h"
 #include "EntityManager.h"
+#include "PowerupDisplay.h"
 
 class SpiderWeb :public PowerUps {
 public:
-	SpiderWeb(EntityManager* entityManager);
+	SpiderWeb(EntityManager* entityManager, PowerupDisplay* display);
 	~SpiderWeb();
 
 	void activate(sf::Time deltaTime) override;
@@ -16,6 +17,7 @@ private:
 
 	float mStunTimer;
 	bool mStunning;
+	PowerupDisplay* mDisplay;
 };
 
 

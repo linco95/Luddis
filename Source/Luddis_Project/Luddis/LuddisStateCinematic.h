@@ -4,6 +4,7 @@
 #include "LuddisState.h"
 #include <queue>
 #include "Tween.h"
+#include "PowerupDisplay.h"
 
 class Luddis;
 class EntityManager;
@@ -13,7 +14,7 @@ namespace sf {
 
 class LuddisStateCinematic : public LuddisState{
 public:
-	LuddisStateCinematic(float defaultSpeed, Luddis* playerPtr, sf::RenderWindow* window, EntityManager* entityManager);
+	LuddisStateCinematic(float defaultSpeed, Luddis* playerPtr, sf::RenderWindow* window, EntityManager* entityManager, PowerupDisplay* display);
 	~LuddisStateCinematic();
 
 	void tick(const sf::Time& deltaTime) override;
@@ -32,6 +33,7 @@ private:
 	std::queue<float> mSpeed;
 	std::queue<float> mTimeElapsed;
 	float mDefaultSpeed;
+	PowerupDisplay* mDisplay;
 	bool mIsFlipped;
 };
 
