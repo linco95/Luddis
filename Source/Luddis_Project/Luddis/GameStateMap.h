@@ -33,6 +33,10 @@ private:
 	typedef std::vector<Room*> RoomVector;
 	RoomVector mRooms;
 	int mCurrentRoom;
+	int mRoomToBe;
+	float mFadeTimer;
+	bool mFade;
+	sf::RectangleShape mFadeEffect;
 	Menu* mMenu;
 	EntityManager mEntityM;
 	GUIManager mGUIM;
