@@ -1,14 +1,14 @@
 #include "Inventory.h"
 #include <cmath>
+#include "SpiderWeb.h"
 
 Inventory::Inventory():
 mChips(0),
 mDust(2),
 mEggs(0),
-mPowerUp(0),
 mMaxDust(15)
 {
-
+	
 }
 
 Inventory::~Inventory(){
@@ -76,16 +76,30 @@ void Inventory::changeEggs(int eggs){
 }
 #pragma endregion Egg related functions
 
-#pragma region POWER-UP
-int Inventory::getPowerUp() const{
-	return mPowerUp;
+#pragma region POWER-UPS
+void Inventory::activateFirst(sf::Time deltaTime) {
+	//mPowerUps[0]->activate(deltaTime);
+	mPowerOne->activate(deltaTime);
 }
 
-void Inventory::setPowerUp(int pow){
-	mPowerUp = pow;
+void Inventory::activateSecond(sf::Time deltaTime) {
+	//mPowerUps[1]->activate(deltaTime);
 }
 
-void Inventory::changePowerUp(int pow){
-	mPowerUp += pow;
+void Inventory::activateThird(sf::Time deltaTime) {
+	//mPowerUps[2]->activate(deltaTime);
+}
+
+void Inventory::choseFirst(PowerUps* powerUp) {
+	//mPowerUps[0] = powerUp;
+	mPowerOne = powerUp;
+}
+
+void Inventory::choseSecond(PowerUps* powerUp) {
+	//mPowerUps[1] = powerUp;
+}
+
+void Inventory::choseThird(PowerUps* powerUp) {
+	//mPowerUps[2] = powerUp;
 }
 #pragma endregion Power-up related functions

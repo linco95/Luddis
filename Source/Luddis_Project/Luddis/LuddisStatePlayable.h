@@ -37,10 +37,12 @@ private:
 	float mProjectileCooldown;
 	float mInvincibility;
 	bool mIsFlipped;
+	
 	bool mMoved;
-
+	/*
 	float mStunTimer;
 	bool mStunning;
+	*/
 };
 
 #endif // !_INCLUDED_LUDDISSTATEPLAYABLE_

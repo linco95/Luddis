@@ -290,10 +290,15 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget, s
 
 void Level::tick(const sf::Time& deltaTime) {
 	updateView(deltaTime);
-	mEffectInterval -= deltaTime.asSeconds();
-	if (mEffectInterval <= 0) {
-		createEffects();
-		mEffectInterval = (float)(rand() % 5);
+	if (mTimeStunned <= 0) {
+		mEffectInterval -= deltaTime.asSeconds();
+		if (mEffectInterval <= 0) {
+			createEffects();
+			mEffectInterval = (float)(rand() % 5);
+		}
+	}
+	else {
+		mTimeStunned -= deltaTime.asSeconds();
 	}
 }
 
@@ -390,5 +395,5 @@ void Level::createEffects() {
 }
 
 void Level::stun(const sf::Time& deltatime) {
-	return;
+	mTimeStunned = deltatime.asSeconds();
 }

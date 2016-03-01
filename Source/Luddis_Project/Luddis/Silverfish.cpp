@@ -61,11 +61,11 @@ Silverfish::~Silverfish(){
 }
 
 void Silverfish::tick(const sf::Time& deltaTime){
+	if (mTarget->getPosition().x >= mActivate) {
+		mIsActive = true;
+	}
+	if (!mIsActive) return;
 	if (mTimeStunned <= 0) {
-		if (mTarget->getPosition().x >= mActivate) {
-			mIsActive = true;
-		}
-		if (!mIsActive) return;
 		if (mBefriend) {
 			mAlignment = FRIEND;
 			mBefriend = false;

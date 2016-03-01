@@ -49,6 +49,7 @@ private:
 	float mCurrentPONR;
 	bool mIsActive;
 	float mEffectInterval;
+	float mTimeStunned;
 };
 
 #endif

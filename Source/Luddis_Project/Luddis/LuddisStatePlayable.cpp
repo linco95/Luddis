@@ -16,6 +16,7 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "PowerupDisplay.h"
+#include "SpiderWeb.h"
 
 // All of these should maybe be loaded from file instead, to avoid hard coded variables
 //All float times are in seconds
@@ -52,10 +53,9 @@ LuddisStatePlayable::LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* wi
 	mMoved(false),
 	mPlayerPtr(playerPtr),
 	mEntityManager(entityManager),
-	mWindow(window),
-	mStunTimer(0),
-	mStunning(false){
-
+	mWindow(window)
+{
+	Inventory::getInstance().choseFirst(new SpiderWeb(entityManager));
 }
 
 LuddisStatePlayable::~LuddisStatePlayable(){
@@ -69,34 +69,20 @@ void LuddisStatePlayable::tick(const sf::Time& deltaTime){
 	if (mInvincibility >= 0) {
 		mInvincibility -= deltaTime.asSeconds();
 	}
-	// Handle stunning of hostiles
-	if (mStunning == true && mStunTimer > 0) {
-		mStunTimer -= deltaTime.asSeconds();
-		mEntityManager->stunEntities(sf::seconds(mStunTimer));
-	}
-	else if (mStunTimer <= 0 && mStunning == true) {
-		mStunTimer = STUNTIME;
-		mStunning = false;
-	}
 
 	handleInput(deltaTime);
 	updateRotation();
 
 	changeScale();
 }
-
+#include <cassert>
 void LuddisStatePlayable::collide(CollidableEntity * collidable, const sf::Vector2f& moveAway) {
 
 	// Collision with solid object
 	if (collidable->getCollisionCategory() == CollidableEntity::BG_SOLID) {
 		//mColliding = true;
 		//mCollideBox = collidable->getHitBox();
-		if (VectorMath::getVectorLengthSq(moveAway) != 0 && mMoved) {
 			mPlayerPtr->move(moveAway);
-			//Debug::log("MoveAway vector x: " + std::to_string(moveAway.x) + ", y: " + std::to_string(moveAway.y), Debug::INFO);
-			//sf::Vector2f moveDirection = VectorMath::projectVector(VectorMath::normalizeVector( mDirectionVector), moveAway);
-			//mPlayerPtr->move(moveDirection);
-		}
 	}
 	if (mInvincibility <= 0) {
 		// Collision with damaging object
@@ -148,7 +134,7 @@ void LuddisStatePlayable::handleInput(const sf::Time & deltaTime){
 	// TODO make this an event instead
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
 		if (true) {
-			mStunning = true;
+			Inventory::getInstance().activateFirst(sf::seconds(STUNTIME));
 		}
 		else {
 			return;
@@ -165,12 +151,12 @@ void LuddisStatePlayable::updateMovement(const sf::Time & deltaTime) {
 
 	sf::Vector2f tempPos = mPlayerPtr->getPosition();
 
-	//Only move if not too close to the cursor position
-	if (VectorMath::getVectorLengthSq(mDirectionVector) > GRACEAREA) {
-		mPlayerPtr->move(moveX, moveY);
+		//Only move if not too close to the cursor position
+		if (VectorMath::getVectorLengthSq(mDirectionVector) > GRACEAREA) {
+			mPlayerPtr->move(moveX, moveY);
 		mPrevPos = -sf::Vector2f(moveX, moveY);
 		mMoved = true;
-	}
+		}
 	else
 		mMoved = false;
 }
