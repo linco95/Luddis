@@ -75,13 +75,13 @@ std::pair<float, float> getProjection(const sf::Shape& shape, const sf::Vector2f
 	// Get the transform of the shape
 	sf::Transform shapeTrans = shape.getTransform();
 	// Translate the transform to match the shapes' top left corner
-	shapeTrans.translate(-shape.getOrigin());
+	//shapeTrans.translate(-shape.getOrigin());
 
 	float minVal, maxVal;
 	bool first = true;
 	for (std::size_t i = 0; i < shape.getPointCount(); i++){
 		// Get the position vector to the i:th point on the shape (Taking the origin into account)
-		sf::Vector2f vecToPoint = shapeTrans.transformPoint(shape.getPoint(i) + shape.getOrigin());
+		sf::Vector2f vecToPoint = shapeTrans.transformPoint(shape.getPoint(i)/* + shape.getOrigin()*/);
 		// Project that point on the axis (Formula: (axis * vecToPoint) / (axis * axis)) (intentionally leaving out multiplying in the vector we're projecting on to get the coefficient)
 		const float scalar = VectorMath::dotProduct(axis, vecToPoint) / axisSq;
 		// Initialize the min and max values if this is the first iteration of the loop
@@ -105,6 +105,64 @@ std::pair<float, float> getProjection(const sf::Shape& shape, const sf::Vector2f
 }
 #include <iostream>
 // Narrow collision phase, using the "Separating Axis Theorem"
+
+bool gapFromShape1to2(sf::Shape* shape1, sf::Shape* shape2, sf::Vector2f& smallestOverlap) {
+	// Saving the number of points in the first shape, just to avoid some function calls
+	const std::size_t pointCount = shape1->getPointCount();
+
+	// We assume that there has been a collision, until we've proved the opposite
+	bool isColliding = true;
+
+	// Create the vector that defines the least change in position that is needed to not collide with the other entity.
+	// Initialized to the zero vector, we will check if it is the zero vector, then just assign, don't compare.
+
+	// Loop through all the points in the first shape
+	for (std::size_t i = 0; i < pointCount; i++) {
+
+		// Get two connected points on the first shape (If i == number of points in the first shape, we get the side from the i:th (last) point of the shape, to the 0:th (first) point) 
+		sf::Vector2f firstVec = shape1->getPoint(i < pointCount ? i + 1 : 0);
+		sf::Vector2f secondVec = shape1->getPoint(i);
+
+		// Get the vector that connects two points on the shape ( == one side of the shape)
+		sf::Vector2f side = firstVec - secondVec;
+
+		// Get the normal to the side
+		sf::Vector2f axis = VectorMath::getNormal(side);
+
+		// Project both shapes on the axis
+		std::pair<float, float> shapeProj[2];
+		shapeProj[0] = getProjection(*shape1, axis);
+		shapeProj[1] = getProjection(*shape2, axis);
+
+		// Look for a gap between the projections and if there's a gap, the shapes are not colliding, i.e. go on to the next hitbox pair
+		if (shapeProj[0].first >= shapeProj[1].second || shapeProj[0].second <= shapeProj[1].first) {
+			isColliding = false;
+			break;
+		}
+		// If the shape is colliding, but one of the shapes shadows isn't contained inside of the other shape
+		else {
+			float diff = 0;
+			//  Is first.min < second.maxin but still within (first.min > second.min)?
+			if (shapeProj[0].first < shapeProj[1].second && shapeProj[0].first > shapeProj[1].first) {
+				diff = shapeProj[1].second - shapeProj[0].first;
+			}
+			// Is first.max > second.min but still within (first.max < second.max)?
+			if (shapeProj[0].second > shapeProj[1].first && shapeProj[0].second < shapeProj[1].second) {
+				float tempDiff = shapeProj[1].first - shapeProj[0].second;
+				// Checks to see if diff is greater than this
+				if (abs(diff) > abs(tempDiff))
+					diff = tempDiff;
+			}
+			// If the smallestOverlap hasn't been initialized, or is longer than diff, we set the smallestOverlap to axis* diff
+			//std::cout << std::to_string(diff);
+			if (VectorMath::getVectorLengthSq(smallestOverlap) == 0 || VectorMath::getVectorLengthSq(smallestOverlap) > diff * diff) {
+				// Direction: from first shape -> second shape
+				smallestOverlap = axis * diff;
+			}
+		}
+	}
+	return isColliding;
+}
 void narrowCollision(std::stack<std::pair<CollidableEntity*, CollidableEntity*>>& colliding){
 	while (!colliding.empty()) {
 		// Get the top pair of the stack
@@ -125,65 +183,21 @@ void narrowCollision(std::stack<std::pair<CollidableEntity*, CollidableEntity*>>
 			We then send that axis to the Entities so that they can move away.
 		*/
 
-		// Saving the number of points in the first shape, just to avoid some function calls
-		const std::size_t firstPointCount = hitboxPair.first->getPointCount();
-		
-		// We assume that there has been a collision, until we've proved the opposite
-		bool isColliding = true;
-
-		// Create the vector that defines the least change in position that is needed to not collide with the other entity.
-		// Initialized to the zero vector, we will check if it is the zero vector, then just assign, don't compare.
 		// This is the vector going from the first shape, to the second shape.
-		sf::Vector2f smallestOverlap(0,0);
+		sf::Vector2f smallestOverlap1(0, 0);
+		sf::Vector2f smallestOverlap2(0, 0);
 
-		// Loop through all the points in the first shape
-		for (std::size_t i = 0; i < firstPointCount; i++) {
-
-			// Get two connected points on the first shape (If i == number of points in the first shape, we get the side from the i:th (last) point of the shape, to the 0:th (first) point) 
-			sf::Vector2f firstVec = hitboxPair.first->getPoint(i < firstPointCount ? i + 1 : 0);
-			sf::Vector2f secondVec = hitboxPair.first->getPoint(i);
-		
-			// Get the vector that connects two points on the shape ( == one side of the shape)
-			sf::Vector2f side = firstVec - secondVec;
-
-			// Get the normal to the side
-			sf::Vector2f axis = VectorMath::getNormal(side);
-
-			// Project both shapes on the axis
-			std::pair<float, float> shapeProj[2];
-			shapeProj[0] = getProjection(*hitboxPair.first, axis);
-			shapeProj[1] = getProjection(*hitboxPair.second, axis);
-			
-			// Look for a gap between the projections and if there's a gap, the shapes are not colliding, i.e. go on to the next hitbox pair
-			if (shapeProj[0].first >= shapeProj[1].second || shapeProj[0].second <= shapeProj[1].first){
-				isColliding = false;
-				break;
-			}
-			// If the shape is colliding, but one of the shapes shadows isn't contained inside of the other shape
-			else {
-				float diff = 0;
-				//  Is first.min < second.maxin but still within (first.min > second.min)?
-				if (shapeProj[0].first < shapeProj[1].second && shapeProj[0].first > shapeProj[1].first) {
-					 diff = shapeProj[1].second - shapeProj[0].first;
-				}
-				// Is first.max > second.min but still within (first.max < second.max)?
-				if (shapeProj[0].second > shapeProj[1].first && shapeProj[0].second < shapeProj[1].second) {
-					float tempDiff = shapeProj[1].first - shapeProj[0].second;
-					// Checks to see if diff is greater than this
-					if (abs(diff) > abs(tempDiff))
-						diff = tempDiff;
-				}
-				// If the smallestOverlap hasn't been initialized, or is longer than diff, we set the smallestOverlap to axis* diff
-				if (VectorMath::getVectorLength(smallestOverlap) == 0 || VectorMath::getVectorLength(smallestOverlap) > diff) {
-				// Direction: from first shape -> second shape
-					smallestOverlap = axis * diff;
-				}
-			}
-		}
 		// If no gaps were found, collide. We give the smallestOverlap vector in the direction that the shape has to move to not be colliding anymore.
-		if (isColliding){
-			pair.first->collide(pair.second, smallestOverlap);
-			pair.second->collide(pair.first, -smallestOverlap);
+		if (gapFromShape1to2(hitboxPair.first, hitboxPair.second, smallestOverlap1) && gapFromShape1to2(hitboxPair.second, hitboxPair.first, smallestOverlap2)){
+			sf::Vector2f temp = VectorMath::getVectorLengthSq(smallestOverlap1) < VectorMath::getVectorLengthSq(smallestOverlap2) ? smallestOverlap1 : smallestOverlap2;
+			/*if (VectorMath::getVectorLengthSq(smallestOverlap) == 0) {
+				std::cout << "\a";
+			}
+			else {*/
+				//std::cout << "\a";
+				pair.first->collide(pair.second, temp);
+				pair.second->collide(pair.first, temp);
+			/*}*/
 		}
 	}
 }

@@ -92,6 +92,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CharacterPortrait.cpp" />
     <ClCompile Include="Chips.cpp" />
+    <ClCompile Include="CinematicMoveToPoint.cpp" />
     <ClCompile Include="CinematicPause.cpp" />
     <ClCompile Include="CollidableEntity.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
@@ -132,6 +133,7 @@
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="ScoreGauge.cpp" />
     <ClCompile Include="Silverfish.cpp" />
+    <ClCompile Include="SoundCue.cpp" />
     <ClCompile Include="SoundEngine.cpp" />
     <ClCompile Include="Spider.cpp" />
     <ClCompile Include="SpiderEgg.cpp" />
@@ -149,6 +151,7 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="CharacterPortrait.h" />
     <ClInclude Include="Chips.h" />
+    <ClInclude Include="CinematicMoveToPoint.h" />
     <ClInclude Include="CinematicPause.h" />
     <ClInclude Include="CinematicSequence.h" />
     <ClInclude Include="CollidableEntity.h" />
@@ -191,6 +194,7 @@
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="ScoreGauge.h" />
     <ClInclude Include="Silverfish.h" />
+    <ClInclude Include="SoundCue.h" />
     <ClInclude Include="SoundEngine.h" />
     <ClInclude Include="Spider.h" />
     <ClInclude Include="SpiderEgg.h" />

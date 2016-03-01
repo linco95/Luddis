@@ -166,7 +166,15 @@
     <ClCompile Include="Tween.cpp">
       <Filter>Source Files\Cinematic</Filter>
     </ClCompile>
-    <ClCompile Include="CinematicPause.cpp" />
+    <ClCompile Include="CinematicPause.cpp">
+      <Filter>Source Files\Cinematic</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundCue.cpp">
+      <Filter>Source Files\Cinematic</Filter>
+    </ClCompile>
+    <ClCompile Include="CinematicMoveToPoint.cpp">
+      <Filter>Source Files\Cinematic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -341,6 +349,12 @@
       <Filter>Header Files\Cinematic</Filter>
     </ClInclude>
     <ClInclude Include="CinematicPause.h">
+      <Filter>Header Files\Cinematic</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundCue.h">
+      <Filter>Header Files\Cinematic</Filter>
+    </ClInclude>
+    <ClInclude Include="CinematicMoveToPoint.h">
       <Filter>Header Files\Cinematic</Filter>
     </ClInclude>
   </ItemGroup>

@@ -10,6 +10,7 @@
 #include "CollisionManager.h"
 #include "CollidableEntity.h"
 #include "EntityManager.h"
+#include "Debug.h"
 #include <array>
 #include <SFML/Window/Mouse.hpp>
 #include <SFML/Window/Keyboard.hpp>
@@ -47,7 +48,9 @@ static const std::array<std::string, 3> PROJECTILE_FILENAME = { "Resources/Image
 LuddisStatePlayable::LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* window, EntityManager* entityManager, PowerupDisplay* display) :
 	mProjectileCooldown(0),
 	mInvincibility(INVINCIBILITY_TIMER),
+	mPrevPos(0, 0),
 	mIsFlipped(false),
+	mMoved(false),
 	mPlayerPtr(playerPtr),
 	mEntityManager(entityManager),
 	mWindow(window),
@@ -73,14 +76,13 @@ void LuddisStatePlayable::tick(const sf::Time& deltaTime){
 
 	changeScale();
 }
-
+#include <cassert>
 void LuddisStatePlayable::collide(CollidableEntity * collidable, const sf::Vector2f& moveAway) {
 
 	// Collision with solid object
 	if (collidable->getCollisionCategory() == CollidableEntity::BG_SOLID) {
 		//mColliding = true;
 		//mCollideBox = collidable->getHitBox();
-		if (VectorMath::getVectorLengthSq(moveAway) != 0)
 			mPlayerPtr->move(moveAway);
 	}
 	if (mInvincibility <= 0) {
@@ -123,6 +125,9 @@ void LuddisStatePlayable::handleInput(const sf::Time & deltaTime){
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
 		updateMovement(deltaTime);
 	}
+	else {
+		mMoved = false;
+	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
 		attack();
 	}
@@ -138,7 +143,7 @@ void LuddisStatePlayable::handleInput(const sf::Time & deltaTime){
 	}
 }
 
-void LuddisStatePlayable::updateMovement(const sf::Time & deltaTime){
+void LuddisStatePlayable::updateMovement(const sf::Time & deltaTime) {
 	mDirectionVector = getVectorMouseToSprite();
 	if (VectorMath::getVectorLengthSq(mDirectionVector) == 0) return;
 	sf::Vector2f offset(VectorMath::normalizeVector(mDirectionVector));
@@ -150,8 +155,11 @@ void LuddisStatePlayable::updateMovement(const sf::Time & deltaTime){
 		//Only move if not too close to the cursor position
 		if (VectorMath::getVectorLengthSq(mDirectionVector) > GRACEAREA) {
 			mPlayerPtr->move(moveX, moveY);
+		mPrevPos = -sf::Vector2f(moveX, moveY);
+		mMoved = true;
 		}
-	mPrevPos = tempPos;
+	else
+		mMoved = false;
 }
 
 void LuddisStatePlayable::attack(){

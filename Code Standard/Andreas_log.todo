@@ -204,4 +204,7 @@ Fixed the collision. The points were just transformed to the shapes location, wi
     Started planning out a level editor
   28/2/16:
     Started trying to implement level editor
-    
+  29/2/16:
+    fl
+  1/3/16:
+    Collision again!

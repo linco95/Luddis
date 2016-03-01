@@ -34,6 +34,7 @@ private:
 	std::queue<float> mTimeElapsed;
 	float mDefaultSpeed;
 	PowerupDisplay* mDisplay;
+	bool mIsFlipped;
 };
 
 #endif // !_INCLUDED_LUDDISSTATECINEMATIC_

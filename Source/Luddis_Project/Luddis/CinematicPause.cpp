@@ -24,6 +24,5 @@ bool CinematicPause::getFinished() const{
 
 CinematicSequence* CinematicPause::copy() const{
 	
-	CinematicPause* cin = new CinematicPause(*this);
-	return cin;
+	return new CinematicPause(*this);
 }

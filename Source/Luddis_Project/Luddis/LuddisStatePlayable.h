@@ -38,6 +38,9 @@ private:
 	float mProjectileCooldown;
 	float mInvincibility;
 	bool mIsFlipped;
+	
+	bool mMoved;
+
 	PowerupDisplay* mDisplay;
 };
 

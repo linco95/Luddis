@@ -167,7 +167,7 @@ struct GameManagerImp : public EventObserver {
 			//Update soundengine
 			se->update(gameClock.getElapsedTime());
 
-			// Handle Events       
+			// Handle Events
 			mCurrentGameState->handleEvents();
 			//handleEvents(mMainWindow);
 			// Update according to the game's state

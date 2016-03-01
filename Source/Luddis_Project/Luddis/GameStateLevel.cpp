@@ -195,23 +195,23 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	mPlayer = new Luddis(LUDDIS_TEXTURE, mWindow, mEntityM);
 	//CINEMATIC TEST
 	Polynomial poly;
-	poly.addTerm(1, 3);
-	poly.addTerm(-1, 2);
-	poly.addTerm(-2, 1);
-	poly.addTerm(1, 0);
+	poly.addTerm(-1, 3);
+	poly.addTerm(1, 2);
+	poly.addTerm(1, 1);
 	Tween tween(poly, 0, 2);
 	CinematicPause pauseCin(2);
-	LuddisStateCinematic* cinState = new LuddisStateCinematic(100, mPlayer, mWindow, mEntityM, mPowerupDisplays[0]);
+	LuddisStateCinematic* cinState = new LuddisStateCinematic(100, mPlayer, mWindow, mEntityM);
 	cinState->addCinematicSequence(&tween);
 	cinState->addCinematicSequence(&tween);
 	cinState->addCinematicSequence(&pauseCin);
-	cinState->addCinematicSequence(&tween);
+	cinState->addCinematicSequence(&tween);*/
+	cinState->addCinematicSequence(&tween2);
 	cinState->addSpeedShift(50, 1);
-	cinState->addSpeedShift(200, 1);
+	cinState->addSpeedShift(100, 1);
 	cinState->addSpeedShift(50, 1);
-	cinState->addSpeedShift(200, 1);
+	cinState->addSpeedShift(100, 1);
 	cinState->addSpeedShift(50, 1);
-	cinState->addSpeedShift(200, 1);
+	cinState->addSpeedShift(100, 1);
 	mPlayer->setPlayerState(cinState);
 	mPlayer->setPosition(-50.0f, (float)ViewUtility::VIEW_HEIGHT/2.0f);
 	//END CINEMATIC TEST

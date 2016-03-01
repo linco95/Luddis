@@ -141,7 +141,6 @@ void Silverfish::collide(CollidableEntity *collidable, const sf::Vector2f& moveA
 			mAnimation.setDefaultAnimation(ANIMATION_DEAD);
 			mSwimAway = true;
 			mNextDir = VectorMath::normalizeVector(getPosition() - collidable->getPosition());
-			//SPEED = 220;
 			mBefriend = true;
 			mTimeStunned = 0;
 			}
