@@ -39,7 +39,7 @@ void LuddisStateStunned::tick(const sf::Time & deltaTime) {
 void LuddisStateStunned::collide(CollidableEntity * collidable, const sf::Vector2f & moveAway){
 	if (mInvincibility <= 0) {
 		// Collision with damaging object
-		if (collidable->getCollisionCategory() == CollidableEntity::BG_DAMAGE || collidable->getCollisionCategory() == CollidableEntity::ENEMY) {
+		if (collidable->getCollisionCategory() == CollidableEntity::ENEMY_DAMAGE) {
 			mPlayerPtr->getAnimation()->replaceAnimation(HIT_ANIMATION);
 
 			if (Inventory::getInstance().getDust() == 0) {

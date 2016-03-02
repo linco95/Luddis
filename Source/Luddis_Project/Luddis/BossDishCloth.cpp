@@ -180,7 +180,7 @@ void BossDishCloth::attack() {
 }
 
 BossDishCloth::Category BossDishCloth::getCollisionCategory() {
-	return ENEMY;
+	return ENEMY_DAMAGE;
 }
 
 BossDishCloth::Type BossDishCloth::getCollisionType() {
@@ -188,7 +188,7 @@ BossDishCloth::Type BossDishCloth::getCollisionType() {
 }
 
 void BossDishCloth::collide(CollidableEntity* collidable, const sf::Vector2f& moveAway){
-	if (collidable->getCollisionCategory() == HAIR){
+	if (collidable->getCollisionCategory() == PLAYER_PROJECTILE){
 		if (!mShooting){
 		mLife -= 15;
 		// For different states of damages

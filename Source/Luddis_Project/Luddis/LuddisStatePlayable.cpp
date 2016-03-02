@@ -80,7 +80,7 @@ void LuddisStatePlayable::tick(const sf::Time& deltaTime){
 void LuddisStatePlayable::collide(CollidableEntity * collidable, const sf::Vector2f& moveAway) {
 
 	// Collision with solid object
-	if (collidable->getCollisionCategory() == CollidableEntity::BG_SOLID) {
+	if (collidable->getCollisionCategory() == CollidableEntity::SOLID) {
 		//mColliding = true;
 		//mCollideBox = collidable->getHitBox();
 		//Debug::log("MoveAway x: " + std::to_string(moveAway.x) + ". y:" + std::to_string(moveAway.y), Debug::INFO);
@@ -88,7 +88,7 @@ void LuddisStatePlayable::collide(CollidableEntity * collidable, const sf::Vecto
 	}
 	if (mInvincibility <= 0) {
 		// Collision with damaging object
-		if (collidable->getCollisionCategory() == CollidableEntity::BG_DAMAGE || collidable->getCollisionCategory() == CollidableEntity::ENEMY) {
+		if (collidable->getCollisionCategory() == CollidableEntity::ENEMY_DAMAGE) {
 			mPlayerPtr->getAnimation()->replaceAnimation(HIT_ANIMATION);
 			mInvincibility += INVINCIBILITY_TIMER;
 			if (Inventory::getInstance().getDust() == 0) {
@@ -185,7 +185,7 @@ void LuddisStatePlayable::attack(){
 	int randValue = std::rand() % PROJECTILE_FILENAME.max_size();
 
 	// create the projectile
-	Projectile *proj = new Projectile(PROJECTILE_FILENAME[randValue], direction * PROJECTILE_SPEED, muzzlePoint, PROJECTILE_TIMER, CollidableEntity::Category::HAIR);
+	Projectile *proj = new Projectile(PROJECTILE_FILENAME[randValue], direction * PROJECTILE_SPEED, muzzlePoint, PROJECTILE_TIMER, CollidableEntity::Category::PLAYER_PROJECTILE);
 	mEntityManager->addEntity(proj);
 	CollisionManager::getInstance().addCollidable(proj);
 }

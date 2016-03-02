@@ -240,26 +240,23 @@ void Dialogue::closeButton(){
 
 void Dialogue::spiderButton1(){
 	//Read a json file and a png file to create extra entities
-	std::string jsonFilename = FILENAME + std::to_string( mLevel) + "SpiderEasy.json";
-	std::string mapFilename = FILENAME + std::to_string(mLevel) + "SpiderEasy.png";
+	std::string jsonFilename = FILENAME + std::to_string( mLevel) + "Spider1.json";
 	changePageButton(1);
-	mGameStateLevel->setupMission(mapFilename, jsonFilename);
+	mGameStateLevel->setupMission(jsonFilename);
 }
 
 void Dialogue::spiderButton2(){
 	//Read a json file and a png file to create extra entities
-	std::string jsonFilename = FILENAME + std::to_string(mLevel) + "SpiderMedium.json";
-	std::string mapFilename = FILENAME + std::to_string(mLevel) + "SpiderMedium.png";
+	std::string jsonFilename = FILENAME + std::to_string(mLevel) + "Spider2.json";
 	changePageButton(2);
-	mGameStateLevel->setupMission(mapFilename, jsonFilename);
+	mGameStateLevel->setupMission(jsonFilename);
 }
 
 void Dialogue::spiderButton3(){
 	//Read a json file and a png file to create extra entities
-	std::string jsonFilename = FILENAME + std::to_string(mLevel) + "SpiderHard.json";
-	std::string mapFilename = FILENAME + std::to_string(mLevel) + "SpiderHard.png";
+	std::string jsonFilename = FILENAME + std::to_string(mLevel) + "Spider3.json";
 	changePageButton(3);
-	mGameStateLevel->setupMission(mapFilename, jsonFilename);
+	mGameStateLevel->setupMission(jsonFilename);
 }
 
 //Call the function corresonding to the string passed back.

@@ -40,7 +40,7 @@ public:
 	void resetLevel();
 	void resetInventory();
 
-	void setupMission(const std::string& mapFilename, const std::string& jsonFilename);
+	void setupMission(const std::string& jsonFilename);
 	bool playable() const;
 
 private:

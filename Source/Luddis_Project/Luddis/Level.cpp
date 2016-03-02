@@ -32,7 +32,6 @@ static const float EFFECT_INTERVAL = 0.7f,
 				   EFFECT_LIFETIME = 7.5f;
 
 static const char* EFFECT_FILEPATH = "Resources/Images/Rag_projectile.png";
-static const char* mapfilepath = "Resources/Configs/Levels/Level1Gatherables.png";
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::BACKGROUND;
 
 Level::Level(EntityManager* entityManager) :
@@ -279,8 +278,6 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget, s
 
 	//Initialize entites from a JSON doc
 	initializeEntities(mWindow, configDoc);
-	// Initialize eggs, chips and ludd from a map
-	//readInitMap(mapfilepath);
 
 	mPointsOfNoReturn.push_back(mWindow->getSize().x / 2 + 1000.f);
 	mCurrentPONR = mWindow->getView().getSize().x / 2;

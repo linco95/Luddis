@@ -105,7 +105,27 @@ std::pair<float, float> getProjection(const sf::Shape& shape, const sf::Vector2f
 // Narrow collision phase, using the "Separating Axis Theorem"
 
 void CollisionManager::narrowCollision(std::stack<std::pair<CollidableEntity*, CollidableEntity*>>& colliding) {
-
+	//Do some culling of collision categories to reduce unneccessary calculations.
+	//Ugly as fuck...
+	CollidableEntity::Category catFirst = colliding.top().first->getCollisionCategory();
+	CollidableEntity::Category catSecond = colliding.top().second->getCollisionCategory();
+	if (
+		catFirst == CollidableEntity::IGNORE || catSecond == CollidableEntity::IGNORE ||
+		(catFirst == CollidableEntity::PLAYER_OBJECT && catSecond == CollidableEntity::PLAYER_PROJECTILE) || (catSecond == CollidableEntity::PLAYER_OBJECT && catFirst == CollidableEntity::PLAYER_PROJECTILE) ||
+		(catFirst == CollidableEntity::COLLECT && catSecond == CollidableEntity::COLLECT) ||
+		(catFirst == CollidableEntity::COLLECT && catSecond == CollidableEntity::ENEMY_DAMAGE) || (catSecond == CollidableEntity::COLLECT && catFirst == CollidableEntity::ENEMY_DAMAGE) ||
+		(catFirst == CollidableEntity::COLLECT && catSecond == CollidableEntity::ENEMY_STUN) || (catSecond == CollidableEntity::COLLECT && catFirst == CollidableEntity::ENEMY_STUN) ||
+		(catFirst == CollidableEntity::COLLECT && catSecond == CollidableEntity::SOLID) || (catSecond == CollidableEntity::COLLECT && catFirst == CollidableEntity::SOLID) ||
+		(catFirst == CollidableEntity::COLLECT && catSecond == CollidableEntity::EVENTZONE) || (catSecond == CollidableEntity::COLLECT && catFirst == CollidableEntity::EVENTZONE) ||
+		(catFirst == CollidableEntity::ENEMY_DAMAGE && catSecond == CollidableEntity::ENEMY_DAMAGE) ||
+		(catFirst == CollidableEntity::ENEMY_DAMAGE && catSecond == CollidableEntity::ENEMY_STUN) || (catSecond == CollidableEntity::ENEMY_DAMAGE && catFirst == CollidableEntity::ENEMY_STUN) ||
+		(catFirst == CollidableEntity::ENEMY_DAMAGE && catSecond == CollidableEntity::EVENTZONE) || (catSecond == CollidableEntity::ENEMY_DAMAGE && catFirst == CollidableEntity::EVENTZONE) ||
+		(catFirst == CollidableEntity::ENEMY_STUN && catSecond == CollidableEntity::ENEMY_STUN) ||
+		(catFirst == CollidableEntity::ENEMY_STUN && catSecond == CollidableEntity::EVENTZONE) || (catSecond == CollidableEntity::ENEMY_STUN && catFirst == CollidableEntity::EVENTZONE) ||
+		(catFirst == CollidableEntity::SOLID && catSecond == CollidableEntity::EVENTZONE) || (catSecond == CollidableEntity::SOLID && catFirst == CollidableEntity::EVENTZONE) ||
+		(catFirst == CollidableEntity::SOLID && catSecond == CollidableEntity::SOLID) ||
+		(catFirst == CollidableEntity::EVENTZONE && catSecond == CollidableEntity::EVENTZONE))
+		return;
 
 	/*
 	Here we're getting every side in the first shape. Then we get the normal of that side and project every point in each shape on that vector.

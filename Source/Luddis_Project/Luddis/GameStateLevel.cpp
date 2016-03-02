@@ -181,7 +181,7 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 		mFirstTime = false;
 		mCurrentLevelFile = levelFile;
 	}
-	
+
 
 	mResetView = true;
 	mInDialogue = false;
@@ -196,18 +196,16 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	mPlayer = new Luddis(LUDDIS_TEXTURE, mWindow, mEntityM);
 	//CINEMATIC TEST
 	Polynomial poly;
-	poly.addTerm(-1, 3);
 	poly.addTerm(1, 2);
-	poly.addTerm(1, 1);
 	Tween tween(poly, 0, 2);
 	CinematicPause pauseCin(2);
 	CinematicMoveToPoint movePoint(sf::Vector2f(500, 500), mPlayer);
 	LuddisStateCinematic* cinState = new LuddisStateCinematic(100, mPlayer, mWindow, mEntityM, mPowerupDisplays[0]);
-	/*cinState->addCinematicSequence(&tween);
+	cinState->addCinematicSequence(&tween);
 	cinState->addCinematicSequence(&tween);
 	cinState->addCinematicSequence(&pauseCin);
 	cinState->addCinematicSequence(&tween);
-	cinState->addCinematicSequence(&movePoint);*/
+	cinState->addCinematicSequence(&movePoint);
 	cinState->addSpeedShift(50, 1);
 	cinState->addSpeedShift(100, 1);
 	cinState->addSpeedShift(50, 1);
@@ -251,7 +249,7 @@ void GameStateLevel::resetInventory(){
 	inv->setEggs(mInv.eggs);
 }
 
-void GameStateLevel::setupMission(const std::string& mapFilename, const std::string& jsonFilename) {
+void GameStateLevel::setupMission(const std::string& jsonFilename) {
 	std::string configText = ResourceManager::getInstance().loadJsonFile(jsonFilename);
 	rapidjson::Document configDoc;
 	configDoc.Parse(configText.c_str());

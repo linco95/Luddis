@@ -96,9 +96,11 @@ void Obstacle::tick(const sf::Time& deltaTime){
 		else {
 			mTimeStunned -= deltaTime.asSeconds();
 		}
+		mAnimation.getCurrAnimation().setOrigin(mAnimation.getCurrAnimation().getSprite().getLocalBounds().width / 2, mAnimation.getCurrAnimation().getSprite().getLocalBounds().height);
 	}
 	// Solid obstacle
 	else {
+		rotate(deltaTime.asSeconds() * 100.0f);
 		return;
 	}
 }
@@ -144,14 +146,14 @@ sf::Shape* Obstacle::getNarrowHitbox() const{
 Obstacle::Category Obstacle::getCollisionCategory(){
 	if (mType == DAMAGE){
 		if (mIsDamaging){
-			return BG_DAMAGE;
+			return ENEMY_DAMAGE;
 		}
 		else{
-			return BG_SOLID;
+			return Category::SOLID;
 		}
 	}
 	else /*if (mType == SOLID)*/{
-		return BG_SOLID;
+		return Category::SOLID;
 	}
 }
 

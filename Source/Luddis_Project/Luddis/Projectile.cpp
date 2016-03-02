@@ -120,13 +120,13 @@ Projectile::Type Projectile::getCollisionType(){
 
 
 void Projectile::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway){
-	if (collidable->getCollisionCategory() == ENEMY && mCollisionCategory == HAIR){
+	if (collidable->getCollisionCategory() == ENEMY_DAMAGE && mCollisionCategory == PLAYER_PROJECTILE){
 		mIsAlive = false;
 	}
-	if (collidable->getCollisionCategory() == HAIR && mCollisionCategory == ENEMY){
+	if (collidable->getCollisionCategory() == PLAYER_PROJECTILE && mCollisionCategory == ENEMY_DAMAGE){
 		mIsAlive = false;
 	}
-	if (collidable->getCollisionCategory() == ENEMY_STUN && mCollisionCategory == HAIR){
+	if (collidable->getCollisionCategory() == ENEMY_STUN && mCollisionCategory == PLAYER_PROJECTILE){
 		mIsAlive = false;
 	}
 	if (collidable->getCollisionCategory() == PLAYER_OBJECT && mCollisionCategory == ENEMY_STUN){
@@ -149,7 +149,7 @@ sf::Shape* Projectile::getNarrowHitbox() const{
 }
 
 void Projectile::stun(const sf::Time& deltatime) {
-	if (mCollisionCategory == ENEMY || mCollisionCategory == ENEMY_STUN || mCollisionCategory == ENEMY_PROJECTILE) {
+	if (mCollisionCategory == ENEMY_DAMAGE || mCollisionCategory == ENEMY_STUN) {
 		mTimeStunned = float(deltatime.asSeconds());
 	}
 	else {
