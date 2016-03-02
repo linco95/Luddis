@@ -83,7 +83,7 @@ void LuddisStatePlayable::collide(CollidableEntity * collidable, const sf::Vecto
 	if (collidable->getCollisionCategory() == CollidableEntity::BG_SOLID) {
 		//mColliding = true;
 		//mCollideBox = collidable->getHitBox();
-		Debug::log("MoveAway x: " + std::to_string(moveAway.x) + ". y:" + std::to_string(moveAway.y), Debug::INFO);
+		//Debug::log("MoveAway x: " + std::to_string(moveAway.x) + ". y:" + std::to_string(moveAway.y), Debug::INFO);
 		mPlayerPtr->move(moveAway);
 	}
 	if (mInvincibility <= 0) {
