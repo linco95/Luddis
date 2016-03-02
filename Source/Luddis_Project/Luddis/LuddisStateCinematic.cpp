@@ -26,6 +26,8 @@ LuddisStateCinematic::~LuddisStateCinematic(){
 }
 
 void LuddisStateCinematic::tick(const sf::Time & deltaTime){
+	if(mSequences.empty())
+		return mPlayerPtr->setPlayerState(new LuddisStatePlayable(mPlayerPtr, mWindow, mEntityManager, mDisplay));
 	if (mSequences.front()->getFinished()) {
 		delete mSequences.front();
 		mSequences.pop();

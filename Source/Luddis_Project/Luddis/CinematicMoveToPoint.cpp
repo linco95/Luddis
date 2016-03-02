@@ -2,7 +2,7 @@
 #include "VectorMath.h"
 #include <SFML/Graphics/Transformable.hpp>
 
-static const float GRACEAREA = 15;
+static const float GRACEAREA = 50;
 
 CinematicMoveToPoint::CinematicMoveToPoint(sf::Vector2f finalPoint, sf::Transformable* transformable):
 mFinished(false),
@@ -17,11 +17,13 @@ CinematicMoveToPoint::~CinematicMoveToPoint(){
 
 const sf::Vector2f CinematicMoveToPoint::tick(const sf::Time & deltaTime)
 {
-	if (VectorMath::getVectorLengthSq(mTransformable->getPosition() - mFinalPoint) < GRACEAREA) {
-		return sf::Vector2f(0, 0);
+	sf::Vector2f temp2 = mTransformable->getPosition();
+	sf::Vector2f temp = mFinalPoint - mTransformable->getPosition();
+	if (VectorMath::getVectorLengthSq(temp) < GRACEAREA) {
 		mFinished = true;
+		return sf::Vector2f(0, 0);
 	}
-	return mTransformable->getPosition() - mFinalPoint;
+	return temp;
 }
 
 bool CinematicMoveToPoint::getFinished() const
