@@ -18,6 +18,7 @@
 #include "Luddis.h"
 #include "LuddisStateCinematic.h"
 #include "CinematicPause.h"
+#include "CinematicMoveToPoint.h"
 
 static const std::string LUDDIS_TEXTURE = "Resources/Images/Grafik_Luddis120x80_s1d3v1.png";
 static const std::string POWER_DISPLAY = "Resources/Images/GUI/PowerButton.png";
@@ -200,12 +201,13 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	poly.addTerm(1, 1);
 	Tween tween(poly, 0, 2);
 	CinematicPause pauseCin(2);
+	CinematicMoveToPoint movePoint(sf::Vector2f(500, 500), mPlayer);
 	LuddisStateCinematic* cinState = new LuddisStateCinematic(100, mPlayer, mWindow, mEntityM, mPowerupDisplays[0]);
-	cinState->addCinematicSequence(&tween);
+	/*cinState->addCinematicSequence(&tween);
 	cinState->addCinematicSequence(&tween);
 	cinState->addCinematicSequence(&pauseCin);
 	cinState->addCinematicSequence(&tween);
-	cinState->addCinematicSequence(&tween);
+	cinState->addCinematicSequence(&movePoint);*/
 	cinState->addSpeedShift(50, 1);
 	cinState->addSpeedShift(100, 1);
 	cinState->addSpeedShift(50, 1);

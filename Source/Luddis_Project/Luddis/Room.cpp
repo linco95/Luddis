@@ -81,15 +81,24 @@ void Room::createButtons(int room) {
 	sf::Vector2f position(0, 0);
 	switch (room) {
 	case 1:
-		position = ViewUtility::getViewSize().getSize()*0.6f + getPosition();
-		addButton(LEVEL1_TEXTURE, "", "Level01", position, Button::RECTANGLE);
-		position.x = ViewUtility::getViewSize().getSize().x*0.85f + getPosition().x;
-		addButton(DOOR_TEXTURE, "", "Room2", position, Button::RECTANGLE);
+		position.x = ViewUtility::getViewSize().getSize().x*0.85f; 
+		position.y = ViewUtility::getViewSize().getSize().y*0.50f;
+		addButton(DOOR_TEXTURE, "", "Level02", position, Button::ButtonType::RECTANGLE);
+
 		break;
 
 	case 2:
-		position.x = ViewUtility::getViewSize().getSize().x*0.15f + getPosition().x;
-		addButton(DOOR_TEXTURE, "", "Room1", position, Button::RECTANGLE);
+		position = ViewUtility::getViewSize().getSize()*0.60f;
+		addButton(LEVEL1_TEXTURE, "", "Level01", position, Button::RECTANGLE);
+		position.x = ViewUtility::getViewSize().getSize().x*0.85f;
+		position.y = ViewUtility::getViewSize().getSize().y*0.50f;
+		addButton(DOOR_TEXTURE, "", "Room3", position, Button::RECTANGLE);
+		break;
+
+	case 3:
+		position.x = ViewUtility::getViewSize().getSize().x*0.15f;
+		position.y = ViewUtility::getViewSize().getSize().y*0.50f;
+		addButton(DOOR_TEXTURE, "", "Room2", position, Button::RECTANGLE);
 		mLevelButtons.back()->setScale(-1.0f, 1.0f);
 		break;
 
@@ -107,7 +116,7 @@ void Room::addButton(std::string buttonFile, std::string buttonText, std::string
 }
 
 void Room::buttonFuncShop() {
-
+	GameStateMap::getInstance().changeRoom(1);
 }
 
 void Room::buttonFuncLevel(std::string level) {

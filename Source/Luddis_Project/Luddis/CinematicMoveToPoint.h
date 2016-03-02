@@ -9,7 +9,7 @@ namespace sf {
 
 class CinematicMoveToPoint : public CinematicSequence {
 public:
-	CinematicMoveToPoint(sf::Vector2f finalPoint);
+	CinematicMoveToPoint(sf::Vector2f finalPoint, sf::Transformable* transformable);
 	~CinematicMoveToPoint();
 
 	const sf::Vector2f tick(const sf::Time & deltaTime) override;
@@ -17,6 +17,8 @@ public:
 	CinematicSequence * copy() const override;
 
 private:
+	sf::Transformable* mTransformable;
+
 	bool mFinished;
 	sf::Vector2f mFinalPoint;
 
