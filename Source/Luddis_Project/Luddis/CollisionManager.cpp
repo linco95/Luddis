@@ -7,7 +7,6 @@
 #include "Debug.h"
 #include <cassert>
 
-
 CollisionManager::CollisionManager() :
 	mCollidables() {
 }
@@ -110,13 +109,18 @@ void CollisionManager::narrowCollision(std::stack<std::pair<CollidableEntity*, C
 	CollidableEntity::Category catFirst = colliding.top().first->getCollisionCategory();
 	CollidableEntity::Category catSecond = colliding.top().second->getCollisionCategory();
 	if (
+		//If eighter the first or the second is IGNORE, proceed without checking for collisions.
 		catFirst == CollidableEntity::IGNORE || catSecond == CollidableEntity::IGNORE ||
 		(catFirst == CollidableEntity::PLAYER_OBJECT && catSecond == CollidableEntity::PLAYER_PROJECTILE) || (catSecond == CollidableEntity::PLAYER_OBJECT && catFirst == CollidableEntity::PLAYER_PROJECTILE) ||
+		(catFirst == CollidableEntity::PLAYER_PROJECTILE && catSecond == CollidableEntity::PLAYER_PROJECTILE)||
+		(catFirst == CollidableEntity::PLAYER_PROJECTILE && catSecond == CollidableEntity::COLLECT) || (catSecond == CollidableEntity::PLAYER_PROJECTILE && catFirst == CollidableEntity::COLLECT) ||
+		(catFirst == CollidableEntity::PLAYER_PROJECTILE && catSecond == CollidableEntity::EVENTZONE) || (catSecond == CollidableEntity::PLAYER_PROJECTILE && catFirst == CollidableEntity::EVENTZONE) ||
 		(catFirst == CollidableEntity::COLLECT && catSecond == CollidableEntity::COLLECT) ||
 		(catFirst == CollidableEntity::COLLECT && catSecond == CollidableEntity::ENEMY_DAMAGE) || (catSecond == CollidableEntity::COLLECT && catFirst == CollidableEntity::ENEMY_DAMAGE) ||
 		(catFirst == CollidableEntity::COLLECT && catSecond == CollidableEntity::ENEMY_STUN) || (catSecond == CollidableEntity::COLLECT && catFirst == CollidableEntity::ENEMY_STUN) ||
 		(catFirst == CollidableEntity::COLLECT && catSecond == CollidableEntity::SOLID) || (catSecond == CollidableEntity::COLLECT && catFirst == CollidableEntity::SOLID) ||
 		(catFirst == CollidableEntity::COLLECT && catSecond == CollidableEntity::EVENTZONE) || (catSecond == CollidableEntity::COLLECT && catFirst == CollidableEntity::EVENTZONE) ||
+		//No enemies can collide with eachother, this might not be wanted behavior.
 		(catFirst == CollidableEntity::ENEMY_DAMAGE && catSecond == CollidableEntity::ENEMY_DAMAGE) ||
 		(catFirst == CollidableEntity::ENEMY_DAMAGE && catSecond == CollidableEntity::ENEMY_STUN) || (catSecond == CollidableEntity::ENEMY_DAMAGE && catFirst == CollidableEntity::ENEMY_STUN) ||
 		(catFirst == CollidableEntity::ENEMY_DAMAGE && catSecond == CollidableEntity::EVENTZONE) || (catSecond == CollidableEntity::ENEMY_DAMAGE && catFirst == CollidableEntity::EVENTZONE) ||
@@ -259,7 +263,6 @@ void CollisionManager::narrowCollision(std::stack<std::pair<CollidableEntity*, C
 	}
 
 	// If no gaps were found, collide. We give the smallestOverlap vector in the direction that the shape has to move to not be colliding anymore.
-	Debug::log("Axis x: " + std::to_string(smallest.x) + ", y: " + std::to_string(smallest.y), Debug::INFO);
 	pair.first->collide(pair.second, smallest * overlap);
 	pair.second->collide(pair.first, smallest * overlap);
 }

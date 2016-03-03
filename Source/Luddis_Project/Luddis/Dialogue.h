@@ -23,7 +23,6 @@ public:
 	bool isAlive() const override;
 	bool isActive() const  override;
 	void setActive(const bool& active) override;
-	void setText(std::string text);
 	void onClick(std::string buttonFunc) override;
 
 private:
@@ -31,12 +30,13 @@ private:
 	void initialize(std::string dialogueFile);
 	void internalClear();
 	void changePageButton(int value);
+	void gotoPage(int value);
 	void spiderButton1();
 	void spiderButton2();
 	void spiderButton3();
 	void closeButton();
 
-	static const int MAX_PAGES = 10;
+	static const int MAX_PAGES = 25;
 	
 	ResourceManager* mResourceManager;
 	SoundEngine* mSoundEngine;

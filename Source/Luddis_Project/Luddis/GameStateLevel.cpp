@@ -182,7 +182,6 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 		mCurrentLevelFile = levelFile;
 	}
 
-
 	mResetView = true;
 	mInDialogue = false;
 
@@ -194,17 +193,21 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	mInv.dust = inv->getDust();
 	mInv.eggs = inv->getEggs();
 	mPlayer = new Luddis(LUDDIS_TEXTURE, mWindow, mEntityM);
+
 	//CINEMATIC TEST
 	Polynomial poly;
 	poly.addTerm(1, 2);
+	/*poly.addTerm(-2, 2);
+	poly.addTerm(2, 1);*/
 	Tween tween(poly, 0, 2);
+	Tween tween2(poly, 2, 1, false);
 	CinematicPause pauseCin(2);
 	CinematicMoveToPoint movePoint(sf::Vector2f(500, 500), mPlayer);
 	LuddisStateCinematic* cinState = new LuddisStateCinematic(100, mPlayer, mWindow, mEntityM, mPowerupDisplays[0]);
 	cinState->addCinematicSequence(&tween);
 	cinState->addCinematicSequence(&tween);
 	cinState->addCinematicSequence(&pauseCin);
-	cinState->addCinematicSequence(&tween);
+	cinState->addCinematicSequence(&tween2);
 	cinState->addCinematicSequence(&movePoint);
 	cinState->addSpeedShift(50, 1);
 	cinState->addSpeedShift(100, 1);
@@ -215,6 +218,7 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	mPlayer->setPlayerState(cinState);
 	mPlayer->setPosition(-50.0f, (float)ViewUtility::VIEW_HEIGHT/2.0f);
 	//END CINEMATIC TEST
+
 	mEntityM->addEntity(mPlayer);
 	mCM->addCollidable(mPlayer);
 	mLevel = new Level(mEntityM);

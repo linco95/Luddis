@@ -123,16 +123,18 @@ void Projectile::collide(CollidableEntity *collidable, const sf::Vector2f& moveA
 	if (collidable->getCollisionCategory() == ENEMY_DAMAGE && mCollisionCategory == PLAYER_PROJECTILE){
 		mIsAlive = false;
 	}
-	if (collidable->getCollisionCategory() == PLAYER_PROJECTILE && mCollisionCategory == ENEMY_DAMAGE){
+	else if (collidable->getCollisionCategory() == PLAYER_PROJECTILE && mCollisionCategory == ENEMY_DAMAGE){
 		mIsAlive = false;
 	}
-	if (collidable->getCollisionCategory() == ENEMY_STUN && mCollisionCategory == PLAYER_PROJECTILE){
+	else if (collidable->getCollisionCategory() == ENEMY_STUN && mCollisionCategory == PLAYER_PROJECTILE){
 		mIsAlive = false;
 	}
-	if (collidable->getCollisionCategory() == PLAYER_OBJECT && mCollisionCategory == ENEMY_STUN){
+	else if (collidable->getCollisionCategory() == PLAYER_OBJECT && mCollisionCategory == ENEMY_STUN){
 		mIsAlive = false;
 	}
-
+	else if (collidable->getCollisionCategory() == SOLID) {
+		mIsAlive = false;
+	}
 }
 
 sf::FloatRect Projectile::getHitBox(){

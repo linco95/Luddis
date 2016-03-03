@@ -16,8 +16,8 @@ static const float ANIMATION_TIME = 1.5f;
 static const float RECT_WIDTH = ViewUtility::VIEW_WIDTH;
 static const float RECT_HEIGHT = 600;
 static const int INDENT = 30;
-static sf::Vector2f DialogueBoxMaxSize(RECT_WIDTH, RECT_HEIGHT);
-static sf::IntRect DEFAULT_RECT(INDENT*6, INDENT, (int)RECT_WIDTH-INDENT*2, 0);
+//static sf::Vector2f DialogueBoxMaxSize(RECT_WIDTH, RECT_HEIGHT);
+static sf::IntRect DEFAULT_RECT(INDENT*8, INDENT*4, (int)RECT_WIDTH-INDENT*2, 0);
 
 Dialogue::Dialogue(const std::string& dialogueFile, sf::RenderWindow* window, GUIManager* guiManager, EventManager* eventManager, sf::Vector2f pos) :
 mButtonCount(0),
@@ -60,7 +60,7 @@ void Dialogue::initialize(std::string dialogueFile){
 	configDoc.Parse(configText.c_str());
 	assert(configDoc.IsObject());
 
-	sf::Vector2f offset(0, -RECT_HEIGHT);
+	sf::Vector2f offset(0, -RECT_HEIGHT + INDENT * 5);
 	sf::Vector2f portraitPos(ViewUtility::VIEW_WIDTH*0.4f, offset.y+getPosition().y);
 
 	//A character portrait is optional.
@@ -96,7 +96,6 @@ void Dialogue::initialize(std::string dialogueFile){
 		assert(pages[itr].HasMember("Buttons") && pages[itr]["Buttons"].IsArray());
 		const rapidjson::Value& buttons = pages[itr]["Buttons"];
 
-
 		for (rapidjson::SizeType i = 0; i < buttons.Size(); i++){
 			const rapidjson::Value& buttonInfo = buttons[i];
 			assert(buttonInfo.IsObject());
@@ -106,7 +105,7 @@ void Dialogue::initialize(std::string dialogueFile){
 			std::string buttonImage = buttonInfo["Button_image"].GetString();
 			assert(buttonInfo.HasMember("Button_func") && buttonInfo["Button_func"].IsString());
 			std::string buttonFunc = buttonInfo["Button_func"].GetString();
-			addButton(buttonImage, buttonText, buttonFunc, mBackground.getPosition() +  sf::Vector2f((float)INDENT*2, (float)INDENT*2 + (float)i * 60.0f), (int)itr);
+			addButton(buttonImage, buttonText, buttonFunc, mBackground.getPosition() +  sf::Vector2f((float)INDENT*4, (float)INDENT*5 + (float)i * 60.0f), (int)itr);
 
 		}
 		TextBox textBox(DEFAULT_RECT, pages[itr]["Text"].GetString(), 24, true);
@@ -119,10 +118,9 @@ void Dialogue::initialize(std::string dialogueFile){
 
 			mHeaders[itr] = new TextBox(DEFAULT_RECT, text, fontSize);
 			mHeaders[itr]->setString(pages[itr]["Header"].GetString());
-			mHeaders[itr]->setPosition(offset);
 
-			int headerOffset = mHeaders[itr]->getRows()*fontSize;
-			mDialogueTexts.back().move(0.0f, (float)headerOffset);
+			sf::Vector2f headerOffset (0, (float)(mHeaders[itr]->getRows()*fontSize));
+			mHeaders[itr]->setPosition(offset - headerOffset);
 		}
 		if (pages[itr].HasMember("Voice_file")) {
 			assert(pages[itr]["Voice_file"].IsString());
@@ -233,6 +231,21 @@ void Dialogue::changePageButton(int value){
 	}
 }
 
+void Dialogue::gotoPage(int value){
+	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++) {
+		mButtons[mActivePage][i]->setActive(false);
+	}
+	if (mSoundFiles[mActivePage].size() != 0)
+		mSoundEngine->stopSound(mCurrentVoiceDialogue);
+	mActivePage = value-1;
+	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++) {
+		mButtons[mActivePage][i]->setActive(true);
+	}
+	if (mSoundFiles[mActivePage].size() != 0) {
+		mCurrentVoiceDialogue = mSoundEngine->playSound(mSoundFiles[mActivePage].c_str());
+	}
+}
+
 void Dialogue::closeButton(){
 	mIsAlive = false;
 	mGameStateLevel->fuckOffSpider();
@@ -261,8 +274,9 @@ void Dialogue::spiderButton3(){
 
 //Call the function corresonding to the string passed back.
 void Dialogue::onClick(std::string buttonFunc){
-	std::string substring = buttonFunc.substr(0, 4);
-	if (substring == "Page"){
+	std::string substringPage = buttonFunc.substr(0, 4);
+	std::string substringGotoPage = buttonFunc.substr(0, 8);
+	if (substringPage == "Page"){
 		int value = 0;
 		std::string string = buttonFunc.substr(5, buttonFunc.size());
 		if (buttonFunc.at(4) == '+'){
@@ -273,12 +287,15 @@ void Dialogue::onClick(std::string buttonFunc){
 		}
 		changePageButton(value);
 	}
+	else if (substringGotoPage == "GotoPage") {
+		std::string string = buttonFunc.substr(8, buttonFunc.size());
+		int value = std::stoi(string);
+	}
 	else if (buttonFunc == "Close"){
 		closeButton();
 	}
 	else if (buttonFunc == "Spider1"){
 		spiderButton1();
-
 	}
 	else if (buttonFunc == "Spider2"){
 		spiderButton2();

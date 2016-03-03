@@ -76,19 +76,19 @@ void EventZone::collide(CollidableEntity* collidable, const sf::Vector2f& moveAw
 			mGameStateLevel->createDialogue(filename);
 			break;
 
-		case SPIDER_EASY_END:
-			filename += std::to_string(mLevel) + "easyend.json";
+		case SPIDER_1_END:
+			filename += std::to_string(mLevel) + "end1.json";
 			mGameStateLevel->createDialogue(filename);
 			break;
 
-		case SPIDER_MEDIUM_END:
-			filename += std::to_string(mLevel) + "mediumend.json";
+		case SPIDER_2_END:
+			filename += std::to_string(mLevel) + "end2.json";
 			mGameStateLevel->createDialogue(filename);
 			break;
 
-		case SPIDER_HARD_END:
+		case SPIDER_3_END:
 			//TODO: Add some kind of check to see if the mission has accually been completed
-			filename += std::to_string(mLevel) + "hardend.json";
+			filename += std::to_string(mLevel) + "end3.json";
 			mGameStateLevel->createDialogue(filename);
 			break;
 		}

@@ -33,9 +33,12 @@ static const std::string TEST_LEVEL = "Resources/Configs/Levels/Level01Entities.
 static const char* MOUSE_IMAGE = "Resources/Images/LuddisCursor.png";
 static const std::string FONT_NAME = "arial.ttf";
 
-static const char* MASTER_BANK = "Resources/Audio/FMOD/Build/Desktop/Master Bank.bank";
-static const char* MASTER_BANK_STRINGS = "Resources/Audio/FMOD/Build/Desktop/Master Bank.strings.bank";
+static const char* MASTER_BANK = "Resources/Audio/Musicbank/Build/Desktop/Master Bank.bank";
+static const char* MASTER_BANK_STRINGS = "Resources/Audio/Musicbank/Build/Desktop/Master Bank.strings.bank";
+static const char* SOUND_BANK = "Resources/Audio/Soundbank/Build/Desktop/Ljud.bank";
+
 static const char* EVENT_MUSIC1 = "event:/MUSIK/Bana_1";
+static const char* EVENT_LUDDIS = "event:/Luddis";
 
 static const bool VSYNCENABLED = true;
 
@@ -87,12 +90,12 @@ struct GameManagerImp : public EventObserver {
 		mMainWindow.setVerticalSyncEnabled(VSYNCENABLED);
 
 		// Set up the viewport
-		auto actualSize = mMainWindow.getView().getSize();
+		/*auto actualSize = mMainWindow.getView().getSize();
 		auto desiredSize = ViewUtility::getViewSize().getSize();
 		sf::FloatRect viewport(0, 0, 0, 0);
 
 		//mMainWindow.getView().setViewport()
-		/*decltype(desiredSize) viewport(0, 0, 1, 1);
+		decltype(desiredSize) viewport(0, 0, 1, 1);
 		if (actualSize.width > actualSize.height) {
 
 		}
@@ -130,8 +133,6 @@ struct GameManagerImp : public EventObserver {
 				break;
 		}
 	}
-	
-
 
 	void handleEvents(RenderWindow& aWindow){
 		Event currEvent;
@@ -147,8 +148,11 @@ struct GameManagerImp : public EventObserver {
 
 		se->loadBank(MASTER_BANK);
 		se->loadBank(MASTER_BANK_STRINGS);
+		/*se->loadBank(SOUND_BANK);
+		se->createEvent(EVENT_LUDDIS, SoundEngine::EventType::SOUND);
+		se->playEvent(EVENT_LUDDIS);*/ //Event not found
 		se->createEvent(EVENT_MUSIC1, SoundEngine::EventType::MUSIC);
-		se->playEvent(EVENT_MUSIC1);
+		//se->playEvent(EVENT_MUSIC1); IT GETS OLD OK?!
 		
 		mGameStatePaused = &GameStatePaused::getInstance();
 		mGameStateLevel = &GameStateLevel::getInstance();

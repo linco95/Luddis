@@ -6,8 +6,8 @@
 #include "VectorMath.h"
 #include <vector>
 
-static const std::string DEFAULT_FONTTYPE = "resources/fonts/arial.ttf";
-static bool CLICKED = false;
+static const std::string DEFAULT_FONTTYPE = "Resources/Fonts/Arial.ttf";
+static bool GLOBLAL_CLICK = false;
 
 Button::Button(std::string graphicFilename, std::string buttonText, std::string buttonFunc, sf::RenderWindow* window, EventManager* eventManager, sf::Vector2f pos, InterfaceElement* owner, ButtonType buttonType) :
 mWindow(window),
@@ -15,6 +15,7 @@ mEventManager(eventManager),
 mButtonType(buttonType),
 mIsAlive(true),
 mIsActive(false),
+mClick(false),
 mOwner(owner),
 mButtonFunc(buttonFunc),
 mButtonText(buttonText, ResourceManager::getInstance().getFont(DEFAULT_FONTTYPE), 16),
@@ -39,7 +40,7 @@ mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 	mButtonText.setColor(sf::Color::Black);
 	mButtonText.setOrigin(textRect.width / 2, textRect.height / 2);
 	mSprite.setOrigin((float)spriteRect.width / 2, (float)spriteRect.height / 2);
-	mEventManager->attatch(this, std::vector < sf::Event::EventType > { sf::Event::MouseButtonReleased, sf::Event::MouseButtonPressed/*, sf::Event::MouseMoved*/ });
+	mEventManager->attatch(this, std::vector < sf::Event::EventType > { sf::Event::MouseButtonReleased, sf::Event::MouseButtonPressed, sf::Event::MouseMoved });
 
 #ifdef LUDDIS_DEBUG_DRAW_HITBOXES
 	//Debug info
@@ -49,23 +50,21 @@ mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 	mDebugCircle.setOrigin(rectSize / 2.0f);
 	mDebugCircle.setFillColor(sf::Color(0, 255, 0, 120));
 	mDebugCircle.setOutlineColor(sf::Color(0, 255, 0, 120));
-	//mDebugCircle.setPosition(mSprite.getPosition());
 	
 	mDebugRect.setSize(rectSize);
 	mDebugRect.setOrigin(rectSize / 2.0f);
 	mDebugRect.setFillColor(sf::Color(0, 255, 0, 120));
 	mDebugRect.setOutlineColor(sf::Color(0, 255, 0, 120));
-	//mDebugRect.setPosition(mSprite.getPosition());
 #endif
 }
 
 Button::~Button(){
-	mEventManager->detatch(this, std::vector < sf::Event::EventType > { sf::Event::MouseButtonReleased, sf::Event::MouseButtonPressed/*, sf::Event::MouseMoved*/ });
+	mEventManager->detatch(this, std::vector < sf::Event::EventType > { sf::Event::MouseButtonReleased, sf::Event::MouseButtonPressed, sf::Event::MouseMoved });
 }
 
 void Button::tick(const sf::Time& deltaTime){
-	updateInput();
-	CLICKED = false;
+	//updateInput();
+	GLOBLAL_CLICK = false;
 }
 
 bool Button::isActive() const{
@@ -97,37 +96,6 @@ bool Button::isAlive() const{
 	return mIsAlive;
 }
 
-//TODO: move whole function to onEvent
-void Button::updateInput(){
-	static sf::Vector2f vector(0,0);
-	vector = mWindow->mapPixelToCoords(sf::Mouse::getPosition(*mWindow)) - getPosition();
-
-	switch(mButtonType) {
-	case RECTANGLE:
-		if (mSprite.getGlobalBounds().contains(vector)) {
-			//Default
-			mSprite.setTextureRect(mRects[1]);
-		}
-		else {
-			//Mouse over
-			mSprite.setTextureRect(mRects[0]);
-		}
-		break;
-
-	case CIRCLE:
-		float distance = VectorMath::getVectorLength(mSprite.getPosition() - vector);
-		if (distance<=mSprite.getGlobalBounds().height/2) {
-			//Default
-			mSprite.setTextureRect(mRects[1]);
-		}
-		else {
-			//Mouse over
-			mSprite.setTextureRect(mRects[0]);
-		}
-		break;
-	}
-}
-
 void Button::onEvent(const sf::Event &aEvent){
 	if (mIsActive){
 		//The viewport has to be changed here, since all EventObservers are iterated in the same vector.
@@ -135,17 +103,18 @@ void Button::onEvent(const sf::Event &aEvent){
 		sf::View mapView = mWindow->getView();
 		mWindow->setView(GUIView);
 		static sf::Vector2f mousePos(0, 0);
-		mousePos = mWindow->mapPixelToCoords(sf::Vector2i(aEvent.mouseButton.x, aEvent.mouseButton.y)) - getPosition();
 		//Listen for mouse clicks
 		sf::FloatRect rect(mSprite.getGlobalBounds());
 		switch (mButtonType) {
 		case RECTANGLE:
 			if (aEvent.type == sf::Event::MouseButtonPressed&&
 				aEvent.mouseButton.button == sf::Mouse::Left) {
+				mousePos = mWindow->mapPixelToCoords(sf::Vector2i(aEvent.mouseButton.x, aEvent.mouseButton.y)) - getPosition();
 
 				//Check to see if the mouse position is within the images bounds
 				if (rect.contains(mousePos)) {
 					mSprite.setTextureRect(mRects[2]);
+					mClick = true;
 				}
 			}
 			//If the mouse is released within the bounds of the image,
@@ -153,21 +122,37 @@ void Button::onEvent(const sf::Event &aEvent){
 			//to the string passed on during inception
 			else if (aEvent.type == sf::Event::MouseButtonReleased&&
 				aEvent.mouseButton.button == sf::Mouse::Left) {
-				if (rect.contains(mousePos) && CLICKED == false) {
-					CLICKED = true;
+
+				mousePos = mWindow->mapPixelToCoords(sf::Vector2i(aEvent.mouseButton.x, aEvent.mouseButton.y)) - getPosition();
+
+				if (rect.contains(mousePos) && GLOBLAL_CLICK == false && mClick == true) {
+					GLOBLAL_CLICK = true;
 					mOwner->onClick(mButtonFunc);
+				}
+			}
+			else if (aEvent.type == sf::Event::MouseMoved) {
+				mousePos = mWindow->mapPixelToCoords(sf::Vector2i(aEvent.mouseMove.x, aEvent.mouseMove.y)) - getPosition();
+
+				if (mSprite.getGlobalBounds().contains(mousePos)) {
+					mSprite.setTextureRect(mRects[1]);
+				}
+				else {
+					mSprite.setTextureRect(mRects[0]);
+					mClick = false;
 				}
 			}
 			break;
 
 		case CIRCLE:
-			float distance = VectorMath::getVectorLength(mSprite.getPosition() - mousePos);
 			if (aEvent.type == sf::Event::MouseButtonPressed&&
 				aEvent.mouseButton.button == sf::Mouse::Left) {
+				mousePos = mWindow->mapPixelToCoords(sf::Vector2i(aEvent.mouseButton.x, aEvent.mouseButton.y)) - getPosition();
+				float distance = VectorMath::getVectorLength(mSprite.getPosition() - mousePos);
 
 				//Check to see if the mouse position is within the images bounds
 				if (distance <= mSprite.getGlobalBounds().height / 2) {
 					mSprite.setTextureRect(mRects[2]);
+					mClick = true;
 				}
 			}
 			//If the mouse is released within the bounds of the image,
@@ -175,9 +160,22 @@ void Button::onEvent(const sf::Event &aEvent){
 			//to the string passed on during inception
 			else if (aEvent.type == sf::Event::MouseButtonReleased&&
 				aEvent.mouseButton.button == sf::Mouse::Left) {
-					if (distance <= mSprite.getGlobalBounds().height / 2 && CLICKED == false) {
-					CLICKED = true;
+				mousePos = mWindow->mapPixelToCoords(sf::Vector2i(aEvent.mouseButton.x, aEvent.mouseButton.y)) - getPosition();
+				float distance = VectorMath::getVectorLength(mSprite.getPosition() - mousePos);
+				if (distance <= mSprite.getGlobalBounds().height / 2 && GLOBLAL_CLICK == false && mClick == true) {
+					GLOBLAL_CLICK = true;
 					mOwner->onClick(mButtonFunc);
+				}
+			}
+			else if (aEvent.type == sf::Event::MouseMoved) {
+				mousePos = mWindow->mapPixelToCoords(sf::Vector2i(aEvent.mouseMove.x, aEvent.mouseMove.y)) - getPosition();
+				float distance = VectorMath::getVectorLength(mSprite.getPosition() - mousePos);
+				if (distance<=mSprite.getGlobalBounds().height/2){
+					mSprite.setTextureRect(mRects[1]);
+				}
+				else {
+					mSprite.setTextureRect(mRects[0]);
+					mClick = false;
 				}
 			}
 		}

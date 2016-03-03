@@ -156,6 +156,7 @@ FMOD_RESULT SoundEngine::createEvent(const char* path, EventType eventType) {
 	SoundEventDesc* desc = NULL;
 	FMOD_RESULT result;
 	result = mStudioSystem->getEvent(path, &desc);
+	assert(result == FMOD_RESULT::FMOD_OK);
 	SoundEventInst** inst = NULL;
 	if (eventType == SOUND)
 		inst = &mSoundEventInstances[path];

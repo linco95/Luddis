@@ -10,9 +10,9 @@ class EventZone: public CollidableEntity{
 public:
 	enum EventType{
 		SPIDER,
-		SPIDER_EASY_END,
-		SPIDER_MEDIUM_END,
-		SPIDER_HARD_END
+		SPIDER_1_END,
+		SPIDER_2_END,
+		SPIDER_3_END
 	};
 	EventZone(EventType eventType, sf::Vector2f pos, sf::Shape* shape, float rotation, int level);
 	~EventZone();
