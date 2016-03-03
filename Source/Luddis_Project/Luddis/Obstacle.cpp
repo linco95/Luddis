@@ -96,7 +96,7 @@ void Obstacle::tick(const sf::Time& deltaTime){
 		else {
 			mTimeStunned -= deltaTime.asSeconds();
 		}
-		mAnimation.getCurrAnimation().setOrigin(mAnimation.getCurrAnimation().getSprite().getLocalBounds().width / 2, mAnimation.getCurrAnimation().getSprite().getLocalBounds().height);
+		//mAnimation.getCurrAnimation().setOrigin(mAnimation.getCurrAnimation().getSprite().getLocalBounds().width / 2, mAnimation.getCurrAnimation().getSprite().getLocalBounds().height);
 	}
 	// Solid obstacle
 	else {
