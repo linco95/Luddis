@@ -24,7 +24,7 @@ static const float PROJECTILE_RELOAD = 0.4f;
 static const float PROJECTILE_TIMER = 3.0f;
 static const float INVINCIBILITY_TIMER = 0.75f;
 static const float GRACEAREA = 30;
-static const float MOVESPEED = 200;
+static const float MOVESPEED = 500;
 static const float PROJECTILE_SPEED = 300;
 static const float MUZZLEOFFSET = 50.0f;
 static const sf::Vector2f FRONTVECTOR(1, 0);

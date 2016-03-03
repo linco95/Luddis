@@ -125,9 +125,12 @@ struct GameManagerImp : public EventObserver {
 
 	void onEvent(const Event& aEvent) override{
 		switch(aEvent.type){
-			case (Event::EventType::Closed):
+			case Event::EventType::Closed:
 				gameOver();
 				break;
+			/*case Event::EventType::KeyPressed:
+				if(aEvent)
+				break;*/
 			default:
 				// NO-OP
 				break;
