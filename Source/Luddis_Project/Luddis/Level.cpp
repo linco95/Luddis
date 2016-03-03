@@ -341,6 +341,8 @@ void Level::updateView(const Time& deltaTime) {
 		view.getCenter().y > maxY ? view.setCenter(view.getCenter().x, maxY) : 0;
 	}
 
+	
+	view.setCenter(mTarget->getPosition());
 	int progress = (int)((mTarget->getPosition().x / mMapBounds.width)*7);
 	if (mProgress != progress) {
 		mProgress = progress;

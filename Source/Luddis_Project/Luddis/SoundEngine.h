@@ -13,8 +13,8 @@ public:
 	typedef FMOD::Studio::EventDescription SoundEventDesc;
 	typedef FMOD::Studio::Bank SoundBank;
 	~SoundEngine();
-	SoundEngine(SoundEngine&) = delete;
-	SoundEngine& operator=(SoundEngine&) = delete;
+	SoundEngine(const SoundEngine&) = delete;
+	SoundEngine& operator=(const SoundEngine&) = delete;
 	static SoundEngine& getInstance();
 
 	void update(const sf::Time& deltaTime);

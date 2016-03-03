@@ -82,7 +82,7 @@ void Luddis::tick(const sf::Time& deltaTime){
 }
 
 void Luddis::draw(sf::RenderTarget& target, sf::RenderStates states) const{
-	target.draw(STASISANIMATION, states);
+	//target.draw(STASISANIMATION, states);
 	states.transform *= getTransform();
 	target.draw(mAnimation.getCurrAnimation(), states);
 
