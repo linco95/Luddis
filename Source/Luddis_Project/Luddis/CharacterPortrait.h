@@ -8,7 +8,7 @@
 
 class CharacterPortrait : public InterfaceElement{
 public:
-	CharacterPortrait(std::string textureFilename, std::string characterName, sf::Vector2f pos);
+	CharacterPortrait(std::string textureFilename, std::string characterName, sf::Vector2f pos, bool mirror = false);
 	virtual ~CharacterPortrait();
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -18,10 +18,18 @@ public:
 	void setActive(const bool& active) override;
 	void kill();
 
+	void expressEmotion(int frame);
+
 private:
+	static const int MAX_FRAMES = 16;
+
 	bool mIsAlive;
 	bool mIsActive;
+	int mEmotionFrame;
 	sf::Sprite mSprite;
+	sf::Sprite mBubble;
+	sf::Sprite mEmotion;
+	sf::IntRect mFrame[MAX_FRAMES];
 	sf::Text mName;
 };
 

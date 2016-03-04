@@ -43,7 +43,7 @@ void GameStatePaused::createMenu(Menu::MenuType menuType) {
 	mMenu = new Menu(mWindow, &mEventM, &mMenuGUIM, menuType);
 	mMenuGUIM.addInterfaceElement(mMenu);
 	mMenu->setActive(true);
-	mMenu->initialize();
+	mMenu->initialize(this);
 
 }
 

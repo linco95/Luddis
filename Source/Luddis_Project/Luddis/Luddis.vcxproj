@@ -51,7 +51,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>LUDDIS_DEBUG_DRAW_HITBOXES;_DESIGNER_HAX_;WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LUDDIS_DEBUG_DRAW_HITBOXES;WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\Rapidjson\include;..\FMOD-1.07\Studio\include;..\FMOD-1.07\Lowlevel\include;..\FMOD-1.07\FSbank\include;..\SFML-2.3.2\include</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>

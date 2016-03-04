@@ -63,6 +63,8 @@ void Room::kill() {
 void Room::onClick(std::string buttonFunc) {
 	std::string levelSubstr = buttonFunc.substr(0, 5);
 	std::string roomSubstr = buttonFunc.substr(0, 4);
+
+
 	if (buttonFunc == "Shop") {
 
 	}

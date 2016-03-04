@@ -11,6 +11,7 @@ public:
 	virtual void render() = 0;
 	virtual void onEvent(const sf::Event &aEvent) = 0;
 	virtual void handleEvents() = 0;
+	virtual void resetLevel(){}
 };
 
 #endif // !_INCLUDED_GAMESTATE_

@@ -33,11 +33,14 @@ public:
 	void kill();
 
 private:
+	typedef void(*buttonFuncUse)(std::string);
+
 	sf::Sprite mBackground;
 	sf::RenderWindow* mWindow;
 	ButtonVector mLevelButtons;
 	GUIManager* mGUIManager;
 	EventManager* mEventManager;
+	std::string mButtonFunc;
 
 	bool mIsActive;
 	bool mIsAlive;

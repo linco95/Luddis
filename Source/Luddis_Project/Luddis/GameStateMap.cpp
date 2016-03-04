@@ -115,7 +115,7 @@ void GameStateMap::onEvent(const sf::Event &aEvent) {
 		switch (aEvent.type) {
 		case sf::Event::EventType::KeyPressed:
 			if (aEvent.key.code == sf::Keyboard::Escape) {
-				mGameStatePaused->createMenu(Menu::PAUSEMENU);
+				mGameStatePaused->createMenu(Menu::ROOMMENU);
 				mGameStatePaused->setBackgroundParameters(nullptr, &mGUIM, this);
 				GameManager::getInstance().setGameState(mGameStatePaused);
 			}

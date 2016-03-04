@@ -132,12 +132,15 @@ FMOD_RESULT SoundEngine::loadBank(const char* filename) {
 	FMOD::Studio::Bank* bank = NULL;
 	FMOD_RESULT result;
 	result = mStudioSystem->loadBankFile(filename, FMOD_STUDIO_LOAD_BANK_NORMAL, &bank);
+	assert(result == FMOD_OK);
 	return result;
 }
 
 FMOD::Studio::Bank* SoundEngine::getBank(const char* filename) {
 	FMOD::Studio::Bank* bank = NULL;
-	mStudioSystem->getBank(filename, &bank);
+	FMOD_RESULT result;
+	result = mStudioSystem->getBank(filename, &bank);
+	assert(result == FMOD_OK);
 	loadBank(filename);
 	return bank;
 }
@@ -146,7 +149,8 @@ FMOD_RESULT SoundEngine::unloadBank(const char* filename){
 	FMOD::Studio::Bank* bank;
 	FMOD_RESULT result = mStudioSystem->getBank(filename, &bank);
 	result = bank->unload();
-	
+	assert(result == FMOD_OK);
+
 	return result;
 }
 
@@ -163,6 +167,8 @@ FMOD_RESULT SoundEngine::createEvent(const char* path, EventType eventType) {
 	else
 		inst = &mMusicEventInstances[path];
 	result = desc->createInstance(inst);
+	assert(result == FMOD_OK);
+
 	if(eventType == SOUND)
 		(*inst)->setVolume(mMainVolume*mSoundVolume/100);
 	else
@@ -188,7 +194,7 @@ FMOD_RESULT SoundEngine::createSound(const char* filepath, bool loop) {
 	FMOD_RESULT result;
 	FMOD::Sound** sound = &mSounds[filepath];
 	result = mLowLvlSystem->createSound(filepath, FMOD_DEFAULT, 0, sound);
-	//if(!loop)
+	if(!loop)
 		(*sound)->setMode(FMOD_LOOP_OFF);
 	sound;
 	return result;

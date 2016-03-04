@@ -54,13 +54,13 @@ private:
 	int mButtonCount;
 	int mActivePage;
 	int mCurrentVoiceDialogue;
-	sf::RectangleShape mBackground;
 	typedef std::vector<TextBox> TextBoxVector;
 	TextBox* mHeaders[MAX_PAGES];
 	TextBoxVector mDialogueTexts;
 	typedef std::vector<Button*> ButtonVector;
 	ButtonVector mButtons[MAX_PAGES];
 	std::string mSoundFiles[MAX_PAGES];
+	int mEmotionFrame[2][MAX_PAGES];
 };
 
 #endif // !_INCLUDED_DIALOGUE_
