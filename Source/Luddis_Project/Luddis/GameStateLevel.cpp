@@ -45,7 +45,7 @@ mResetView(false){
 }
 
 GameStateLevel::~GameStateLevel(){
-
+	mResettableGUI.clearInterfaceElements();
 	mGUIM->clearInterfaceElements();
 	mEntityM->emptyVector();
 	mEventM.detatch(this, sf::Event::EventType::KeyPressed);
@@ -127,13 +127,14 @@ void GameStateLevel::render(){
 #endif
 }
 
-void GameStateLevel::onEvent(const sf::Event &aEvent){
-	if (true){
-		switch (aEvent.type){
-		case (sf::Event::EventType::KeyPressed) :
-			if (aEvent.key.code == sf::Keyboard::Escape){
+void GameStateLevel::onEvent(const sf::Event &aEvent) {
+	if (true) {
+		switch (aEvent.type) {
+		case sf::Event::EventType::KeyPressed:
+			if (aEvent.key.code == sf::Keyboard::Escape) {
 				mGameStatePaused->createMenu(Menu::PAUSEMENU);
-			GameManager::getInstance().setGameState(mGameStatePaused);
+				mGameStatePaused->setBackgroundParameters(mEntityM, mGUIM, this);
+				GameManager::getInstance().setGameState(mGameStatePaused);
 			}
 			break;
 		}
@@ -199,12 +200,11 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	poly.addTerm(1, 2);
 	/*poly.addTerm(-2, 2);
 	poly.addTerm(2, 1);*/
-	Tween tween(poly, 0, 2);
-	Tween tween2(poly, 2, 1, false);
-	CinematicPause pauseCin(2);
+	Tween tween(poly, 0, 3);
+	Tween tween2(poly, 3, 0, false);
+	CinematicPause pauseCin(1.2f);
 	CinematicMoveToPoint movePoint(sf::Vector2f(500, 500), mPlayer);
 	LuddisStateCinematic* cinState = new LuddisStateCinematic(100, mPlayer, mWindow, mEntityM, mPowerupDisplays[0]);
-	cinState->addCinematicSequence(&tween);
 	cinState->addCinematicSequence(&tween);
 	cinState->addCinematicSequence(&pauseCin);
 	cinState->addCinematicSequence(&tween2);

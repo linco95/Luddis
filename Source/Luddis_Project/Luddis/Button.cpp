@@ -7,19 +7,20 @@
 #include <vector>
 
 static const std::string DEFAULT_FONTTYPE = "Resources/Fonts/Arial.ttf";
+//GLOBLAL_CLICK prevents more than one button from activating per loop.
 static bool GLOBLAL_CLICK = false;
 
 Button::Button(std::string graphicFilename, std::string buttonText, std::string buttonFunc, sf::RenderWindow* window, EventManager* eventManager, sf::Vector2f pos, InterfaceElement* owner, ButtonType buttonType) :
-mWindow(window),
-mEventManager(eventManager),
-mButtonType(buttonType),
-mIsAlive(true),
-mIsActive(false),
-mClick(false),
-mOwner(owner),
-mButtonFunc(buttonFunc),
-mButtonText(buttonText, ResourceManager::getInstance().getFont(DEFAULT_FONTTYPE), 16),
-mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
+	mWindow(window),
+	mEventManager(eventManager),
+	mButtonType(buttonType),
+	mIsAlive(true),
+	mIsActive(false),
+	mClick(false),
+	mOwner(owner),
+	mButtonFunc(buttonFunc),
+	mButtonText(buttonText, ResourceManager::getInstance().getFont(DEFAULT_FONTTYPE), 16),
+	mSprite(ResourceManager::getInstance().getTexture(graphicFilename)) {
 	setPosition(pos);
 	//Set the texture rect to a third of the original image,
 	//and set two more rects to correspond to the other
@@ -27,16 +28,16 @@ mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 	sf::IntRect spriteRect(mSprite.getTextureRect());
 	spriteRect.width /= 3;
 	mSprite.setTextureRect(spriteRect);
-	for (int i = 0; i < 3; i++){
+	for (int i = 0; i < 3; i++) {
 		mRects[i] = spriteRect;
 		mRects[i].left += i*spriteRect.width;
 	}
 	sf::FloatRect textRect = mButtonText.getGlobalBounds();
-	float xScale = (float)textRect.width/spriteRect.width;
-	if ((float)textRect.width+5.0f> spriteRect.width){
-		mSprite.setScale(xScale+0.5f, 1);
+	float xScale = (float)textRect.width / spriteRect.width;
+	if ((float)textRect.width + 5.0f> spriteRect.width) {
+		mSprite.setScale(xScale + 0.5f, 1);
 	}
-	
+
 	mButtonText.setColor(sf::Color::Black);
 	mButtonText.setOrigin(textRect.width / 2, textRect.height / 2);
 	mSprite.setOrigin((float)spriteRect.width / 2, (float)spriteRect.height / 2);
@@ -46,11 +47,11 @@ mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 	//Debug info
 	sf::Vector2f rectSize((float)spriteRect.width, (float)spriteRect.height);
 	mDebugCircle.setPointCount(15);
-	mDebugCircle.setRadius(rectSize.x/2);
+	mDebugCircle.setRadius(rectSize.x / 2);
 	mDebugCircle.setOrigin(rectSize / 2.0f);
 	mDebugCircle.setFillColor(sf::Color(0, 255, 0, 120));
 	mDebugCircle.setOutlineColor(sf::Color(0, 255, 0, 120));
-	
+
 	mDebugRect.setSize(rectSize);
 	mDebugRect.setOrigin(rectSize / 2.0f);
 	mDebugRect.setFillColor(sf::Color(0, 255, 0, 120));
@@ -58,20 +59,20 @@ mSprite(ResourceManager::getInstance().getTexture(graphicFilename)){
 #endif
 }
 
-Button::~Button(){
+Button::~Button() {
 	mEventManager->detatch(this, std::vector < sf::Event::EventType > { sf::Event::MouseButtonReleased, sf::Event::MouseButtonPressed, sf::Event::MouseMoved });
 }
 
-void Button::tick(const sf::Time& deltaTime){
+void Button::tick(const sf::Time& deltaTime) {
 	//updateInput();
 	GLOBLAL_CLICK = false;
 }
 
-bool Button::isActive() const{
+bool Button::isActive() const {
 	return mIsActive;
 }
 
-void Button::setActive(const bool& active){
+void Button::setActive(const bool& active) {
 	mIsActive = active;
 }
 
@@ -79,25 +80,25 @@ Button::RenderLayer Button::getRenderLayer() const {
 	return FOREGROUND;
 }
 
-void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const{
+void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	states.transform *= getTransform();
 	target.draw(mSprite, states);
 	target.draw(mButtonText, states);
 
 #ifdef LUDDIS_DEBUG_DRAW_HITBOXES
-	if(mButtonType==CIRCLE)
+	if (mButtonType == CIRCLE)
 		target.draw(mDebugCircle, states);
 	else
 		target.draw(mDebugRect, states);
 #endif
 }
 
-bool Button::isAlive() const{
+bool Button::isAlive() const {
 	return mIsAlive;
 }
 
-void Button::onEvent(const sf::Event &aEvent){
-	if (mIsActive){
+void Button::onEvent(const sf::Event &aEvent) {
+	if (mIsActive) {
 		//The viewport has to be changed here, since all EventObservers are iterated in the same vector.
 		sf::View GUIView(ViewUtility::getViewSize());
 		sf::View mapView = mWindow->getView();
@@ -122,7 +123,6 @@ void Button::onEvent(const sf::Event &aEvent){
 			//to the string passed on during inception
 			else if (aEvent.type == sf::Event::MouseButtonReleased&&
 				aEvent.mouseButton.button == sf::Mouse::Left) {
-
 				mousePos = mWindow->mapPixelToCoords(sf::Vector2i(aEvent.mouseButton.x, aEvent.mouseButton.y)) - getPosition();
 
 				if (rect.contains(mousePos) && GLOBLAL_CLICK == false && mClick == true) {
@@ -170,7 +170,7 @@ void Button::onEvent(const sf::Event &aEvent){
 			else if (aEvent.type == sf::Event::MouseMoved) {
 				mousePos = mWindow->mapPixelToCoords(sf::Vector2i(aEvent.mouseMove.x, aEvent.mouseMove.y)) - getPosition();
 				float distance = VectorMath::getVectorLength(mSprite.getPosition() - mousePos);
-				if (distance<=mSprite.getGlobalBounds().height/2){
+				if (distance <= mSprite.getGlobalBounds().height / 2) {
 					mSprite.setTextureRect(mRects[1]);
 				}
 				else {
@@ -184,7 +184,7 @@ void Button::onEvent(const sf::Event &aEvent){
 	}
 }
 
-void Button::kill(){
+void Button::kill() {
 	mIsAlive = false;
 }
 

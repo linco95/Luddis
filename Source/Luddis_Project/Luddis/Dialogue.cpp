@@ -4,6 +4,7 @@
 #include "GameStateLevel.h"
 #include "SoundEngine.h"
 #include "ViewUtility.h"
+#include "Debug.h"
 #include <rapidjson/document.h>
 #include <cmath>
 #include <array>
@@ -217,6 +218,10 @@ void Dialogue::internalClear(){
 }
 
 void Dialogue::changePageButton(int value){
+	if ((size_t)(mActivePage + value)>mDialogueTexts.size() || (mActivePage + value)<0) {
+		Debug::log("Trying to go outside of dialogue page index range!", Debug::WARNING);
+		return;
+	}
 	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++){
 		mButtons[mActivePage][i]->setActive(false);
 	}
@@ -231,7 +236,11 @@ void Dialogue::changePageButton(int value){
 	}
 }
 
-void Dialogue::gotoPage(int value){
+void Dialogue::gotoPageButton(int value){
+	if ((size_t)(mActivePage + value)>mDialogueTexts.size() || (mActivePage + value)<0) {
+		Debug::log("Trying to go outside of dialogue page index range!", Debug::WARNING);
+		return;
+	}
 	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++) {
 		mButtons[mActivePage][i]->setActive(false);
 	}
@@ -290,6 +299,7 @@ void Dialogue::onClick(std::string buttonFunc){
 	else if (substringGotoPage == "GotoPage") {
 		std::string string = buttonFunc.substr(8, buttonFunc.size());
 		int value = std::stoi(string);
+		gotoPageButton(value);
 	}
 	else if (buttonFunc == "Close"){
 		closeButton();

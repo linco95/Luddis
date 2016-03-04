@@ -1,4 +1,5 @@
 #include "GameStateMap.h"
+#include "GameStatePaused.h"
 #include <SFML/Window/Event.hpp>
 #include "ViewUtility.h"
 #include "EventManager.h"
@@ -46,6 +47,7 @@ void GameStateMap::initialize(sf::RenderWindow* window) {
 		mGUIM.addInterfaceElement(room);
 	}
 	mRooms.at(mCurrentRoom - 1)->setActive(true);
+	mGameStatePaused = &GameStatePaused::getInstance();
 }
 
 void GameStateMap::createMenu(Menu::MenuType menuType) {
@@ -108,15 +110,15 @@ void GameStateMap::render(){
 	mWindow->draw(mFadeEffect);
 }
 
-void GameStateMap::onEvent(const sf::Event &aEvent){
-	if (true){
-		switch (aEvent.type){
-		case (sf::Event::EventType::MouseButtonPressed) :
-
-			break;
-
-		case (sf::Event::EventType::KeyPressed) :
-
+void GameStateMap::onEvent(const sf::Event &aEvent) {
+	if (true) {
+		switch (aEvent.type) {
+		case sf::Event::EventType::KeyPressed:
+			if (aEvent.key.code == sf::Keyboard::Escape) {
+				mGameStatePaused->createMenu(Menu::PAUSEMENU);
+				mGameStatePaused->setBackgroundParameters(nullptr, &mGUIM, this);
+				GameManager::getInstance().setGameState(mGameStatePaused);
+			}
 			break;
 		}
 	}

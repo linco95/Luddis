@@ -341,8 +341,10 @@ void Level::updateView(const Time& deltaTime) {
 		view.getCenter().y > maxY ? view.setCenter(view.getCenter().x, maxY) : 0;
 	}
 
-	
+#ifdef _DESIGNER_HAX_
 	view.setCenter(mTarget->getPosition());
+#endif // _DESIGNER_HAX_
+
 	int progress = (int)((mTarget->getPosition().x / mMapBounds.width)*7);
 	if (mProgress != progress) {
 		mProgress = progress;

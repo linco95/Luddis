@@ -47,7 +47,11 @@ void LuddisStateCinematic::tick(const sf::Time & deltaTime){
 	}
 
 	if (!mSequences.empty()) {
-		sf::Vector2f direction = VectorMath::normalizeVector(mSequences.front()->tick(deltaTime));
+		sf::Vector2f direction = mSequences.front()->tick(deltaTime);
+		if (direction == sf::Vector2f(0, 0))
+			return;
+
+		direction = VectorMath::normalizeVector(direction);
 		if (VectorMath::getVectorLengthSq(direction) != 0) {
 
 			float angle = VectorMath::getAngle(FRONTVECTOR, direction) * 180 / (float)M_PI;

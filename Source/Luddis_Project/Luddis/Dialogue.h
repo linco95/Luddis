@@ -30,7 +30,7 @@ private:
 	void initialize(std::string dialogueFile);
 	void internalClear();
 	void changePageButton(int value);
-	void gotoPage(int value);
+	void gotoPageButton(int value);
 	void spiderButton1();
 	void spiderButton2();
 	void spiderButton3();

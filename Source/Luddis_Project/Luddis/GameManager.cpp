@@ -88,7 +88,7 @@ struct GameManagerImp : public EventObserver {
 		// Create the window
 		mMainWindow.create(VideoMode(ViewUtility::VIEW_WIDTH, ViewUtility::VIEW_HEIGHT), APPNAME, Style::Fullscreen);
 		mMainWindow.setVerticalSyncEnabled(VSYNCENABLED);
-
+		sf::Vector2u vec(800, 600);
 		// Set up the viewport
 		/*auto actualSize = mMainWindow.getView().getSize();
 		auto desiredSize = ViewUtility::getViewSize().getSize();

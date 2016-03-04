@@ -18,13 +18,20 @@
 #include "PowerupDisplay.h"
 #include "SpiderWeb.h"
 
+
 // All of these should maybe be loaded from file instead, to avoid hard coded variables
 //All float times are in seconds
 static const float PROJECTILE_RELOAD = 0.4f;
 static const float PROJECTILE_TIMER = 3.0f;
 static const float INVINCIBILITY_TIMER = 0.75f;
 static const float GRACEAREA = 30;
-static const float MOVESPEED = 500;
+
+#ifdef _DESIGNER_HAX_
+static const float SUPERMOVESPEED = 300;
+#endif //_DESIGNER_HAX_
+
+static const float MOVESPEED = 200;
+
 static const float PROJECTILE_SPEED = 300;
 static const float MUZZLEOFFSET = 50.0f;
 static const sf::Vector2f FRONTVECTOR(1, 0);
@@ -148,17 +155,25 @@ void LuddisStatePlayable::updateMovement(const sf::Time & deltaTime) {
 	mDirectionVector = getVectorMouseToSprite();
 	if (VectorMath::getVectorLengthSq(mDirectionVector) == 0) return;
 	sf::Vector2f offset(VectorMath::normalizeVector(mDirectionVector));
-	float moveX(offset.x*deltaTime.asSeconds()*MOVESPEED);
-	float moveY(offset.y*deltaTime.asSeconds()*MOVESPEED);
+
+	float moveX, moveY;
+
+#ifdef _DESIGNER_HAX_
+	moveX = offset.x*deltaTime.asSeconds()*SUPERMOVESPEED;
+	moveY = offset.y*deltaTime.asSeconds()*SUPERMOVESPEED;
+#endif // _DESIGNER_HAX_
+
+	moveX = offset.x*deltaTime.asSeconds()*MOVESPEED;
+	moveY = offset.y*deltaTime.asSeconds()*MOVESPEED;
 
 	sf::Vector2f tempPos = mPlayerPtr->getPosition();
 
-		//Only move if not too close to the cursor position
-		if (VectorMath::getVectorLengthSq(mDirectionVector) > GRACEAREA) {
-			mPlayerPtr->move(moveX, moveY);
+	//Only move if not too close to the cursor position
+	if (VectorMath::getVectorLengthSq(mDirectionVector) > GRACEAREA) {
+		mPlayerPtr->move(moveX, moveY);
 		mPrevPos = -sf::Vector2f(moveX, moveY);
 		mMoved = true;
-		}
+	}
 	else
 		mMoved = false;
 }
