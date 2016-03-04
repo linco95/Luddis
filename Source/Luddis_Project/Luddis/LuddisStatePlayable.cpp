@@ -219,7 +219,7 @@ void LuddisStatePlayable::updateRotation(){
 void LuddisStatePlayable::changeScale() {
 	//int dust = Inventory::getInstance().getDust();
 	//int max = Inventory::getInstance().getMaxDust();
-	float percentDust = Inventory::getInstance().getDust() / Inventory::getInstance().getMaxDust();
+	float percentDust = float(Inventory::getInstance().getDust() / Inventory::getInstance().getMaxDust());
 	if (percentDust < 20.0f && mScale != sf::Vector2f(1.0f, 1.0f)) {
 		mScale = { 1.0f , 1.0f };
 		mPlayerPtr->getAnimation()->setDefaultAnimation(ANIMATION_ALMOSTDEAD);
