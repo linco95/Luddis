@@ -62,6 +62,7 @@ void GameStateMap::createMenu(Menu::MenuType menuType) {
 
 void GameStateMap::changeRoom(int room) {
 	if (mFade) {
+		//TODO: Move to Room class.
 		mFade = false;
 		mRooms.at(mCurrentRoom - 1)->setActive(false);
 		mCurrentRoom = room;

@@ -6,9 +6,9 @@
 
 class GameStateLevel;
 
-class EventZone: public CollidableEntity{
+class EventZone : public CollidableEntity {
 public:
-	enum EventType{
+	enum EventType {
 		SPIDER,
 		SPIDER_1_END,
 		SPIDER_2_END,
@@ -25,6 +25,7 @@ public:
 	sf::FloatRect getHitBox() override;
 	sf::Shape* getNarrowHitbox() const override;
 	void stun(const sf::Time& deltatime) override;
+
 private:
 	Category getCollisionCategory() override;
 	Type getCollisionType() override;

@@ -175,6 +175,9 @@
     <ClCompile Include="CinematicMoveToPoint.cpp">
       <Filter>Source Files\Cinematic</Filter>
     </ClCompile>
+    <ClCompile Include="SockNPC.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -356,6 +359,9 @@
     </ClInclude>
     <ClInclude Include="CinematicMoveToPoint.h">
       <Filter>Header Files\Cinematic</Filter>
+    </ClInclude>
+    <ClInclude Include="SockNPC.h">
+      <Filter>Header Files\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

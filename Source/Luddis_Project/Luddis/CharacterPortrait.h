@@ -19,18 +19,25 @@ public:
 	void kill();
 
 	void expressEmotion(int frame);
+	void highlight(bool highlight);
 
 private:
 	static const int MAX_FRAMES = 16;
 
-	bool mIsAlive;
-	bool mIsActive;
-	int mEmotionFrame;
 	sf::Sprite mSprite;
 	sf::Sprite mBubble;
 	sf::Sprite mEmotion;
 	sf::IntRect mFrame[MAX_FRAMES];
 	sf::Text mName;
+
+	bool mIsAlive;
+	bool mIsActive;
+	float mHighlightMoveTimer;
+	bool mIsHighlighted;
+	//sf::Vector2f mHighlightScale;
+	sf::Vector2f mDefaultSpritePos;
+
+	int mEmotionFrame;
 };
 
 #endif // !_INCLUDED_CHARACTERPORTRAIT_

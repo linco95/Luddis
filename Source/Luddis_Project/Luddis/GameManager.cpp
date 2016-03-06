@@ -158,7 +158,7 @@ struct GameManagerImp : public EventObserver {
 		se->createEvent(EVENT_LUDDIS, SoundEngine::EventType::SOUND);
 		se->playEvent(EVENT_LUDDIS);
 		se->createEvent(EVENT_MUSIC1, SoundEngine::EventType::MUSIC);
-		se->playEvent(EVENT_MUSIC1);
+		//se->playEvent(EVENT_MUSIC1);
 		
 		mGameStatePaused = &GameStatePaused::getInstance();
 		mGameStateLevel = &GameStateLevel::getInstance();

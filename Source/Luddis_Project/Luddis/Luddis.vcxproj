@@ -133,6 +133,7 @@
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="ScoreGauge.cpp" />
     <ClCompile Include="Silverfish.cpp" />
+    <ClCompile Include="SockNPC.cpp" />
     <ClCompile Include="SoundCue.cpp" />
     <ClCompile Include="SoundEngine.cpp" />
     <ClCompile Include="Spider.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="ScoreGauge.h" />
     <ClInclude Include="Silverfish.h" />
+    <ClInclude Include="SockNPC.h" />
     <ClInclude Include="SoundCue.h" />
     <ClInclude Include="SoundEngine.h" />
     <ClInclude Include="Spider.h" />

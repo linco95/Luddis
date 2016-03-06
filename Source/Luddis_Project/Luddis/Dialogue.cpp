@@ -18,7 +18,7 @@ static const float RECT_HEIGHT = 300;
 static const int INDENT = 30;
 static sf::IntRect DEFAULT_RECT(INDENT*7, INDENT, (int)RECT_WIDTH-INDENT*1, 0);
 
-Dialogue::Dialogue(const std::string& dialogueFile, sf::RenderWindow* window, GUIManager* guiManager, EventManager* eventManager, sf::Vector2f pos) :
+Dialogue::Dialogue(const std::string& dialogueFile, sf::RenderWindow* window, GUIManager* guiManager, EventManager* eventManager, sf::Vector2f pos, int initialPage) :
 mButtonCount(0),
 mAnimationTimer(ANIMATION_TIME),
 mLevel(0),
@@ -34,7 +34,7 @@ mEventManager(eventManager),
 mGameStateLevel(&GameStateLevel::getInstance()),
 mCharacterDisplayLeft(nullptr),
 mCharacterDisplayRight(nullptr),
-mActivePage(0),
+mActivePage(initialPage),
 mDialogueTexts(){
 	setPosition(pos);
 	initialize(dialogueFile);
@@ -49,9 +49,12 @@ Dialogue::~Dialogue(){
 }
 
 void Dialogue::initialize(std::string dialogueFile){
-	for (int i = 0; i < 2; i++)
-		for (int j = 0; j < MAX_PAGES; j++)
+	for (int i = 0; i < 2; i++) {
+		for (int j = 0; j < MAX_PAGES; j++) {
 			mEmotionFrame[i][j] = 0;
+			mHighlight[i][j] = false;
+		}
+	}
 
 	std::string configText = mResourceManager->loadJsonFile(dialogueFile);
 	rapidjson::Document configDoc;
@@ -59,7 +62,7 @@ void Dialogue::initialize(std::string dialogueFile){
 	assert(configDoc.IsObject());
 
 	sf::Vector2f offset(0, -RECT_HEIGHT + INDENT*3);
-	sf::Vector2f portraitPos(ViewUtility::VIEW_WIDTH*0.4f, offset.y+getPosition().y);
+	sf::Vector2f portraitPos(ViewUtility::VIEW_WIDTH*0.25f, offset.y+getPosition().y);
 
 	//A character portrait is optional.
 	if (configDoc.HasMember("Left_character_filename") &&
@@ -81,7 +84,7 @@ void Dialogue::initialize(std::string dialogueFile){
 
 
 		sf::Vector2f rightPortraitPos = portraitPos;
-		rightPortraitPos.x = ViewUtility::VIEW_WIDTH*0.6f;
+		rightPortraitPos.x = ViewUtility::VIEW_WIDTH*0.75f;
 		mCharacterDisplayRight = new CharacterPortrait(textureFilename, characterName, rightPortraitPos, true);
 		mGUIManager->addInterfaceElement(mCharacterDisplayRight);
 	}
@@ -103,8 +106,7 @@ void Dialogue::initialize(std::string dialogueFile){
 			std::string buttonImage = buttonInfo["Button_image"].GetString();
 			assert(buttonInfo.HasMember("Button_func") && buttonInfo["Button_func"].IsString());
 			std::string buttonFunc = buttonInfo["Button_func"].GetString();
-			addButton(buttonImage, buttonText, buttonFunc, offset +  sf::Vector2f((float)INDENT*4, (float)INDENT*4 + (float)i * 50.0f), (int)itr);
-
+			addButton(buttonImage, buttonText, buttonFunc, offset +  sf::Vector2f((float)INDENT*4, (float)INDENT + (float)i * 50.0f), (int)itr);
 		}
 		TextBox textBox(DEFAULT_RECT, pages[itr]["Text"].GetString(), 24, true);
 		textBox.setPosition(offset);
@@ -135,6 +137,11 @@ void Dialogue::initialize(std::string dialogueFile){
 			int character = emotion["Character"].GetInt();
 			mEmotionFrame[character][itr] = emotion["Frame"].GetInt();
 		}
+		if (pages[itr].HasMember("Highlight")) {
+			assert(pages[itr]["Highlight"].IsInt());
+			int character = pages[itr]["Highlight"].GetInt();
+			mHighlight[character][itr] = true;
+		}
 	}
 	if (configDoc.HasMember("Level")){
 		assert(configDoc["Level"].IsInt());
@@ -146,10 +153,6 @@ void Dialogue::tick(const sf::Time& deltaTime){
 	if (mAnimationTimer > 0){
 		mAnimationTimer -= deltaTime.asSeconds();
 		mAnimationTimer = std::max(mAnimationTimer, 0.0f);
-		float height = RECT_HEIGHT*((ANIMATION_TIME - mAnimationTimer) / ANIMATION_TIME);
-		sf::Vector2f size(RECT_WIDTH, height);
-		sf::Vector2f position(0, -height);
-
 	}
 	else if(!mDrawContents){
 		mDrawContents = true;
@@ -157,11 +160,7 @@ void Dialogue::tick(const sf::Time& deltaTime){
 			mCharacterDisplayRight->setActive(true);
 		if(mCharacterDisplayLeft!= nullptr)
 			mCharacterDisplayLeft->setActive(true);
-		if (mSoundFiles[mActivePage].size() != 0)
-			mCurrentVoiceDialogue = mSoundEngine->playSound(mSoundFiles[mActivePage].c_str());
-		for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++){
-			mButtons[mActivePage].at(i)->setActive(true);
-		}
+		internalPageSwapInto(mActivePage);
 	}
 	if (mDrawContents){
 		mDialogueTexts[mActivePage].animate(deltaTime);
@@ -222,50 +221,47 @@ void Dialogue::internalClear(){
 	}
 }
 
-void Dialogue::changePageButton(int value){
-	if ((size_t)(mActivePage + value+1)>mDialogueTexts.size() || (mActivePage + value)<0) {
-		Debug::log("Trying to go outside of dialogue page index range!", Debug::WARNING);
+void Dialogue::internalPageSwapAway(int value){
+	if ((size_t)(mActivePage + value + 1)>mDialogueTexts.size() || (mActivePage + value)<0) {
+		Debug::log("Trying to go outside of dialogue page index range!", Debug::FATAL);
 		return;
 	}
-	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++){
+	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++) {
 		mButtons[mActivePage][i]->setActive(false);
 	}
 	if (mSoundFiles[mActivePage].size() != 0)
+		//TODO: Make this use studio instead of low level api
 		mSoundEngine->stopSound(mCurrentVoiceDialogue);
-	mActivePage += value;
-	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++){
+}
+
+void Dialogue::internalPageSwapInto(int value){
+	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++) {
 		mButtons[mActivePage][i]->setActive(true);
 	}
 	if (mSoundFiles[mActivePage].size() != 0) {
+		//TODO: Make this use studio instead of low level api
 		mCurrentVoiceDialogue = mSoundEngine->playSound(mSoundFiles[mActivePage].c_str());
 	}
-	if(mCharacterDisplayLeft!= nullptr)
+	if (mCharacterDisplayLeft != nullptr) {
 		mCharacterDisplayLeft->expressEmotion(mEmotionFrame[0][mActivePage]);
-	if (mCharacterDisplayRight != nullptr)
+		mCharacterDisplayLeft->highlight(mHighlight[0][mActivePage]);
+	}
+	if (mCharacterDisplayRight != nullptr) {
 		mCharacterDisplayRight->expressEmotion(mEmotionFrame[1][mActivePage]);
+		mCharacterDisplayRight->highlight(mHighlight[1][mActivePage]);
+	}
+}
+
+void Dialogue::changePageButton(int value){
+	internalPageSwapAway(mActivePage);
+	mActivePage += value;
+	internalPageSwapInto(mActivePage);
 }
 
 void Dialogue::gotoPageButton(int value){
-	if ((size_t)(mActivePage + value+1)>mDialogueTexts.size() || (mActivePage + value)<0) {
-		Debug::log("Trying to go outside of dialogue page index range!", Debug::WARNING);
-		return;
-	}
-	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++) {
-		mButtons[mActivePage][i]->setActive(false);
-	}
-	if (mSoundFiles[mActivePage].size() != 0)
-		mSoundEngine->stopSound(mCurrentVoiceDialogue);
+	internalPageSwapAway(mActivePage);
 	mActivePage = value-1;
-	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++) {
-		mButtons[mActivePage][i]->setActive(true);
-	}
-	if (mSoundFiles[mActivePage].size() != 0) {
-		mCurrentVoiceDialogue = mSoundEngine->playSound(mSoundFiles[mActivePage].c_str());
-	}
-	if (mCharacterDisplayLeft != nullptr)
-		mCharacterDisplayLeft->expressEmotion(mEmotionFrame[0][mActivePage]);
-	if (mCharacterDisplayRight != nullptr)
-		mCharacterDisplayRight->expressEmotion(mEmotionFrame[1][mActivePage]);
+	internalPageSwapInto(mActivePage);
 }
 
 void Dialogue::closeButton(){
@@ -274,21 +270,21 @@ void Dialogue::closeButton(){
 }
 
 void Dialogue::spiderButton1(){
-	//Read a json file and a png file to create extra entities
+	//Read a json file to create extra entities
 	std::string jsonFilename = FILENAME + std::to_string( mLevel) + "Spider1.json";
 	changePageButton(1);
 	mGameStateLevel->setupMission(jsonFilename);
 }
 
 void Dialogue::spiderButton2(){
-	//Read a json file and a png file to create extra entities
+	//Read a json file to create extra entities
 	std::string jsonFilename = FILENAME + std::to_string(mLevel) + "Spider2.json";
 	changePageButton(2);
 	mGameStateLevel->setupMission(jsonFilename);
 }
 
 void Dialogue::spiderButton3(){
-	//Read a json file and a png file to create extra entities
+	//Read a json file to create extra entities
 	std::string jsonFilename = FILENAME + std::to_string(mLevel) + "Spider3.json";
 	changePageButton(3);
 	mGameStateLevel->setupMission(jsonFilename);
