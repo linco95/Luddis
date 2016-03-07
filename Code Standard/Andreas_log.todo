@@ -57,7 +57,7 @@ TODO:
 
  ☐ Generally assert pre-requirements (zeropointer etc). DbC
 
- ☐ What represents me? Moving obstacle in "Städskrub".
+ ✘ What represents me? Moving obstacle in "Städskrub". @cancelled (16-03-02 09:47)
 
  ✘ Maybe start using doxygen for future sprints/iterations @cancelled (16-02-23 00:40)
  ✘ Maybe implement some kind of entity component system? Test it on a separate branch? @cancelled (16-02-22 09:40)
@@ -208,3 +208,6 @@ Fixed the collision. The points were just transformed to the shapes location, wi
     fl
   1/3/16:
     Collision again!
+    Found out that collision had to be checked from both shapes
+  2/3/16:
+    Implementing the correct sounds
