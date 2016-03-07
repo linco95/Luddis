@@ -18,6 +18,7 @@
 #include "Luddis.h"
 #include "LuddisStateCinematic.h"
 #include "CinematicPause.h"
+#include "CinematicMoveToPoint.h"
 
 static const std::string LUDDIS_TEXTURE = "Resources/Images/Grafik_Luddis120x80_s1d3v1.png";
 static const std::string POWER_DISPLAY = "Resources/Images/GUI/PowerButton.png";
@@ -27,9 +28,11 @@ static const std::string COMMON_RESOURCES = "Resources/Configs/Levels/CommonReso
 static const char* TEXTURE_LUDDGAUGE_FRAME = "Resources/Images/GUI/LuddGaugeFrame.png";
 static const char* TEXTURE_LUDDGAUGE_BAR = "Resources/Images/GUI/LuddGaugeBar.png";
 
-
 static const char* LOADINGBAR_FRAME = "Resources/Images/GUI/Loadingbar_Frame.png";
 static const char* LOADINGBAR_BAR = "Resources/Images/GUI/Loadingbar_Bar.png";
+
+static const float DIALOGUEMAXFADE = 0.8f;
+static const float CINEMATICBOXMAXHEIGHT = 225;
 
 GameStateLevel::GameStateLevel() :
 mEventM(),
@@ -37,14 +40,22 @@ mResettableGUI(),
 mCM(&CollisionManager::getInstance()),
 mGUIView(ViewUtility::getViewSize()),
 mInDialogue(false),
+mDialogueFadeTimer(0.0f),
 mFirstTime(true),
 mResetView(false){
 	mEventM.attatch(this, sf::Event::EventType::KeyPressed);
 	readSetupFiles(COMMON_RESOURCES);
+	for (int i = 0; i < 2; i++) {
+		mCinematicBox[i].setOrigin((float)ViewUtility::VIEW_WIDTH / 2, 0);
+		mCinematicBox[i].setFillColor(sf::Color::Black);
+	}
+	mCinematicBox[0].setPosition((float)ViewUtility::VIEW_WIDTH / 2, 0);
+	mCinematicBox[1].setPosition((float)ViewUtility::VIEW_WIDTH / 2, (float)ViewUtility::VIEW_HEIGHT);
+	mCinematicBox[1].rotate(180);
 }
 
 GameStateLevel::~GameStateLevel(){
-
+	mResettableGUI.clearInterfaceElements();
 	mGUIM->clearInterfaceElements();
 	mEntityM->emptyVector();
 	mEventM.detatch(this, sf::Event::EventType::KeyPressed);
@@ -77,10 +88,10 @@ void GameStateLevel::initialize(sf::RenderWindow* window, EntityManager* entityM
 	mGameStatePaused = &GameStatePaused::getInstance();
 }
 
-void GameStateLevel::update(sf::Clock& clock){
+void GameStateLevel::update(sf::Clock& clock) {
 	//Do game logic
 	updateLuddGauge();
-	if (!mInDialogue){
+	if (!mInDialogue) {
 		mEntityM->updateEntities(clock.getElapsedTime());
 		mCM->detectCollisions();
 	}
@@ -93,7 +104,7 @@ void GameStateLevel::update(sf::Clock& clock){
 	mMapView = mWindow->getView();
 	mWindow->setView(mGUIView);
 	mResettableGUI.updateElements(clock.getElapsedTime());
-	mGUIM->updateElements(clock.restart());
+	mGUIM->updateElements(clock.getElapsedTime());
 	//Then change it back
 	mWindow->setView(mMapView);
 
@@ -109,6 +120,31 @@ void GameStateLevel::update(sf::Clock& clock){
 	mEntityM->removeDeadEntities();
 	mGUIM->removeObsoleteElements();
 	mResettableGUI.removeObsoleteElements();
+
+
+	if (mInDialogue && mDialogueFadeTimer <= DIALOGUEMAXFADE) {
+		mDialogueFadeTimer += clock.restart().asSeconds();
+		mDialogueFadeTimer = std::min(mDialogueFadeTimer, DIALOGUEMAXFADE);
+
+		float percent = mDialogueFadeTimer / DIALOGUEMAXFADE;
+		sf::Vector2f size((float)ViewUtility::VIEW_WIDTH, percent*CINEMATICBOXMAXHEIGHT);
+		mCinematicBox[0].setSize(size);
+		mCinematicBox[1].setSize(size);
+
+	}
+	else if (!mInDialogue && mDialogueFadeTimer>=0) {
+		mDialogueFadeTimer -= clock.restart().asSeconds();
+		mDialogueFadeTimer = std::max(mDialogueFadeTimer, 0.0f);
+		float percent = mDialogueFadeTimer / DIALOGUEMAXFADE;
+		sf::Vector2f size((float)ViewUtility::VIEW_WIDTH, percent*CINEMATICBOXMAXHEIGHT);
+		mCinematicBox[0].setSize(size);
+		mCinematicBox[1].setSize(size);
+		if (mDialogueFadeTimer <= 0) {
+			mInDialogue = false;
+		}
+	}
+	else
+		clock.restart();
 }
 
 void GameStateLevel::render(){
@@ -117,7 +153,11 @@ void GameStateLevel::render(){
 	//Change the view when drawing GUI elements
 	mMapView = mWindow->getView();
 	mWindow->setView(mGUIView);
+	//Draw cinematic boxes over entities, but under the GUI
+	mWindow->draw(mCinematicBox[0]);
+	mWindow->draw(mCinematicBox[1]);
 	mResettableGUI.renderElements(*mWindow);
+	if(!mInDialogue)
 	mGUIM->renderElements(*mWindow);
 	//Then change it back
 	mWindow->setView(mMapView);
@@ -126,13 +166,14 @@ void GameStateLevel::render(){
 #endif
 }
 
-void GameStateLevel::onEvent(const sf::Event &aEvent){
-	if (true){
-		switch (aEvent.type){
-		case (sf::Event::EventType::KeyPressed) :
-			if (aEvent.key.code == sf::Keyboard::Escape){
+void GameStateLevel::onEvent(const sf::Event &aEvent) {
+	if (true) {
+		switch (aEvent.type) {
+		case sf::Event::EventType::KeyPressed:
+			if (aEvent.key.code == sf::Keyboard::Escape) {
 				mGameStatePaused->createMenu(Menu::PAUSEMENU);
-			GameManager::getInstance().setGameState(mGameStatePaused);
+				mGameStatePaused->setBackgroundParameters(mEntityM, mGUIM, this);
+				GameManager::getInstance().setGameState(mGameStatePaused);
 			}
 			break;
 		}
@@ -154,7 +195,7 @@ void GameStateLevel::createDialogue(std::string dialogueFilename){
 		mSpider = new Spider(mWindow, sf::Vector2f((float)ViewUtility::VIEW_WIDTH*0.6f, 0));
 		mResettableGUI.addInterfaceElement(mSpider);
 	}
-	mInDialogue = true;
+	setInDialogue(true);
 }
 
 void GameStateLevel::fuckOffSpider() {
@@ -172,7 +213,6 @@ bool GameStateLevel::getInDialogue() const{
 
 void GameStateLevel::setInDialogue(bool inDialogue){
 	mInDialogue = inDialogue;
-	
 }
 
 void GameStateLevel::setupLevel(std::string levelFile) {
@@ -180,10 +220,10 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 		mFirstTime = false;
 		mCurrentLevelFile = levelFile;
 	}
-	
 
 	mResetView = true;
 	mInDialogue = false;
+	mDialogueFadeTimer = 0;
 
 	Inventory* inv = &Inventory::getInstance();
 	mCM->emptyVector();
@@ -193,28 +233,31 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	mInv.dust = inv->getDust();
 	mInv.eggs = inv->getEggs();
 	mPlayer = new Luddis(LUDDIS_TEXTURE, mWindow, mEntityM);
+
 	//CINEMATIC TEST
 	Polynomial poly;
-	poly.addTerm(1, 3);
-	poly.addTerm(-1, 2);
-	poly.addTerm(-2, 1);
-	poly.addTerm(1, 0);
-	Tween tween(poly, 0, 2);
-	CinematicPause pauseCin(2);
-	LuddisStateCinematic* cinState = new LuddisStateCinematic(100, mPlayer, mWindow, mEntityM);
-	cinState->addCinematicSequence(&tween);
-	cinState->addCinematicSequence(&tween);
+	poly.addTerm(1, 2);
+	/*poly.addTerm(-2, 2);
+	poly.addTerm(2, 1);*/
+	Tween tween(poly, 0, 3);
+	Tween tween2(poly, 3, 0, false);
+	CinematicPause pauseCin(1.2f);
+	CinematicMoveToPoint movePoint(sf::Vector2f(500, 500), mPlayer);
+	LuddisStateCinematic* cinState = new LuddisStateCinematic(100, mPlayer, mWindow, mEntityM, mPowerupDisplays[0]);
+	/*cinState->addCinematicSequence(&tween);
 	cinState->addCinematicSequence(&pauseCin);
-	cinState->addCinematicSequence(&tween);
+	cinState->addCinematicSequence(&tween2);*/
+	cinState->addCinematicSequence(&movePoint);
 	cinState->addSpeedShift(50, 1);
-	cinState->addSpeedShift(200, 1);
+	cinState->addSpeedShift(100, 1);
 	cinState->addSpeedShift(50, 1);
-	cinState->addSpeedShift(200, 1);
+	cinState->addSpeedShift(100, 1);
 	cinState->addSpeedShift(50, 1);
-	cinState->addSpeedShift(200, 1);
+	cinState->addSpeedShift(100, 1);
 	mPlayer->setPlayerState(cinState);
 	mPlayer->setPosition(-50.0f, (float)ViewUtility::VIEW_HEIGHT/2.0f);
 	//END CINEMATIC TEST
+
 	mEntityM->addEntity(mPlayer);
 	mCM->addCollidable(mPlayer);
 	mLevel = new Level(mEntityM);
@@ -249,7 +292,7 @@ void GameStateLevel::resetInventory(){
 	inv->setEggs(mInv.eggs);
 }
 
-void GameStateLevel::setupMission(const std::string& mapFilename, const std::string& jsonFilename) {
+void GameStateLevel::setupMission(const std::string& jsonFilename) {
 	std::string configText = ResourceManager::getInstance().loadJsonFile(jsonFilename);
 	rapidjson::Document configDoc;
 	configDoc.Parse(configText.c_str());

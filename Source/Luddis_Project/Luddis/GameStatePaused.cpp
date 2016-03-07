@@ -14,7 +14,7 @@ GameStatePaused::~GameStatePaused(){
 	mEventM.detatch(this, sf::Event::EventType::KeyPressed);
 	mMenu->kill();
 	mMenuGUIM.clearInterfaceElements();
-	mLevelGUIM->clearInterfaceElements();
+	//mBackgroundGUIM->clearInterfaceElements();
 }
 
 GameStatePaused& GameStatePaused::getInstance() {
@@ -23,10 +23,16 @@ GameStatePaused& GameStatePaused::getInstance() {
 }
 
 void GameStatePaused::initialize(sf::RenderWindow* window, EntityManager* entityManager, GUIManager* guiManager){
-	mGameStateLevel = &GameStateLevel::getInstance();
+	mLastGameState = &GameStateLevel::getInstance();
 	mWindow = window;
 	mEntityM = entityManager;
-	mLevelGUIM = guiManager;
+	mBackgroundGUIM = guiManager;
+}
+
+void GameStatePaused::setBackgroundParameters(EntityManager * entityManager, GUIManager * guiManager, GameState* gameState){
+	mEntityM = entityManager;
+	mBackgroundGUIM = guiManager;
+	mLastGameState = gameState;
 }
 
 void GameStatePaused::createMenu(Menu::MenuType menuType) {
@@ -37,7 +43,7 @@ void GameStatePaused::createMenu(Menu::MenuType menuType) {
 	mMenu = new Menu(mWindow, &mEventM, &mMenuGUIM, menuType);
 	mMenuGUIM.addInterfaceElement(mMenu);
 	mMenu->setActive(true);
-	mMenu->initialize();
+	mMenu->initialize(this);
 
 }
 
@@ -57,23 +63,24 @@ void GameStatePaused::update(sf::Clock& clock){
 }
 
 void GameStatePaused::render(){
-	//Draw objects
-	mEntityM->renderEntities(*mWindow);
+	//Draw objects (unless null pointer)
+	if (mEntityM != nullptr)
+		mEntityM->renderEntities(*mWindow);
 	//Change the view when drawing GUI elements
 	mMapView = mWindow->getView();
 	mWindow->setView(mGUIView);
-	mLevelGUIM->renderElements(*mWindow);
+	mBackgroundGUIM->renderElements(*mWindow);
 	mMenuGUIM.renderElements(*mWindow);
 	//Then change it back
 	mWindow->setView(mMapView);
 }
 
-void GameStatePaused::onEvent(const sf::Event &aEvent){
-	if (true){
-		switch (aEvent.type){
-		case (sf::Event::EventType::KeyPressed) :
-			if (aEvent.key.code == sf::Keyboard::Escape && mGameStateLevel->playable()) {
-				GameManager::getInstance().setGameState(mGameStateLevel);
+void GameStatePaused::onEvent(const sf::Event &aEvent) {
+	if (true) {
+		switch (aEvent.type) {
+		case sf::Event::EventType::KeyPressed:
+			if (aEvent.key.code == sf::Keyboard::Escape) {
+				GameManager::getInstance().setGameState(mLastGameState);
 			}
 			break;
 		}

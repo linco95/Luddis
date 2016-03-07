@@ -31,11 +31,14 @@ static const std::string TEXTURE_CHIPSCOUNTER = "Resources/Images/GUI/HUD_Chips_
 static const std::string TEXTURE_LUDDCOUNTER = "Resources/Images/GUI/HUD_Ludd_Icon.png";
 static const std::string TEST_LEVEL = "Resources/Configs/Levels/Level01Entities.json";
 static const char* MOUSE_IMAGE = "Resources/Images/LuddisCursor.png";
-static const std::string FONT_NAME = "arial.ttf";
 
-static const char* MASTER_BANK = "Resources/Audio/FMOD/Build/Desktop/Master Bank.bank";
-static const char* MASTER_BANK_STRINGS = "Resources/Audio/FMOD/Build/Desktop/Master Bank.strings.bank";
-static const char* EVENT_MUSIC1 = "event:/MUSIK/Bana_1";
+static const char* MASTERBANK = "Resources/AudioBanks/Build/Desktop/Master Bank.bank";
+static const char* MASTER_BANK_STRINGS = "Resources/AudioBanks/Build/Desktop/Master Bank.strings.bank";
+static const char* MUSIC_BANK = "Resources/AudioBanks/Build/Desktop/Music.bank";
+static const char* SOUND_BANK = "Resources/AudioBanks/Build/Desktop/Weapons.bank";
+
+static const char* EVENT_MUSIC1 = "event:/Music/Music";
+static const char* EVENT_LUDDIS = "event:/Weapons/Full Auto Loop";
 
 static const bool VSYNCENABLED = true;
 
@@ -85,14 +88,14 @@ struct GameManagerImp : public EventObserver {
 		// Create the window
 		mMainWindow.create(VideoMode(ViewUtility::VIEW_WIDTH, ViewUtility::VIEW_HEIGHT), APPNAME, Style::Fullscreen);
 		mMainWindow.setVerticalSyncEnabled(VSYNCENABLED);
-
+		sf::Vector2u vec(800, 600);
 		// Set up the viewport
-		auto actualSize = mMainWindow.getView().getSize();
+		/*auto actualSize = mMainWindow.getView().getSize();
 		auto desiredSize = ViewUtility::getViewSize().getSize();
 		sf::FloatRect viewport(0, 0, 0, 0);
 
 		//mMainWindow.getView().setViewport()
-		/*decltype(desiredSize) viewport(0, 0, 1, 1);
+		decltype(desiredSize) viewport(0, 0, 1, 1);
 		if (actualSize.width > actualSize.height) {
 
 		}
@@ -122,16 +125,17 @@ struct GameManagerImp : public EventObserver {
 
 	void onEvent(const Event& aEvent) override{
 		switch(aEvent.type){
-			case (Event::EventType::Closed):
+			case Event::EventType::Closed:
 				gameOver();
 				break;
+			/*case Event::EventType::KeyPressed:
+				if(aEvent)
+				break;*/
 			default:
 				// NO-OP
 				break;
 		}
 	}
-	
-
 
 	void handleEvents(RenderWindow& aWindow){
 		Event currEvent;
@@ -145,10 +149,16 @@ struct GameManagerImp : public EventObserver {
 		CollisionManager* cm = &CollisionManager::getInstance();
 		SoundEngine* se = &SoundEngine::getInstance();
 
-		se->loadBank(MASTER_BANK);
+		//The string bank contains all paths for the events etc.
+		se->loadBank(MASTERBANK);
 		se->loadBank(MASTER_BANK_STRINGS);
+		se->loadBank(MUSIC_BANK);
+		se->loadBank(SOUND_BANK);
+		
+		se->createEvent(EVENT_LUDDIS, SoundEngine::EventType::SOUND);
+		se->playEvent(EVENT_LUDDIS);
 		se->createEvent(EVENT_MUSIC1, SoundEngine::EventType::MUSIC);
-		se->playEvent(EVENT_MUSIC1);
+		//se->playEvent(EVENT_MUSIC1);
 		
 		mGameStatePaused = &GameStatePaused::getInstance();
 		mGameStateLevel = &GameStateLevel::getInstance();
@@ -167,7 +177,7 @@ struct GameManagerImp : public EventObserver {
 			//Update soundengine
 			se->update(gameClock.getElapsedTime());
 
-			// Handle Events       
+			// Handle Events
 			mCurrentGameState->handleEvents();
 			//handleEvents(mMainWindow);
 			// Update according to the game's state

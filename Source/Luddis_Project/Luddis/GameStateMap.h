@@ -10,6 +10,8 @@
 #include <vector>
 #include <SFML/Graphics/View.hpp>
 
+class GameStatePaused;
+
 class GameStateMap: public GameState{
 public:
 	GameStateMap(GameStateMap&) = delete;
@@ -33,6 +35,11 @@ private:
 	typedef std::vector<Room*> RoomVector;
 	RoomVector mRooms;
 	int mCurrentRoom;
+	int mRoomToBe;
+	float mFadeTimer;
+	bool mFade;
+	sf::RectangleShape mFadeEffect;
+	GameStatePaused* mGameStatePaused;
 	Menu* mMenu;
 	EntityManager mEntityM;
 	GUIManager mGUIM;

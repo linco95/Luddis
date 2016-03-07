@@ -34,7 +34,6 @@ Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window, EntityMana
 	mWindow(window), 
 	mEntityManager(entityManager),
 	mAnimation(ANIMATION_FILEPATH),
-	mPrevPos(0, 0),
 	mHitbox(new sf::CircleShape(HITBOX_SHAPE)),
 	mLife(Inventory::getInstance().getDust())
 {
@@ -83,7 +82,7 @@ void Luddis::tick(const sf::Time& deltaTime){
 }
 
 void Luddis::draw(sf::RenderTarget& target, sf::RenderStates states) const{
-	target.draw(STASISANIMATION, states);
+	//target.draw(STASISANIMATION, states);
 	states.transform *= getTransform();
 	target.draw(mAnimation.getCurrAnimation(), states);
 

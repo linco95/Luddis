@@ -22,6 +22,7 @@ public:
 	static GameStatePaused& getInstance();
 
 	void initialize(sf::RenderWindow* window, EntityManager* entityManager, GUIManager* guiManager);
+	void setBackgroundParameters(EntityManager* entityManager, GUIManager* guiManager, GameState* gameState);
 	void createMenu(Menu::MenuType menuType);
 
 	void update(sf::Clock& clock) override;
@@ -33,10 +34,10 @@ private:
 	GameStatePaused();
 
 	EntityManager* mEntityM;
-	GUIManager* mLevelGUIM;
+	GUIManager* mBackgroundGUIM;
 	GUIManager mMenuGUIM;
 	EventManager mEventM;
-	GameStateLevel* mGameStateLevel;
+	GameState* mLastGameState;
 	sf::View mGUIView;
 	sf::View mMapView;
 	sf::RenderWindow* mWindow;

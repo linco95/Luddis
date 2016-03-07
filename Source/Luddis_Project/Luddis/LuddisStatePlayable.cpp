@@ -10,6 +10,7 @@
 #include "CollisionManager.h"
 #include "CollidableEntity.h"
 #include "EntityManager.h"
+#include "Debug.h"
 #include <array>
 #include <SFML/Window/Mouse.hpp>
 #include <SFML/Window/Keyboard.hpp>
@@ -17,13 +18,20 @@
 #include "PowerupDisplay.h"
 #include "SpiderWeb.h"
 
+
 // All of these should maybe be loaded from file instead, to avoid hard coded variables
 //All float times are in seconds
 static const float PROJECTILE_RELOAD = 0.4f;
 static const float PROJECTILE_TIMER = 3.0f;
 static const float INVINCIBILITY_TIMER = 0.75f;
 static const float GRACEAREA = 30;
+
+#ifdef _DESIGNER_HAX_
+static const float SUPERMOVESPEED = 600;
+#endif //_DESIGNER_HAX_
+
 static const float MOVESPEED = 200;
+
 static const float PROJECTILE_SPEED = 300;
 static const float MUZZLEOFFSET = 50.0f;
 static const sf::Vector2f FRONTVECTOR(1, 0);
@@ -44,15 +52,18 @@ static const std::array<std::string, 3> PROJECTILE_FILENAME = { "Resources/Image
 "Resources/Images/Luddis_attack3.png"
 };
 
-LuddisStatePlayable::LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* window, EntityManager* entityManager) :
+LuddisStatePlayable::LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* window, EntityManager* entityManager, PowerupDisplay* display) :
 	mProjectileCooldown(0),
 	mInvincibility(INVINCIBILITY_TIMER),
+	mPrevPos(0, 0),
 	mIsFlipped(false),
+	mMoved(false),
 	mPlayerPtr(playerPtr),
 	mEntityManager(entityManager),
-	mWindow(window)
+	mWindow(window),
+	mDisplay(display)
 {
-	Inventory::getInstance().choseFirst(new SpiderWeb(entityManager));
+	Inventory::getInstance().choseFirst(new SpiderWeb(entityManager, display));
 }
 
 LuddisStatePlayable::~LuddisStatePlayable(){
@@ -76,14 +87,15 @@ void LuddisStatePlayable::tick(const sf::Time& deltaTime){
 void LuddisStatePlayable::collide(CollidableEntity * collidable, const sf::Vector2f& moveAway) {
 
 	// Collision with solid object
-	if (collidable->getCollisionCategory() == CollidableEntity::BG_SOLID) {
+	if (collidable->getCollisionCategory() == CollidableEntity::SOLID) {
 		//mColliding = true;
 		//mCollideBox = collidable->getHitBox();
+		//Debug::log("MoveAway x: " + std::to_string(moveAway.x) + ". y:" + std::to_string(moveAway.y), Debug::INFO);
 		mPlayerPtr->move(moveAway);
 	}
 	if (mInvincibility <= 0) {
 		// Collision with damaging object
-		if (collidable->getCollisionCategory() == CollidableEntity::BG_DAMAGE || collidable->getCollisionCategory() == CollidableEntity::ENEMY) {
+		if (collidable->getCollisionCategory() == CollidableEntity::ENEMY_DAMAGE) {
 			mPlayerPtr->getAnimation()->replaceAnimation(HIT_ANIMATION);
 			mInvincibility += INVINCIBILITY_TIMER;
 			if (Inventory::getInstance().getDust() == 0) {
@@ -100,7 +112,7 @@ void LuddisStatePlayable::collide(CollidableEntity * collidable, const sf::Vecto
 			//Replace animation before changing state or a crash will occur.
 			mPlayerPtr->getAnimation()->replaceAnimation(HIT_ANIMATION);
 			//TODO: add a way to make stun timers modular.
-			mPlayerPtr->setPlayerState(new LuddisStateStunned(mPlayerPtr, 1.0f, mWindow, mEntityManager));
+			mPlayerPtr->setPlayerState(new LuddisStateStunned(mPlayerPtr, 1.0f, mWindow, mEntityManager, mDisplay));
 			mInvincibility += INVINCIBILITY_TIMER;
 		}
 	}
@@ -121,6 +133,9 @@ void LuddisStatePlayable::handleInput(const sf::Time & deltaTime){
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
 		updateMovement(deltaTime);
 	}
+	else {
+		mMoved = false;
+	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
 		attack();
 	}
@@ -136,20 +151,31 @@ void LuddisStatePlayable::handleInput(const sf::Time & deltaTime){
 	}
 }
 
-void LuddisStatePlayable::updateMovement(const sf::Time & deltaTime){
+void LuddisStatePlayable::updateMovement(const sf::Time & deltaTime) {
 	mDirectionVector = getVectorMouseToSprite();
 	if (VectorMath::getVectorLengthSq(mDirectionVector) == 0) return;
 	sf::Vector2f offset(VectorMath::normalizeVector(mDirectionVector));
-	float moveX(offset.x*deltaTime.asSeconds()*MOVESPEED);
-	float moveY(offset.y*deltaTime.asSeconds()*MOVESPEED);
+
+	float moveX, moveY;
+
+	moveX = offset.x*deltaTime.asSeconds()*MOVESPEED;
+	moveY = offset.y*deltaTime.asSeconds()*MOVESPEED;
+
+#ifdef _DESIGNER_HAX_
+	moveX = offset.x*deltaTime.asSeconds()*SUPERMOVESPEED;
+	moveY = offset.y*deltaTime.asSeconds()*SUPERMOVESPEED;
+#endif // _DESIGNER_HAX_
 
 	sf::Vector2f tempPos = mPlayerPtr->getPosition();
 
-		//Only move if not too close to the cursor position
-		if (VectorMath::getVectorLengthSq(mDirectionVector) > GRACEAREA) {
-			mPlayerPtr->move(moveX, moveY);
-		}
-	mPrevPos = tempPos;
+	//Only move if not too close to the cursor position
+	if (VectorMath::getVectorLengthSq(mDirectionVector) > GRACEAREA) {
+		mPlayerPtr->move(moveX, moveY);
+		mPrevPos = -sf::Vector2f(moveX, moveY);
+		mMoved = true;
+	}
+	else
+		mMoved = false;
 }
 
 void LuddisStatePlayable::attack(){
@@ -174,7 +200,7 @@ void LuddisStatePlayable::attack(){
 	int randValue = std::rand() % PROJECTILE_FILENAME.max_size();
 
 	// create the projectile
-	Projectile *proj = new Projectile(PROJECTILE_FILENAME[randValue], direction * PROJECTILE_SPEED, muzzlePoint, PROJECTILE_TIMER, CollidableEntity::Category::HAIR);
+	Projectile *proj = new Projectile(PROJECTILE_FILENAME[randValue], direction * PROJECTILE_SPEED, muzzlePoint, PROJECTILE_TIMER, CollidableEntity::Category::PLAYER_PROJECTILE);
 	mEntityManager->addEntity(proj);
 	CollisionManager::getInstance().addCollidable(proj);
 }
@@ -191,22 +217,24 @@ void LuddisStatePlayable::updateRotation(){
 }
 
 void LuddisStatePlayable::changeScale() {
-	int dust = Inventory::getInstance().getDust();
-	if (dust < 2 && mScale != sf::Vector2f(1.0f, 1.0f)) {
+	//int dust = Inventory::getInstance().getDust();
+	//int max = Inventory::getInstance().getMaxDust();
+	float percentDust = (float)(Inventory::getInstance().getDust() / Inventory::getInstance().getMaxDust());
+	if (percentDust < 20.0f && mScale != sf::Vector2f(1.0f, 1.0f)) {
 		mScale = { 1.0f , 1.0f };
 		mPlayerPtr->getAnimation()->setDefaultAnimation(ANIMATION_ALMOSTDEAD);
 	}
-	else if (dust < 4 && dust > 1 && mScale != sf::Vector2f(1.10f, 1.10f)) {
+	else if (percentDust < 40.0f && percentDust > 19.9f && mScale != sf::Vector2f(1.10f, 1.10f)) {
 		mScale = { 1.1f , 1.1f };
 		mPlayerPtr->getAnimation()->setDefaultAnimation(ANIMATION_FILEPATH);
 	}
-	else if (dust < 6 && dust > 3 && mScale != sf::Vector2f(1.20f, 1.20f)) {
+	else if (percentDust < 60.0f && percentDust > 39.9f && mScale != sf::Vector2f(1.20f, 1.20f)) {
 		mScale = { 1.2f , 1.2f };
 	}
-	else if (dust < 8 && dust > 5 && mScale != sf::Vector2f(1.30f, 1.30f)) {
+	else if (percentDust < 80.0f && percentDust > 59.9f && mScale != sf::Vector2f(1.30f, 1.30f)) {
 		mScale = { 1.3f , 1.3f };
 	}
-	else if (dust > 7 && mScale != sf::Vector2f(1.4f, 1.4f)) {
+	else if (percentDust > 70.0f && mScale != sf::Vector2f(1.4f, 1.4f)) {
 		mScale = { 1.4f , 1.4f };
 	}
 	if (mIsFlipped == false)

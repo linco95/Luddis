@@ -38,8 +38,8 @@ void Menu::internalClear(){
 	delete mBackground;
 }
 
-void Menu::initialize(){
-	mGameStateLevel = &GameStateLevel::getInstance();
+void Menu::initialize(GameState* gameState){
+	mGameState = gameState;
 	sf::Vector2f vector(mWindow->getView().getSize());
 	vector = vector*(2.0f / 3.0f);
 	mBackground->setSize(ViewUtility::getViewSize().getSize());
@@ -78,6 +78,15 @@ void Menu::initializeButtons(){
 		addButton(MENUBUTTON_TEXTURE_SETTINGS, "", "Settings", position + offset, Button::ButtonType::CIRCLE);
 		offset = { 450, 0 };
 		addButton(MENUBUTTON_TEXTURE_EXITLEVEL, "", "ExitLevel", position + offset, Button::ButtonType::CIRCLE);
+		offset = { 0, 275 };
+		addButton(MENUBUTTON_TEXTURE_RETURN, "", "Continue", position + offset, Button::ButtonType::CIRCLE);
+		break;
+
+	case Menu::ROOMMENU:
+		offset = { 150, 50 };
+		addButton(MENUBUTTON_TEXTURE_QUITGAME, "", "QuitGame", position + offset, Button::ButtonType::CIRCLE);
+		offset = { -150, 50 };
+		addButton(MENUBUTTON_TEXTURE_SETTINGS, "", "Settings", position + offset, Button::ButtonType::CIRCLE);
 		offset = { 0, 275 };
 		addButton(MENUBUTTON_TEXTURE_RETURN, "", "Continue", position + offset, Button::ButtonType::CIRCLE);
 		break;
@@ -168,15 +177,9 @@ void Menu::buttonFuncLoadGame(){
 }
 
 void Menu::buttonFuncContinue(){
-	if (mGameStateLevel->playable()) {
-
-		GameManager::getInstance().setGameState(mGameStateLevel);
-		mIsAlive = false;
-	}
-	else {
-		//TODO: Implement restarting from a checkpoint.
-
-	}
+	GameManager::getInstance().setGameState(mGameState);
+	mIsAlive = false;
+	
 }
 
 void Menu::buttonFuncExitLevel(){
@@ -195,6 +198,6 @@ void Menu::buttonFuncQuitGame(){
 }
 
 void Menu::buttonFuncResetLevel(){
-	mGameStateLevel->resetLevel();
-	GameManager::getInstance().setGameState(mGameStateLevel);
+	mGameState->resetLevel();
+	GameManager::getInstance().setGameState(mGameState);
 }

@@ -1,17 +1,20 @@
+#define _USE_MATH_DEFINES
 #include "LuddisStateCinematic.h"
 #include "LuddisStatePlayable.h"
 #include "Luddis.h"
 #include "EntityManager.h"
 #include "VectorMath.h"
 #include <SFML/Graphics/RenderWindow.hpp>
+#include "PowerupDisplay.h"
 
 static const sf::Vector2f FRONTVECTOR(1, 0);
 
-LuddisStateCinematic::LuddisStateCinematic(float defaultSpeed, Luddis* playerPtr, sf::RenderWindow* window, EntityManager* entityManager):
+LuddisStateCinematic::LuddisStateCinematic(float defaultSpeed, Luddis* playerPtr, sf::RenderWindow* window, EntityManager* entityManager, PowerupDisplay* display):
 mPlayerPtr(playerPtr),
 mWindow(window),
 mEntityManager(entityManager),
-mDefaultSpeed(defaultSpeed){
+mDefaultSpeed(defaultSpeed),
+mDisplay(display){
 
 }
 
@@ -23,6 +26,8 @@ LuddisStateCinematic::~LuddisStateCinematic(){
 }
 
 void LuddisStateCinematic::tick(const sf::Time & deltaTime){
+	if(mSequences.empty())
+		return mPlayerPtr->setPlayerState(new LuddisStatePlayable(mPlayerPtr, mWindow, mEntityManager, mDisplay));
 	if (mSequences.front()->getFinished()) {
 		delete mSequences.front();
 		mSequences.pop();
@@ -42,16 +47,26 @@ void LuddisStateCinematic::tick(const sf::Time & deltaTime){
 	}
 
 	if (!mSequences.empty()) {
-		sf::Vector2f direction = VectorMath::normalizeVector(mSequences.front()->tick(deltaTime));
-		float angle = VectorMath::getAngle(FRONTVECTOR, direction);
-		mPlayerPtr->setRotation(angle*36);
+		sf::Vector2f direction = mSequences.front()->tick(deltaTime);
+		if (direction == sf::Vector2f(0, 0))
+			return;
+
+		direction = VectorMath::normalizeVector(direction);
+		if (VectorMath::getVectorLengthSq(direction) != 0) {
+
+			float angle = VectorMath::getAngle(FRONTVECTOR, direction) * 180 / (float)M_PI;
+			mPlayerPtr->setRotation(angle);
+			if ((direction.x <= 0 && !mIsFlipped) || (direction.x > 0 && mIsFlipped)) {
+				mIsFlipped = !mIsFlipped;
+			}
+		}
 		if (!mSpeed.empty())
 			mPlayerPtr->move(direction*mSpeed.front()*deltaTime.asSeconds());
 		else
 			mPlayerPtr->move(direction*mDefaultSpeed*deltaTime.asSeconds());
 	}
 	else
-		mPlayerPtr->setPlayerState(new LuddisStatePlayable(mPlayerPtr, mWindow, mEntityManager));
+		mPlayerPtr->setPlayerState(new LuddisStatePlayable(mPlayerPtr, mWindow, mEntityManager, mDisplay));
 }
 
 void LuddisStateCinematic::collide(CollidableEntity * collidable, const sf::Vector2f & moveAway){

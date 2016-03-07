@@ -23,9 +23,8 @@ public:
 	CinematicSequence* copy() const override;
 
 private:
-	sf::Vector2f mPosition;
 	Polynomial mPolynomial;
-	float mX, mFinalX;
+	float mX, mY, mFinalX;
 	bool mIncrease;
 	bool mFinished;
 };

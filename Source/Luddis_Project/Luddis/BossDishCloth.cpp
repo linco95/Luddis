@@ -71,13 +71,6 @@ void BossDishCloth::tick(const sf::Time& deltaTime){
 	if (mTarget->getPosition().x >= mActivate) {
 		mIsActive = true;
 	}
-	if (!mIsActive) return;
-	if (mLife <= 0) {
-		/*PowerUpItem* pow1 = new PowerUpItem(POWERUP1_FILEPATH, getPosition());
-		mEntityManager->addEntity(pow1);
-		CollisionManager::getInstance().addCollidable(pow1);*/
-		mIsAlive = false;
-	}
 	if (mTimeStunned <= 0) {
 		mAttackInterval -= deltaTime.asSeconds();
 		updateMovement(deltaTime);
@@ -89,6 +82,13 @@ void BossDishCloth::tick(const sf::Time& deltaTime){
 	}
 	else {
 		mTimeStunned -= deltaTime.asSeconds();
+	}
+	if (!mIsActive) return;
+	if (mLife <= 0) {
+		/*PowerUpItem* pow1 = new PowerUpItem(POWERUP1_FILEPATH, getPosition());
+		mEntityManager->addEntity(pow1);
+		CollisionManager::getInstance().addCollidable(pow1);*/
+		mIsAlive = false;
 	}
 }
 
@@ -180,7 +180,7 @@ void BossDishCloth::attack() {
 }
 
 BossDishCloth::Category BossDishCloth::getCollisionCategory() {
-	return ENEMY;
+	return ENEMY_DAMAGE;
 }
 
 BossDishCloth::Type BossDishCloth::getCollisionType() {
@@ -188,7 +188,7 @@ BossDishCloth::Type BossDishCloth::getCollisionType() {
 }
 
 void BossDishCloth::collide(CollidableEntity* collidable, const sf::Vector2f& moveAway){
-	if (collidable->getCollisionCategory() == HAIR){
+	if (collidable->getCollisionCategory() == PLAYER_PROJECTILE){
 		if (!mShooting){
 		mLife -= 15;
 		// For different states of damages

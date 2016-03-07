@@ -40,8 +40,6 @@ public:
 	void setScale(float x, float y);
 
 private:
-	void updateInput();
-
 	InterfaceElement* mOwner;
 	sf::RenderWindow* mWindow;
 	EventManager* mEventManager;
@@ -50,11 +48,13 @@ private:
 	sf::Text mButtonText;
 	std::string mButtonFunc;
 	ButtonType mButtonType;
+
 #ifdef LUDDIS_DEBUG_DRAW_HITBOXES
 	sf::CircleShape mDebugCircle;
 	sf::RectangleShape mDebugRect;
 #endif
 
+	bool mClick;
 	bool mIsAlive;
 	bool mIsActive;
 };

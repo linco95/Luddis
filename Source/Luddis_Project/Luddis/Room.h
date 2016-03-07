@@ -27,17 +27,21 @@ public:
 	void createButtons(int room);
 	void addButton(std::string buttonFile, std::string buttonText, std::string buttonFunc, sf::Vector2f pos, Button::ButtonType buttonType);
 
-	void buttonFuncShop();
-	void buttonFuncLevel(std::string level);
-	void buttonFuncRoom(int room);
 	void kill();
 
 private:
+	void buttonFuncShop();
+	void buttonFuncLevel(std::string);
+	void buttonFuncRoom(int room);
+
+	typedef void(Room::*FadeEffect)(std::string);
+	FadeEffect mFadeEffect;
 	sf::Sprite mBackground;
 	sf::RenderWindow* mWindow;
 	ButtonVector mLevelButtons;
 	GUIManager* mGUIManager;
 	EventManager* mEventManager;
+	std::string mButtonFunc;
 
 	bool mIsActive;
 	bool mIsAlive;

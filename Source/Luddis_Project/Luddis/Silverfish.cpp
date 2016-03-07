@@ -29,7 +29,7 @@ mActivate(activation),
 mWindow(window),
 mAnimation(ANIMATION_SWIM),
 mHitbox(new sf::RectangleShape(HITBOX_SHAPE)),
-mAlignment(ENEMY),
+mAlignment(ENEMY_DAMAGE),
 mTarget(aTarget)
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
@@ -64,10 +64,9 @@ void Silverfish::tick(const sf::Time& deltaTime){
 	if (mTarget->getPosition().x >= mActivate) {
 		mIsActive = true;
 	}
-	if (!mIsActive) return;
 	if (mTimeStunned <= 0) {
 		if (mBefriend) {
-			mAlignment = FRIEND;
+			mAlignment = IGNORE;
 			mBefriend = false;
 		}
 		updateMovement(deltaTime);
@@ -83,6 +82,7 @@ void Silverfish::tick(const sf::Time& deltaTime){
 	else {
 		mTimeStunned -= deltaTime.asSeconds();
 	}
+	if (!mIsActive) return;
 }
 
 void Silverfish::updateMovement(const sf::Time& deltaTime){
@@ -133,7 +133,7 @@ Silverfish::Type Silverfish::getCollisionType(){
 }
 
 void Silverfish::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway){
-	if (collidable->getCollisionCategory() == HAIR){
+	if (collidable->getCollisionCategory() == PLAYER_PROJECTILE){
 		if (mSwimAway== false){
 		mLife -= 5;
 		if (mLife <= 0){
@@ -141,7 +141,6 @@ void Silverfish::collide(CollidableEntity *collidable, const sf::Vector2f& moveA
 			mAnimation.setDefaultAnimation(ANIMATION_DEAD);
 			mSwimAway = true;
 			mNextDir = VectorMath::normalizeVector(getPosition() - collidable->getPosition());
-			//SPEED = 220;
 			mBefriend = true;
 			mTimeStunned = 0;
 			}

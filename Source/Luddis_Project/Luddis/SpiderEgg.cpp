@@ -65,7 +65,7 @@ SpiderEgg::Type SpiderEgg::getCollisionType(){
 }
 
 void SpiderEgg::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway){
-	if (collidable->getCollisionCategory() == FRIEND){
+	if (collidable->getCollisionCategory() == PLAYER_OBJECT){
 		mIsAlive = false;
 		Inventory::getInstance().changeEggs(1);
 	}
