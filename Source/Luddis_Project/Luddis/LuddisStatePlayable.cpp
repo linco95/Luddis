@@ -27,7 +27,7 @@ static const float INVINCIBILITY_TIMER = 0.75f;
 static const float GRACEAREA = 30;
 
 #ifdef _DESIGNER_HAX_
-static const float SUPERMOVESPEED = 600;
+static const float SUPERMOVESPEED = 800;
 #endif //_DESIGNER_HAX_
 
 static const float MOVESPEED = 200;
@@ -82,6 +82,10 @@ void LuddisStatePlayable::tick(const sf::Time& deltaTime){
 	updateRotation();
 
 	changeScale();
+
+	if (Inventory::getInstance().getDust() == 0) {
+		mPlayerPtr->setPlayerState(new LuddisStateDead(mPlayerPtr));
+	}
 }
 #include <cassert>
 void LuddisStatePlayable::collide(CollidableEntity * collidable, const sf::Vector2f& moveAway) {
@@ -98,15 +102,13 @@ void LuddisStatePlayable::collide(CollidableEntity * collidable, const sf::Vecto
 		if (collidable->getCollisionCategory() == CollidableEntity::ENEMY_DAMAGE) {
 			mPlayerPtr->getAnimation()->replaceAnimation(HIT_ANIMATION);
 			mInvincibility += INVINCIBILITY_TIMER;
+			/*
 			if (Inventory::getInstance().getDust() == 0) {
 				mPlayerPtr->setPlayerState(new LuddisStateDead(mPlayerPtr));
 			}
 			Inventory::getInstance().addDust(-1);
+			*/
 		}
-		// Collision with a collectible
-		/*if (collidable->getCollisionCategory() == COLLECT){
-		// NO-OP
-		}*/
 		// Collision with a stunning entity
 		if (collidable->getCollisionCategory() == CollidableEntity::ENEMY_STUN) {
 			//Replace animation before changing state or a crash will occur.
@@ -187,7 +189,7 @@ void LuddisStatePlayable::attack(){
 	sf::Vector2f direction = VectorMath::rotateVector(FRONTVECTOR, mPlayerPtr->getRotation());
 
 	// Replace the current animation with an shooting animation and play a shooting sound
-	mPlayerPtr->getAnimation()->replaceAnimation(SHOT_ANIMATION);
+	mPlayerPtr->getAnimation()->overrideAnimation(SHOT_ANIMATION);
 	// TODO Pull out constant variable
 	SoundEngine::getInstance().playSound("Resources/Audio/Luddis_skott_16bit.wav");
 

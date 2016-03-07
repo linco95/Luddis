@@ -6,7 +6,7 @@
 #include "EventObserver.h"
 #include "EventManager.h"
 #include "ResourceManager.h"
-#include "SoundEngine.h"
+//#include "SoundEngine.h"
 #include "GUIManager.h"
 #include "Dialogue.h"
 #include "Level.h"
@@ -147,19 +147,20 @@ struct GameManagerImp : public EventObserver {
 	void gameLoop(){
 		// To avoid multiple functioncalls every iteration of gameloop
 		CollisionManager* cm = &CollisionManager::getInstance();
+		/*
 		SoundEngine* se = &SoundEngine::getInstance();
 
 		//The string bank contains all paths for the events etc.
-		se->loadBank(MASTERBANK);
-		se->loadBank(MASTER_BANK_STRINGS);
-		se->loadBank(MUSIC_BANK);
-		se->loadBank(SOUND_BANK);
+		//se->loadBank(MASTERBANK);
+		//se->loadBank(MASTER_BANK_STRINGS);
+		//se->loadBank(MUSIC_BANK);
+		//se->loadBank(SOUND_BANK);
 		
-		se->createEvent(EVENT_LUDDIS, SoundEngine::EventType::SOUND);
-		se->playEvent(EVENT_LUDDIS);
-		se->createEvent(EVENT_MUSIC1, SoundEngine::EventType::MUSIC);
+		//se->createEvent(EVENT_LUDDIS, SoundEngine::EventType::SOUND);
+		//se->playEvent(EVENT_LUDDIS);
+		//se->createEvent(EVENT_MUSIC1, SoundEngine::EventType::MUSIC);
 		//se->playEvent(EVENT_MUSIC1);
-		
+		*/
 		mGameStatePaused = &GameStatePaused::getInstance();
 		mGameStateLevel = &GameStateLevel::getInstance();
 		mGameStateMap = &GameStateMap::getInstance();
@@ -171,11 +172,11 @@ struct GameManagerImp : public EventObserver {
 		mCurrentGameState = mGameStateLevel;
 
 		View mapView;
-		se->setMainVolume(10);
+		//se->setMainVolume(10);
 		Clock gameClock;
 		while (mMainWindow.isOpen()){
 			//Update soundengine
-			se->update(gameClock.getElapsedTime());
+			//se->update(gameClock.getElapsedTime());
 
 			// Handle Events
 			mCurrentGameState->handleEvents();

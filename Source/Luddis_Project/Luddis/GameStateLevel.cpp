@@ -7,9 +7,6 @@
 #include "PowerupDisplay.h"
 #include "Dialogue.h"
 #include "Level.h"
-#include "Dust.h"
-#include "Chips.h"
-#include "SpiderEgg.h"
 #include "Silverfish.h"
 #include "Spider.h"
 #include "EventZone.h"
@@ -269,7 +266,7 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	/*cinState->addCinematicSequence(&tween);
 	cinState->addCinematicSequence(&pauseCin);
 	cinState->addCinematicSequence(&tween2);*/
-	/*cinState->addCinematicSequence(&movePoint);*/
+	//cinState->addCinematicSequence(&movePoint);
 	cinState->addSpeedShift(50, 1);
 	cinState->addSpeedShift(100, 1);
 	cinState->addSpeedShift(50, 1);

@@ -1,6 +1,5 @@
 #include "BossDishCloth.h"
 #include "Projectile.h"
-#include "PowerUpItem.h"
 #include "EntityManager.h"
 #include "CollisionManager.h"
 #include "VectorMath.h"

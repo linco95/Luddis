@@ -58,12 +58,6 @@
     <ClCompile Include="Silverfish.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="Chips.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Dust.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="AnimationQueue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -72,9 +66,6 @@
     </ClCompile>
     <ClCompile Include="Inventory.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SpiderEgg.cpp">
-      <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="CollidableEntity.cpp">
       <Filter>Source Files</Filter>
@@ -139,9 +130,6 @@
     <ClCompile Include="SpiderWeb.cpp">
       <Filter>Source Files\PowerUps</Filter>
     </ClCompile>
-    <ClCompile Include="PowerUpItem.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="Spider.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
@@ -174,6 +162,9 @@
     </ClCompile>
     <ClCompile Include="CinematicMoveToPoint.cpp">
       <Filter>Source Files\Cinematic</Filter>
+    </ClCompile>
+    <ClCompile Include="Collectible.cpp">
+      <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="SockNPC.cpp">
       <Filter>Source Files\GUI</Filter>
@@ -238,20 +229,11 @@
     <ClInclude Include="Projectile.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="Dust.h">
-      <Filter>Header Files\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Chips.h">
-      <Filter>Header Files\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="BossDishCloth.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="Inventory.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SpiderEgg.h">
-      <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="CollidableEntity.h">
       <Filter>Header Files</Filter>
@@ -313,9 +295,6 @@
     <ClInclude Include="Room.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="PowerUpItem.h">
-      <Filter>Header Files\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="PowerUps.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -363,6 +342,9 @@
     </ClInclude>
     <ClInclude Include="CinematicMoveToPoint.h">
       <Filter>Header Files\Cinematic</Filter>
+    </ClInclude>
+    <ClInclude Include="Collectible.h">
+      <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="SockNPC.h">
       <Filter>Header Files\GUI</Filter>

@@ -44,6 +44,7 @@ private:
 	sf::Vector2f mNextDir;
 	Category mAlignment;
 	float mTimeStunned;
+	float mInvulnerable;
 };
 
 #endif

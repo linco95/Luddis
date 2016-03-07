@@ -5,10 +5,7 @@
 #include "BackgroundEffect.h"
 #include "Luddis.h"
 #include "EventZone.h"
-#include "Chips.h"
-#include "Dust.h"
 #include "Obstacle.h"
-#include "SpiderEgg.h"
 #include "TutorialText.h"
 #include "ViewUtility.h"
 #include "VectorMath.h"
@@ -20,6 +17,7 @@
 #include <array>
 #include <map>
 #include "Debug.h"
+#include "Collectible.h"
 
 using namespace sf;
 
@@ -54,14 +52,14 @@ void Level::readInitMap(const std::string& filename) {
 	CollidableEntity* obj = 0;
 
 	for (auto e : pixelVector) {
-		if (e.color == sf::Color(0, 0, 0)) {//Black
-			obj = new Dust(mWindow, "Resources/Images/Dust.png", e.position, 0);
+		if (e.color == sf::Color(0, 0, 0)) {//Black Dust
+			obj = new Collectible(mWindow, "Resources/Images/Dust.png", e.position, Collectible::CollectibleType::DUST);
 				}
-		else if (e.color == sf::Color(255, 255, 0)) {//Yellow
-			obj = new Chips(mWindow, "Resources/Images/Chips.png", e.position, 0);
+		else if (e.color == sf::Color(255, 255, 0)) {//Yellow Chips
+			obj = new Collectible(mWindow, "Resources/Images/Chips.png", e.position, Collectible::CollectibleType::CHIPS);
 				}
-		else if (e.color == sf::Color(0, 0, 255)) {//Blue
-			obj = new SpiderEgg(mWindow, "Resources/Images/Spritesheets/Spider_egg", e.position);
+		else if (e.color == sf::Color(0, 0, 255)) {//Blue SpiderEgg
+			obj = new Collectible(mWindow, "Resources/Images/Spritesheets/Spider_egg", e.position, Collectible::CollectibleType::SPIDEREGG);
 			}
 		if (obj != 0) {
 			mEntityManager->addEntity(obj);
@@ -235,7 +233,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 			float y = (float)(*itr)["y"].GetInt();
 			sf::Vector2f pos(x, y);
 
-			Dust* dust = new Dust(mWindow, "Resources/Images/Dust.png", pos, 0);
+			Collectible* dust = new Collectible(mWindow, "Resources/Images/Dust.png", pos, Collectible::CollectibleType::DUST);
 			mEntityManager->addEntity(dust);
 			cm->addCollidable(dust);
 			Debug::log("Spawning dust at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
@@ -253,7 +251,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 			float y = (float)(*itr)["y"].GetInt();
 			sf::Vector2f pos(x, y);
 
-			Chips* chips = new Chips(mWindow, "Resources/Images/Chips.png", pos, 0);
+			Collectible* chips = new Collectible(mWindow, "Resources/Images/Chips.png", pos, Collectible::CollectibleType::CHIPS);
 			mEntityManager->addEntity(chips);
 			cm->addCollidable(chips);
 			Debug::log("Spawning chips at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
