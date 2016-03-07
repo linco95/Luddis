@@ -11,11 +11,14 @@ Collectible::Collectible(sf::RenderWindow* window, const std::string& textureFil
 	mIsAlive(true),
 	mIsActive(true),
 	mWindow(window),
-	mAnimation(textureFilename),
-	mType(type)
+	mType(type),
+	//QUICKFIX!
+	mAnimation("Resources/Images/Spritesheets/Spider_egg")
 {
 	if (mType == SPIDEREGG) {
 		mHitbox = new sf::CircleShape(HITBOX_EGG_SHAPE);
+		mAnimation = Animation(textureFilename);
+
 		mAnimation.setOrigin(mAnimation.getSprite().getTextureRect().width / 2.f, mAnimation.getSprite().getTextureRect().height / 2.f);
 		// Set the animation to start at a random frame. Should be read from the animation TODO
 		mAnimation.setFrame(std::rand() % 4);
@@ -24,7 +27,9 @@ Collectible::Collectible(sf::RenderWindow* window, const std::string& textureFil
 		mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
 	}
 	else {
+		mSprite = sf::Sprite(ResourceManager::getInstance().getTexture(textureFilename));
 		mHitbox = new sf::CircleShape(HITBOX_SHAPE);
+
 		mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 		// Set spawn position
 		setPosition(aPos);
