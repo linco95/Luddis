@@ -146,6 +146,9 @@ void Silverfish::collide(CollidableEntity *collidable, const sf::Vector2f& moveA
 			}
 		}
 	}
+	if (collidable->getCollisionCategory() == PLAYER) {
+
+	}
 }
 
 sf::FloatRect Silverfish::getHitBox(){
