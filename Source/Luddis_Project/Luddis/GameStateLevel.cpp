@@ -247,7 +247,7 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	/*cinState->addCinematicSequence(&tween);
 	cinState->addCinematicSequence(&pauseCin);
 	cinState->addCinematicSequence(&tween2);*/
-	cinState->addCinematicSequence(&movePoint);
+	//cinState->addCinematicSequence(&movePoint);
 	cinState->addSpeedShift(50, 1);
 	cinState->addSpeedShift(100, 1);
 	cinState->addSpeedShift(50, 1);

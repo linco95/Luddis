@@ -27,7 +27,7 @@ static const float INVINCIBILITY_TIMER = 0.75f;
 static const float GRACEAREA = 30;
 
 #ifdef _DESIGNER_HAX_
-static const float SUPERMOVESPEED = 600;
+static const float SUPERMOVESPEED = 800;
 #endif //_DESIGNER_HAX_
 
 static const float MOVESPEED = 200;

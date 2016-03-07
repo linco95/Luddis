@@ -31,7 +31,7 @@ std::string& ResourceManager::loadJsonFile(const std::string& filename){
 		while (std::getline(input, temp)){
 			inputText += temp + "\n";
 		}
-		mTextFiles[filename] = inputText;
+		mTextFiles[filename] = inputText;	
 	}
 	return mTextFiles[filename];
 }

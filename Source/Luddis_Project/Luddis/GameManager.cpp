@@ -150,14 +150,14 @@ struct GameManagerImp : public EventObserver {
 		SoundEngine* se = &SoundEngine::getInstance();
 
 		//The string bank contains all paths for the events etc.
-		se->loadBank(MASTERBANK);
-		se->loadBank(MASTER_BANK_STRINGS);
-		se->loadBank(MUSIC_BANK);
-		se->loadBank(SOUND_BANK);
+		//se->loadBank(MASTERBANK);
+		//se->loadBank(MASTER_BANK_STRINGS);
+		//se->loadBank(MUSIC_BANK);
+		//se->loadBank(SOUND_BANK);
 		
-		se->createEvent(EVENT_LUDDIS, SoundEngine::EventType::SOUND);
-		se->playEvent(EVENT_LUDDIS);
-		se->createEvent(EVENT_MUSIC1, SoundEngine::EventType::MUSIC);
+		//se->createEvent(EVENT_LUDDIS, SoundEngine::EventType::SOUND);
+		//se->playEvent(EVENT_LUDDIS);
+		//se->createEvent(EVENT_MUSIC1, SoundEngine::EventType::MUSIC);
 		//se->playEvent(EVENT_MUSIC1);
 		
 		mGameStatePaused = &GameStatePaused::getInstance();
