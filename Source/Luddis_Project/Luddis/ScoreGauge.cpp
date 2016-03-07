@@ -42,8 +42,8 @@ void ScoreGauge::setActive(const bool& active){
 	mIsActive = active;
 }
 
-ScoreGauge::RenderLayer ScoreGauge::getRenderLayer() const{
-	return FOREGROUND;
+ScoreGauge::Strata ScoreGauge::getRenderLayer() const{
+	return FOURTH;
 }
 
 void ScoreGauge::kill() {

@@ -29,6 +29,8 @@ public:
 	void render() override;
 	void onEvent(const sf::Event &aEvent) override;
 	void handleEvents() override;
+	void handleClicks(std::string command)override;
+
 
 private:
 	GameStatePaused();

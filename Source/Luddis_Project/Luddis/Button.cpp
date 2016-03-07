@@ -7,13 +7,14 @@
 #include <vector>
 
 static const std::string DEFAULT_FONTTYPE = "Resources/Fonts/Arial.ttf";
-//GLOBLAL_CLICK prevents more than one button from activating per loop.
-static bool GLOBLAL_CLICK = false;
+//GLOBAL_CLICK prevents more than one button from activating per loop.
+static bool GLOBAL_CLICK = false;
 
-Button::Button(std::string graphicFilename, std::string buttonText, std::string buttonFunc, sf::RenderWindow* window, EventManager* eventManager, sf::Vector2f pos, InterfaceElement* owner, ButtonType buttonType) :
+Button::Button(std::string graphicFilename, std::string buttonText, std::string buttonFunc, sf::RenderWindow* window, EventManager* eventManager, sf::Vector2f pos, InterfaceElement* owner, ButtonType buttonType, Strata strata) :
 	mWindow(window),
 	mEventManager(eventManager),
 	mButtonType(buttonType),
+	mStrata(strata),
 	mIsAlive(true),
 	mIsActive(false),
 	mClick(false),
@@ -64,8 +65,7 @@ Button::~Button() {
 }
 
 void Button::tick(const sf::Time& deltaTime) {
-	//updateInput();
-	GLOBLAL_CLICK = false;
+	GLOBAL_CLICK = false;
 }
 
 bool Button::isActive() const {
@@ -76,8 +76,12 @@ void Button::setActive(const bool& active) {
 	mIsActive = active;
 }
 
-Button::RenderLayer Button::getRenderLayer() const {
-	return FOREGROUND;
+Button::Strata Button::getRenderLayer() const {
+	return mStrata;
+}
+
+void Button::setStrata(Strata strata){
+	mStrata = strata;
 }
 
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
@@ -125,8 +129,8 @@ void Button::onEvent(const sf::Event &aEvent) {
 				aEvent.mouseButton.button == sf::Mouse::Left) {
 				mousePos = mWindow->mapPixelToCoords(sf::Vector2i(aEvent.mouseButton.x, aEvent.mouseButton.y)) - getPosition();
 
-				if (rect.contains(mousePos) && GLOBLAL_CLICK == false && mClick == true) {
-					GLOBLAL_CLICK = true;
+				if (rect.contains(mousePos) && GLOBAL_CLICK == false && mClick == true) {
+					GLOBAL_CLICK = true;
 					mOwner->onClick(mButtonFunc);
 				}
 			}
@@ -162,8 +166,8 @@ void Button::onEvent(const sf::Event &aEvent) {
 				aEvent.mouseButton.button == sf::Mouse::Left) {
 				mousePos = mWindow->mapPixelToCoords(sf::Vector2i(aEvent.mouseButton.x, aEvent.mouseButton.y)) - getPosition();
 				float distance = VectorMath::getVectorLength(mSprite.getPosition() - mousePos);
-				if (distance <= mSprite.getGlobalBounds().height / 2 && GLOBLAL_CLICK == false && mClick == true) {
-					GLOBLAL_CLICK = true;
+				if (distance <= mSprite.getGlobalBounds().height / 2 && GLOBAL_CLICK == false && mClick == true) {
+					GLOBAL_CLICK = true;
 					mOwner->onClick(mButtonFunc);
 				}
 			}

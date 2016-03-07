@@ -93,3 +93,7 @@ void GameStatePaused::handleEvents(){
 		mEventM.notify(currEvent);
 	}
 }
+
+void GameStatePaused::handleClicks(std::string command){
+
+}

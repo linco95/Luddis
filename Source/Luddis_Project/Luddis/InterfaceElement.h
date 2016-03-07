@@ -9,9 +9,12 @@
 class InterfaceElement: public sf::Drawable, public sf::Transformable{
 public:
 	//Used for render sorting.
-	enum RenderLayer{
-		BACKGROUND,
-		FOREGROUND
+	enum Strata{
+		FIFTH,
+		FOURTH,
+		THIRD,
+		SECOND,
+		FIRST
 	};
 	InterfaceElement();
 	virtual ~InterfaceElement();
@@ -21,7 +24,7 @@ public:
 	//Function for updating the object. Mostly timer related.
 	virtual void tick(const sf::Time& deltaTime) = 0;
 	//Returns the renderlayer. Used for sorting later.
-	virtual RenderLayer getRenderLayer() const = 0;
+	virtual Strata getRenderLayer() const = 0;
 	//Return if the object is alive or not.
 	//Dead objects get deallocated.
 	virtual bool isAlive() const = 0;

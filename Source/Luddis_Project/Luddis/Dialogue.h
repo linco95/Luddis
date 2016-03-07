@@ -8,18 +8,18 @@
 #include "CharacterPortrait.h"
 
 class GUIManager;
-class GameStateLevel;
+class GameState;
 class ResourceManager;
 class SoundEngine;
 
 class Dialogue : public InterfaceElement{
 public:
-	Dialogue(const std::string& dialogueFile, sf::RenderWindow* window, GUIManager* guiManager, EventManager* eventManager, sf::Vector2f pos, int initialPage = 0);
+	Dialogue(const std::string& dialogueFile, sf::RenderWindow* window, GUIManager* guiManager, EventManager* eventManager, sf::Vector2f pos, GameState* gameState, int initialPage = 0);
 	~Dialogue();
 
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-	RenderLayer getRenderLayer() const override;
+	Strata getRenderLayer() const override;
 	bool isAlive() const override;
 	bool isActive() const  override;
 	void setActive(const bool& active) override;
@@ -43,7 +43,7 @@ private:
 	ResourceManager* mResourceManager;
 	SoundEngine* mSoundEngine;
 	sf::RenderWindow* mWindow;
-	GameStateLevel* mGameStateLevel;
+	GameState* mGameState;
 	GUIManager* mGUIManager;
 	EventManager* mEventManager;
 	int mLevel;

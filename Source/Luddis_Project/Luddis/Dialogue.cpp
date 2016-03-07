@@ -18,7 +18,7 @@ static const float RECT_HEIGHT = 300;
 static const int INDENT = 30;
 static sf::IntRect DEFAULT_RECT(INDENT*7, INDENT, (int)RECT_WIDTH-INDENT*1, 0);
 
-Dialogue::Dialogue(const std::string& dialogueFile, sf::RenderWindow* window, GUIManager* guiManager, EventManager* eventManager, sf::Vector2f pos, int initialPage) :
+Dialogue::Dialogue(const std::string& dialogueFile, sf::RenderWindow* window, GUIManager* guiManager, EventManager* eventManager, sf::Vector2f pos, GameState* gameState, int initialPage) :
 mButtonCount(0),
 mAnimationTimer(ANIMATION_TIME),
 mLevel(0),
@@ -31,7 +31,7 @@ mResourceManager(&ResourceManager::getInstance()),
 mSoundEngine(&SoundEngine::getInstance()),
 mGUIManager(guiManager),
 mEventManager(eventManager),
-mGameStateLevel(&GameStateLevel::getInstance()),
+mGameState(gameState),
 mCharacterDisplayLeft(nullptr),
 mCharacterDisplayRight(nullptr),
 mActivePage(initialPage),
@@ -42,9 +42,7 @@ mDialogueTexts(){
 
 Dialogue::~Dialogue(){
 	internalClear();
-	if (mGameStateLevel != nullptr){
-		mGameStateLevel->setInDialogue(false);
-	}
+	mGameState->handleClicks("DialogueDelete");
 	mSoundEngine->stopSound(mCurrentVoiceDialogue);
 }
 
@@ -192,8 +190,8 @@ void Dialogue::setActive(const bool& active){
 	mIsActive = active;
 }
 
-Dialogue::RenderLayer Dialogue::getRenderLayer() const{
-	return BACKGROUND;
+Dialogue::Strata Dialogue::getRenderLayer() const{
+	return THIRD;
 }
 
 void Dialogue::addButton(std::string buttonFile, std::string buttonText, std::string buttonFunc, sf::Vector2f pos, int index){
@@ -222,10 +220,10 @@ void Dialogue::internalClear(){
 }
 
 void Dialogue::internalPageSwapAway(int value){
-	if ((size_t)(mActivePage + value + 1)>mDialogueTexts.size() || (mActivePage + value)<0) {
+	/*if ((size_t)(mActivePage + value + 1)>mDialogueTexts.size() || (mActivePage + value)<0) {
 		Debug::log("Trying to go outside of dialogue page index range!", Debug::FATAL);
 		return;
-	}
+	}*/
 	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++) {
 		mButtons[mActivePage][i]->setActive(false);
 	}
@@ -266,28 +264,21 @@ void Dialogue::gotoPageButton(int value){
 
 void Dialogue::closeButton(){
 	mIsAlive = false;
-	mGameStateLevel->setInDialogue(false);
 }
 
 void Dialogue::spiderButton1(){
-	//Read a json file to create extra entities
-	std::string jsonFilename = FILENAME + std::to_string( mLevel) + "Spider1.json";
 	changePageButton(1);
-	mGameStateLevel->setupMission(jsonFilename);
+	mGameState->handleClicks("Spider1");
 }
 
 void Dialogue::spiderButton2(){
-	//Read a json file to create extra entities
-	std::string jsonFilename = FILENAME + std::to_string(mLevel) + "Spider2.json";
 	changePageButton(2);
-	mGameStateLevel->setupMission(jsonFilename);
+	mGameState->handleClicks("Spider2");
 }
 
 void Dialogue::spiderButton3(){
-	//Read a json file to create extra entities
-	std::string jsonFilename = FILENAME + std::to_string(mLevel) + "Spider3.json";
 	changePageButton(3);
-	mGameStateLevel->setupMission(jsonFilename);
+	mGameState->handleClicks("Spider3");
 }
 
 //Call the function corresonding to the string passed back.
