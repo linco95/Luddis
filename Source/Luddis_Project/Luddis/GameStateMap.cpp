@@ -62,6 +62,7 @@ void GameStateMap::createMenu(Menu::MenuType menuType) {
 
 void GameStateMap::changeRoom(int room) {
 	if (mFade) {
+		//TODO: Move to Room class.
 		mFade = false;
 		mRooms.at(mCurrentRoom - 1)->setActive(false);
 		mCurrentRoom = room;
@@ -115,7 +116,7 @@ void GameStateMap::onEvent(const sf::Event &aEvent) {
 		switch (aEvent.type) {
 		case sf::Event::EventType::KeyPressed:
 			if (aEvent.key.code == sf::Keyboard::Escape) {
-				mGameStatePaused->createMenu(Menu::PAUSEMENU);
+				mGameStatePaused->createMenu(Menu::ROOMMENU);
 				mGameStatePaused->setBackgroundParameters(nullptr, &mGUIM, this);
 				GameManager::getInstance().setGameState(mGameStatePaused);
 			}

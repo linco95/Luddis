@@ -17,6 +17,7 @@ public:
 
 	void setString(const std::string& text);
 	void setFont(std::string fontName);
+	void setColor(sf::Color color);
 	void animate(const sf::Time& deltaTime);
 	void resetAnimation();
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

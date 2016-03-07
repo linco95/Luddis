@@ -17,12 +17,13 @@ public:
 	enum MenuType{
 		MAINMENU,
 		PAUSEMENU,
+		ROOMMENU,
 		DEATHMENU
 	};
 	Menu(sf::RenderWindow* window, EventManager* eventManager, GUIManager* gUIManager, MenuType menuType);
 	virtual ~Menu();
 
-	void initialize();
+	void initialize(GameState* gameState);
 	void initializeButtons();
 
 	void tick(const sf::Time& deltaTime) override;
@@ -52,7 +53,7 @@ private:
 	ButtonVector mButtons;
 	EventManager* mEventManager;
 	GUIManager* mGUIManager;
-	GameStateLevel* mGameStateLevel;
+	GameState* mGameState;
 	sf::RenderWindow* mWindow;
 	MenuType mMenuType;
 

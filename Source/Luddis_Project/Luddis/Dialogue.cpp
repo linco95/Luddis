@@ -10,20 +10,19 @@
 #include <array>
 #include <typeinfo>
 
-static const std::string BACKGROUND_TEXTURE = "Resources/Images/GUI/DialogueFrame.png";
 static const std::string FILENAME = "Resources/Configs/Levels/Level";
 
-static const float ANIMATION_TIME = 1.5f;
+static const float ANIMATION_TIME = 0.9f;
 static const float RECT_WIDTH = ViewUtility::VIEW_WIDTH;
-static const float RECT_HEIGHT = 600;
+static const float RECT_HEIGHT = 300;
 static const int INDENT = 30;
-//static sf::Vector2f DialogueBoxMaxSize(RECT_WIDTH, RECT_HEIGHT);
-static sf::IntRect DEFAULT_RECT(INDENT*8, INDENT*4, (int)RECT_WIDTH-INDENT*2, 0);
+static sf::IntRect DEFAULT_RECT(INDENT*7, INDENT, (int)RECT_WIDTH-INDENT*1, 0);
 
-Dialogue::Dialogue(const std::string& dialogueFile, sf::RenderWindow* window, GUIManager* guiManager, EventManager* eventManager, sf::Vector2f pos) :
+Dialogue::Dialogue(const std::string& dialogueFile, sf::RenderWindow* window, GUIManager* guiManager, EventManager* eventManager, sf::Vector2f pos, int initialPage) :
 mButtonCount(0),
 mAnimationTimer(ANIMATION_TIME),
 mLevel(0),
+mEmotionFrame(),
 mIsAlive(true),
 mIsActive(true),
 mDrawContents(false),
@@ -35,15 +34,9 @@ mEventManager(eventManager),
 mGameStateLevel(&GameStateLevel::getInstance()),
 mCharacterDisplayLeft(nullptr),
 mCharacterDisplayRight(nullptr),
-mActivePage(0),
-mBackground(),
+mActivePage(initialPage),
 mDialogueTexts(){
 	setPosition(pos);
-	sf::Vector2f offset(0, -RECT_HEIGHT);
-	mBackground.setPosition(offset);
-	mBackground.setTexture(&mResourceManager->getTexture(BACKGROUND_TEXTURE));
-	mBackground.setFillColor(sf::Color(255, 255, 255));
-	//mBackground.setOutlineThickness((float)INDENT / 2);
 	initialize(dialogueFile);
 }
 
@@ -56,13 +49,20 @@ Dialogue::~Dialogue(){
 }
 
 void Dialogue::initialize(std::string dialogueFile){
+	for (int i = 0; i < 2; i++) {
+		for (int j = 0; j < MAX_PAGES; j++) {
+			mEmotionFrame[i][j] = 0;
+			mHighlight[i][j] = false;
+		}
+	}
+
 	std::string configText = mResourceManager->loadJsonFile(dialogueFile);
 	rapidjson::Document configDoc;
 	configDoc.Parse(configText.c_str());
 	assert(configDoc.IsObject());
 
-	sf::Vector2f offset(0, -RECT_HEIGHT + INDENT * 5);
-	sf::Vector2f portraitPos(ViewUtility::VIEW_WIDTH*0.4f, offset.y+getPosition().y);
+	sf::Vector2f offset(0, -RECT_HEIGHT + INDENT*3);
+	sf::Vector2f portraitPos(ViewUtility::VIEW_WIDTH*0.25f, offset.y+getPosition().y);
 
 	//A character portrait is optional.
 	if (configDoc.HasMember("Left_character_filename") &&
@@ -84,8 +84,8 @@ void Dialogue::initialize(std::string dialogueFile){
 
 
 		sf::Vector2f rightPortraitPos = portraitPos;
-		rightPortraitPos.x = ViewUtility::VIEW_WIDTH*0.6f;
-		mCharacterDisplayRight = new CharacterPortrait(textureFilename, characterName, rightPortraitPos);
+		rightPortraitPos.x = ViewUtility::VIEW_WIDTH*0.75f;
+		mCharacterDisplayRight = new CharacterPortrait(textureFilename, characterName, rightPortraitPos, true);
 		mGUIManager->addInterfaceElement(mCharacterDisplayRight);
 	}
 
@@ -106,11 +106,12 @@ void Dialogue::initialize(std::string dialogueFile){
 			std::string buttonImage = buttonInfo["Button_image"].GetString();
 			assert(buttonInfo.HasMember("Button_func") && buttonInfo["Button_func"].IsString());
 			std::string buttonFunc = buttonInfo["Button_func"].GetString();
-			addButton(buttonImage, buttonText, buttonFunc, mBackground.getPosition() +  sf::Vector2f((float)INDENT*4, (float)INDENT*5 + (float)i * 60.0f), (int)itr);
-
+			addButton(buttonImage, buttonText, buttonFunc, offset +  sf::Vector2f((float)INDENT*4, (float)INDENT + (float)i * 50.0f), (int)itr);
 		}
 		TextBox textBox(DEFAULT_RECT, pages[itr]["Text"].GetString(), 24, true);
 		textBox.setPosition(offset);
+		textBox.setColor(sf::Color::White);
+		//textBox
 		mDialogueTexts.push_back(textBox);
 		if (pages[itr].HasMember("Header")){
 			assert(pages[itr]["Header"].IsString());
@@ -118,6 +119,7 @@ void Dialogue::initialize(std::string dialogueFile){
 			int fontSize = 32;
 
 			mHeaders[itr] = new TextBox(DEFAULT_RECT, text, fontSize);
+			mHeaders[itr]->setColor(sf::Color::White);
 			mHeaders[itr]->setString(pages[itr]["Header"].GetString());
 
 			sf::Vector2f headerOffset (0, (float)(mHeaders[itr]->getRows()*fontSize));
@@ -126,6 +128,19 @@ void Dialogue::initialize(std::string dialogueFile){
 		if (pages[itr].HasMember("Voice_file")) {
 			assert(pages[itr]["Voice_file"].IsString());
 			mSoundFiles[itr] = pages[itr]["Voice_file"].GetString();
+		}
+		if (pages[itr].HasMember("Emotion")) {
+			assert(pages[itr]["Emotion"].IsObject());
+			const rapidjson::Value& emotion = pages[itr]["Emotion"];
+			assert(emotion.HasMember("Character"));
+			assert(emotion.HasMember("Frame"));
+			int character = emotion["Character"].GetInt();
+			mEmotionFrame[character][itr] = emotion["Frame"].GetInt();
+		}
+		if (pages[itr].HasMember("Highlight")) {
+			assert(pages[itr]["Highlight"].IsInt());
+			int character = pages[itr]["Highlight"].GetInt();
+			mHighlight[character][itr] = true;
 		}
 	}
 	if (configDoc.HasMember("Level")){
@@ -138,12 +153,6 @@ void Dialogue::tick(const sf::Time& deltaTime){
 	if (mAnimationTimer > 0){
 		mAnimationTimer -= deltaTime.asSeconds();
 		mAnimationTimer = std::max(mAnimationTimer, 0.0f);
-		float height = RECT_HEIGHT*((ANIMATION_TIME - mAnimationTimer) / ANIMATION_TIME);
-		sf::Vector2f size(RECT_WIDTH, height);
-		sf::Vector2f position(0, -height);
-
-		mBackground.setSize(size);
-		mBackground.setPosition(position);
 	}
 	else if(!mDrawContents){
 		mDrawContents = true;
@@ -151,11 +160,7 @@ void Dialogue::tick(const sf::Time& deltaTime){
 			mCharacterDisplayRight->setActive(true);
 		if(mCharacterDisplayLeft!= nullptr)
 			mCharacterDisplayLeft->setActive(true);
-		if (mSoundFiles[mActivePage].size() != 0)
-			mCurrentVoiceDialogue = mSoundEngine->playSound(mSoundFiles[mActivePage].c_str());
-		for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++){
-			mButtons[mActivePage].at(i)->setActive(true);
-		}
+		internalPageSwapInto(mActivePage);
 	}
 	if (mDrawContents){
 		mDialogueTexts[mActivePage].animate(deltaTime);
@@ -167,7 +172,6 @@ void Dialogue::tick(const sf::Time& deltaTime){
 
 void Dialogue::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	states.transform *= getTransform();
-	target.draw(mBackground, states);
 	if (mDrawContents){
 		target.draw(mDialogueTexts[mActivePage], states);
 		if (mHeaders[mActivePage] != nullptr){
@@ -217,65 +221,70 @@ void Dialogue::internalClear(){
 	}
 }
 
-void Dialogue::changePageButton(int value){
-	if ((size_t)(mActivePage + value)>mDialogueTexts.size() || (mActivePage + value)<0) {
-		Debug::log("Trying to go outside of dialogue page index range!", Debug::WARNING);
+void Dialogue::internalPageSwapAway(int value){
+	if ((size_t)(mActivePage + value + 1)>mDialogueTexts.size() || (mActivePage + value)<0) {
+		Debug::log("Trying to go outside of dialogue page index range!", Debug::FATAL);
 		return;
 	}
-	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++){
+	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++) {
 		mButtons[mActivePage][i]->setActive(false);
 	}
 	if (mSoundFiles[mActivePage].size() != 0)
+		//TODO: Make this use studio instead of low level api
 		mSoundEngine->stopSound(mCurrentVoiceDialogue);
-	mActivePage += value;
-	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++){
+}
+
+void Dialogue::internalPageSwapInto(int value){
+	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++) {
 		mButtons[mActivePage][i]->setActive(true);
 	}
 	if (mSoundFiles[mActivePage].size() != 0) {
+		//TODO: Make this use studio instead of low level api
 		mCurrentVoiceDialogue = mSoundEngine->playSound(mSoundFiles[mActivePage].c_str());
+	}
+	if (mCharacterDisplayLeft != nullptr) {
+		mCharacterDisplayLeft->expressEmotion(mEmotionFrame[0][mActivePage]);
+		mCharacterDisplayLeft->highlight(mHighlight[0][mActivePage]);
+	}
+	if (mCharacterDisplayRight != nullptr) {
+		mCharacterDisplayRight->expressEmotion(mEmotionFrame[1][mActivePage]);
+		mCharacterDisplayRight->highlight(mHighlight[1][mActivePage]);
 	}
 }
 
+void Dialogue::changePageButton(int value){
+	internalPageSwapAway(mActivePage);
+	mActivePage += value;
+	internalPageSwapInto(mActivePage);
+}
+
 void Dialogue::gotoPageButton(int value){
-	if ((size_t)(mActivePage + value)>mDialogueTexts.size() || (mActivePage + value)<0) {
-		Debug::log("Trying to go outside of dialogue page index range!", Debug::WARNING);
-		return;
-	}
-	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++) {
-		mButtons[mActivePage][i]->setActive(false);
-	}
-	if (mSoundFiles[mActivePage].size() != 0)
-		mSoundEngine->stopSound(mCurrentVoiceDialogue);
+	internalPageSwapAway(mActivePage);
 	mActivePage = value-1;
-	for (ButtonVector::size_type i = 0; i < mButtons[mActivePage].size(); i++) {
-		mButtons[mActivePage][i]->setActive(true);
-	}
-	if (mSoundFiles[mActivePage].size() != 0) {
-		mCurrentVoiceDialogue = mSoundEngine->playSound(mSoundFiles[mActivePage].c_str());
-	}
+	internalPageSwapInto(mActivePage);
 }
 
 void Dialogue::closeButton(){
 	mIsAlive = false;
-	mGameStateLevel->fuckOffSpider();
+	mGameStateLevel->setInDialogue(false);
 }
 
 void Dialogue::spiderButton1(){
-	//Read a json file and a png file to create extra entities
+	//Read a json file to create extra entities
 	std::string jsonFilename = FILENAME + std::to_string( mLevel) + "Spider1.json";
 	changePageButton(1);
 	mGameStateLevel->setupMission(jsonFilename);
 }
 
 void Dialogue::spiderButton2(){
-	//Read a json file and a png file to create extra entities
+	//Read a json file to create extra entities
 	std::string jsonFilename = FILENAME + std::to_string(mLevel) + "Spider2.json";
 	changePageButton(2);
 	mGameStateLevel->setupMission(jsonFilename);
 }
 
 void Dialogue::spiderButton3(){
-	//Read a json file and a png file to create extra entities
+	//Read a json file to create extra entities
 	std::string jsonFilename = FILENAME + std::to_string(mLevel) + "Spider3.json";
 	changePageButton(3);
 	mGameStateLevel->setupMission(jsonFilename);

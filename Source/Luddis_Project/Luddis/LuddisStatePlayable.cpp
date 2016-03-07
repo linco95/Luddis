@@ -27,7 +27,7 @@ static const float INVINCIBILITY_TIMER = 0.75f;
 static const float GRACEAREA = 30;
 
 #ifdef _DESIGNER_HAX_
-static const float SUPERMOVESPEED = 300;
+static const float SUPERMOVESPEED = 600;
 #endif //_DESIGNER_HAX_
 
 static const float MOVESPEED = 200;
@@ -160,13 +160,13 @@ void LuddisStatePlayable::updateMovement(const sf::Time & deltaTime) {
 
 	float moveX, moveY;
 
+	moveX = offset.x*deltaTime.asSeconds()*MOVESPEED;
+	moveY = offset.y*deltaTime.asSeconds()*MOVESPEED;
+
 #ifdef _DESIGNER_HAX_
 	moveX = offset.x*deltaTime.asSeconds()*SUPERMOVESPEED;
 	moveY = offset.y*deltaTime.asSeconds()*SUPERMOVESPEED;
 #endif // _DESIGNER_HAX_
-
-	moveX = offset.x*deltaTime.asSeconds()*MOVESPEED;
-	moveY = offset.y*deltaTime.asSeconds()*MOVESPEED;
 
 	sf::Vector2f tempPos = mPlayerPtr->getPosition();
 
@@ -221,7 +221,7 @@ void LuddisStatePlayable::updateRotation(){
 void LuddisStatePlayable::changeScale() {
 	//int dust = Inventory::getInstance().getDust();
 	//int max = Inventory::getInstance().getMaxDust();
-	float percentDust = float(Inventory::getInstance().getDust() / Inventory::getInstance().getMaxDust());
+	float percentDust = (float)(Inventory::getInstance().getDust() / Inventory::getInstance().getMaxDust());
 	if (percentDust < 20.0f && mScale != sf::Vector2f(1.0f, 1.0f)) {
 		mScale = { 1.0f , 1.0f };
 		mPlayerPtr->getAnimation()->setDefaultAnimation(ANIMATION_ALMOSTDEAD);

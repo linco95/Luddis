@@ -12,13 +12,13 @@ static const std::string LEVEL_CONFIG_PATH = "Resources/Configs/Levels/";
 static const std::string DOOR_TEXTURE = "Resources/Images/Rooms/Its_a_door_ok.png";
 static const std::string LEVEL1_TEXTURE = "Resources/Images/Rooms/Level1.png";
 
-Room::Room(GUIManager* guiManager, std::string textureFilename, EventManager* eventManager, sf::RenderWindow* window):
-mIsActive(false),
-mIsAlive(true),
-mBackground(ResourceManager::getInstance().getTexture(textureFilename)),
-mGUIManager(guiManager),
-mEventManager(eventManager),
-mWindow(window){
+Room::Room(GUIManager* guiManager, std::string textureFilename, EventManager* eventManager, sf::RenderWindow* window) :
+	mIsActive(false),
+	mIsAlive(true),
+	mBackground(ResourceManager::getInstance().getTexture(textureFilename)),
+	mGUIManager(guiManager),
+	mEventManager(eventManager),
+	mWindow(window) {
 }
 
 Room::~Room() {
@@ -28,7 +28,7 @@ Room::~Room() {
 }
 
 void Room::tick(const sf::Time& deltaTime) {
-	sf::Vector2f position = getPosition();
+
 }
 
 void Room::draw(sf::RenderTarget& target, sf::RenderStates states) const {
@@ -46,7 +46,7 @@ bool Room::isAlive() const {
 	return mIsAlive;
 }
 
-bool Room::isActive() const{
+bool Room::isActive() const {
 	return mIsActive;
 }
 
@@ -63,6 +63,8 @@ void Room::kill() {
 void Room::onClick(std::string buttonFunc) {
 	std::string levelSubstr = buttonFunc.substr(0, 5);
 	std::string roomSubstr = buttonFunc.substr(0, 4);
+
+
 	if (buttonFunc == "Shop") {
 
 	}
@@ -81,7 +83,7 @@ void Room::createButtons(int room) {
 	sf::Vector2f position(0, 0);
 	switch (room) {
 	case 1:
-		position.x = ViewUtility::getViewSize().getSize().x*0.85f; 
+		position.x = ViewUtility::getViewSize().getSize().x*0.85f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.50f;
 		addButton(DOOR_TEXTURE, "", "Level02", position, Button::ButtonType::RECTANGLE);
 

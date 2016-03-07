@@ -37,6 +37,10 @@ void TextBox::setFont(std::string fontName){
 	mText.setString(wrapText(mTextString, mBox.width, ResourceManager::getInstance().getFont(mFontName), mFontSize));
 }
 
+void TextBox::setColor(sf::Color color){
+	mText.setColor(color);
+}
+
 void TextBox::animate(const sf::Time& deltaTime){
 	if (mAnimateTime > 0){
 		mAnimateTime -= deltaTime.asSeconds();

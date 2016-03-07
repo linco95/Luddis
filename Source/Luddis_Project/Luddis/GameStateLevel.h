@@ -5,7 +5,9 @@
 #include "EventManager.h"
 #include "CollisionManager.h"
 #include "GUIManager.h"
-#include <rapidjson\document.h>
+
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <rapidjson/document.h>
 
 class EntityManager;
 class GameStatePaused;
@@ -37,7 +39,7 @@ public:
 	//attributes. Will clear out all vectors first.
 	void setupLevel(std::string levelFile);
 	//Will reset all entities and non HUD GUI elements.
-	void resetLevel();
+	void resetLevel() override;
 	void resetInventory();
 
 	void setupMission(const std::string& jsonFilename);
@@ -62,9 +64,11 @@ private:
 	Spider* mSpider;
 	Luddis* mPlayer;
 	ScoreGauge* mLuddGauge;
+	sf::RectangleShape mCinematicBox[2];
 	bool mFirstTime;
 	bool mPlayable;
 	bool mInDialogue;
+	float mDialogueFadeTimer;
 	bool mResetView;
 	std::string mCurrentLevelFile;
 	int outputTime;
