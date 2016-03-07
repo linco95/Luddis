@@ -82,6 +82,10 @@ void LuddisStatePlayable::tick(const sf::Time& deltaTime){
 	updateRotation();
 
 	changeScale();
+
+	if (Inventory::getInstance().getDust() == 0) {
+		mPlayerPtr->setPlayerState(new LuddisStateDead(mPlayerPtr));
+	}
 }
 #include <cassert>
 void LuddisStatePlayable::collide(CollidableEntity * collidable, const sf::Vector2f& moveAway) {
@@ -98,15 +102,13 @@ void LuddisStatePlayable::collide(CollidableEntity * collidable, const sf::Vecto
 		if (collidable->getCollisionCategory() == CollidableEntity::ENEMY_DAMAGE) {
 			mPlayerPtr->getAnimation()->replaceAnimation(HIT_ANIMATION);
 			mInvincibility += INVINCIBILITY_TIMER;
+			/*
 			if (Inventory::getInstance().getDust() == 0) {
 				mPlayerPtr->setPlayerState(new LuddisStateDead(mPlayerPtr));
 			}
 			Inventory::getInstance().addDust(-1);
+			*/
 		}
-		// Collision with a collectible
-		/*if (collidable->getCollisionCategory() == COLLECT){
-		// NO-OP
-		}*/
 		// Collision with a stunning entity
 		if (collidable->getCollisionCategory() == CollidableEntity::ENEMY_STUN) {
 			//Replace animation before changing state or a crash will occur.

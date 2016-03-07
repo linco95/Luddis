@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include "VectorMath.h"
 #include <cmath>
+#include "Inventory.h"
 
 static const std::string ANIMATION_SWIM = "resources/images/spritesheets/Silverfish_Swim";
 static const std::string ANIMATION_HIT = "resources/images/spritesheets/Silverfish_death";
@@ -16,6 +17,7 @@ static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
 static const int DAMAGE = 10;
 static const int LIFE = 15;
 static const sf::Vector2f FRONTVECTOR(-1, 0);
+static const float INVULNERABLE_TIMER = 1.0f;
 
 static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(55, 17));
 
@@ -30,7 +32,8 @@ mWindow(window),
 mAnimation(ANIMATION_SWIM),
 mHitbox(new sf::RectangleShape(HITBOX_SHAPE)),
 mAlignment(ENEMY_DAMAGE),
-mTarget(aTarget)
+mTarget(aTarget),
+mInvulnerable(INVULNERABLE_TIMER)
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	// Get a y-spawn position
@@ -82,6 +85,11 @@ void Silverfish::tick(const sf::Time& deltaTime){
 	else {
 		mTimeStunned -= deltaTime.asSeconds();
 	}
+
+	if (mInvulnerable >= 0) {
+		mInvulnerable -= deltaTime.asSeconds();
+	}
+
 	if (!mIsActive) return;
 }
 
@@ -147,7 +155,9 @@ void Silverfish::collide(CollidableEntity *collidable, const sf::Vector2f& moveA
 		}
 	}
 	if (collidable->getCollisionCategory() == PLAYER) {
-
+		if (mInvulnerable <= 0) {
+			Inventory::getInstance().addDust(-1);
+		}
 	}
 }
 
