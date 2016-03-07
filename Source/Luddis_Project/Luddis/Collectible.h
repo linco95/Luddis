@@ -1,17 +1,23 @@
-#ifndef INCLUDED_POWERUPITEM
-#define INCLUDED_POWERUPITEM
-
-#include <string>
+#ifndef INCLUDED_COLLECTIBLE
+#define INCLUDED_COLLECTIBLE
 
 #include "CollidableEntity.h"
-#include <SFML/Window.hpp>
-#include <SFML/Audio/Sound.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <string>
+#include "Animation.h"
 
-class PowerUpItem : public CollidableEntity {
+class Collectible : public CollidableEntity {
 public:
-	PowerUpItem(std::string textureFilename, const sf::Vector2f& position);
-	~PowerUpItem();
+
+	enum CollectibleType {
+		DUST,
+		CHIPS,
+		SPIDEREGG,
+		POWERUP
+	};
+
+	Collectible(sf::RenderWindow* window, const std::string& textureFilename, const sf::Vector2f& aPos, CollectibleType type);
+	~Collectible();
 
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -23,14 +29,17 @@ public:
 	sf::Shape* getNarrowHitbox() const override;
 	void stun(const sf::Time& deltatime) override;
 private:
-	bool mIsAlive;
-	bool mIsActive;
-	sf::Sprite mSprite;
-	sf::RenderWindow* mWindow;
 	Category getCollisionCategory() override;
 	Type getCollisionType() override;
 	void collide(CollidableEntity *collidable, const sf::Vector2f& moveAway) override;
+
+	bool mIsAlive;
+	bool mIsActive;
+	Animation mAnimation;
+	sf::Sprite mSprite;
+	sf::RenderWindow* mWindow;
 	sf::Shape* mHitbox;
+	CollectibleType mType;
 };
 
 #endif
