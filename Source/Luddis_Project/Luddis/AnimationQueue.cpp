@@ -35,6 +35,9 @@ const Animation& AnimationQueue::getCurrAnimation() const{
 }
 void AnimationQueue::replaceAnimation(const Animation& aAnim){
 	if (mIsReplaced) return;
+	overrideAnimation(aAnim);
+}
+void AnimationQueue::overrideAnimation(const Animation & aAnim) {
 	mReplacingAnim = aAnim;
 	mReplacingAnim.setOrigin(mOrigin);
 	mIsReplaced = true;

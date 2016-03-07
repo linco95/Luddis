@@ -189,7 +189,7 @@ void LuddisStatePlayable::attack(){
 	sf::Vector2f direction = VectorMath::rotateVector(FRONTVECTOR, mPlayerPtr->getRotation());
 
 	// Replace the current animation with an shooting animation and play a shooting sound
-	mPlayerPtr->getAnimation()->replaceAnimation(SHOT_ANIMATION);
+	mPlayerPtr->getAnimation()->overrideAnimation(SHOT_ANIMATION);
 	// TODO Pull out constant variable
 	SoundEngine::getInstance().playSound("Resources/Audio/Luddis_skott_16bit.wav");
 

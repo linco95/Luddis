@@ -17,6 +17,7 @@ public:
 	Animation& getCurrAnimation();
 	const Animation& getCurrAnimation() const;
 	void replaceAnimation(const Animation& aAnim);
+	void overrideAnimation(const Animation& aAnim);
 	void setDefaultAnimation(const Animation& aAnim);
 	void setOrigin(const sf::Vector2f& a_Origin);
 	AnimationQueue(const AnimationQueue&) = delete;
