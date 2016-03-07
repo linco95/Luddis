@@ -1,9 +1,9 @@
 TODO:
 
- ☐ Writing Level class
-	- Loading obstacles narrow hitbox form config
-	- Add multi-layered background (lights man, lights!)
-  -  Look at parallaxing
+ ✔ Writing Level class @done (16-03-07 12:49)
+  ✔ Loading obstacles narrow hitbox form config @done (16-03-07 12:48)
+  ✘ Add multi-layered background (lights man, lights!) @cancelled (16-03-07 12:48)
+  ✘  Look at parallaxing @cancelled (16-03-07 12:48)
 
  ☐ Don't remove dust from level if Luddis are full
  ☐ Add a way to get the amount of sprites in the sheet from the animation
@@ -14,9 +14,9 @@ TODO:
  ✔ Generally load in animations from json files instead of static variables in the code @done (16-02-23 10:42)
  ✔ Add custom mousepointer @started(16-02-24 12:49) @done (16-02-24 14:31) @lasted(1:42)
  ☐ Make the mouse cursor singelton, or make it accesible from gamemanager (Actually makes sense as we only have one mouse at a time), and add functionality for other classes to replace the cursor
- ☐ Replace the sprite of the cursor with an animation (If we're going to use that)
+ ✘ Replace the sprite of the cursor with an animation (If we're going to use that) @cancelled (16-03-07 12:49)
  
- ☐ We might need a way to replace animation, and guarantee that it replaces the animation (normally a call to replaceanimation only returns if there is already an replaced animation) in animationqueue (overrideAnimation()) Maybe prioritized?
+ ✔ We might need a way to replace animation, and guarantee that it replaces the animation (normally a call to replaceanimation only returns if there is already an replaced animation) in animationqueue (overrideAnimation()) Maybe prioritized? @done (16-03-07 12:48)
  
  ☐ Maybe make the updates with an fixed timestamp
  ☐ Replace collision enum, with a bitmap? 
@@ -26,11 +26,11 @@ TODO:
  ☐ Rewrite the handeling of collisions. The responsibilities are off now. 
  ✔ Make the silverfish swim away from luddis when they die @done (16-02-23 09:36)
  ✔ Finish collision handeling @started(16-02-22 12:45) @done (16-02-24 11:35) @lasted(1 day, 22:50)
- ☐ Implement states on the boss dishrag and luddis
+ ✔ Implement states on the boss dishrag and luddis @done (16-03-07 12:50)
   ✔ Ask if we should implement random intervals on boss stopping  @done
  ☐ Get broad hitbox from narrow hitboxs' globalbounds
- ☐ Write a simple level editor
- ☐ If the circle got more than x sides, use sat against cirkle instead
+ ✘ Write a simple level editor @started(16-03-02 09:51) @cancelled (16-03-07 12:50) @wasted(5 days, 2:59)
+ ☐ If the circle got more than x sides, use sat against circle instead
  ✔ Make sure luddis doesnt move use mouseposition when they are equal (zero vector does not give pleasant results) @done (16-02-22 09:38)
   ✔ Make sure luddis loads in the correct position (rotation) @done (16-02-23 00:38)
   ✘ Give luddis a direction vector, and use that to give him a default rotation, and maybe use it combined with prevpos, to do collision better? @cancelled (16-02-23 00:38)
@@ -44,7 +44,7 @@ TODO:
  ✔ Check that my math for checking gaps in SAT is correct / not redundant @done (16-02-22 09:38)
  ✔ Align the collision check to the actual shape @done (16-02-22 09:38)
  ✔ Make sure collision stops movement as desired @started(16-02-22 09:39) @done (16-02-24 11:34) @lasted(2 days, 1:55)
- ☐ Turn dust/chips/eggs into a single collectible with different inventory targets
+ ✔ Turn dust/chips/eggs into a single collectible with different inventory targets @done (16-03-07 12:50)
  ☐ Store the hitboxes on the stack instead of the heap?
  ✔ Implementing states in gamemanager @done (16-02-22 09:39)
  ✔ Maybe reading masks/maps by using sf::Image.getPixelPtr() @done (16-02-22 09:40)
