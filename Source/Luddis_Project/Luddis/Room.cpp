@@ -15,6 +15,7 @@ static const std::string DOOR_TEXTURE = "Resources/Images/Rooms/Its_a_door_ok.pn
 static const std::string SHOP_TEXTURE = "Resources/Images/GUI/Shop.png";
 static const std::string DIALOGUE_TEXTURE = "Resources/Images/GUI/Dialogue.png";
 static const std::string LEVEL1_TEXTURE = "Resources/Images/Rooms/Level1.png";
+static const std::string LEVEL2_TEXTURE = "Resources/Images/Rooms/Level2.png";
 
 static const std::string DIALOGUE_PATH = "Resources/Configs/Dialogue/";
 
@@ -104,6 +105,9 @@ void Room::createButtons(int room) {
 	case 2:
 		position = ViewUtility::getViewSize().getSize()*0.60f;
 		addButton(LEVEL1_TEXTURE, "", "Level01", position, Button::RECTANGLE);
+		position.x = ViewUtility::getViewSize().getSize().x*0.25f;
+		position.y = ViewUtility::getViewSize().getSize().y*0.50f;
+		addButton(LEVEL2_TEXTURE, "", "Level02", position, Button::RECTANGLE);
 		position.x = ViewUtility::getViewSize().getSize().x*0.85f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.50f;
 		addButton(DOOR_TEXTURE, "", "Room3", position, Button::RECTANGLE);

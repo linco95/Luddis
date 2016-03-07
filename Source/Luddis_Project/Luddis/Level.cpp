@@ -31,6 +31,7 @@ static const float EFFECT_INTERVAL = 0.7f,
 
 static const char* EFFECT_FILEPATH = "Resources/Images/Rag_projectile.png";
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::BACKGROUND;
+static const char* mapfilepath;
 
 Level::Level(EntityManager* entityManager) :
 mIsActive(true),
@@ -132,8 +133,10 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		assert(itr->HasMember("angle") && (*itr)["angle"].IsDouble());
 		assert(itr->HasMember("height") && (*itr)["height"].IsInt());
 		assert(itr->HasMember("width") && (*itr)["width"].IsInt());
+		assert(itr->HasMember("level") && (*itr)["level"].IsInt());
 
-			int type = (*itr)["type"].GetInt();
+		int type = (*itr)["type"].GetInt();
+		int levelNumber = (*itr)["level"].GetInt();
 		//Position
 		float x = (float)(*itr)["x"].GetInt();
 		float y = (float)(*itr)["y"].GetInt();
@@ -145,7 +148,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		float sY = (float)(*itr)["height"].GetInt();
 		sf::Vector2f size(sX, sY);
 
-			Obstacle* obstacle = new Obstacle(mWindow, Obstacle::ObstacleType(type), pos, angle, size);
+		Obstacle* obstacle = new Obstacle(mWindow, Obstacle::ObstacleType(type), pos, angle, size, levelNumber);
 		mEntityManager->addEntity(obstacle);
 		cm->addCollidable(obstacle);
 		Debug::log("Spawning obstacle at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
@@ -276,6 +279,15 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget, s
 
 	//Initialize entites from a JSON doc
 	initializeEntities(mWindow, configDoc);
+	
+	if (configDoc.HasMember("Level")) {
+		int level = configDoc["Level"].GetInt();
+		if (level == 1) mapfilepath = "Resources/Configs/Levels/Level1Gatherables.png";
+		else if (level == 2) mapfilepath = "Resources/Configs/Levels/Level2Gatherables.png";
+	}
+
+	// Initialize eggs, chips and ludd from a map
+	readInitMap(mapfilepath);
 
 	mPointsOfNoReturn.push_back(mWindow->getSize().x / 2 + 1000.f);
 	mCurrentPONR = mWindow->getView().getSize().x / 2;
