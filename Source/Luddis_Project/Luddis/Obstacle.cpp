@@ -5,12 +5,15 @@
 const Entity::RenderLayer LAYER = Entity::RenderLayer::OBSTACLES;
 const int DAMAGE = 0;
 //static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
-static const float IDLE_TIME = 4;
+static const float IDLE_TIME = 1;
 static const float DAMAGE_TIME = 2;
+static const float EMPTY_TIME = 3;
 
 static const Animation ANIMATION1_IDLE = Animation("Resources/Images/Spritesheets/Steam_idle");
+static const Animation ANIMATION1_EMPTY = Animation("Resources/Images/Spritesheets/Steam_empty");
 static const Animation ANIMATION1_DAMAGE = Animation("Resources/Images/Spritesheets/Steam_active");
 static const Animation ANIMATION2_IDLE = Animation("Resources/Images/Spritesheets/Lightning_idle");
+static const Animation ANIMATION2_EMPTY = Animation("Resources/Images/Spritesheets/Lightning_empty");
 static const Animation ANIMATION2_DAMAGE = Animation("Resources/Images/Spritesheets/Lightning_active");
 
 Obstacle::Obstacle(sf::RenderWindow* window, ObstacleType type, const sf::Vector2f& position, const float& angle, const sf::Vector2f& size, int level) :
@@ -24,8 +27,10 @@ Obstacle::Obstacle(sf::RenderWindow* window, ObstacleType type, const sf::Vector
 	mIdleHitbox(new sf::RectangleShape(sf::Vector2f(53, 35))),
 	mActiveHitbox(new sf::RectangleShape(sf::Vector2f(150, 300))),
 	mIsDamaging(false),
+	mIsEmpty(false),
 	mDamageTime(DAMAGE_TIME),
 	mIdleTime(IDLE_TIME),
+	mEmptyTime(EMPTY_TIME),
 	mAnimation(ANIMATION1_IDLE),
 mAngle(angle)
 {
@@ -66,26 +71,43 @@ void Obstacle::tick(const sf::Time& deltaTime){
 	if (mType == DAMAGE){
 		if (mTimeStunned <= 0) {
 			float toMove = (float)mActiveHitbox->getLocalBounds().height;
+		
 			// Active obstacle (damaging)
 			if (mIsDamaging == true) {
 				mDamageTime -= float(deltaTime.asSeconds());
 				if (mDamageTime <= 0) {
 					mIsDamaging = false;
+					mIsEmpty = true;
 					mDamageTime = DAMAGE_TIME;
+
 					// Move to start idle animation
 					float temp = toMove - (float)mIdleHitbox->getLocalBounds().height;
 					sf::Vector2f moving = -(temp / 2.0f) * VectorMath::getNormal(sf::Vector2f(cos(mAngle), sin(mAngle)));
 					move(moving);
 					mHitbox = mIdleHitbox;
+
 					if (mLevel == 1)
-					mAnimation.setDefaultAnimation(ANIMATION1_IDLE);
+					mAnimation.setDefaultAnimation(ANIMATION1_EMPTY);
 					else if (mLevel == 2)
-					mAnimation.setDefaultAnimation(ANIMATION2_IDLE);
+					mAnimation.setDefaultAnimation(ANIMATION2_EMPTY);
 				}
 			}
 			// Inactive
 			else if (mIsDamaging == false) {
-				mIdleTime -= float(deltaTime.asSeconds());
+				if (mIsEmpty == true) {
+					mEmptyTime -= float(deltaTime.asSeconds());
+					if (mEmptyTime <= 0) {
+						mIsEmpty = false;
+						mEmptyTime = EMPTY_TIME;
+
+						if (mLevel == 1)
+							mAnimation.setDefaultAnimation(ANIMATION1_IDLE);
+						else if (mLevel == 2)
+							mAnimation.setDefaultAnimation(ANIMATION2_IDLE);
+					}
+				}
+				else if (mIsEmpty == false){
+					mIdleTime -= float(deltaTime.asSeconds());
 				if (mIdleTime <= 0) {
 					mIsDamaging = true;
 					mIdleTime = IDLE_TIME;
@@ -94,10 +116,12 @@ void Obstacle::tick(const sf::Time& deltaTime){
 					sf::Vector2f moving = (temp / 2.0f) * VectorMath::getNormal(sf::Vector2f(cos(mAngle), sin(mAngle)));
 					move(moving);
 					mHitbox = mActiveHitbox;
+
 					if (mLevel == 1)
 						mAnimation.setDefaultAnimation(ANIMATION1_DAMAGE);
 					else if (mLevel == 2)
 						mAnimation.setDefaultAnimation(ANIMATION2_DAMAGE);
+					}
 				}
 			}
 			mAnimation.tick(deltaTime);
