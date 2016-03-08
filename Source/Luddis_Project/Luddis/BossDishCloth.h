@@ -41,6 +41,7 @@ private:
 	int mLife;
 	sf::Shape* mHitbox;
 	float mTimeStunned;
+	float mInvulnerable;
 };
 
 #endif // !_INCLUDED_BOSSDISHCLOTH

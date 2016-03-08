@@ -5,6 +5,7 @@
 #include "VectorMath.h"
 #include <SFML\Graphics\Shape.hpp>
 #include "ResourceManager.h"
+#include "Inventory.h"
 
 //Different states depending on how damaged the boss is.
 //State 1
@@ -41,8 +42,7 @@ void loadResources(){
 	ResourceManager::getInstance().loadTexture(SHOOTING_ANIMATION_4 + ".png");
 }
 
-BossDishCloth::BossDishCloth(sf::RenderWindow* window, const sf::Vector2f& position,
-	const float& activation, Transformable* aTarget, EntityManager* entityManager) :
+BossDishCloth::BossDishCloth(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget, EntityManager* entityManager) :
 mIsAlive(true),
 mIsActive(false),
 mWindow(window),
@@ -59,7 +59,6 @@ mTarget(aTarget)
 	loadResources();
 	setPosition(position);
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
-
 }
 
 BossDishCloth::~BossDishCloth(){
@@ -82,11 +81,13 @@ void BossDishCloth::tick(const sf::Time& deltaTime){
 	else {
 		mTimeStunned -= deltaTime.asSeconds();
 	}
+
+	if (mInvulnerable >= 0) {
+		mInvulnerable -= deltaTime.asSeconds();
+	}
+
 	if (!mIsActive) return;
 	if (mLife <= 0) {
-		/*PowerUpItem* pow1 = new PowerUpItem(POWERUP1_FILEPATH, getPosition());
-		mEntityManager->addEntity(pow1);
-		CollisionManager::getInstance().addCollidable(pow1);*/
 		mIsAlive = false;
 	}
 }
@@ -241,6 +242,11 @@ void BossDishCloth::collide(CollidableEntity* collidable, const sf::Vector2f& mo
 				mAnimation.replaceAnimation(SHOOTING_ANIMATION);
 				mAnimation.getCurrAnimation().setFrame(frame);
 			}
+		}
+	}
+	if (collidable->getCollisionCategory() == PLAYER_OBJECT) {
+		if (mInvulnerable <= 0) {
+			Inventory::getInstance().addDust(-1);
 		}
 	}
 }

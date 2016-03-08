@@ -4,9 +4,9 @@
 
 Inventory::Inventory():
 mChips(0),
-mDust(2),
+mDust(10),
 mEggs(0),
-mMaxDust(15)
+mMaxDust(50)
 {
 	
 }

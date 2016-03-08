@@ -3,6 +3,7 @@
 
 #include "CollidableEntity.h"
 #include "EntityManager.h"
+#include "AnimationQueue.h"
 
 class BossRobot : public CollidableEntity {
 public:
@@ -22,7 +23,22 @@ public:
 	sf::Shape* getNarrowHitbox() const override;
 	void stun(const sf::Time& deltatime) override;
 private:
+	void updateMovement(const sf::Time& deltaTime);
+	void attack();
 
+	AnimationQueue mAnimation;
+	EntityManager* mEntityManager;
+	sf::RenderWindow* mWindow;
+	sf::Transformable* mTarget;
+	const float mActivate;
+	bool mIsAlive;
+	bool mIsActive;
+	float mAttackInterval;
+	sf::Vector2f mDirection;
+	int mLife;
+	sf::Shape* mHitbox;
+	float mTimeStunned;
+	float mInvulnerable;
 };
 
 #endif // !INCLUDED_BOSSROBOT
