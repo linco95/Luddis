@@ -11,7 +11,7 @@
 #include <SFML/Graphics/Rect.hpp>
 
 static const std::string LEVEL_CONFIG_PATH = "Resources/Configs/Levels/";
-static const std::string DOOR_TEXTURE = "Resources/Images/Rooms/Its_a_door_ok.png";
+static const std::string DOOR_TEXTURE = "Resources/Images/Rooms/Doorknob.png";
 static const std::string SHOP_TEXTURE = "Resources/Images/GUI/Shop.png";
 static const std::string SOCKSHOP_TEXTURE = "Resources/Images/Rooms/Shop.png";
 static const std::string DIALOGUE_TEXTURE = "Resources/Images/GUI/Dialogue.png";
@@ -113,12 +113,9 @@ void Room::createButtons(int room) {
 		position.x = ViewUtility::getViewSize().getSize().x*0.665f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.585f;
 		addButton(LEVEL2_TEXTURE, "", "Level02", position, Button::RECTANGLE);
-		/*position.x = ViewUtility::getViewSize().getSize().x*0.85f;
-		position.y = ViewUtility::getViewSize().getSize().y*0.50f;
+		position.x = ViewUtility::getViewSize().getSize().x*0.93f;
+		position.y = ViewUtility::getViewSize().getSize().y*0.445f;
 		addButton(DOOR_TEXTURE, "", "Room3", position, Button::RECTANGLE);
-		position.x = ViewUtility::getViewSize().getSize().y*0.150f;
-		addButton(DOOR_TEXTURE, "", "Room1", position, Button::RECTANGLE);
-		mLevelButtons.back()->setScale(-1.0f, 1.0f);*/
 		break;
 
 	case 3:
