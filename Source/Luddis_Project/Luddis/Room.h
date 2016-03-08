@@ -6,19 +6,21 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/View.hpp>
 
+class GameState;
 class GUIManager;
 class EventManager;
+class Filter;
 
 class Room : public InterfaceElement{
 public:
 	typedef std::vector<Button*> ButtonVector;
 
-	Room(GUIManager* guiManager, std::string textureFilename, EventManager* eventManager, sf::RenderWindow* window);
+	Room(GUIManager* guiManager, std::string textureFilename, EventManager* eventManager, sf::RenderWindow* window, GameState* gameState);
 	~Room();
 
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-	RenderLayer getRenderLayer() const override;
+	Strata getRenderLayer() const override;
 	bool isAlive() const override;
 	bool isActive() const override;
 	void setActive(const bool& active) override;
@@ -31,17 +33,16 @@ public:
 
 private:
 	void buttonFuncShop();
+	void buttonFuncDialogue();
 	void buttonFuncLevel(std::string);
 	void buttonFuncRoom(int room);
 
-	typedef void(Room::*FadeEffect)(std::string);
-	FadeEffect mFadeEffect;
 	sf::Sprite mBackground;
 	sf::RenderWindow* mWindow;
+	GameState* mGameState;
 	ButtonVector mLevelButtons;
 	GUIManager* mGUIManager;
 	EventManager* mEventManager;
-	std::string mButtonFunc;
 
 	bool mIsActive;
 	bool mIsAlive;

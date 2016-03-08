@@ -99,8 +99,8 @@ void CharacterPortrait::draw(sf::RenderTarget& target, sf::RenderStates states) 
 	}
 }
 
-CharacterPortrait::RenderLayer CharacterPortrait::getRenderLayer() const {
-	return FOREGROUND;
+CharacterPortrait::Strata CharacterPortrait::getRenderLayer() const {
+	return FOURTH;
 }
 
 bool CharacterPortrait::isActive() const {

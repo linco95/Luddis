@@ -100,6 +100,7 @@
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Dialogue.cpp" />
     <ClCompile Include="EventZone.cpp" />
+    <ClCompile Include="Filter.cpp" />
     <ClCompile Include="GameStateLevel.cpp" />
     <ClCompile Include="GameStateMap.cpp" />
     <ClCompile Include="GameStatePaused.cpp" />
@@ -131,6 +132,7 @@
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="ScoreGauge.cpp" />
+    <ClCompile Include="Shop.cpp" />
     <ClCompile Include="Silverfish.cpp" />
     <ClCompile Include="SockNPC.cpp" />
     <ClCompile Include="SoundCue.cpp" />
@@ -159,6 +161,7 @@
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Dialogue.h" />
     <ClInclude Include="EventZone.h" />
+    <ClInclude Include="Filter.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameStateLevel.h" />
     <ClInclude Include="GameStateMap.h" />
@@ -191,6 +194,7 @@
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="ScoreGauge.h" />
+    <ClInclude Include="Shop.h" />
     <ClInclude Include="Silverfish.h" />
     <ClInclude Include="SockNPC.h" />
     <ClInclude Include="SoundCue.h" />

@@ -24,8 +24,8 @@ void SockNPC::tick(const sf::Time & deltaTime){
 	mAnimation.tick(deltaTime);
 }
 
-SockNPC::RenderLayer SockNPC::getRenderLayer() const{
-	return RenderLayer::FOREGROUND;
+SockNPC::Strata SockNPC::getRenderLayer() const{
+	return Strata::FOURTH;
 }
 
 bool SockNPC::isAlive() const{

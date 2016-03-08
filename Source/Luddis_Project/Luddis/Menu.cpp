@@ -120,8 +120,8 @@ void Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	target.draw(*mBackground, states);
 }
 
-Menu::RenderLayer Menu::getRenderLayer() const{
-	return BACKGROUND;
+Menu::Strata Menu::getRenderLayer() const{
+	return FIFTH;
 }
 
 bool Menu::isAlive() const{

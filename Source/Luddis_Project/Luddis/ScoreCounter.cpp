@@ -52,8 +52,8 @@ void ScoreCounter::setActive(const bool& active){
 	mIsActive = active;
 }
 
-ScoreCounter::RenderLayer ScoreCounter::getRenderLayer() const{
-	return FOREGROUND;
+ScoreCounter::Strata ScoreCounter::getRenderLayer() const{
+	return FOURTH;
 }
 
 void ScoreCounter::setScore(int score){

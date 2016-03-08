@@ -21,13 +21,13 @@ public:
 	static GameStateMap& getInstance();
 
 	void initialize(sf::RenderWindow* window);
-	void createMenu(Menu::MenuType menuType);
 	void changeRoom(int room);
 
 	void update(sf::Clock& clock) override;
 	void render() override;
 	void onEvent(const sf::Event &aEvent) override;
 	void handleEvents() override;
+	void handleClicks(std::string command)override;
 
 private:
 	GameStateMap();
@@ -35,10 +35,8 @@ private:
 	typedef std::vector<Room*> RoomVector;
 	RoomVector mRooms;
 	int mCurrentRoom;
-	int mRoomToBe;
-	float mFadeTimer;
-	bool mFade;
-	sf::RectangleShape mFadeEffect;
+	bool mOccupied;
+	int mCurrentDialogueID;
 	GameStatePaused* mGameStatePaused;
 	Menu* mMenu;
 	EntityManager mEntityM;

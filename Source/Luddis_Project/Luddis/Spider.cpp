@@ -95,8 +95,8 @@ void Spider::setActive(const bool& active){
 	mIsActive = active;
 }
 
-Spider::RenderLayer Spider::getRenderLayer() const{
-	return FOREGROUND;
+Spider::Strata Spider::getRenderLayer() const{
+	return FOURTH;
 }
 
 void Spider::turn(){

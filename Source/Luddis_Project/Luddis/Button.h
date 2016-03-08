@@ -24,14 +24,15 @@ public:
 	//have three horizontal frames of equal size.
 	//The first will be the default, the second the mouseover
 	//and the third the click frame
-	Button(std::string graphicFilename, std::string buttonText, std::string buttonFunc, sf::RenderWindow* window, EventManager* eventManager, sf::Vector2f pos, InterfaceElement* owner, ButtonType buttonType);
+	Button(std::string graphicFilename, std::string buttonText, std::string buttonFunc, sf::RenderWindow* window, EventManager* eventManager, sf::Vector2f pos, InterfaceElement* owner, ButtonType buttonType, Strata strata = FIRST);
 	virtual ~Button();
 
 	void onEvent(const sf::Event &aEvent)override;
 
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-	RenderLayer getRenderLayer() const override;
+	Strata getRenderLayer() const override;
+	void setStrata(Strata strata);
 	bool isAlive() const override;
 	bool isActive() const override;
 	void setActive(const bool& active) override;
@@ -48,6 +49,7 @@ private:
 	sf::Text mButtonText;
 	std::string mButtonFunc;
 	ButtonType mButtonType;
+	Strata mStrata;
 
 #ifdef LUDDIS_DEBUG_DRAW_HITBOXES
 	sf::CircleShape mDebugCircle;

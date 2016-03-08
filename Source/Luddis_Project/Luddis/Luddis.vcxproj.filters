@@ -169,6 +169,10 @@
     <ClCompile Include="SockNPC.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="Filter.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Shop.cpp" />
     <ClCompile Include="BossRobot.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
@@ -348,8 +352,14 @@
     <ClInclude Include="SockNPC.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="Filter.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
     <ClInclude Include="BossRobot.h">
       <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Shop.h">
+      <Filter>Source Files\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -28,6 +28,8 @@ static const char* TEXTURE_LUDDGAUGE_BAR = "Resources/Images/GUI/LuddGaugeBar.pn
 static const char* LOADINGBAR_FRAME = "Resources/Images/GUI/Loadingbar_Frame.png";
 static const char* LOADINGBAR_BAR = "Resources/Images/GUI/Loadingbar_Bar.png";
 
+static const std::string FILENAME = "Resources/Configs/Levels/Level";
+
 static const float DIALOGUEMAXFADE = 0.8f;
 static const float CINEMATICBOXMAXHEIGHT = 225;
 
@@ -39,6 +41,7 @@ mGUIView(ViewUtility::getViewSize()),
 mInDialogue(false),
 mDialogueFadeTimer(0.0f),
 mFirstTime(true),
+mCurrentLevel(1),
 mResetView(false){
 	mEventM.attatch(this, sf::Event::EventType::KeyPressed);
 	readSetupFiles(COMMON_RESOURCES);
@@ -184,9 +187,28 @@ void GameStateLevel::handleEvents(){
 	}
 }
 
+void GameStateLevel::handleClicks(std::string command){
+	if (command == "DialogueDelete") {
+		mInDialogue = false;
+		fuckOffSpider();
+	}
+	else if (command == "Spider1") {
+		std::string jsonFilename = FILENAME + std::to_string(mCurrentLevel) + "Spider1.json";
+		setupMission(jsonFilename);
+	}
+	else if (command == "Spider2") {
+		std::string jsonFilename = FILENAME + std::to_string(mCurrentLevel) + "Spider2.json";
+		setupMission(jsonFilename);
+	}
+	else if (command == "Spider3") {
+		std::string jsonFilename = FILENAME + std::to_string(mCurrentLevel) + "Spider3.json";
+		setupMission(jsonFilename);
+	}
+}
+
 void GameStateLevel::createDialogue(std::string dialogueFilename){
 	sf::Vector2f pos(0.0f, (float)ViewUtility::VIEW_HEIGHT);
-	Dialogue* dialogue = new Dialogue(dialogueFilename, mWindow, &mResettableGUI, &mEventM, pos);
+	Dialogue* dialogue = new Dialogue(dialogueFilename, mWindow, &mResettableGUI, &mEventM, pos, this);
 	mResettableGUI.addInterfaceElement(dialogue);
 	if (dialogueFilename.find("SpiderDialogue") != std::string::npos){
 		mSpider = new Spider(mWindow, sf::Vector2f((float)ViewUtility::VIEW_WIDTH*0.6f, 0));
@@ -272,6 +294,7 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	}
 
 	mCurrentLevelFile = levelFile;
+	mCurrentLevel = levelFile.at(33);
 	mPlayable = true;
 }
 

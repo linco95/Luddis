@@ -29,6 +29,7 @@ public:
 	void render() override;
 	void onEvent(const sf::Event &aEvent) override;
 	void handleEvents() override;
+	void handleClicks(std::string command)override;
 
 	//Function to create a dialogue on the level.
 	void createDialogue(std::string dialogueFile);
@@ -71,6 +72,7 @@ private:
 	float mDialogueFadeTimer;
 	bool mResetView;
 	std::string mCurrentLevelFile;
+	int mCurrentLevel;
 	int outputTime;
 	float timePassed;
 	PowerupDisplay* mPowerupDisplays[2];

@@ -16,7 +16,7 @@ public:
 	bool isAlive() const override;
 	bool isActive() const  override;
 	void setActive(const bool& active) override;
-	RenderLayer getRenderLayer() const override;
+	Strata getRenderLayer() const override;
 
 	void activateCooldown();
 	float getCooldown() const;
