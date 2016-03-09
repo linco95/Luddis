@@ -8,9 +8,12 @@
 #include <cmath>
 #include "Inventory.h"
 
-static const std::string ANIMATION_SWIM = "resources/images/spritesheets/Silverfish_Swim";
-static const std::string ANIMATION_HIT = "resources/images/spritesheets/Silverfish_death";
-static const std::string ANIMATION_DEAD = "resources/images/spritesheets/Silverfish_dead";
+static const std::string ANIMATION1_SWIM = "resources/images/spritesheets/Silverfish_Swim";
+static const std::string ANIMATION1_HIT = "resources/images/spritesheets/Silverfish_death";
+static const std::string ANIMATION1_DEAD = "resources/images/spritesheets/Silverfish_dead";
+static const std::string ANIMATION2_SWIM = "resources/images/spritesheets/Goldfish_Swim";
+static const std::string ANIMATION2_HIT = "resources/images/spritesheets/Goldfish_death";
+static const std::string ANIMATION2_DEAD = "resources/images/spritesheets/Goldfish_dead";
 
 static float SPEED = 80;
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
@@ -21,7 +24,7 @@ static const float INVULNERABLE_TIMER = 1.0f;
 
 static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(55, 17));
 
-Silverfish::Silverfish(sf::RenderWindow* window, const sf::Vector2f& position, const float& angle, const float& activation, Transformable* aTarget) :
+Silverfish::Silverfish(sf::RenderWindow* window, FishType type, const sf::Vector2f& position, const float& angle, const float& activation, Transformable* aTarget) :
 mIsAlive(true),
 mIsActive(false),
 mSwimAway(false),
@@ -29,7 +32,8 @@ mBefriend(false),
 mLife(LIFE),
 mActivate(activation),
 mWindow(window),
-mAnimation(ANIMATION_SWIM),
+mType(type),
+mAnimation(ANIMATION1_SWIM),
 mHitbox(new sf::RectangleShape(HITBOX_SHAPE)),
 mAlignment(ENEMY_DAMAGE),
 mTarget(aTarget),
@@ -51,6 +55,10 @@ mInvulnerable(INVULNERABLE_TIMER)
 
 	if (mDirection.x > 0){
 		scale(sf::Vector2f(1, -1));
+	}
+
+	if (mType == GOLD) {
+		mAnimation.setDefaultAnimation(ANIMATION2_SWIM);
 	}
 
 	mHitbox->setScale(getScale());
@@ -145,8 +153,15 @@ void Silverfish::collide(CollidableEntity *collidable, const sf::Vector2f& moveA
 		if (mSwimAway== false){
 		mLife -= 5;
 		if (mLife <= 0){
-			mAnimation.replaceAnimation(ANIMATION_HIT);
-			mAnimation.setDefaultAnimation(ANIMATION_DEAD);
+			if (mType == GOLD) {
+				mAnimation.replaceAnimation(ANIMATION2_HIT);
+				mAnimation.setDefaultAnimation(ANIMATION2_DEAD);
+			}
+
+			else if (mType == SILVER){
+				mAnimation.replaceAnimation(ANIMATION1_HIT);
+				mAnimation.setDefaultAnimation(ANIMATION1_DEAD);
+			}
 			mSwimAway = true;
 			mNextDir = VectorMath::normalizeVector(getPosition() - collidable->getPosition());
 			mBefriend = true;

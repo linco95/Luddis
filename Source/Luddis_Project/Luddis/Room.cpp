@@ -107,22 +107,15 @@ void Room::createButtons(int room) {
 		position.x = ViewUtility::getViewSize().getSize().x*0.22f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.62f;
 		addButton(SOCKSHOP_TEXTURE, "", "Room1", position, Button::RECTANGLE);
-		position.x = ViewUtility::getViewSize().getSize().x*0.45f;
-		position.y = ViewUtility::getViewSize().getSize().y*0.645f;
+		position.x = ViewUtility::getViewSize().getSize().x*0.513f;
+		position.y = ViewUtility::getViewSize().getSize().y*0.643f;
 		addButton(LEVEL1_TEXTURE, "", "Level01", position, Button::RECTANGLE);
-		position.x = ViewUtility::getViewSize().getSize().x*0.665f;
+		position.x = ViewUtility::getViewSize().getSize().x*0.755f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.585f;
 		addButton(LEVEL2_TEXTURE, "", "Level02", position, Button::RECTANGLE);
 		position.x = ViewUtility::getViewSize().getSize().x*0.93f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.445f;
-		addButton(DOOR_TEXTURE, "", "Room3", position, Button::RECTANGLE);
-		break;
-
-	case 3:
-		position.x = ViewUtility::getViewSize().getSize().x*0.15f;
-		position.y = ViewUtility::getViewSize().getSize().y*0.50f;
-		addButton(DOOR_TEXTURE, "", "Room2", position, Button::RECTANGLE);
-		mLevelButtons.back()->setScale(-1.0f, 1.0f);
+		addButton(DOOR_TEXTURE, "", "Level03", position, Button::RECTANGLE);
 		break;
 
 	default:
