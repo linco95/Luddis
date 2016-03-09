@@ -13,9 +13,10 @@
 
 static const std::string LEVEL_CONFIG_PATH = "Resources/Configs/Levels/";
 static const std::string DOOR_TEXTURE = "Resources/Images/Rooms/Doorknob.png";
-static const std::string SHOP_TEXTURE = "Resources/Images/GUI/Shop.png";
+static const std::string SHOP_TEXTURE = "Resources/Images/GUI/Button.png";
 static const std::string SOCKSHOP_TEXTURE = "Resources/Images/Rooms/Shop.png";
-static const std::string DIALOGUE_TEXTURE = "Resources/Images/GUI/Dialogue.png";
+static const std::string DIALOGUE_TEXTURE = "Resources/Images/GUI/Button.png";
+static const std::string OVERLAY_TEXTURE = "Resources/Images/Rooms/sockshop_overlay.png";
 static const std::string LEVEL1_TEXTURE = "Resources/Images/Rooms/Level1.png";
 static const std::string LEVEL2_TEXTURE = "Resources/Images/Rooms/Level2.png";
 
@@ -118,8 +119,9 @@ void Room::createButtons(int room) {
 		position.x = ViewUtility::getViewSize().getSize().x*0.85f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.50f;
 		addButton(DOOR_TEXTURE, "", "Room3", position, Button::RECTANGLE);
-		position.x = ViewUtility::getViewSize().getSize().y*0.15f;
-		addButton(DOOR_TEXTURE, "", "Room1", position, Button::RECTANGLE);
+		position.x = ViewUtility::getViewSize().getSize().x*0.755f;
+		position.y = ViewUtility::getViewSize().getSize().y*0.585f;
+		addButton(LEVEL2_TEXTURE, "", "Level02", position, Button::RECTANGLE);
 		mLevelButtons.back()->setScale(-1.0f, 1.0f);
 		break;
 

@@ -63,14 +63,14 @@ Shop::~Shop() {
 void Shop::initialize() {
 	sf::Vector2f position = mBackground.getPosition();
 	float offset = (float)mBackground.getTextureRect().width;
-	position.x += offset / 2;
-	Button* button = new Button(BUTTON_DIRECTION, "", "Page1", mWindow, mEventManager, position, this, Button::RECTANGLE);
+	position.x -= offset / 2;
+	Button* button = new Button(BUTTON_DIRECTION, "", "Page-1", mWindow, mEventManager, position, this, Button::RECTANGLE);
 	button->setActive(true);
 	button->setScale(-1, 1);
 	mGUIManager->addInterfaceElement(button);
 	mButtons.push_back(button);
-	position.x -= offset;
-	button = new Button(BUTTON_DIRECTION, "", "Page-1", mWindow, mEventManager, position, this, Button::RECTANGLE);
+	position.x += offset;
+	button = new Button(BUTTON_DIRECTION, "", "Page1", mWindow, mEventManager, position, this, Button::RECTANGLE);
 	button->setActive(true);
 	mGUIManager->addInterfaceElement(button);
 	mButtons.push_back(button);
