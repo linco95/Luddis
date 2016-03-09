@@ -103,11 +103,11 @@ std::pair<float, float> getProjection(const sf::Shape& shape, const sf::Vector2f
 #include <iostream>
 // Narrow collision phase, using the "Separating Axis Theorem"
 
-void CollisionManager::narrowCollision(std::stack<std::pair<CollidableEntity*, CollidableEntity*>>& colliding) {
+void CollisionManager::narrowCollision(std::pair<CollidableEntity*, CollidableEntity*>& colliding) {
 	//Do some culling of collision categories to reduce unneccessary calculations.
 	//Ugly as fuck...
-	CollidableEntity::Category catFirst = colliding.top().first->getCollisionCategory();
-	CollidableEntity::Category catSecond = colliding.top().second->getCollisionCategory();
+	CollidableEntity::Category catFirst = colliding.first->getCollisionCategory();
+	CollidableEntity::Category catSecond = colliding.second->getCollisionCategory();
 	if (
 		//If eighter the first or the second is IGNORE, proceed without checking for collisions.
 		catFirst == CollidableEntity::IGNORE || catSecond == CollidableEntity::IGNORE ||
@@ -143,7 +143,7 @@ void CollisionManager::narrowCollision(std::stack<std::pair<CollidableEntity*, C
 	*/
 
 	// Get the top pair of the stack
-	auto pair = colliding.top();
+	auto pair = colliding;
 	bool isColliding = true;
 	// Get each CollidableEntities hitbox
 	auto hitboxPair = std::make_pair(pair.first->getNarrowHitbox(), pair.second->getNarrowHitbox());
@@ -284,7 +284,7 @@ void CollisionManager::detectCollisions() {
 		}
 	}
 	while (!colliding.empty()) {
-		narrowCollision(colliding);
+		narrowCollision(colliding.top());
 		colliding.pop();
 	}
 }

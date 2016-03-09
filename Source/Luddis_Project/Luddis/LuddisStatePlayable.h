@@ -36,7 +36,6 @@ private:
 	sf::Vector2f mScale;
 
 	float mProjectileCooldown;
-	float mInvincibility;
 	bool mIsFlipped;
 	
 	bool mMoved;

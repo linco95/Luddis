@@ -22,7 +22,7 @@ static const std::string ANIMATION_FILEPATH = "Resources/Images/Spritesheets/Lud
 static const sf::Vector2f FRONTVECTOR(1, 0);
 
 static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
-static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(35, 8);
+static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(35, 4);
 
 //TEMP
 static Animation STASISANIMATION("Resources/Images/Spritesheets/Stasis_ring");
@@ -117,7 +117,6 @@ sf::FloatRect Luddis::getHitBox(){
 
 sf::Shape* Luddis::getNarrowHitbox() const{
 	mHitbox->setPosition(getPosition());
-	mHitbox->setRotation(getRotation());
 	mHitbox->setScale(getScale());
 	return mHitbox;
 }

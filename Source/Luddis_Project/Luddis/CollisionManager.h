@@ -20,7 +20,7 @@ public:
 	void detectCollisions();
 	void removeDeadCollidables();
 	void emptyVector();
-	void narrowCollision(std::stack<std::pair<CollidableEntity*, CollidableEntity*>>& colliding);
+	void narrowCollision(std::pair<CollidableEntity*, CollidableEntity*>& colliding);
 
 #ifdef LUDDIS_DEBUG_DRAW_HITBOXES
 	std::vector<sf::CircleShape> mDebugPoints;

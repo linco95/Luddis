@@ -8,12 +8,13 @@
 #include "Dialogue.h"
 #include "Filter.h"
 #include "Debug.h"
+#include "SoundEngine.h"
 #include <SFML/Graphics/Rect.hpp>
 
 static const std::string LEVEL_CONFIG_PATH = "Resources/Configs/Levels/";
 static const std::string DOOR_TEXTURE = "Resources/Images/Rooms/Its_a_door_ok.png";
-static const std::string SHOP_TEXTURE = "Resources/Images/GUI/Shop.png";
-static const std::string DIALOGUE_TEXTURE = "Resources/Images/GUI/Dialogue.png";
+static const std::string SHOP_TEXTURE = "Resources/Images/GUI/Button.png";
+static const std::string OVERLAY_TEXTURE = "Resources/Images/Rooms/sockshop_overlay.png";
 static const std::string LEVEL1_TEXTURE = "Resources/Images/Rooms/Level1.png";
 
 static const std::string DIALOGUE_PATH = "Resources/Configs/Dialogue/";
@@ -98,7 +99,11 @@ void Room::createButtons(int room) {
 		position.x = ViewUtility::getViewSize().getSize().x*0.60f;
 		addButton(SHOP_TEXTURE, "", "Shop", position, Button::ButtonType::RECTANGLE);
 		position.x = ViewUtility::getViewSize().getSize().x*0.40f;
-		addButton(DIALOGUE_TEXTURE, "", "Dialogue", position, Button::ButtonType::RECTANGLE);
+		addButton(SHOP_TEXTURE, "", "Dialogue", position, Button::ButtonType::RECTANGLE);
+
+		position = ViewUtility::getViewSize().getCenter();
+		addButton(OVERLAY_TEXTURE, "", "Do nothing, capishe?", position, Button::ButtonType::RECTANGLE);
+		mLevelButtons.back()->setStrata(THIRD);
 		break;
 
 	case 2:
@@ -107,7 +112,7 @@ void Room::createButtons(int room) {
 		position.x = ViewUtility::getViewSize().getSize().x*0.85f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.50f;
 		addButton(DOOR_TEXTURE, "", "Room3", position, Button::RECTANGLE);
-		position.x = ViewUtility::getViewSize().getSize().y*0.150f;
+		position.x = ViewUtility::getViewSize().getSize().y*0.15f;
 		addButton(DOOR_TEXTURE, "", "Room1", position, Button::RECTANGLE);
 		mLevelButtons.back()->setScale(-1.0f, 1.0f);
 		break;
@@ -144,6 +149,8 @@ void Room::buttonFuncDialogue() {
 void Room::buttonFuncLevel(std::string level) {
 	std::string filename = LEVEL_CONFIG_PATH + "Level" + level + "Entities.json";
 	GameStateLevel::getInstance().setupLevel(filename);
+	SoundEngine::getInstance().stopEvent("event:/Music/Sockshop", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
+
 	GameManager::getInstance().setGameState(&GameStateLevel::getInstance());
 }
 

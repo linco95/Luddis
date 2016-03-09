@@ -23,14 +23,13 @@ public:
 
 	void initialize(sf::RenderWindow* window, EntityManager* entityManager, GUIManager* guiManager);
 	void setBackgroundParameters(EntityManager* entityManager, GUIManager* guiManager, GameState* gameState);
-	void createMenu(Menu::MenuType menuType);
+	void createMenu(Menu::MenuType menuType, GameState* lastGameState);
 
 	void update(sf::Clock& clock) override;
 	void render() override;
 	void onEvent(const sf::Event &aEvent) override;
 	void handleEvents() override;
 	void handleClicks(std::string command)override;
-
 
 private:
 	GameStatePaused();

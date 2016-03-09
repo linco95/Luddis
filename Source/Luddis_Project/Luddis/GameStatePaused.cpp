@@ -35,7 +35,7 @@ void GameStatePaused::setBackgroundParameters(EntityManager * entityManager, GUI
 	mLastGameState = gameState;
 }
 
-void GameStatePaused::createMenu(Menu::MenuType menuType) {
+void GameStatePaused::createMenu(Menu::MenuType menuType, GameState* lastGameState) {
 
 	if (mMenu != nullptr)
 		mMenu->kill();
@@ -43,7 +43,7 @@ void GameStatePaused::createMenu(Menu::MenuType menuType) {
 	mMenu = new Menu(mWindow, &mEventM, &mMenuGUIM, menuType);
 	mMenuGUIM.addInterfaceElement(mMenu);
 	mMenu->setActive(true);
-	mMenu->initialize(this);
+	mMenu->initialize(lastGameState);
 
 }
 
@@ -80,6 +80,7 @@ void GameStatePaused::onEvent(const sf::Event &aEvent) {
 		switch (aEvent.type) {
 		case sf::Event::EventType::KeyPressed:
 			if (aEvent.key.code == sf::Keyboard::Escape) {
+				mMenu->kill();
 				GameManager::getInstance().setGameState(mLastGameState);
 			}
 			break;

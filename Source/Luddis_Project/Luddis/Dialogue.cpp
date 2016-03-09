@@ -38,11 +38,15 @@ mActivePage(initialPage),
 mDialogueTexts(){
 	setPosition(pos);
 	initialize(dialogueFile);
+	static const char* parameter = "PauseMenu";
+	SoundEngine::getInstance().setEventParameter("event:/Music/Levels/Lvl2", parameter, 1.0f);
 }
 
 Dialogue::~Dialogue(){
 	internalClear();
-	mGameState->handleClicks("DialogueDelete");
+	static const char* parameter = "PauseMenu";
+	SoundEngine::getInstance().setEventParameter("event:/Music/Levels/Lvl2", parameter, 0.0f);
+	mGameState->handleClicks("DeleteDialogue");
 	mSoundEngine->stopSound(mCurrentVoiceDialogue);
 }
 
