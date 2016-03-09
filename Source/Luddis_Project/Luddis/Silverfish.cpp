@@ -73,6 +73,7 @@ Silverfish::~Silverfish(){
 }
 
 void Silverfish::tick(const sf::Time& deltaTime){
+	
 	if (mTarget->getPosition().x >= mActivate) {
 		mIsActive = true;
 	}
@@ -81,6 +82,7 @@ void Silverfish::tick(const sf::Time& deltaTime){
 			mAlignment = IGNORE;
 			mBefriend = false;
 		}
+		if (!mIsActive) return;
 		updateMovement(deltaTime);
 		mAnimation.tick(deltaTime);
 		// TODO: Cleanup, enable fishes to be outside while spawning
@@ -99,7 +101,6 @@ void Silverfish::tick(const sf::Time& deltaTime){
 		mInvulnerable -= deltaTime.asSeconds();
 	}
 
-	if (!mIsActive) return;
 }
 
 void Silverfish::updateMovement(const sf::Time& deltaTime){
