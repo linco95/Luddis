@@ -221,22 +221,23 @@ void LuddisStatePlayable::updateRotation(){
 void LuddisStatePlayable::changeScale() {
 	//int dust = Inventory::getInstance().getDust();
 	//int max = Inventory::getInstance().getMaxDust();
-	float percentDust = float((Inventory::getInstance().getDust() / Inventory::getInstance().getMaxDust()) * 100);
-	if (percentDust < 19.9f && mScale != sf::Vector2f(1.0f, 1.0f)) {
+	float percentDust = float((float(Inventory::getInstance().getDust()) / float(Inventory::getInstance().getMaxDust())) * 100);
+	Debug::log("Dust%" + std::to_string(percentDust));
+	if (percentDust < 19 && mScale != sf::Vector2f(1.0f, 1.0f)) {
 		mScale = { 1.0f , 1.0f };
 		mPlayerPtr->getAnimation()->setDefaultAnimation(ANIMATION_ALMOSTDEAD);
 	}
-	else if (percentDust < 40.0f && percentDust > 19.9f && mScale != sf::Vector2f(1.10f, 1.10f)) {
+	else if (percentDust < 39 && percentDust > 18 && mScale != sf::Vector2f(1.10f, 1.10f)) {
 		mScale = { 1.1f , 1.1f };
 		mPlayerPtr->getAnimation()->setDefaultAnimation(ANIMATION_FILEPATH);
 	}
-	else if (percentDust < 60.0f && percentDust > 39.9f && mScale != sf::Vector2f(1.20f, 1.20f)) {
+	else if (percentDust < 59 && percentDust > 38 && mScale != sf::Vector2f(1.20f, 1.20f)) {
 		mScale = { 1.2f , 1.2f };
 	}
-	else if (percentDust < 80.0f && percentDust > 59.9f && mScale != sf::Vector2f(1.30f, 1.30f)) {
+	else if (percentDust < 79 && percentDust > 58 && mScale != sf::Vector2f(1.30f, 1.30f)) {
 		mScale = { 1.3f , 1.3f };
 	}
-	else if (percentDust > 70.0f && mScale != sf::Vector2f(1.4f, 1.4f)) {
+	else if (percentDust > 89 && mScale != sf::Vector2f(1.4f, 1.4f)) {
 		mScale = { 1.4f , 1.4f };
 	}
 	if (mIsFlipped == false)
