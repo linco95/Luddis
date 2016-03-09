@@ -201,7 +201,7 @@ void LuddisStatePlayable::changeScale() {
 	//int dust = Inventory::getInstance().getDust();
 	//int max = Inventory::getInstance().getMaxDust();
 	float percentDust = float((float(Inventory::getInstance().getDust()) / float(Inventory::getInstance().getMaxDust())) * 100);
-	Debug::log("Dust%" + std::to_string(percentDust));
+	//Debug::log("Dust%" + std::to_string(percentDust));
 	if (percentDust < 19 && mScale != sf::Vector2f(1.0f, 1.0f)) {
 		mScale = { 1.0f , 1.0f };
 		mPlayerPtr->getAnimation()->setDefaultAnimation(ANIMATION_ALMOSTDEAD);

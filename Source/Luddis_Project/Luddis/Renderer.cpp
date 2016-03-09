@@ -2,7 +2,7 @@
 #include <map>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Drawable.hpp>
-
+#include "Debug.h"
 
 Renderer::Renderer() { }
 
@@ -29,7 +29,6 @@ void Renderer::render(sf::RenderWindow & a_Window) {
 	a_Window.clear(sf::Color::Black);
 	for (auto itr : m_Drawables) {
 		for (auto d : itr.second)
-			if (d != 0)
 				a_Window.draw(*d);
 	}
 	a_Window.display();
