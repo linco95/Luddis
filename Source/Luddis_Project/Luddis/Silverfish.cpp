@@ -13,7 +13,7 @@ static const std::string ANIMATION_HIT = "resources/images/spritesheets/Silverfi
 static const std::string ANIMATION_DEAD = "resources/images/spritesheets/Silverfish_dead";
 
 static float SPEED = 80;
-static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
+static const Renderer::RenderLayer LAYER = Renderer::PLAYER;
 static const int DAMAGE = 10;
 static const int LIFE = 15;
 static const sf::Vector2f FRONTVECTOR(-1, 0);
@@ -128,7 +128,7 @@ void Silverfish::setActive(const bool& active){
 	mIsActive = active;
 }
 
-Entity::RenderLayer Silverfish::getRenderLayer() const{
+Renderer::RenderLayer Silverfish::getRenderLayer() const{
 	return LAYER;
 }
 
@@ -154,7 +154,7 @@ void Silverfish::collide(CollidableEntity *collidable, const sf::Vector2f& moveA
 			}
 		}
 	}
-	if (collidable->getCollisionCategory() == PLAYER) {
+	if (collidable->getCollisionCategory() == Renderer::PLAYER) {
 		if (mInvulnerable <= 0) {
 			Inventory::getInstance().addDust(-1);
 		}

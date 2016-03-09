@@ -5,7 +5,7 @@
 #include "Debug.h"
 #include <cassert>
 
-static const Entity::RenderLayer LAYER = Entity::RenderLayer::ITEM;
+static const Renderer::RenderLayer LAYER = Renderer::ITEM;
 static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 static const float ROTATIONSPEED = 1.f;
 static const float FADINGFACTOR = 0.2f; /// < Fade the factor towards this value according to its lifetime
@@ -106,7 +106,7 @@ void Projectile::checkLifeTime(){
 	}
 }
 
-Entity::RenderLayer Projectile::getRenderLayer() const{
+Renderer::RenderLayer Projectile::getRenderLayer() const{
 	return LAYER;
 }
 

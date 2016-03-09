@@ -21,7 +21,7 @@ static const std::string ANIMATION_FILEPATH = "Resources/Images/Spritesheets/Lud
 
 static const sf::Vector2f FRONTVECTOR(1, 0);
 
-static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
+static const Renderer::RenderLayer LAYER = Renderer::RenderLayer::PLAYER;
 static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(35, 8);
 
 //TEMP
@@ -122,7 +122,7 @@ sf::Shape* Luddis::getNarrowHitbox() const{
 	return mHitbox;
 }
 
-Entity::RenderLayer Luddis::getRenderLayer() const {
+Renderer::RenderLayer Luddis::getRenderLayer() const {
 	return LAYER;
 }
 

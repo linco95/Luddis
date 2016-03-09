@@ -109,8 +109,8 @@ void BossDishCloth::setActive(const bool& active){
 	mIsActive = active;
 }
 
-BossDishCloth::RenderLayer BossDishCloth::getRenderLayer() const {
-	return PLAYER;
+Renderer::RenderLayer BossDishCloth::getRenderLayer() const {
+	return Renderer::PLAYER;
 }
 
 void BossDishCloth::updateMovement(const sf::Time& deltaTime){

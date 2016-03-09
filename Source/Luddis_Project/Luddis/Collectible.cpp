@@ -3,7 +3,7 @@
 #include "Inventory.h"
 #include "SoundEngine.h"
 
-static const Entity::RenderLayer LAYER = Entity::RenderLayer::ITEM;
+static const Renderer::RenderLayer LAYER = Renderer::ITEM;
 static const sf::CircleShape HITBOX_EGG_SHAPE = sf::CircleShape(10, 8);
 static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 
@@ -69,7 +69,7 @@ void Collectible::setActive(const bool& active) {
 	mIsActive = active;
 }
 
-Entity::RenderLayer Collectible::getRenderLayer() const {
+Renderer::RenderLayer Collectible::getRenderLayer() const {
 	return LAYER;
 }
 

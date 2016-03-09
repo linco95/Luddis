@@ -3,7 +3,7 @@
 #include "ResourceManager.h"
 #include <cmath>
 
-static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
+static const Renderer::RenderLayer LAYER = Renderer::RenderLayer::PLAYER;
 static const float ROTATIONSPEED = 0.5f;
 static const float FADINGFACTOR = 0.5f;
 
@@ -74,7 +74,7 @@ void BackgroundEffect::checkLifeTime() {
 	}
 }
 
-Entity::RenderLayer BackgroundEffect::getRenderLayer() const {
+Renderer::RenderLayer BackgroundEffect::getRenderLayer() const {
 	return LAYER;
 }
 

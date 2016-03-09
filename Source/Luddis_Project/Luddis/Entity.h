@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/Graphics/Drawable.hpp>
-
+#include "Renderer.h"
 
 // Forwarddeclaration
 namespace sf{
@@ -12,14 +12,14 @@ namespace sf{
 
 class Entity : public sf::Transformable, public sf::Drawable {
 public:	
-	enum RenderLayer{
-		BACKGROUND,
-		OBSTACLES,
-		ITEM,
-		PLAYER,
-		FOREGROUND,
-		MOUSE
-	};
+	//enum RenderLayer{
+	//	BACKGROUND,
+	//	OBSTACLES,
+	//	ITEM,
+	//	PLAYER,
+	//	FOREGROUND,
+	//	MOUSE
+	//};
 
 	Entity();
 	virtual ~Entity();
@@ -31,7 +31,7 @@ public:
 	// Check if an entity is alive
 	virtual bool isAlive() const = 0;
 	// Determines in what order entities are drawn
-	virtual RenderLayer getRenderLayer() const = 0;
+	virtual Renderer::RenderLayer getRenderLayer() const = 0;
 	// Check if an entity is active
 	virtual bool isActive() const = 0;
 	// Set an entities "active" state
