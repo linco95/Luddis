@@ -172,6 +172,9 @@
     <ClCompile Include="Filter.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="BossRobot.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
     <ClCompile Include="Mannequin.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
@@ -357,6 +360,9 @@
     </ClInclude>
     <ClInclude Include="Filter.h">
       <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="BossRobot.h">
+      <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="Mannequin.h">
       <Filter>Header Files\GUI</Filter>

@@ -89,6 +89,7 @@
     <ClCompile Include="AnimationQueue.cpp" />
     <ClCompile Include="BackgroundEffect.cpp" />
     <ClCompile Include="BossDishCloth.cpp" />
+    <ClCompile Include="BossRobot.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CharacterPortrait.cpp" />
     <ClCompile Include="CinematicMoveToPoint.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="AnimationQueue.h" />
     <ClInclude Include="BackgroundEffect.h" />
     <ClInclude Include="BossDishCloth.h" />
+    <ClInclude Include="BossRobot.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="CharacterPortrait.h" />
     <ClInclude Include="CinematicMoveToPoint.h" />

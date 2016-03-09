@@ -12,10 +12,12 @@
 #include <SFML/Graphics/Rect.hpp>
 
 static const std::string LEVEL_CONFIG_PATH = "Resources/Configs/Levels/";
-static const std::string DOOR_TEXTURE = "Resources/Images/Rooms/Its_a_door_ok.png";
-static const std::string SHOP_TEXTURE = "Resources/Images/GUI/Button.png";
-static const std::string OVERLAY_TEXTURE = "Resources/Images/Rooms/sockshop_overlay.png";
+static const std::string DOOR_TEXTURE = "Resources/Images/Rooms/Doorknob.png";
+static const std::string SHOP_TEXTURE = "Resources/Images/GUI/Shop.png";
+static const std::string SOCKSHOP_TEXTURE = "Resources/Images/Rooms/Shop.png";
+static const std::string DIALOGUE_TEXTURE = "Resources/Images/GUI/Dialogue.png";
 static const std::string LEVEL1_TEXTURE = "Resources/Images/Rooms/Level1.png";
+static const std::string LEVEL2_TEXTURE = "Resources/Images/Rooms/Level2.png";
 
 static const std::string DIALOGUE_PATH = "Resources/Configs/Dialogue/";
 
@@ -107,7 +109,11 @@ void Room::createButtons(int room) {
 		break;
 
 	case 2:
-		position = ViewUtility::getViewSize().getSize()*0.60f;
+		position.x = ViewUtility::getViewSize().getSize().x*0.22f;
+		position.y = ViewUtility::getViewSize().getSize().y*0.62f;
+		addButton(SOCKSHOP_TEXTURE, "", "Room1", position, Button::RECTANGLE);
+		position.x = ViewUtility::getViewSize().getSize().x*0.513f;
+		position.y = ViewUtility::getViewSize().getSize().y*0.643f;
 		addButton(LEVEL1_TEXTURE, "", "Level01", position, Button::RECTANGLE);
 		position.x = ViewUtility::getViewSize().getSize().x*0.85f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.50f;
@@ -122,6 +128,12 @@ void Room::createButtons(int room) {
 		position.y = ViewUtility::getViewSize().getSize().y*0.50f;
 		addButton(DOOR_TEXTURE, "", "Room2", position, Button::RECTANGLE);
 		mLevelButtons.back()->setScale(-1.0f, 1.0f);
+		position.x = ViewUtility::getViewSize().getSize().x*0.755f;
+		position.y = ViewUtility::getViewSize().getSize().y*0.585f;
+		addButton(LEVEL2_TEXTURE, "", "Level02", position, Button::RECTANGLE);
+		position.x = ViewUtility::getViewSize().getSize().x*0.93f;
+		position.y = ViewUtility::getViewSize().getSize().y*0.445f;
+		addButton(DOOR_TEXTURE, "", "Level03", position, Button::RECTANGLE);
 		break;
 
 	default:
