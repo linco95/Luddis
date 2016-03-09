@@ -10,6 +10,7 @@ class GameState;
 class GUIManager;
 class EventManager;
 class Filter;
+class Overlay;
 
 class Room : public InterfaceElement{
 public:
@@ -38,6 +39,7 @@ private:
 	void buttonFuncRoom(int room);
 
 	sf::Sprite mBackground;
+	Overlay* mOverlay;
 	sf::RenderWindow* mWindow;
 	GameState* mGameState;
 	ButtonVector mLevelButtons;

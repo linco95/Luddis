@@ -6,7 +6,7 @@
 
 class Overlay : public InterfaceElement{
 public:
-	Overlay(const char* filename);
+	Overlay(const char* filename, Strata strata);
 	~Overlay();
 
 	virtual void draw(sf::RenderTarget & target, sf::RenderStates states) const override;
@@ -19,6 +19,7 @@ public:
 	void kill();
 private:
 	sf::Sprite mSprite;
+	Strata mStrata;
 
 	bool mIsAlive;
 	bool mIsActive;

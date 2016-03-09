@@ -14,7 +14,7 @@ class Mannequin;
 class SockNPC;
 class GameStatePaused;
 
-class GameStateMap: public GameState{
+class GameStateMap : public GameState {
 public:
 	GameStateMap(GameStateMap&) = delete;
 	GameStateMap& operator=(GameStateMap&) = delete;

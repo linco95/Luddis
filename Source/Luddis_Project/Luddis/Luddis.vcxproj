@@ -105,6 +105,7 @@
     <ClCompile Include="GameStateLevel.cpp" />
     <ClCompile Include="GameStateMap.cpp" />
     <ClCompile Include="GameStatePaused.cpp" />
+    <ClCompile Include="GameStateStart.cpp" />
     <ClCompile Include="LuddisStateCinematic.cpp" />
     <ClCompile Include="LuddisStateDead.cpp" />
     <ClCompile Include="LuddisStatePlayable.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="GameStateLevel.h" />
     <ClInclude Include="GameStateMap.h" />
     <ClInclude Include="GameStatePaused.h" />
+    <ClInclude Include="GameStateStart.h" />
     <ClInclude Include="LuddisState.h" />
     <ClInclude Include="LuddisStateCinematic.h" />
     <ClInclude Include="LuddisStateDead.h" />

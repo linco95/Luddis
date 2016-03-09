@@ -12,7 +12,7 @@
 
 const char* BACKGROUND_TEXTURE = "Resources/Images/GUI/ShopBackground.png";
 const char* BUTTON_DIRECTION = "Resources/Images/GUI/DirectionButton.png";
-const char* BUTTON_EXIT = "Resources/Images/GUI/ExitButton.png";
+const char* BUTTON_EXIT = "Resources/Images/Rooms/ButtonSockShopDone.png";
 
 const char* FONT_NAME = "Resources/Fonts/trebuc.ttf";
 
@@ -171,7 +171,7 @@ void Shop::onClick(std::string command) {
 
 void Shop::buttonFuncSwitchPage(int page) {
 	//Outside
-	if ((mActivePage + page) > mMaxPage || (mActivePage + page) < 0)
+	if ((mActivePage + page) >= mMaxPage || (mActivePage + page) < 0)
 		return;
 
 	for (auto i : mItems[mActivePage])

@@ -11,6 +11,9 @@
 
 static const std::string MENUBUTTON_TEXTURE = "Resources/Images/GUI/MenuButton.png";
 static const std::string MENUBUTTON_TEXTURE_SETTINGS = "Resources/Images/GUI/ButtonSettings.png";
+static const std::string STARTMENUBUTTON_PLAY = "Resources/Images/GUI/StartmenuPlay.png";
+static const std::string STARTMENUBUTTON_SETTINGS = "Resources/Images/GUI/StartmenuSettings.png";
+static const std::string STARTMENUBUTTON_QUIT = "Resources/Images/GUI/StartmenuQuit.png";
 static const std::string MENUBUTTON_TEXTURE_RETURN = "Resources/Images/GUI/ButtonReturn.png";
 static const std::string MENUBUTTON_TEXTURE_QUITGAME = "Resources/Images/GUI/ButtonQuitGame.png";
 static const std::string MENUBUTTON_TEXTURE_EXITLEVEL = "Resources/Images/GUI/ButtonExitLevel.png";
@@ -18,32 +21,32 @@ static const std::string MENUBUTTON_TEXTURE_DERP = "Resources/Images/GUI/derp.pn
 static const std::string MENU_BACKGROUND_TEXTURE = "Resources/Images/GUI/Filter.png";
 
 Menu::Menu(sf::RenderWindow* window, EventManager* eventManager, GUIManager* gUIManager, MenuType menuType) :
-mBackground(new sf::RectangleShape()),
-mIsActive(false),
-mIsAlive(true),
-mMenuType(menuType),
-mWindow(window),
-mEventManager(eventManager),
-mGUIManager(gUIManager){
+	mBackground(new sf::RectangleShape()),
+	mIsActive(false),
+	mIsAlive(true),
+	mMenuType(menuType),
+	mWindow(window),
+	mEventManager(eventManager),
+	mGUIManager(gUIManager) {
 
-	SoundEngine::getInstance().setEventParameter("event:/Menu/Button/Button_Change", "Menu", 1.0f);
-	SoundEngine::getInstance().setEventParameter("event:/Music/Levels/Lvl2", "PauseMenu", 0.0f);
+	//SoundEngine::getInstance().setEventParameter("event:/Menu/Button/Button_Change", "Menu", 1.0f);
+	//SoundEngine::getInstance().setEventParameter("event:/Music/Levels/Lvl2", "PauseMenu", 0.0f);
 }
 
-Menu::~Menu(){
-	SoundEngine::getInstance().setEventParameter("event:/Menu/Button/Button_Change", "Menu", 0.0f);
-	SoundEngine::getInstance().setEventParameter("event:/Music/Levels/Lvl2", "PauseMenu", 1.0f);
+Menu::~Menu() {
+	//SoundEngine::getInstance().setEventParameter("event:/Menu/Button/Button_Change", "Menu", 0.0f);
+	//SoundEngine::getInstance().setEventParameter("event:/Music/Levels/Lvl2", "PauseMenu", 1.0f);
 	internalClear();
 }
 
-void Menu::internalClear(){
-	for (auto e : mButtons){
+void Menu::internalClear() {
+	for (auto e : mButtons) {
 		e->kill();
 	}
 	delete mBackground;
 }
 
-void Menu::initialize(GameState* gameState){
+void Menu::initialize(GameState* gameState) {
 	mGameState = gameState;
 	sf::Vector2f vector(mWindow->getView().getSize());
 	vector = vector*(2.0f / 3.0f);
@@ -52,30 +55,29 @@ void Menu::initialize(GameState* gameState){
 	mBackground->setTexture(&ResourceManager::getInstance().getTexture(MENU_BACKGROUND_TEXTURE));
 	mBackground->setOutlineThickness(0.0f);
 	mBackground->setFillColor(sf::Color(255, 255, 255, 255));
-	sf::Vector2f vector2 = mWindow->getView().getSize()*(0.5f);
+	sf::Vector2f vector2 = mWindow->getView().getCenter();
 	setPosition(vector2);
 	initializeButtons();
 }
 
-void Menu::initializeButtons(){
-	int maxButtons = 4;
+void Menu::initializeButtons() {
 	sf::Vector2f position(getPosition());
 	sf::Vector2f offset(0, 0);
 	switch (mMenuType)
 	{
 	case Menu::MAINMENU:
-		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
-		addButton(MENUBUTTON_TEXTURE, "Stara Nytt Spel", "NewGame", position+offset, Button::ButtonType::RECTANGLE);
-		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
-		addButton(MENUBUTTON_TEXTURE, "Ladda Spel", "LoadGame", position + offset, Button::ButtonType::RECTANGLE);
-		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
-		addButton(MENUBUTTON_TEXTURE_SETTINGS, "", "Settings", position + offset, Button::ButtonType::CIRCLE);
-		offset = VectorMath::rotateVector(offset, (float)(360 / maxButtons));
-		addButton(MENUBUTTON_TEXTURE_QUITGAME, "", "Quit", position + offset, Button::ButtonType::CIRCLE);
+		offset = { -300, -400 };
+		addButton(STARTMENUBUTTON_PLAY, "", "NewGame", position + offset, Button::ButtonType::RECTANGLE);
+		//offset = { -450, 0 };
+		//addButton(MENUBUTTON_TEXTURE, "Ladda Spel", "LoadGame", position + offset, Button::ButtonType::RECTANGLE);
+		offset = { -300, -150 };
+		addButton(STARTMENUBUTTON_SETTINGS, "", "Settings", position + offset, Button::ButtonType::RECTANGLE);
+		offset = { -300, 100 };
+		addButton(STARTMENUBUTTON_QUIT, "", "QuitGame", position + offset, Button::ButtonType::RECTANGLE);
 		break;
 
 	case Menu::PAUSEMENU:
-		offset = {-450, 0};
+		offset = { -450, 0 };
 		addButton(MENUBUTTON_TEXTURE_QUITGAME, "", "QuitGame", position + offset, Button::ButtonType::CIRCLE);
 		offset = { -150, 50 };
 		addButton(MENUBUTTON_TEXTURE_DERP, "", "ResetLevel", position + offset, Button::ButtonType::CIRCLE);
@@ -97,70 +99,70 @@ void Menu::initializeButtons(){
 		break;
 
 	case Menu::DEATHMENU:
-		offset = { -200,-150 };
-		addButton(MENUBUTTON_TEXTURE_RETURN, "", "Continue", position + offset, Button::ButtonType::CIRCLE);
+		//offset = { -200,-150 };
+		//addButton(MENUBUTTON_TEXTURE_RETURN, "", "Continue", position + offset, Button::ButtonType::CIRCLE);
 		offset = { 200,-150 };
 		addButton(MENUBUTTON_TEXTURE, "Starta Om Nivå", "ResetLevel", position + offset, Button::ButtonType::CIRCLE);
-		offset = { -200,150 };
+		offset = { -200, 150 };
 		addButton(MENUBUTTON_TEXTURE_EXITLEVEL, "", "ExitLevel", position + offset, Button::ButtonType::CIRCLE);
-		offset = { -200,150 };
+		offset = { 200, 150 };
 		addButton(MENUBUTTON_TEXTURE_QUITGAME, "", "QuitGame", position + offset, Button::ButtonType::CIRCLE);
 		break;
 	}
 }
 
-void Menu::addButton(std::string buttonFile, std::string buttonText, std::string buttonFunc, sf::Vector2f pos, Button::ButtonType buttonType){
+void Menu::addButton(std::string buttonFile, std::string buttonText, std::string buttonFunc, sf::Vector2f pos, Button::ButtonType buttonType) {
 	Button* button = new Button(buttonFile, buttonText, buttonFunc, mWindow, mEventManager, pos, this, buttonType);
 	button->setActive(true);
 	mButtons.push_back(button);
 	mGUIManager->addInterfaceElement(button);
 }
 
-void Menu::tick(const sf::Time& deltaTime){
-	
+void Menu::tick(const sf::Time& deltaTime) {
+
 }
 
-void Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const{
+void Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	states.transform *= getTransform();
 	target.draw(*mBackground, states);
 }
 
-Menu::Strata Menu::getRenderLayer() const{
+Menu::Strata Menu::getRenderLayer() const {
 	return FIFTH;
 }
 
-bool Menu::isAlive() const{
+bool Menu::isAlive() const {
 	return mIsAlive;
 }
 
-bool Menu::isActive() const{
+bool Menu::isActive() const {
 	return mIsActive;
 }
 
-void Menu::setActive(const bool& active){
+void Menu::setActive(const bool& active) {
 	mIsActive = active;
 }
 
-void Menu::onClick(std::string buttonFunc){
-	if (buttonFunc == "NewGame"){
-		buttonFuncNewGame();
+void Menu::onClick(std::string buttonFunc) {
+	if (buttonFunc == "NewGame") {
+		mGameState->handleClicks(buttonFunc);
 	}
-	else if (buttonFunc == "LoadGame"){
+	else if (buttonFunc == "LoadGame") {
 		buttonFuncLoadGame();
 	}
-	else if (buttonFunc == "Continue"){
+	else if (buttonFunc == "Continue") {
 		buttonFuncContinue();
 	}
-	else if (buttonFunc == "ExitLevel"){
+	else if (buttonFunc == "ExitLevel") {
 		buttonFuncExitLevel();
 	}
-	else if (buttonFunc == "Settings"){
+	else if (buttonFunc == "Settings") {
 		buttonFuncSettings();
 	}
-	else if (buttonFunc == "QuitGame"){
+	else if (buttonFunc == "QuitGame") {
 		buttonFuncQuitGame();
 	}
-	else if (buttonFunc == "ResetLevel"){
+	else if (buttonFunc == "ResetLevel") {
 		buttonFuncResetLevel();
 	}
 }
@@ -173,39 +175,38 @@ void Menu::kill() {
 	mIsAlive = false;
 }
 
-void Menu::buttonFuncNewGame(){
+void Menu::buttonFuncNewGame() {
+	
+}
+
+void Menu::buttonFuncLoadGame() {
 
 }
 
-void Menu::buttonFuncLoadGame(){
-
-}
-
-void Menu::buttonFuncContinue(){
+void Menu::buttonFuncContinue() {
 	GameManager::getInstance().setGameState(mGameState);
 	mIsAlive = false;
 }
 
-void Menu::buttonFuncExitLevel(){
+void Menu::buttonFuncExitLevel() {
 	GameStateLevel::getInstance().resetInventory();
 	GameManager::getInstance().setGameState(&GameStateMap::getInstance());
 	SoundEngine* se = &SoundEngine::getInstance();
 	se->stopEvent("event:/Music/Levels/Lvl2", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_ALLOWFADEOUT);
-	se->stopEvent("event:/Menu/Button/Button_Change",FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_ALLOWFADEOUT);
 	se->playEvent("event:/Music/Sockshop");
 	mIsAlive = false;
 }
 
-void Menu::buttonFuncSettings(){
+void Menu::buttonFuncSettings() {
 	//TODO: Implement functionality
 }
 
-void Menu::buttonFuncQuitGame(){
+void Menu::buttonFuncQuitGame() {
 	mWindow->close();
 	mIsAlive = false;
 }
 
-void Menu::buttonFuncResetLevel(){
+void Menu::buttonFuncResetLevel() {
 	mGameState->resetLevel();
 	GameManager::getInstance().setGameState(mGameState);
 }
