@@ -2,6 +2,8 @@
 #include "SoundEngine.h"
 #include "Silverfish.h"
 #include "BossDishCloth.h"
+#include "BossRobot.h"
+#include "BossRobotButton.h"
 #include "BackgroundEffect.h"
 #include "Luddis.h"
 #include "EventZone.h"
@@ -180,9 +182,24 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		mEntityManager->addEntity(boss);
 		cm->addCollidable(boss);
 		Debug::log("Spawning boss at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
+		}
 	}
-	}
-
+	
+	/*
+	Debug::log("Rob begin");
+	//Robot test
+	BossRobotButton* robotButton = new BossRobotButton(mWindow, sf::Vector2f(500, 500), 0, mTarget);
+	mEntityManager->addEntity(robotButton);
+	cm->addCollidable(robotButton);
+	Debug::log("Rob mid");
+	
+	BossRobot* robot = new BossRobot(mWindow, sf::Vector2f(200, 200), 0, mTarget, robotButton);
+	mEntityManager->addEntity(robot);
+	cm->addCollidable(robot);
+	
+	Debug::log("Rob end");
+	*/
+	
 	//Event zones
 	if (configDoc.HasMember("EventZone_rect_spawns")) {
 		const rapidjson::Value& eventZoneRectSpawns = configDoc["EventZone_rect_spawns"];
