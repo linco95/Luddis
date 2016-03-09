@@ -117,7 +117,6 @@ sf::FloatRect Luddis::getHitBox(){
 
 sf::Shape* Luddis::getNarrowHitbox() const{
 	mHitbox->setPosition(getPosition());
-	mHitbox->setRotation(getRotation());
 	mHitbox->setScale(getScale());
 	return mHitbox;
 }

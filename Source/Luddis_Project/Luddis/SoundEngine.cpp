@@ -4,8 +4,8 @@
 #include <cassert>
 
 SoundEngine::SoundEngine() :
-	mMainVolume(100), mSoundVolume(100), mMusicVolume(100),
-	mStudioSystem(NULL), mLowLvlSystem(NULL),
+mMainVolume(100), mSoundVolume(100), mMusicVolume(100),
+mStudioSystem(NULL), mLowLvlSystem(NULL),
 	mSounds(), mChannel(NULL) {
 
 	initialize();
@@ -134,10 +134,10 @@ FMOD_RESULT SoundEngine::setEventParameter(const char* path, const char* paramet
 	FMOD_RESULT result;
 	//See if it can be found in the sound map,
 	//otherwise assume that its in the music map.
-	if (mSoundEventInstances.find(path) != mSoundEventInstances.end())
-		result = mSoundEventInstances[path]->setParameterValue(parameter, value);
-	else
+	if (mMusicEventInstances.find(path) != mMusicEventInstances.end())
 		result = mMusicEventInstances[path]->setParameterValue(parameter, value);
+	else
+		result = mSoundEventInstances[path]->setParameterValue(parameter, value);
 	return result;
 }
 

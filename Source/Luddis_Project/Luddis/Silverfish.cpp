@@ -4,13 +4,17 @@
 #include "EntityManager.h"
 #include <SFML/System.hpp>
 #include <stdlib.h>
+#include "SoundEngine.h"
 #include "VectorMath.h"
 #include <cmath>
 #include "Inventory.h"
 
-static const std::string ANIMATION_SWIM = "resources/images/spritesheets/Silverfish_Swim";
-static const std::string ANIMATION_HIT = "resources/images/spritesheets/Silverfish_death";
-static const std::string ANIMATION_DEAD = "resources/images/spritesheets/Silverfish_dead";
+static const std::string ANIMATION1_SWIM = "resources/images/spritesheets/Silverfish_Swim";
+static const std::string ANIMATION1_HIT = "resources/images/spritesheets/Silverfish_death";
+static const std::string ANIMATION1_DEAD = "resources/images/spritesheets/Silverfish_dead";
+static const std::string ANIMATION2_SWIM = "resources/images/spritesheets/Goldfish_Swim";
+static const std::string ANIMATION2_HIT = "resources/images/spritesheets/Goldfish_death";
+static const std::string ANIMATION2_DEAD = "resources/images/spritesheets/Goldfish_dead";
 
 static float SPEED = 80;
 static const Renderer::RenderLayer LAYER = Renderer::PLAYER;
@@ -21,7 +25,7 @@ static const float INVULNERABLE_TIMER = 1.0f;
 
 static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(55, 17));
 
-Silverfish::Silverfish(sf::RenderWindow* window, const sf::Vector2f& position, const float& angle, const float& activation, Transformable* aTarget) :
+Silverfish::Silverfish(sf::RenderWindow* window, FishType type, const sf::Vector2f& position, const float& angle, const float& activation, Transformable* aTarget) :
 mIsAlive(true),
 mIsActive(false),
 mSwimAway(false),
@@ -29,11 +33,12 @@ mBefriend(false),
 mLife(LIFE),
 mActivate(activation),
 mWindow(window),
-mAnimation(ANIMATION_SWIM),
+mType(type),
+mAnimation(ANIMATION1_SWIM),
 mHitbox(new sf::RectangleShape(HITBOX_SHAPE)),
 mAlignment(ENEMY_DAMAGE),
 mTarget(aTarget),
-mInvulnerable(INVULNERABLE_TIMER)
+mInvulnerable(0)
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	// Get a y-spawn position
@@ -53,6 +58,10 @@ mInvulnerable(INVULNERABLE_TIMER)
 		scale(sf::Vector2f(1, -1));
 	}
 
+	if (mType == GOLD) {
+		mAnimation.setDefaultAnimation(ANIMATION2_SWIM);
+	}
+
 	mHitbox->setScale(getScale());
 	mHitbox->setRotation(getRotation());
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
@@ -64,6 +73,7 @@ Silverfish::~Silverfish(){
 }
 
 void Silverfish::tick(const sf::Time& deltaTime){
+	
 	if (mTarget->getPosition().x >= mActivate) {
 		mIsActive = true;
 	}
@@ -72,6 +82,7 @@ void Silverfish::tick(const sf::Time& deltaTime){
 			mAlignment = IGNORE;
 			mBefriend = false;
 		}
+		if (!mIsActive) return;
 		updateMovement(deltaTime);
 		mAnimation.tick(deltaTime);
 		// TODO: Cleanup, enable fishes to be outside while spawning
@@ -90,7 +101,6 @@ void Silverfish::tick(const sf::Time& deltaTime){
 		mInvulnerable -= deltaTime.asSeconds();
 	}
 
-	if (!mIsActive) return;
 }
 
 void Silverfish::updateMovement(const sf::Time& deltaTime){
@@ -145,8 +155,15 @@ void Silverfish::collide(CollidableEntity *collidable, const sf::Vector2f& moveA
 		if (mSwimAway== false){
 		mLife -= 5;
 		if (mLife <= 0){
-			mAnimation.replaceAnimation(ANIMATION_HIT);
-			mAnimation.setDefaultAnimation(ANIMATION_DEAD);
+			if (mType == GOLD) {
+				mAnimation.replaceAnimation(ANIMATION2_HIT);
+				mAnimation.setDefaultAnimation(ANIMATION2_DEAD);
+			}
+
+			else if (mType == SILVER){
+				mAnimation.replaceAnimation(ANIMATION1_HIT);
+				mAnimation.setDefaultAnimation(ANIMATION1_DEAD);
+			}
 			mSwimAway = true;
 			mNextDir = VectorMath::normalizeVector(getPosition() - collidable->getPosition());
 			mBefriend = true;
@@ -154,9 +171,12 @@ void Silverfish::collide(CollidableEntity *collidable, const sf::Vector2f& moveA
 			}
 		}
 	}
-	if (collidable->getCollisionCategory() == Renderer::PLAYER) {
+	if (collidable->getCollisionCategory() == PLAYER_OBJECT) {
 		if (mInvulnerable <= 0) {
 			Inventory::getInstance().addDust(-1);
+			SoundEngine* se = &SoundEngine::getInstance();
+			se->playEvent("event:/Gameplay/Luddis/Interaction/Luddis_Hit");
+			mInvulnerable += INVULNERABLE_TIMER;
 		}
 	}
 }

@@ -63,14 +63,14 @@ Shop::~Shop() {
 void Shop::initialize() {
 	sf::Vector2f position = mBackground.getPosition();
 	float offset = (float)mBackground.getTextureRect().width;
-	position.x += offset / 2;
-	Button* button = new Button(BUTTON_DIRECTION, "", "Page1", mWindow, mEventManager, position, this, Button::RECTANGLE);
+	position.x -= offset / 2;
+	Button* button = new Button(BUTTON_DIRECTION, "", "Page-1", mWindow, mEventManager, position, this, Button::RECTANGLE);
 	button->setActive(true);
 	button->setScale(-1, 1);
 	mGUIManager->addInterfaceElement(button);
 	mButtons.push_back(button);
-	position.x -= offset;
-	button = new Button(BUTTON_DIRECTION, "", "Page-1", mWindow, mEventManager, position, this, Button::RECTANGLE);
+	position.x += offset;
+	button = new Button(BUTTON_DIRECTION, "", "Page1", mWindow, mEventManager, position, this, Button::RECTANGLE);
 	button->setActive(true);
 	mGUIManager->addInterfaceElement(button);
 	mButtons.push_back(button);
@@ -99,7 +99,7 @@ void Shop::initializeContents() {
 		std::string image = configDoc[itr]["image"].GetString();
 		std::string description = configDoc[itr]["description"].GetString();
 		int ID = configDoc[itr]["ID"].GetInt();
-		sf::Vector2f position = sf::Vector2f(176, (float)(486 + counter*210)) + mBackground.getPosition() - mBackground.getOrigin();
+		sf::Vector2f position = sf::Vector2f(176, (float)(486 + counter * 210)) + mBackground.getPosition() - mBackground.getOrigin();
 		addItemButton(image, "Accessory" + std::to_string(ID), position, mMaxPage);
 		sf::IntRect box(330, 418 + counter * 208, 382, 142);
 		mDescriptions[mMaxPage].push_back(new TextBoxDecorator(box, description, 32));

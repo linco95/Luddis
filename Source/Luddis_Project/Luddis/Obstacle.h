@@ -56,6 +56,7 @@ private:
 	AnimationQueue mAnimation;
 
 	float mTimeStunned;
+	float mInvulnerable;
 };
 
 #endif

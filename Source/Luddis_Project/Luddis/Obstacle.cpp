@@ -1,6 +1,7 @@
 #include "Obstacle.h"
 #include "VectorMath.h"
 #include "ResourceManager.h"
+#include "Inventory.h"
 
 const Renderer::RenderLayer LAYER = Renderer::OBSTACLES;
 const int DAMAGE = 0;
@@ -16,6 +17,8 @@ static const Animation ANIMATION2_IDLE = Animation("Resources/Images/Spritesheet
 static const Animation ANIMATION2_EMPTY = Animation("Resources/Images/Spritesheets/Lightning_empty");
 static const Animation ANIMATION2_DAMAGE = Animation("Resources/Images/Spritesheets/Lightning_active");
 
+static const float INVULNERABLE_TIMER = 1.0f;
+
 Obstacle::Obstacle(sf::RenderWindow* window, ObstacleType type, const sf::Vector2f& position, const float& angle, const sf::Vector2f& size, int level) :
 	mIsAlive(true),
 	mIsActive(true),
@@ -24,7 +27,6 @@ Obstacle::Obstacle(sf::RenderWindow* window, ObstacleType type, const sf::Vector
 	mLevel(level),
 	//mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
 	mHitbox(new sf::RectangleShape(size)),
-	mIdleHitbox(new sf::RectangleShape(sf::Vector2f(53, 35))),
 	mActiveHitbox(new sf::RectangleShape(sf::Vector2f(150, 300))),
 	mIsDamaging(false),
 	mIsEmpty(false),
@@ -32,6 +34,7 @@ Obstacle::Obstacle(sf::RenderWindow* window, ObstacleType type, const sf::Vector
 	mIdleTime(IDLE_TIME),
 	mEmptyTime(EMPTY_TIME),
 	mAnimation(ANIMATION1_IDLE),
+	mInvulnerable(INVULNERABLE_TIMER),
 mAngle(angle)
 {
 	setPosition(position);
@@ -39,19 +42,12 @@ mAngle(angle)
 	//If damaging obstacle (steam)
 	if (type == DAMAGE) {
 
-		mIdleHitbox->setOrigin(mIdleHitbox->getLocalBounds().width / 2, mIdleHitbox->getLocalBounds().height);
-		mIdleHitbox->setPosition(getPosition());
-		mIdleHitbox->setScale(getScale());
-		mIdleHitbox->setRotation(getRotation());
-
-		mActiveHitbox->setOrigin(mActiveHitbox->getLocalBounds().width / 2, mActiveHitbox->getLocalBounds().height);
+		mActiveHitbox->setOrigin(mActiveHitbox->getLocalBounds().width / 2, mActiveHitbox->getLocalBounds().height / 2);
 		mActiveHitbox->setPosition(getPosition());
 		mActiveHitbox->setScale(getScale());
 		mActiveHitbox->setRotation(getRotation());
 
-		mHitbox = mIdleHitbox;
-
-		move(((float)mIdleHitbox->getLocalBounds().height / 2.0f) * VectorMath::getNormal(sf::Vector2f(cos(mAngle), sin(mAngle))));
+		mHitbox = mActiveHitbox;
 	}
 	//else solid hitbox
 	else {
@@ -80,12 +76,6 @@ void Obstacle::tick(const sf::Time& deltaTime){
 					mIsEmpty = true;
 					mDamageTime = DAMAGE_TIME;
 
-					// Move to start idle animation
-					float temp = toMove - (float)mIdleHitbox->getLocalBounds().height;
-					sf::Vector2f moving = -(temp / 2.0f) * VectorMath::getNormal(sf::Vector2f(cos(mAngle), sin(mAngle)));
-					move(moving);
-					mHitbox = mIdleHitbox;
-
 					if (mLevel == 1)
 					mAnimation.setDefaultAnimation(ANIMATION1_EMPTY);
 					else if (mLevel == 2)
@@ -99,7 +89,6 @@ void Obstacle::tick(const sf::Time& deltaTime){
 					if (mEmptyTime <= 0) {
 						mIsEmpty = false;
 						mEmptyTime = EMPTY_TIME;
-
 						if (mLevel == 1)
 							mAnimation.setDefaultAnimation(ANIMATION1_IDLE);
 						else if (mLevel == 2)
@@ -112,10 +101,6 @@ void Obstacle::tick(const sf::Time& deltaTime){
 					mIsDamaging = true;
 					mIdleTime = IDLE_TIME;
 					// Move to start damaging animation
-					float temp = toMove - (float)mIdleHitbox->getLocalBounds().height;
-					sf::Vector2f moving = (temp / 2.0f) * VectorMath::getNormal(sf::Vector2f(cos(mAngle), sin(mAngle)));
-					move(moving);
-					mHitbox = mActiveHitbox;
 
 					if (mLevel == 1)
 						mAnimation.setDefaultAnimation(ANIMATION1_DAMAGE);
@@ -125,11 +110,14 @@ void Obstacle::tick(const sf::Time& deltaTime){
 				}
 			}
 			mAnimation.tick(deltaTime);
+			if (mInvulnerable >= 0) {
+				mInvulnerable -= deltaTime.asSeconds();
+			}
 		}
 		else {
 			mTimeStunned -= deltaTime.asSeconds();
 		}
-		//mAnimation.getCurrAnimation().setOrigin(mAnimation.getCurrAnimation().getSprite().getLocalBounds().width / 2, mAnimation.getCurrAnimation().getSprite().getLocalBounds().height);
+
 	}
 	// Solid obstacle
 	else {
@@ -182,7 +170,7 @@ Obstacle::Category Obstacle::getCollisionCategory(){
 			return ENEMY_DAMAGE;
 		}
 		else{
-			return Category::SOLID;
+			return Category::IGNORE;
 		}
 	}
 	else /*if (mType == SOLID)*/{
@@ -194,8 +182,16 @@ Obstacle::Type Obstacle::getCollisionType(){
 	return REC;
 }
 
-void Obstacle::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway){
-
+void Obstacle::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway) {
+	if (mType == DAMAGE) {
+		if (mIsDamaging) {
+			if (collidable->getCollisionCategory() == PLAYER_OBJECT) {
+				if (mInvulnerable <= 0)
+					Inventory::getInstance().addDust(-1);
+				mInvulnerable = INVULNERABLE_TIMER;
+			}
+		}
+	}
 }
 
 void Obstacle::stun(const sf::Time& deltatime) {
