@@ -26,11 +26,10 @@ Renderer& Renderer::getInstance() {
 }
 
 void Renderer::render(sf::RenderWindow & a_Window) {
-	a_Window.clear(sf::Color::Black);
+	//a_Window.clear(sf::Color::Black);
 	for (auto itr : m_Drawables) {
 		for (auto d : itr.second)
 				a_Window.draw(*d);
 	}
-	a_Window.display();
 	m_Drawables.clear();
 }

@@ -94,6 +94,7 @@ void GameStateMap::update(sf::Clock& clock) {
 void GameStateMap::render() {
 	//Draw objects
 	mEntityM.renderEntities(*mWindow);
+	Renderer::getInstance().render(*mWindow);
 	mGUIM.renderElements(*mWindow);
 }
 

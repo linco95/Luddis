@@ -192,15 +192,16 @@ struct GameManagerImp : public EventObserver {
 
 			// Render according to the game's state
 			mMainWindow.clear();
-			mCurrentGameState->render();
 
+
+			mCurrentGameState->render();
+	
 			// Render the mouse on top of everything, always
 			mCursor.tick();
-			renderer->addDrawableToQueue(&mCursor, Renderer::MOUSE);
-
+			mMainWindow.draw(mCursor);
+			
 			// Swap the buffers
-			renderer->render(mMainWindow);
-			//mMainWindow.display();
+			mMainWindow.display();
 		}
 	}
 	GUIManager mGUIManager;

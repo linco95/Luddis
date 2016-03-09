@@ -66,6 +66,7 @@ void GameStatePaused::render(){
 	//Draw objects (unless null pointer)
 	if (mEntityM != nullptr)
 		mEntityM->renderEntities(*mWindow);
+	Renderer::getInstance().render(*mWindow);
 	//Change the view when drawing GUI elements
 	mMapView = mWindow->getView();
 	mWindow->setView(mGUIView);

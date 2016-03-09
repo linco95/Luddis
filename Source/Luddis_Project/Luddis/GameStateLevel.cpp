@@ -150,6 +150,7 @@ void GameStateLevel::update(sf::Clock& clock) {
 void GameStateLevel::render(){
 	//Draw objects
 	mEntityM->renderEntities(*mWindow);
+	Renderer::getInstance().render(*mWindow);
 	//Change the view when drawing GUI elements
 	mMapView = mWindow->getView();
 	mWindow->setView(mGUIView);
