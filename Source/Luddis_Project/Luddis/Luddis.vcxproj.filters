@@ -172,10 +172,16 @@
     <ClCompile Include="Filter.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="Shop.cpp" />
     <ClCompile Include="BossRobot.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="Mannequin.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Shop.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="TextBoxDecorator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -358,9 +364,13 @@
     <ClInclude Include="BossRobot.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="Shop.h">
-      <Filter>Source Files\GUI</Filter>
+    <ClInclude Include="Mannequin.h">
+      <Filter>Header Files\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="Shop.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="TextBoxDecorator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

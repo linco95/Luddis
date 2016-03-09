@@ -78,6 +78,10 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 	if (configDoc.HasMember("Level"))
 		level = configDoc["Level"].GetInt();
 
+	SoundEngine* se = &SoundEngine::getInstance();
+	const char* levelMusic = "event:/Music/Levels/Lvl2"; //TODO: make dynamic
+	se->playEvent(levelMusic);
+
 	// Silverfishes
 	if (configDoc.HasMember("Silverfish_spawns") && configDoc["Silverfish_spawns"].IsArray()) {
 	const rapidjson::Value& fishSpawns = configDoc["Silverfish_spawns"];
@@ -351,15 +355,16 @@ void Level::updateView(const Time& deltaTime) {
 	view.setCenter(mTarget->getPosition());
 #endif // _DESIGNER_HAX_
 
-	int progress = (int)((mTarget->getPosition().x / mMapBounds.width)*7);
+	int progress = (int)((mTarget->getPosition().x / mMapBounds.width)*100);
 	if (mProgress != progress) {
 		mProgress = progress;
 		//TODO: make dynamic (add current level event to setup file)
 		static const char* parameter = "Progress";
-		SoundEngine::getInstance().setEventParameter("event:/MUSIK/Bana_1", parameter, (float)mProgress);
+		SoundEngine::getInstance().setEventParameter("event:/Music/Levels/Lvl2", parameter, (float)mProgress);
 	}
 	mWindow->setView(view);
 }
+
 bool Level::isAlive() const {
 	return true;
 }

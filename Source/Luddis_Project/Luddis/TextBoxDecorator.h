@@ -1,13 +1,14 @@
-#ifndef _INCLUDED_SOCKNPC_
-#define _INCLUDED_SOCKNPC_
+#ifndef _INCLUDED_TEXTBOXDECORATOR_
+#define _INCLUDED_TEXTBOXDECORATOR_
 
 #include "InterfaceElement.h"
-#include "AnimationQueue.h"
 
-class SockNPC : public InterfaceElement {
+class TextBox;
+
+class TextBoxDecorator :public InterfaceElement{
 public:
-	SockNPC();
-	~SockNPC();
+	TextBoxDecorator(sf::IntRect box, std::string text, int fontSize, bool animate = false, std::string fontName = "Resources/Fonts/arial.ttf");
+	~TextBoxDecorator();
 
 	void draw(sf::RenderTarget & target, sf::RenderStates states) const override;
 	void tick(const sf::Time & deltaTime) override;
@@ -16,18 +17,12 @@ public:
 	bool isActive() const override;
 	void setActive(const bool & active) override;
 
-	void dive();
 
 private:
-	AnimationQueue mAnimation;
+	TextBox* mTextBox;
+
 	bool mIsActive;
 	bool mIsAlive;
-
-	float tempTimer;
-	float mDiveTimer;
-	bool mDive;
-	bool mDiveDown;
-	bool mLeftSide;
 };
 
-#endif // !_INCLUDED_SOCKNPC_
+#endif // !_INCLUDED_TEXTBOXDECORATOR_

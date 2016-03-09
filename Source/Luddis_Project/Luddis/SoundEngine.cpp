@@ -3,10 +3,11 @@
 #include "Debug.h"
 #include <cassert>
 
-SoundEngine::SoundEngine():
-mMainVolume(100), mSoundVolume(100), mMusicVolume(100),
-mStudioSystem(NULL), mLowLvlSystem(NULL),
-mSounds(), mChannel(NULL){
+SoundEngine::SoundEngine() :
+	mMainVolume(100), mSoundVolume(100), mMusicVolume(100),
+	mStudioSystem(NULL), mLowLvlSystem(NULL),
+	mSounds(), mChannel(NULL) {
+
 	initialize();
 }
 
@@ -14,7 +15,7 @@ SoundEngine::~SoundEngine() {
 	finalize();
 }
 
-SoundEngine& SoundEngine::getInstance(){
+SoundEngine& SoundEngine::getInstance() {
 	static SoundEngine se;
 	return se;
 }
@@ -44,17 +45,17 @@ void SoundEngine::finalize() {
 	mStudioSystem->release();
 }
 
-void SoundEngine::setMainVolume(float volume){
+void SoundEngine::setMainVolume(float volume) {
 	mMainVolume = volume;
 	setSoundVolume(mSoundVolume);
 	setMusicVolume(mMusicVolume);
 }
 
-void SoundEngine::setSoundVolume(float volume){
+void SoundEngine::setSoundVolume(float volume) {
 	mSoundVolume = volume;
 	mFinalVolume = mMainVolume*mSoundVolume / 100;
 	//Studio instances
-	for (auto se: mSoundEventInstances){
+	for (auto se : mSoundEventInstances) {
 		se.second->setVolume(mFinalVolume);
 	}
 	FMOD_RESULT result;
@@ -63,7 +64,7 @@ void SoundEngine::setSoundVolume(float volume){
 	mChannel->setVolume(mFinalVolume);
 }
 
-void SoundEngine::setMusicVolume(float volume){
+void SoundEngine::setMusicVolume(float volume) {
 	mMusicVolume = volume;
 	mFinalVolume = mMainVolume*mMusicVolume / 100;
 	//Studio instances
@@ -73,7 +74,7 @@ void SoundEngine::setMusicVolume(float volume){
 }
 
 
-int SoundEngine::playSound(const char* filename){
+int SoundEngine::playSound(const char* filename) {
 	if (mSounds.find(filename) == mSounds.end()) {
 		createSound(filename);
 	}
@@ -87,34 +88,46 @@ int SoundEngine::playSound(const char* filename){
 	return channelIndex;
 }
 
-FMOD_RESULT SoundEngine::playEvent(const char * path){
+FMOD_RESULT SoundEngine::playEvent(const char * path) {
 	FMOD_RESULT result;
 	//See if it can be found in the sound map,
 	//otherwise assume that its in the music map.
-	if (mSoundEventInstances.find(path) != mSoundEventInstances.end()) {
+	if (mMusicEventInstances.find(path) != mMusicEventInstances.end()) {
 		result = mMusicEventInstances[path]->start();
 		result = mMusicEventInstances[path]->setVolume(mMainVolume* mSoundVolume / 100);
 	}
 	else {
-		result = mMusicEventInstances[path]->start();
-		result = mMusicEventInstances[path]->setVolume(mMainVolume* mMusicVolume / 100);
+		result = mSoundEventInstances[path]->start();
+		result = mSoundEventInstances[path]->setVolume(mMainVolume* mMusicVolume / 100);
 	}
+
+	FMOD::Studio::ParameterInstance* parameter;
+	mSoundEventInstances[path]->getParameter("Menu", &parameter);
+
+	float value;
+	parameter->getValue(&value);
+
 	return result;
 }
 
 FMOD_RESULT SoundEngine::stopSound(int channelIndex) {
+	FMOD_RESULT result;
 	FMOD::Channel* channel;
-	mLowLvlSystem->getChannel(channelIndex, &channel);
-	return channel->stop();
+	result = mLowLvlSystem->getChannel(channelIndex, &channel);
+	if (result != FMOD_ERR_INVALID_HANDLE)
+		result = channel->stop();
+	return result;
 }
 
 FMOD_RESULT SoundEngine::stopEvent(const char* path, FMOD_STUDIO_STOP_MODE stopMode) {
 	//See if it can be found in the sound map,
 	//otherwise assume that its in the music map.
-	if(mSoundEventInstances.find(path) != mSoundEventInstances.end())
-		return mSoundEventInstances[path]->stop(stopMode);
+	FMOD_RESULT result;
+	if (mMusicEventInstances.find(path) != mMusicEventInstances.end())
+		result = mMusicEventInstances[path]->stop(stopMode);
 	else
-		return mMusicEventInstances[path]->stop(stopMode);
+		result = mSoundEventInstances[path]->stop(stopMode);
+	return result;
 }
 
 FMOD_RESULT SoundEngine::setEventParameter(const char* path, const char* parameter, float value) {
@@ -123,7 +136,7 @@ FMOD_RESULT SoundEngine::setEventParameter(const char* path, const char* paramet
 	//otherwise assume that its in the music map.
 	if (mSoundEventInstances.find(path) != mSoundEventInstances.end())
 		result = mSoundEventInstances[path]->setParameterValue(parameter, value);
-	else 
+	else
 		result = mMusicEventInstances[path]->setParameterValue(parameter, value);
 	return result;
 }
@@ -145,7 +158,7 @@ FMOD::Studio::Bank* SoundEngine::getBank(const char* filename) {
 	return bank;
 }
 
-FMOD_RESULT SoundEngine::unloadBank(const char* filename){
+FMOD_RESULT SoundEngine::unloadBank(const char* filename) {
 	FMOD::Studio::Bank* bank;
 	FMOD_RESULT result = mStudioSystem->getBank(filename, &bank);
 	result = bank->unload();
@@ -169,8 +182,8 @@ FMOD_RESULT SoundEngine::createEvent(const char* path, EventType eventType) {
 	result = desc->createInstance(inst);
 	assert(result == FMOD_OK);
 
-	if(eventType == SOUND)
-		(*inst)->setVolume(mMainVolume*mSoundVolume/100);
+	if (eventType == SOUND)
+		(*inst)->setVolume(mMainVolume*mSoundVolume / 100);
 	else
 		(*inst)->setVolume(mMainVolume*mMusicVolume / 100);
 	return result;
@@ -194,7 +207,7 @@ FMOD_RESULT SoundEngine::createSound(const char* filepath, bool loop) {
 	FMOD_RESULT result;
 	FMOD::Sound** sound = &mSounds[filepath];
 	result = mLowLvlSystem->createSound(filepath, FMOD_DEFAULT, 0, sound);
-	if(!loop)
+	if (!loop)
 		(*sound)->setMode(FMOD_LOOP_OFF);
 	sound;
 	return result;
@@ -208,7 +221,7 @@ FMOD_RESULT SoundEngine::releaseSound(const char* filepath) {
 }
 
 //static sf::Clock actualTime;
-void SoundEngine::update(const sf::Time& deltaTime){
+void SoundEngine::update(const sf::Time& deltaTime) {
 	mStudioSystem->update();
 	mLowLvlSystem->update();
 }

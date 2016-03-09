@@ -4,6 +4,7 @@
 #include "EntityManager.h"
 #include <SFML/System.hpp>
 #include <stdlib.h>
+#include "SoundEngine.h"
 #include "VectorMath.h"
 #include <cmath>
 #include "Inventory.h"
@@ -37,7 +38,7 @@ mAnimation(ANIMATION1_SWIM),
 mHitbox(new sf::RectangleShape(HITBOX_SHAPE)),
 mAlignment(ENEMY_DAMAGE),
 mTarget(aTarget),
-mInvulnerable(INVULNERABLE_TIMER)
+mInvulnerable(0)
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	// Get a y-spawn position
@@ -172,6 +173,9 @@ void Silverfish::collide(CollidableEntity *collidable, const sf::Vector2f& moveA
 	if (collidable->getCollisionCategory() == PLAYER_OBJECT) {
 		if (mInvulnerable <= 0) {
 			Inventory::getInstance().addDust(-1);
+			SoundEngine* se = &SoundEngine::getInstance();
+			se->playEvent("event:/Gameplay/Luddis/Interaction/Luddis_Hit");
+			mInvulnerable += INVULNERABLE_TIMER;
 		}
 	}
 }

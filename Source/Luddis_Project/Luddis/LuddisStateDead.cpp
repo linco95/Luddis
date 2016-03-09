@@ -11,7 +11,7 @@ LuddisStateDead::LuddisStateDead(Luddis* playerPtr):
 mPlayerPtr(playerPtr){
 	mPlayerPtr->getAnimation()->setDefaultAnimation(ANIMATION_ALMOSTDEAD);
 	GameManager::getInstance().setGameState(&GameStatePaused::getInstance());
-	GameStatePaused::getInstance().createMenu(Menu::MenuType::DEATHMENU);
+	GameStatePaused::getInstance().createMenu(Menu::MenuType::DEATHMENU, &GameStatePaused::getInstance());
 }
 
 LuddisStateDead::~LuddisStateDead(){
