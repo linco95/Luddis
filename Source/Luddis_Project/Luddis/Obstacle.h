@@ -46,8 +46,10 @@ private:
 
 	// State managing variables
 	bool mIsDamaging;
+	bool mIsEmpty;
 	float mDamageTime;
 	float mIdleTime;
+	float mEmptyTime;
 	int mLevel;
 
 	float mAngle;
