@@ -56,6 +56,7 @@ private:
 	sf::RectangleShape mDebugRect;
 #endif
 
+	bool mInside;
 	bool mClick;
 	bool mIsAlive;
 	bool mIsActive;

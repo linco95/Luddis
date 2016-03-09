@@ -3,6 +3,8 @@
 #include "LuddisStateStunned.h"
 #include "LuddisStateDead.h"
 #include "Luddis.h"
+#include "PowerupDisplay.h"
+#include "SpiderWeb.h"
 #include "Projectile.h"
 #include "VectorMath.h"
 #include "SoundEngine.h"
@@ -15,15 +17,12 @@
 #include <SFML/Window/Mouse.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
-#include "PowerupDisplay.h"
-#include "SpiderWeb.h"
 
 
 // All of these should maybe be loaded from file instead, to avoid hard coded variables
 //All float times are in seconds
 static const float PROJECTILE_RELOAD = 0.4f;
 static const float PROJECTILE_TIMER = 3.0f;
-static const float INVINCIBILITY_TIMER = 0.75f;
 static const float GRACEAREA = 30;
 
 #ifdef _DESIGNER_HAX_
@@ -42,9 +41,6 @@ static const std::string ANIMATION_ALMOSTDEAD = "Resources/Images/Spritesheets/l
 
 static const std::string SHOT_ANIMATION = "Resources/Images/Spritesheets/Luddis_shot";
 static const std::string HIT_ANIMATION = "Resources/Images/Spritesheets/Luddis_hit";
-static const std::string SOUND_FILENAME1 = "Resources/Audio/Skott_Blås_Små_01.wav";
-static const std::string SOUND_FILENAME2 = "Resources/Audio/Skott_Blås_Små_02.wav";
-static const std::string SOUND_FILENAME3 = "Resources/Audio/Skott_Blås_Små_03.wav";
 
 //This should be dynamic later to determine what texture to use for projectiles
 static const std::array<std::string, 3> PROJECTILE_FILENAME = { "Resources/Images/Luddis_attack1.png",
@@ -54,7 +50,6 @@ static const std::array<std::string, 3> PROJECTILE_FILENAME = { "Resources/Image
 
 LuddisStatePlayable::LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* window, EntityManager* entityManager, PowerupDisplay* display) :
 	mProjectileCooldown(0),
-	mInvincibility(INVINCIBILITY_TIMER),
 	mPrevPos(0, 0),
 	mIsFlipped(false),
 	mMoved(false),
@@ -66,16 +61,13 @@ LuddisStatePlayable::LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* wi
 	Inventory::getInstance().choseFirst(new SpiderWeb(entityManager, display));
 }
 
-LuddisStatePlayable::~LuddisStatePlayable(){
+LuddisStatePlayable::~LuddisStatePlayable() {
 
 }
 
-void LuddisStatePlayable::tick(const sf::Time& deltaTime){
+void LuddisStatePlayable::tick(const sf::Time& deltaTime) {
 	if (mProjectileCooldown >= 0) {
 		mProjectileCooldown -= deltaTime.asSeconds();
-	}
-	if (mInvincibility >= 0) {
-		mInvincibility -= deltaTime.asSeconds();
 	}
 
 	handleInput(deltaTime);
@@ -87,36 +79,24 @@ void LuddisStatePlayable::tick(const sf::Time& deltaTime){
 		mPlayerPtr->setPlayerState(new LuddisStateDead(mPlayerPtr));
 	}
 }
+
 #include <cassert>
 void LuddisStatePlayable::collide(CollidableEntity * collidable, const sf::Vector2f& moveAway) {
 
 	// Collision with solid object
 	if (collidable->getCollisionCategory() == CollidableEntity::SOLID) {
-		//mColliding = true;
-		//mCollideBox = collidable->getHitBox();
-		//Debug::log("MoveAway x: " + std::to_string(moveAway.x) + ". y:" + std::to_string(moveAway.y), Debug::INFO);
 		mPlayerPtr->move(moveAway);
 	}
-	if (mInvincibility <= 0) {
-		// Collision with damaging object
-		if (collidable->getCollisionCategory() == CollidableEntity::ENEMY_DAMAGE) {
-			mPlayerPtr->getAnimation()->replaceAnimation(HIT_ANIMATION);
-			mInvincibility += INVINCIBILITY_TIMER;
-			/*
-			if (Inventory::getInstance().getDust() == 0) {
-				mPlayerPtr->setPlayerState(new LuddisStateDead(mPlayerPtr));
-			}
-			Inventory::getInstance().addDust(-1);
-			*/
-		}
-		// Collision with a stunning entity
-		if (collidable->getCollisionCategory() == CollidableEntity::ENEMY_STUN) {
-			//Replace animation before changing state or a crash will occur.
-			mPlayerPtr->getAnimation()->replaceAnimation(HIT_ANIMATION);
-			//TODO: add a way to make stun timers modular.
-			mPlayerPtr->setPlayerState(new LuddisStateStunned(mPlayerPtr, 1.0f, mWindow, mEntityManager, mDisplay));
-			mInvincibility += INVINCIBILITY_TIMER;
-		}
+	// Collision with damaging object
+	if (collidable->getCollisionCategory() == CollidableEntity::ENEMY_DAMAGE) {
+		mPlayerPtr->getAnimation()->replaceAnimation(HIT_ANIMATION);
+	}
+	// Collision with a stunning entity
+	if (collidable->getCollisionCategory() == CollidableEntity::ENEMY_STUN) {
+		//Replace animation before changing state or a crash will occur.
+		mPlayerPtr->getAnimation()->replaceAnimation(HIT_ANIMATION);
+		//TODO: add a way to make stun timers modular.
+		mPlayerPtr->setPlayerState(new LuddisStateStunned(mPlayerPtr, 1.0f, mWindow, mEntityManager, mDisplay));
 	}
 }
 
@@ -126,7 +106,7 @@ sf::Vector2f LuddisStatePlayable::getVectorMouseToSprite() const {
 	return mousePosition - playerPosition;
 }
 
-void LuddisStatePlayable::handleInput(const sf::Time & deltaTime){
+void LuddisStatePlayable::handleInput(const sf::Time & deltaTime) {
 	sf::Vector2f direction = getVectorMouseToSprite();
 	if (VectorMath::getVectorLengthSq(direction) == 0) return;
 	float rotation = VectorMath::getAngle(FRONTVECTOR, direction) * 180 / (float)M_PI;
@@ -136,7 +116,7 @@ void LuddisStatePlayable::handleInput(const sf::Time & deltaTime){
 		updateMovement(deltaTime);
 	}
 	else {
-		mMoved = false;
+
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
 		attack();
@@ -144,12 +124,10 @@ void LuddisStatePlayable::handleInput(const sf::Time & deltaTime){
 	//Handle keyboard presses
 	// TODO make this an event instead
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
-		if (true) {
-			Inventory::getInstance().activateFirst(sf::seconds(STUNTIME));
-		}
-		else {
-			return;
-		}
+		Inventory::getInstance().activateFirst(sf::seconds(STUNTIME));
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+
 	}
 }
 
@@ -180,7 +158,7 @@ void LuddisStatePlayable::updateMovement(const sf::Time & deltaTime) {
 		mMoved = false;
 }
 
-void LuddisStatePlayable::attack(){
+void LuddisStatePlayable::attack() {
 	// If the projectile is on cooldown, return
 	if (mProjectileCooldown > 0) return;
 	// If not, shoot
@@ -191,7 +169,8 @@ void LuddisStatePlayable::attack(){
 	// Replace the current animation with an shooting animation and play a shooting sound
 	mPlayerPtr->getAnimation()->overrideAnimation(SHOT_ANIMATION);
 	// TODO Pull out constant variable
-	SoundEngine::getInstance().playSound("Resources/Audio/Luddis_skott_16bit.wav");
+	SoundEngine* se = &SoundEngine::getInstance();
+	se->playEvent("event:/Gameplay/Luddis/Interaction/Luddis_Shot");
 
 	// Set the muzzlepoint where the projectile will get created
 	sf::Vector2f muzzlePoint = mPlayerPtr->getPosition() + direction * MUZZLEOFFSET*mPlayerPtr->getScale().x;
@@ -207,7 +186,7 @@ void LuddisStatePlayable::attack(){
 	CollisionManager::getInstance().addCollidable(proj);
 }
 
-void LuddisStatePlayable::updateRotation(){
+void LuddisStatePlayable::updateRotation() {
 	sf::Vector2f direction = getVectorMouseToSprite();
 	if (VectorMath::getVectorLengthSq(direction) == 0) return;
 	float rotation = VectorMath::getAngle(FRONTVECTOR, direction) * 180 / (float)M_PI;

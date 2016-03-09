@@ -21,7 +21,7 @@ static const std::string ANIMATION_FILEPATH = "Resources/Images/Spritesheets/Lud
 
 static const sf::Vector2f FRONTVECTOR(1, 0);
 
-static const Renderer::RenderLayer LAYER = Renderer::RenderLayer::PLAYER;
+static const Renderer::RenderLayer LAYER = Renderer::PLAYER;
 static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(35, 8);
 
 //TEMP

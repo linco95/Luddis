@@ -12,7 +12,15 @@
 
 class Silverfish : public CollidableEntity {
 public:
-	Silverfish(sf::RenderWindow* window, const sf::Vector2f& position, const float& angle, const float& activation, Transformable* aTarget);
+	/*
+	* 0 - SILVER
+	* 1 - GOLD
+	*/
+	enum FishType {
+		SILVER,
+		GOLD
+	};
+	Silverfish(sf::RenderWindow* window, FishType type, const sf::Vector2f& position, const float& angle, const float& activation, Transformable* aTarget);
 	~Silverfish();
 
 	void tick(const sf::Time& deltaTime) override;
@@ -40,6 +48,7 @@ private:
 	bool mBefriend;
 	const float mActivate;
 	sf::Shape* mHitbox;
+	FishType mType;
 	AnimationQueue mAnimation;
 	sf::Vector2f mNextDir;
 	Category mAlignment;

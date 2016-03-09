@@ -37,6 +37,8 @@ static const char* MASTERBANK = "Resources/AudioBanks/Build/Desktop/Master Bank.
 static const char* MASTER_BANK_STRINGS = "Resources/AudioBanks/Build/Desktop/Master Bank.strings.bank";
 static const char* MUSIC_BANK = "Resources/AudioBanks/Build/Desktop/Music.bank";
 static const char* SOUND_BANK = "Resources/AudioBanks/Build/Desktop/Weapons.bank";
+static const char* MUSIC_BANK = "Resources/AudioBanks/Build/Desktop/Music Bank.bank";
+static const char* SOUND_BANK = "Resources/AudioBanks/Build/Desktop/Audio Bank.bank";
 
 static const char* EVENT_MUSIC1 = "event:/Music/Music";
 static const char* EVENT_LUDDIS = "event:/Weapons/Full Auto Loop";
@@ -149,6 +151,7 @@ struct GameManagerImp : public EventObserver {
 		// To avoid multiple functioncalls every iteration of gameloop
 		CollisionManager* cm = &CollisionManager::getInstance();
 		/*
+		
 		SoundEngine* se = &SoundEngine::getInstance();
 
 		//The string bank contains all paths for the events etc.
@@ -156,12 +159,28 @@ struct GameManagerImp : public EventObserver {
 		//se->loadBank(MASTER_BANK_STRINGS);
 		//se->loadBank(MUSIC_BANK);
 		//se->loadBank(SOUND_BANK);
+		se->loadBank(MASTERBANK);
+		se->loadBank(MASTER_BANK_STRINGS);
+		se->loadBank(MUSIC_BANK);
+		se->loadBank(SOUND_BANK);
+
+		//TEMP
+		se->createEvent("event:/Gameplay/Luddis/Interaction/Luddis_Dust", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Luddis/Interaction/Luddis_Crumb", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Luddis/Interaction/Luddis_Hit", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Luddis/Interaction/Luddis_Shot", SoundEngine::SOUND);
+		se->createEvent("event:/Menu/Button/Button_Change", SoundEngine::SOUND);
+		se->createEvent("event:/Menu/Button/Button_Click", SoundEngine::SOUND);
+		se->createEvent("event:/Menu/Button/Button_Fail", SoundEngine::SOUND);
+		se->createEvent("event:/Music/Levels/Lvl2", SoundEngine::MUSIC);
+		se->createEvent("event:/Music/Sockshop", SoundEngine::MUSIC);
 		
 		//se->createEvent(EVENT_LUDDIS, SoundEngine::EventType::SOUND);
 		//se->playEvent(EVENT_LUDDIS);
 		//se->createEvent(EVENT_MUSIC1, SoundEngine::EventType::MUSIC);
 		//se->playEvent(EVENT_MUSIC1);
 		*/
+		
 		mGameStatePaused = &GameStatePaused::getInstance();
 		mGameStateLevel = &GameStateLevel::getInstance();
 		mGameStateMap = &GameStateMap::getInstance();
@@ -171,13 +190,16 @@ struct GameManagerImp : public EventObserver {
 		mGameStatePaused->createMenu(Menu::MenuType::PAUSEMENU);
 		mGameStateLevel->setupLevel(TEST_LEVEL);
 		mCurrentGameState = mGameStateLevel;
+
 		Renderer* renderer = &Renderer::getInstance();
 		View mapView;
 		//se->setMainVolume(10);
+		se->setMainVolume(10);
 		Clock gameClock;
 		while (mMainWindow.isOpen()){
 			//Update soundengine
 			//se->update(gameClock.getElapsedTime());
+			se->update(gameClock.getElapsedTime());
 
 			// Handle Events
 			mCurrentGameState->handleEvents();
@@ -191,9 +213,11 @@ struct GameManagerImp : public EventObserver {
 
 			// Render the mouse on top of everything, always
 			mCursor.tick();
+			mMainWindow.draw(mCursor);
 			renderer->addDrawableToQueue(&mCursor, Renderer::MOUSE);
 
 			// Swap the buffers
+			mMainWindow.display();
 			renderer->render(mMainWindow);
 			//mMainWindow.display();
 		}
@@ -242,4 +266,3 @@ GameManager& GameManager::getInstance(){
 void GameManager::setGameState(GameState* gameState){
 	mGMImp->setGameState(gameState);
 }
-

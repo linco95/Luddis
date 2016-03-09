@@ -96,14 +96,16 @@ Collectible::Type Collectible::getCollisionType() {
 void Collectible::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway) {
 	if (collidable->getCollisionCategory() == PLAYER_OBJECT) {
 		mIsAlive = false;
+		SoundEngine* se = &SoundEngine::getInstance();
 		switch (mType) {
 		case DUST:
 			Inventory::getInstance().addDust(1);
-			SoundEngine::getInstance().playSound("resources/audio/Damm_Slurp_01.wav");
+
+			se->playEvent("event:/Gameplay/Luddis/Interaction/Luddis_Dust");
 			break;
 		case CHIPS:
 			Inventory::getInstance().changeChips(1);
-			SoundEngine::getInstance().playSound("resources/audio/luddis_crumbgather_s1d2v1.wav");
+			se->playEvent("event:/Gameplay/Luddis/Interaction/Luddis_Crumb");
 			break;
 		case SPIDEREGG:
 			Inventory::getInstance().changeEggs(1);

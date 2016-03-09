@@ -29,7 +29,7 @@ EFFECT_SPEED = 400,
 EFFECT_LIFETIME = 7.5f;
 
 static const char* EFFECT_FILEPATH = "Resources/Images/Rag_projectile.png";
-static const Renderer::RenderLayer LAYER = Renderer::RenderLayer::BACKGROUND;
+static const Renderer::RenderLayer LAYER = Renderer::BACKGROUND;
 static const char* mapfilepath;
 
 Level::Level(EntityManager* entityManager) :

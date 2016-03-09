@@ -6,6 +6,7 @@
 #include "EventManager.h"
 #include "GUIManager.h"
 #include "GameManager.h"
+#include "SoundEngine.h"
 #include "VectorMath.h"
 
 static const std::string MENUBUTTON_TEXTURE = "Resources/Images/GUI/MenuButton.png";
@@ -25,9 +26,13 @@ mWindow(window),
 mEventManager(eventManager),
 mGUIManager(gUIManager){
 
+	SoundEngine::getInstance().setEventParameter("event:/Menu/Button/Button_Change", "Menu", 1.0f);
+	SoundEngine::getInstance().setEventParameter("event:/Music/Levels/Lvl2", "PauseMenu", 0.0f);
 }
 
 Menu::~Menu(){
+	SoundEngine::getInstance().setEventParameter("event:/Menu/Button/Button_Change", "Menu", 0.0f);
+	SoundEngine::getInstance().setEventParameter("event:/Music/Levels/Lvl2", "PauseMenu", 1.0f);
 	internalClear();
 }
 
@@ -179,12 +184,15 @@ void Menu::buttonFuncLoadGame(){
 void Menu::buttonFuncContinue(){
 	GameManager::getInstance().setGameState(mGameState);
 	mIsAlive = false;
-	
 }
 
 void Menu::buttonFuncExitLevel(){
 	GameStateLevel::getInstance().resetInventory();
 	GameManager::getInstance().setGameState(&GameStateMap::getInstance());
+	SoundEngine* se = &SoundEngine::getInstance();
+	se->stopEvent("event:/Music/Levels/Lvl2", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_ALLOWFADEOUT);
+	se->stopEvent("event:/Menu/Button/Button_Change",FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_ALLOWFADEOUT);
+	se->playEvent("event:/Music/Sockshop");
 	mIsAlive = false;
 }
 
