@@ -120,6 +120,7 @@
     <ClCompile Include="Polynomial.cpp" />
     <ClCompile Include="PowerupDisplay.cpp" />
     <ClCompile Include="PowerUps.cpp" />
+    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="ScoreCounter.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="Polynomial.h" />
     <ClInclude Include="PowerupDisplay.h" />
     <ClInclude Include="PowerUps.h" />
+    <ClInclude Include="Renderer.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="ScoreCounter.h" />
     <ClInclude Include="Entity.h" />
@@ -216,6 +218,9 @@
     <ClInclude Include="Tween.h" />
     <ClInclude Include="VectorMath.h" />
     <ClInclude Include="ViewUtility.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

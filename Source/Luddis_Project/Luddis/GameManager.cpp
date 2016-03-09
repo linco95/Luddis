@@ -6,6 +6,8 @@
 #include "EventObserver.h"
 #include "EventManager.h"
 #include "ResourceManager.h"
+//#include "SoundEngine.h"
+#include "Renderer.h"
 #include "SoundEngine.h"
 #include "GUIManager.h"
 #include "Dialogue.h"
@@ -178,6 +180,7 @@ struct GameManagerImp : public EventObserver {
 		//mGameStateLevel->setupLevel(TEST_LEVEL);
 		mCurrentGameState = mGameStateStart;
 
+		Renderer* renderer = &Renderer::getInstance();
 		View mapView;
 		Clock gameClock;
 		while (mMainWindow.isOpen()){
@@ -196,10 +199,11 @@ struct GameManagerImp : public EventObserver {
 
 			// Render the mouse on top of everything, always
 			mCursor.tick();
-			mMainWindow.draw(mCursor);
+			renderer->addDrawableToQueue(&mCursor, Renderer::MOUSE);
 
 			// Swap the buffers
-			mMainWindow.display();
+			renderer->render(mMainWindow);
+			//mMainWindow.display();
 		}
 	}
 	GUIManager mGUIManager;
@@ -247,4 +251,3 @@ GameManager& GameManager::getInstance(){
 void GameManager::setGameState(GameState* gameState){
 	mGMImp->setGameState(gameState);
 }
-

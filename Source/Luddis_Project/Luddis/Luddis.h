@@ -22,7 +22,7 @@ public:
 	bool isAlive() const override;
 	bool isActive() const override;
 	void setActive(const bool& active) override;
-	RenderLayer getRenderLayer() const override;
+	Renderer::RenderLayer getRenderLayer() const override;
 	sf::FloatRect getHitBox() override;
 	sf::Shape* getNarrowHitbox() const override;
 	void reset(GameStateLevel* gameStateLevel);

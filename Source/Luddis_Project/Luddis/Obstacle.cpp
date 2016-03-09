@@ -3,7 +3,7 @@
 #include "ResourceManager.h"
 #include "Inventory.h"
 
-const Entity::RenderLayer LAYER = Entity::RenderLayer::OBSTACLES;
+const Renderer::RenderLayer LAYER = Renderer::OBSTACLES;
 const int DAMAGE = 0;
 //static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(15, 8);
 static const float IDLE_TIME = 1;
@@ -147,7 +147,7 @@ void Obstacle::setActive(const bool& active){
 	mIsActive = active;
 }
 
-Entity::RenderLayer Obstacle::getRenderLayer() const{
+Renderer::RenderLayer Obstacle::getRenderLayer() const{
 	return LAYER;
 }
 

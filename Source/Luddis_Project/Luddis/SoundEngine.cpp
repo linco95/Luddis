@@ -4,8 +4,8 @@
 #include <cassert>
 
 SoundEngine::SoundEngine() :
-	mMainVolume(100), mSoundVolume(100), mMusicVolume(100),
-	mStudioSystem(NULL), mLowLvlSystem(NULL),
+mMainVolume(100), mSoundVolume(100), mMusicVolume(100),
+mStudioSystem(NULL), mLowLvlSystem(NULL),
 	mSounds(), mChannel(NULL) {
 
 	initialize();

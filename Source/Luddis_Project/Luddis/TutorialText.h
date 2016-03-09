@@ -19,7 +19,7 @@ public:
 	// Check if an entity is alive
 	bool isAlive() const override;
 	// Determines in what order entities are drawn
-	RenderLayer getRenderLayer() const override;
+	Renderer::RenderLayer getRenderLayer() const override;
 	// Check if an entity is active
 	bool isActive() const override;
 	// Set an entities "active" state

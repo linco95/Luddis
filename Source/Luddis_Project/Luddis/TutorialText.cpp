@@ -47,8 +47,8 @@ bool TutorialText::isAlive() const{
 	return mIsAlive;
 }
 
-TutorialText::RenderLayer TutorialText::getRenderLayer() const{
-	return FOREGROUND;
+Renderer::RenderLayer TutorialText::getRenderLayer() const{
+	return Renderer::FOREGROUND;
 }
 
 bool TutorialText::isActive() const{
