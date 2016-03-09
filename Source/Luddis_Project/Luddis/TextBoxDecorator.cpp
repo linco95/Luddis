@@ -2,35 +2,36 @@
 #include "TextBox.h"
 #include <SFML/Graphics/RenderTarget.hpp>
 
-TextBoxDecorator::TextBoxDecorator(sf::IntRect box, std::string text, int fontSize, bool animate, std::string fontName):
-mTextBox(new TextBox(box, text, fontSize, animate, fontName)){
-	
+TextBoxDecorator::TextBoxDecorator(sf::IntRect box, std::string text, int fontSize, bool animate, std::string fontName) :
+	mTextBox(new TextBox(box, text, fontSize, animate, fontName)) {
+
 }
 
-TextBoxDecorator::~TextBoxDecorator(){
+TextBoxDecorator::~TextBoxDecorator() {
 	delete mTextBox;
 }
 
-void TextBoxDecorator::draw(sf::RenderTarget& target, sf::RenderStates states) const{
-	mTextBox->draw(target, states);
+void TextBoxDecorator::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+	states.transform *= getTransform();
+	target.draw(*mTextBox, states);
 }
 
-void TextBoxDecorator::tick(const sf::Time& deltaTime){
+void TextBoxDecorator::tick(const sf::Time& deltaTime) {
 	mTextBox->animate(deltaTime);
 }
 
-TextBoxDecorator::Strata TextBoxDecorator::getRenderLayer() const{
+TextBoxDecorator::Strata TextBoxDecorator::getRenderLayer() const {
 	return FIRST;
 }
 
-bool TextBoxDecorator::isAlive() const{
+bool TextBoxDecorator::isAlive() const {
 	return mIsAlive;
 }
 
-bool TextBoxDecorator::isActive() const{
+bool TextBoxDecorator::isActive() const {
 	return mIsActive;
 }
 
-void TextBoxDecorator::setActive(const bool & active){
+void TextBoxDecorator::setActive(const bool & active) {
 	mIsActive = active;
 }

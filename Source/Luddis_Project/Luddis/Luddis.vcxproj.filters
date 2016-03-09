@@ -172,9 +172,6 @@
     <ClCompile Include="Filter.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="BossRobot.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="Mannequin.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
@@ -182,6 +179,8 @@
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
     <ClCompile Include="TextBoxDecorator.cpp" />
+    <ClCompile Include="BossRobot.cpp" />
+    <ClCompile Include="Overlay.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -361,9 +360,6 @@
     <ClInclude Include="Filter.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="BossRobot.h">
-      <Filter>Header Files\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="Mannequin.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
@@ -371,6 +367,10 @@
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
     <ClInclude Include="TextBoxDecorator.h" />
+    <ClInclude Include="BossRobot.h" />
+    <ClInclude Include="Overlay.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

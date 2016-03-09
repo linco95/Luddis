@@ -356,7 +356,7 @@ void GameStateLevel::readSetupFiles(const std::string& filename, bool allocate) 
 			if (allocate)
 				rm->loadTexture(file);
 			else
-				rm->clearTexture(file);
+				;//rm->clearTexture(file);
 		}
 	}
 
@@ -370,7 +370,7 @@ void GameStateLevel::readSetupFiles(const std::string& filename, bool allocate) 
 			if (allocate)
 				rm->loadTexture(file);
 			else {
-				rm->clearTexture(file);
+				;//rm->clearTexture(file);
 			}
 		}
 	}
@@ -387,8 +387,8 @@ void GameStateLevel::readSetupFiles(const std::string& filename, bool allocate) 
 				rm->loadTexture(file + ".png");
 			}
 			else {
-				rm->clearJsonFile(file + ".json");
-				rm->clearTexture(file + ".png");
+				;//rm->clearJsonFile(file + ".json");
+				;//rm->clearTexture(file + ".png");
 			}
 		}
 	}
@@ -403,7 +403,7 @@ void GameStateLevel::readSetupFiles(const std::string& filename, bool allocate) 
 			if (allocate)
 				rm->loadTexture(file);
 			else {
-				rm->clearTexture(file);
+				;//rm->clearTexture(file);
 			}
 		}
 	}
@@ -419,7 +419,7 @@ void GameStateLevel::readSetupFiles(const std::string& filename, bool allocate) 
 			if (allocate)
 				rm->loadJsonFile(file);
 			else
-				rm->clearJsonFile(file);
+				;//rm->clearJsonFile(file);
 		}
 
 		assert(setupFiles.HasMember("PNG_files") && setupFiles["PNG_files"].IsArray());
@@ -433,7 +433,7 @@ void GameStateLevel::readSetupFiles(const std::string& filename, bool allocate) 
 			if (allocate)
 				rm->readMap(file);
 			else
-				rm->clearMap(file);
+				;//rm->clearMap(file);
 		}
 	}
 	//loadingbar->kill();

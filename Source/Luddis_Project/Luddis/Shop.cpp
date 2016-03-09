@@ -99,7 +99,7 @@ void Shop::initializeContents() {
 		std::string image = configDoc[itr]["image"].GetString();
 		std::string description = configDoc[itr]["description"].GetString();
 		int ID = configDoc[itr]["ID"].GetInt();
-		sf::Vector2f position = sf::Vector2f(176, (float)(486 + counter*210)) + mBackground.getPosition() - mBackground.getOrigin();
+		sf::Vector2f position = sf::Vector2f(176, (float)(486 + counter * 210)) + mBackground.getPosition() - mBackground.getOrigin();
 		addItemButton(image, "Accessory" + std::to_string(ID), position, mMaxPage);
 		sf::IntRect box(330, 418 + counter * 208, 382, 142);
 		mDescriptions[mMaxPage].push_back(new TextBoxDecorator(box, description, 32));
