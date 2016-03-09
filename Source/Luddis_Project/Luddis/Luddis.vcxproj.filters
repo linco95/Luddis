@@ -64,6 +64,7 @@
     <ClCompile Include="TutorialText.cpp" />
     <ClCompile Include="Tween.cpp" />
     <ClCompile Include="VectorMath.cpp" />
+    <ClCompile Include="GameStateStart.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -103,7 +104,6 @@
     <ClInclude Include="Polynomial.h" />
     <ClInclude Include="PowerupDisplay.h" />
     <ClInclude Include="PowerUps.h" />
-    <ClInclude Include="Renderer.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="ScoreCounter.h" />
     <ClInclude Include="Entity.h" />

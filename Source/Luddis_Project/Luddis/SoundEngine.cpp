@@ -101,11 +101,8 @@ FMOD_RESULT SoundEngine::playEvent(const char * path) {
 		result = mSoundEventInstances[path]->setVolume(mMainVolume* mMusicVolume / 100);
 	}
 
-	FMOD::Studio::ParameterInstance* parameter;
-	mSoundEventInstances[path]->getParameter("Menu", &parameter);
-
-	float value;
-	parameter->getValue(&value);
+	float volume;
+	mMusicEventInstances[path]->getVolume(&volume);
 
 	return result;
 }
