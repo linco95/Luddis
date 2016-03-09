@@ -116,13 +116,12 @@ void Room::createButtons(int room) {
 		position.x = ViewUtility::getViewSize().getSize().x*0.513f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.643f;
 		addButton(LEVEL1_TEXTURE, "", "Level01", position, Button::RECTANGLE);
-		position.x = ViewUtility::getViewSize().getSize().x*0.85f;
-		position.y = ViewUtility::getViewSize().getSize().y*0.50f;
-		addButton(DOOR_TEXTURE, "", "Room3", position, Button::RECTANGLE);
+		position.x = ViewUtility::getViewSize().getSize().x*0.93f;
+		position.y = ViewUtility::getViewSize().getSize().y*0.45f;
+		addButton(DOOR_TEXTURE, "", "Level03", position, Button::RECTANGLE);
 		position.x = ViewUtility::getViewSize().getSize().x*0.755f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.585f;
 		addButton(LEVEL2_TEXTURE, "", "Level02", position, Button::RECTANGLE);
-		mLevelButtons.back()->setScale(-1.0f, 1.0f);
 		break;
 
 	case 3:
