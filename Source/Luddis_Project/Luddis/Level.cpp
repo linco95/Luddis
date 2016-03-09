@@ -281,16 +281,9 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget, s
 
 	//Initialize entites from a JSON doc
 	initializeEntities(mWindow, configDoc);
-	
-	if (configDoc.HasMember("Level")) {
-		int level = configDoc["Level"].GetInt();
-		if (level == 1) mapfilepath = "Resources/Configs/Levels/Level1Gatherables.png";
-		else if (level == 2) mapfilepath = "Resources/Configs/Levels/Level2Gatherables.png";
-		else if (level == 3) mapfilepath = "Resources/Configs/Levels/Level3Gatherables.png";
-	}
 
 	// Initialize eggs, chips and ludd from a map
-	readInitMap(mapfilepath);
+	//readInitMap(mapfilepath);
 
 	mPointsOfNoReturn.push_back(mWindow->getSize().x / 2 + 1000.f);
 	mCurrentPONR = mWindow->getView().getSize().x / 2;
