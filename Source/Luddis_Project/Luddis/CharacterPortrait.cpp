@@ -7,8 +7,8 @@ static const char* EMOTION_TEXTURE = "Resources/Images/Portraits/Emotions.png";
 static const char* EMOTION_BUBBLE = "Resources/Images/Portraits/SpeechBubble.png";
 static const int DEFAULT_FONTSIZE = 24;
 
-static const int EMOTION_SHEET_ROWS = 3;
-static const int EMOTION_SHEET_COLUMNS = 3;
+static const int EMOTION_SHEET_ROWS = 1;
+static const int EMOTION_SHEET_COLUMNS = 9;
 //static sf::Vector2f DEFAULT_SCALE(1.0f, 1.0f);
 
 static const float HIGHLIGHT_MAXTIME = 0.8f;
@@ -25,6 +25,7 @@ CharacterPortrait::CharacterPortrait(std::string textureFilename, std::string ch
 	mEmotion(ResourceManager::getInstance().getTexture(EMOTION_TEXTURE)),
 	mBubble(ResourceManager::getInstance().getTexture(EMOTION_BUBBLE)),
 	mName(characterName, ResourceManager::getInstance().getFont(DEFAULT_FONT), DEFAULT_FONTSIZE) {
+
 	setPosition(pos);
 	float spriteOrigoX = (float)mSprite.getTextureRect().width / 2;
 	float spriteOrigoY = (float)mSprite.getTextureRect().height / 2;
@@ -45,7 +46,7 @@ CharacterPortrait::CharacterPortrait(std::string textureFilename, std::string ch
 	for (int i = 0; i < EMOTION_SHEET_ROWS; i++) {
 		for (int j = 0; j < EMOTION_SHEET_COLUMNS; j++) {
 			mFrame[index].top = (index / EMOTION_SHEET_COLUMNS)*FRAME_HEIGHT;
-			mFrame[index].left = (index % EMOTION_SHEET_COLUMNS)*FRAME_WIDTH;
+			mFrame[index].left = (index % EMOTION_SHEET_COLUMNS)*FRAME_WIDTH - FRAME_WIDTH;
 			mFrame[index].height = FRAME_HEIGHT;
 			mFrame[index].width = FRAME_WIDTH;
 
@@ -54,8 +55,10 @@ CharacterPortrait::CharacterPortrait(std::string textureFilename, std::string ch
 	}
 	mBubble.setOrigin((float)mBubble.getTextureRect().width, (float)mBubble.getTextureRect().height);
 	mEmotion.setOrigin((float)mFrame[0].width / 2, (float)mFrame[0].height / 2);
-	mBubble.move(285, -30);
-	mEmotion.move(175, -170);
+	mBubble.setScale(0.8f, 0.8f);
+	mEmotion.setScale(0.8f, 0.8f);
+	mBubble.move(485, -30);
+	mEmotion.move(285, -250);
 	if (mirror) {
 		setScale(-1, 1);
 		mName.setScale(-1, 1);

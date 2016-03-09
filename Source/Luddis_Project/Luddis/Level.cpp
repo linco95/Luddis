@@ -80,6 +80,10 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 	if (configDoc.HasMember("Level"))
 		level = configDoc["Level"].GetInt();
 
+	SoundEngine* se = &SoundEngine::getInstance();
+	const char* levelMusic = "event:/Music/Levels/Lvl2"; //TODO: make dynamic
+	se->playEvent(levelMusic);
+
 	// Silverfishes
 	if (configDoc.HasMember("Silverfish_spawns") && configDoc["Silverfish_spawns"].IsArray()) {
 	const rapidjson::Value& fishSpawns = configDoc["Silverfish_spawns"];
@@ -89,14 +93,16 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		assert(itr->HasMember("y") && (*itr)["y"].IsInt());
 		assert(itr->HasMember("angle") && (*itr)["angle"].IsDouble());
 		assert(itr->HasMember("activationpos") && (*itr)["activationpos"].IsInt());
+		assert(itr->HasMember("type") && (*itr)["type"].IsInt());
 
 		float x = (float)(*itr)["x"].GetInt();
 		float y = (float)(*itr)["y"].GetInt();
 		sf::Vector2f pos(x, y);
 		float angle = (float)(*itr)["angle"].GetDouble();
 		float act = (float)(*itr)["activationpos"].GetInt();
+		int type = (*itr)["type"].GetInt();
 
-		Silverfish* fish = new Silverfish(mWindow, pos, angle, act, mTarget);
+		Silverfish* fish = new Silverfish(mWindow, Silverfish::FishType(type), pos, angle, act, mTarget);
 		mEntityManager->addEntity(fish);
 		cm->addCollidable(fish);
 		Debug::log("Spawning silverfish at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
@@ -296,15 +302,9 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget, s
 
 	//Initialize entites from a JSON doc
 	initializeEntities(mWindow, configDoc);
-	
-	if (configDoc.HasMember("Level")) {
-		int level = configDoc["Level"].GetInt();
-		if (level == 1) mapfilepath = "Resources/Configs/Levels/Level1Gatherables.png";
-		else if (level == 2) mapfilepath = "Resources/Configs/Levels/Level2Gatherables.png";
-	}
 
 	// Initialize eggs, chips and ludd from a map
-	readInitMap(mapfilepath);
+	//readInitMap(mapfilepath);
 
 	mPointsOfNoReturn.push_back(mWindow->getSize().x / 2 + 1000.f);
 	mCurrentPONR = mWindow->getView().getSize().x / 2;
@@ -315,11 +315,11 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget, s
 void Level::tick(const sf::Time& deltaTime) {
 	updateView(deltaTime);
 	if (mTimeStunned <= 0) {
-		mEffectInterval -= deltaTime.asSeconds();
+	/*	mEffectInterval -= deltaTime.asSeconds();
 		if (mEffectInterval <= 0) {
 			createEffects();
 			mEffectInterval = (float)(rand() % 5);
-		}
+		}*/
 	}
 	else {
 		mTimeStunned -= deltaTime.asSeconds();
@@ -372,15 +372,16 @@ void Level::updateView(const Time& deltaTime) {
 	view.setCenter(mTarget->getPosition());
 #endif // _DESIGNER_HAX_
 
-	int progress = (int)((mTarget->getPosition().x / mMapBounds.width)*7);
+	int progress = (int)((mTarget->getPosition().x / mMapBounds.width)*100);
 	if (mProgress != progress) {
 		mProgress = progress;
 		//TODO: make dynamic (add current level event to setup file)
 		static const char* parameter = "Progress";
-		SoundEngine::getInstance().setEventParameter("event:/MUSIK/Bana_1", parameter, (float)mProgress);
+		SoundEngine::getInstance().setEventParameter("event:/Music/Levels/Lvl2", parameter, (float)mProgress);
 	}
 	mWindow->setView(view);
 }
+
 bool Level::isAlive() const {
 	return true;
 }
@@ -413,14 +414,14 @@ void Level::draw(RenderTarget& target, RenderStates states) const {
 
 //TODO: move to an effect creator, as level has
 //more than enough responsibilities.
-void Level::createEffects() {
+/*void Level::createEffects() {
 	//Background effect
 	sf::Vector2f vec = VectorMath::normalizeVector(sf::Vector2f(-0.5f, 1.0f));
 	for (int i = 0; i <= rand() % 20; i++) {
 		BackgroundEffect* eff = new BackgroundEffect(EFFECT_FILEPATH, vec*EFFECT_SPEED, sf::Vector2f((float)(rand() % 15000), -100) + vec*EFFECT_SPEED / 3.0f, EFFECT_LIFETIME, mTarget);
 		mEntityManager->addEntity(eff);
 	}
-}
+}*/
 
 void Level::stun(const sf::Time& deltatime) {
 	mTimeStunned = deltatime.asSeconds();

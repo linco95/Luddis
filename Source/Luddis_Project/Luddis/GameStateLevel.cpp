@@ -111,7 +111,7 @@ void GameStateLevel::update(sf::Clock& clock) {
 	//Look to see if Luddis is dead, before garbage collection
 	if (!mPlayer->isAlive()) {
 		mPlayable = false;
-		mGameStatePaused->createMenu(Menu::DEATHMENU);
+		mGameStatePaused->createMenu(Menu::DEATHMENU, this);
 		GameManager::getInstance().setGameState(mGameStatePaused);
 	}
 
@@ -171,7 +171,7 @@ void GameStateLevel::onEvent(const sf::Event &aEvent) {
 		switch (aEvent.type) {
 		case sf::Event::EventType::KeyPressed:
 			if (aEvent.key.code == sf::Keyboard::Escape) {
-				mGameStatePaused->createMenu(Menu::PAUSEMENU);
+				mGameStatePaused->createMenu(Menu::PAUSEMENU, this);
 				mGameStatePaused->setBackgroundParameters(mEntityM, mGUIM, this);
 				GameManager::getInstance().setGameState(mGameStatePaused);
 			}
@@ -188,7 +188,7 @@ void GameStateLevel::handleEvents(){
 }
 
 void GameStateLevel::handleClicks(std::string command){
-	if (command == "DialogueDelete") {
+	if (command == "DeleteDialogue") {
 		mInDialogue = false;
 		fuckOffSpider();
 	}

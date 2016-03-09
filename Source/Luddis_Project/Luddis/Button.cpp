@@ -4,6 +4,7 @@
 #include "EventManager.h"
 #include "ViewUtility.h"
 #include "VectorMath.h"
+#include "SoundEngine.h"
 #include <vector>
 
 static const std::string DEFAULT_FONTTYPE = "Resources/Fonts/Arial.ttf";
@@ -80,7 +81,7 @@ Button::Strata Button::getRenderLayer() const {
 	return mStrata;
 }
 
-void Button::setStrata(Strata strata){
+void Button::setStrata(Strata strata) {
 	mStrata = strata;
 }
 
@@ -119,6 +120,8 @@ void Button::onEvent(const sf::Event &aEvent) {
 				//Check to see if the mouse position is within the images bounds
 				if (rect.contains(mousePos)) {
 					mSprite.setTextureRect(mRects[2]);
+					SoundEngine* se = &SoundEngine::getInstance();
+					se->playEvent("event:/Menu/Button/Button_Click");
 					mClick = true;
 				}
 			}
@@ -137,12 +140,16 @@ void Button::onEvent(const sf::Event &aEvent) {
 			else if (aEvent.type == sf::Event::MouseMoved) {
 				mousePos = mWindow->mapPixelToCoords(sf::Vector2i(aEvent.mouseMove.x, aEvent.mouseMove.y)) - getPosition();
 
-				if (mSprite.getGlobalBounds().contains(mousePos)) {
+				if (mSprite.getGlobalBounds().contains(mousePos) && !mInside) {
+					mInside = true;
 					mSprite.setTextureRect(mRects[1]);
+					SoundEngine* se = &SoundEngine::getInstance();
+					se->playEvent("event:/Menu/Button/Button_Change");
 				}
-				else {
+				else if (!mSprite.getGlobalBounds().contains(mousePos) && mInside) {
 					mSprite.setTextureRect(mRects[0]);
 					mClick = false;
+					mInside = false;
 				}
 			}
 			break;
@@ -156,6 +163,8 @@ void Button::onEvent(const sf::Event &aEvent) {
 				//Check to see if the mouse position is within the images bounds
 				if (distance <= mSprite.getGlobalBounds().height / 2) {
 					mSprite.setTextureRect(mRects[2]);
+					SoundEngine* se = &SoundEngine::getInstance();
+					se->playEvent("event:/Menu/Button/Button_Click");
 					mClick = true;
 				}
 			}
@@ -174,10 +183,14 @@ void Button::onEvent(const sf::Event &aEvent) {
 			else if (aEvent.type == sf::Event::MouseMoved) {
 				mousePos = mWindow->mapPixelToCoords(sf::Vector2i(aEvent.mouseMove.x, aEvent.mouseMove.y)) - getPosition();
 				float distance = VectorMath::getVectorLength(mSprite.getPosition() - mousePos);
-				if (distance <= mSprite.getGlobalBounds().height / 2) {
+				if (distance <= mSprite.getGlobalBounds().height / 2 && !mInside) {
+					mInside = true;
 					mSprite.setTextureRect(mRects[1]);
+					SoundEngine* se = &SoundEngine::getInstance();
+					se->playEvent("event:/Menu/Button/Button_Change");
 				}
-				else {
+				else if (distance > mSprite.getGlobalBounds().height / 2 && mInside) {
+					mInside = false;
 					mSprite.setTextureRect(mRects[0]);
 					mClick = false;
 				}

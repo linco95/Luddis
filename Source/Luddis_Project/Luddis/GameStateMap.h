@@ -10,6 +10,8 @@
 #include <vector>
 #include <SFML/Graphics/View.hpp>
 
+class Mannequin;
+class SockNPC;
 class GameStatePaused;
 
 class GameStateMap: public GameState{
@@ -38,6 +40,8 @@ private:
 	bool mOccupied;
 	int mCurrentDialogueID;
 	GameStatePaused* mGameStatePaused;
+	SockNPC* mSock;
+	Mannequin* mMannequin;
 	Menu* mMenu;
 	EntityManager mEntityM;
 	GUIManager mGUIM;

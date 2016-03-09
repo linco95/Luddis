@@ -3,6 +3,7 @@
 
 #include "InterfaceElement.h"
 #include "Button.h"
+#include "TextBoxDecorator.h"
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <vector>
@@ -29,11 +30,11 @@ public:
 	void setActive(const bool & active) override;
 	void onClick(std::string command) override;
 	void buttonFuncSwitchPage(int page);
-	void buttonFuncClose();
-	void buttonFunc();
 
 private:
 	void initialize();
+	void initializeContents();
+	void addItemButton(std::string buttonFile, std::string buttonFunc, sf::Vector2f pos, int index);
 
 	static const int MAX_PAGES = 10;
 
@@ -43,7 +44,7 @@ private:
 	GameState* mGameState;
 	Inventory* mInventory;
 	sf::Sprite mBackground;
-	sf::Text mText;
+	sf::Text mChips;
 	int mActivePage;
 	int mMaxPage;
 
@@ -52,7 +53,8 @@ private:
 	typedef std::vector<Button*> ButtonVector;
 	ButtonVector mButtons;
 	ButtonVector mItems[MAX_PAGES];
-
+	typedef std::vector<TextBoxDecorator*> TextBoxVector;
+	TextBoxVector mDescriptions[MAX_PAGES];
 };
 
 #endif // !_INCLUDED_SHOP_
