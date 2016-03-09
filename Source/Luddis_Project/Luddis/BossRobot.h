@@ -1,16 +1,14 @@
-#ifndef _INCLUDED_BOSSDISHCLOTH_
-#define _INCLUDED_BOSSDISHCLOTH_
+#ifndef INCLUDED_BOSSROBOT
+#define INCLUDED_BOSSROBOT
 
-#include "AnimationQueue.h"
 #include "CollidableEntity.h"
-#include <SFML/Graphics/RenderWindow.hpp>
+#include "EntityManager.h"
+#include "AnimationQueue.h"
 
-class EntityManager;
-
-class BossDishCloth: public CollidableEntity{
+class BossRobot : public CollidableEntity {
 public:
-	BossDishCloth(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget, EntityManager* entityManager);
-	virtual ~BossDishCloth();
+	BossRobot(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget, EntityManager* entityManager);
+	virtual ~BossRobot();
 
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -33,7 +31,6 @@ private:
 	sf::RenderWindow* mWindow;
 	sf::Transformable* mTarget;
 	const float mActivate;
-	bool mShooting;
 	bool mIsAlive;
 	bool mIsActive;
 	float mAttackInterval;
@@ -44,4 +41,4 @@ private:
 	float mInvulnerable;
 };
 
-#endif // !_INCLUDED_BOSSDISHCLOTH
+#endif // !INCLUDED_BOSSROBOT

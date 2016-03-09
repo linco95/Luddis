@@ -169,7 +169,7 @@ void Silverfish::collide(CollidableEntity *collidable, const sf::Vector2f& moveA
 			}
 		}
 	}
-	if (collidable->getCollisionCategory() == PLAYER) {
+	if (collidable->getCollisionCategory() == PLAYER_OBJECT) {
 		if (mInvulnerable <= 0) {
 			Inventory::getInstance().addDust(-1);
 		}
