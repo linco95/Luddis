@@ -111,6 +111,7 @@ void CollisionManager::narrowCollision(std::pair<CollidableEntity*, CollidableEn
 	if (
 		//If eighter the first or the second is IGNORE, proceed without checking for collisions.
 		catFirst == CollidableEntity::IGNORE || catSecond == CollidableEntity::IGNORE ||
+		(catFirst == CollidableEntity::SOLID && catSecond == CollidableEntity::SOLID) ||
 		(catFirst == CollidableEntity::PLAYER_OBJECT && catSecond == CollidableEntity::PLAYER_PROJECTILE) || (catSecond == CollidableEntity::PLAYER_OBJECT && catFirst == CollidableEntity::PLAYER_PROJECTILE) ||
 		(catFirst == CollidableEntity::PLAYER_PROJECTILE && catSecond == CollidableEntity::PLAYER_PROJECTILE)||
 		(catFirst == CollidableEntity::PLAYER_PROJECTILE && catSecond == CollidableEntity::COLLECT) || (catSecond == CollidableEntity::PLAYER_PROJECTILE && catFirst == CollidableEntity::COLLECT) ||
@@ -127,7 +128,6 @@ void CollisionManager::narrowCollision(std::pair<CollidableEntity*, CollidableEn
 		(catFirst == CollidableEntity::ENEMY_STUN && catSecond == CollidableEntity::ENEMY_STUN) ||
 		(catFirst == CollidableEntity::ENEMY_STUN && catSecond == CollidableEntity::EVENTZONE) || (catSecond == CollidableEntity::ENEMY_STUN && catFirst == CollidableEntity::EVENTZONE) ||
 		(catFirst == CollidableEntity::SOLID && catSecond == CollidableEntity::EVENTZONE) || (catSecond == CollidableEntity::SOLID && catFirst == CollidableEntity::EVENTZONE) ||
-		(catFirst == CollidableEntity::SOLID && catSecond == CollidableEntity::SOLID) ||
 		(catFirst == CollidableEntity::EVENTZONE && catSecond == CollidableEntity::EVENTZONE))
 		return;
 
@@ -240,11 +240,11 @@ void CollisionManager::narrowCollision(std::pair<CollidableEntity*, CollidableEn
 		shapeProj[1] = getProjection(*hitboxPair.second, axis);
 
 		// Look for a gap between the projections and if there's a gap, the shapes are not colliding, i.e. go on to the next hitbox pair
-		if (shapeProj[0].first > shapeProj[1].second || shapeProj[1].first > shapeProj[0].second) {
+		if (shapeProj[0].first >= shapeProj[1].second || shapeProj[1].first >= shapeProj[0].second) {
 			return;
 		}
 		else {
-			if (shapeProj[0].first < shapeProj[1].second && shapeProj[0].first > shapeProj[1].first) {
+			if (shapeProj[0].first <= shapeProj[1].second && shapeProj[0].first >= shapeProj[1].first) {
 				float o = shapeProj[1].second - shapeProj[0].first;
 				if (o < overlap) {
 					overlap = o;
