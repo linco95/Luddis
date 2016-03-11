@@ -1,7 +1,7 @@
 #include "GUIManager.h"
 #include <cassert>
 #include <map>
-
+#include "Renderer.h"
 GUIManager::GUIManager() :
 mElements(){
 
@@ -37,6 +37,7 @@ void GUIManager::clearInterfaceElements(){
 }
 
 void GUIManager::renderElements(sf::RenderWindow& window){
+	static Renderer* renderer = &Renderer::getInstance();
 	// sort the entities renderlayer
 	std::map<InterfaceElement::Strata, InterfaceElementVector> renderMap;
 	for (auto e : mElements) {
@@ -48,6 +49,7 @@ void GUIManager::renderElements(sf::RenderWindow& window){
 		for (auto e : it.second){
 			if (e->isActive()){
 				window.draw(*e);
+				//renderer->addDrawableToQueue(e, Renderer::GUI);
 			}
 		}
 	}

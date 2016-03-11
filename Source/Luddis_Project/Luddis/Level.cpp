@@ -5,7 +5,6 @@
 #include "BossRobot.h"
 #include "BossRobotButton.h"
 #include "BackgroundEffect.h"
-#include "Luddis.h"
 #include "EventZone.h"
 #include "Obstacle.h"
 #include "TutorialText.h"
@@ -32,7 +31,7 @@ static const float EFFECT_INTERVAL = 0.7f,
 				   EFFECT_LIFETIME = 7.5f;
 
 static const char* EFFECT_FILEPATH = "Resources/Images/Rag_projectile.png";
-static const Entity::RenderLayer LAYER = Entity::RenderLayer::BACKGROUND;
+static const Renderer::RenderLayer LAYER = Renderer::BACKGROUND;
 static const char* mapfilepath;
 
 Level::Level(EntityManager* entityManager) :
@@ -182,9 +181,9 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		mEntityManager->addEntity(boss);
 		cm->addCollidable(boss);
 		Debug::log("Spawning boss at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
-		}
 	}
-	
+	}
+
 	/*
 	Debug::log("Rob begin");
 	//Robot test
@@ -229,14 +228,21 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 
 	//The background
 	if (configDoc.HasMember("Background")) {
+		// Check for foreground
+		
+		
+
 	const rapidjson::Value& background = configDoc["Background"];
 	assert(background.IsObject());
 	const rapidjson::Value& segments = background["segments"];
 	assert(segments.IsInt());
 	assert(background["filename"].IsString());
+
 		for (int i = 0; i < segments.GetInt(); i++) {
+
+
 		std::string BGFILEPATH = background["filename"].GetString();
-		int position = background["filename"].GetStringLength() - 4;
+			int position = BGFILEPATH.size() - 4;
 			BGFILEPATH.insert(position, std::to_string(i + 1));
 		rm->loadTexture(BGFILEPATH, IntRect(Vector2<int>(), Vector2<int>(Texture::getMaximumSize(), Texture::getMaximumSize())));
 		sf::IntRect rect(0, 0, (int)rm->getTexture(BGFILEPATH).getSize().x, (int)rm->getTexture(BGFILEPATH).getSize().y);
@@ -244,9 +250,22 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		sf::Sprite sprite(rm->getTexture(BGFILEPATH));
 		sprite.setPosition((float)mMapBounds.width, 0.0f);
 		mBackgroundImages.push_back(sprite);
-		increaseMapBounds(rect);
+		
+		if (background.HasMember("Foreground")) {
+			const rapidjson::Value& foreground = background["Foreground"];
+				assert(foreground.IsString());
+				std::string FGFILEPATH = foreground.GetString();
+				position = FGFILEPATH.size() - 4;
+				FGFILEPATH.insert(position, std::to_string(i + 1));
+				sf::Sprite sprite(rm->loadTexture(FGFILEPATH, IntRect(Vector2<int>(), Vector2<int>(Texture::getMaximumSize(), Texture::getMaximumSize()))));
+				sprite.setPosition((float)mMapBounds.width, 0.0f);
+				mForegroundImages.push_back(sprite);
+			}
+
+			increaseMapBounds(rect);
 	}
 	}
+	
 	//Dust
 	if (configDoc.HasMember("Dust_spawns") && configDoc["Dust_spawns"].IsArray()) {
 		const rapidjson::Value& dustSpawns = configDoc["Dust_spawns"];
@@ -302,7 +321,7 @@ void Level::initializeLevel(sf::RenderWindow& aWindow, Transformable* aTarget, s
 
 	//Initialize entites from a JSON doc
 	initializeEntities(mWindow, configDoc);
-
+	
 	// Initialize eggs, chips and ludd from a map
 	//readInitMap(mapfilepath);
 
@@ -323,6 +342,24 @@ void Level::tick(const sf::Time& deltaTime) {
 	}
 	else {
 		mTimeStunned -= deltaTime.asSeconds();
+	}
+
+
+	// TODO: This is temporary, and needs to be moved back to rendering function. It is put here for now because we need to rewrite all entities to add sprites to renderer instead of drawing them themselves. Until then this is here instead :)
+	static Renderer* renderer = &Renderer::getInstance();
+
+	const int max = mBackgroundImages.size();
+	for (int i = 0; i < max; i++)
+	{
+		float x = mWindow->getView().getCenter().x;
+		float xMin = (mMapBounds.width / max) * (i + 1) - mWindow->getView().getSize().x * 3;
+		float xMax = (mMapBounds.width / max) * (i + 1) + mWindow->getView().getSize().x * 3;
+
+		if (x < xMax && x >= xMin) {
+			renderer->addDrawableToQueue(&mBackgroundImages[i], Renderer::BACKGROUND);
+			if (!mForegroundImages.empty())
+				renderer->addDrawableToQueue(&mForegroundImages[i], Renderer::FOREGROUND);
+}
 	}
 }
 
@@ -372,7 +409,7 @@ void Level::updateView(const Time& deltaTime) {
 	view.setCenter(mTarget->getPosition());
 #endif // _DESIGNER_HAX_
 
-	int progress = (int)((mTarget->getPosition().x / mMapBounds.width)*100);
+	int progress = (int)((mTarget->getPosition().x / mMapBounds.width) * 100);
 	if (mProgress != progress) {
 		mProgress = progress;
 		//TODO: make dynamic (add current level event to setup file)
@@ -394,22 +431,12 @@ void Level::setActive(const bool& active) {
 	mIsActive = active;
 }
 
-Entity::RenderLayer Level::getRenderLayer() const {
+Renderer::RenderLayer Level::getRenderLayer() const {
 	return LAYER;
 }
 
 void Level::draw(RenderTarget& target, RenderStates states) const {
-	int max = mBackgroundImages.size();
-	for (int i = 0; i < max; i++)
-	{
-		float x = mWindow->getView().getCenter().x;
-		float xMin = (mMapBounds.width / max) * (i + 1) - mWindow->getView().getSize().x * 3;
-		float xMax = (mMapBounds.width / max) * (i + 1) + mWindow->getView().getSize().x * 3;
 
-		if (x < xMax && x >= xMin) {
-			target.draw(mBackgroundImages[i]);
-		}
-	}
 }
 
 //TODO: move to an effect creator, as level has

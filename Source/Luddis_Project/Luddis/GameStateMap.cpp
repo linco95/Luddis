@@ -60,6 +60,7 @@ void GameStateMap::initialize(sf::RenderWindow* window) {
 		mRooms.push_back(room);
 		mGUIM.addInterfaceElement(room);
 	}
+
 	mRooms.at(mCurrentRoom - 1)->setActive(true);
 	mGameStatePaused = &GameStatePaused::getInstance();
 }
@@ -94,6 +95,7 @@ void GameStateMap::update(sf::Clock& clock) {
 void GameStateMap::render() {
 	//Draw objects
 	mEntityM.renderEntities(*mWindow);
+	Renderer::getInstance().render(*mWindow);
 	mGUIM.renderElements(*mWindow);
 }
 

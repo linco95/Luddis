@@ -47,19 +47,10 @@ void EntityManager::removeDeadEntities(){
 */
 
 void EntityManager::renderEntities(sf::RenderWindow& window){
-
-	// sort the entities renderlayer
-	std::map<Entity::RenderLayer, EntitiesVector> renderMap;
+	static Renderer* renderer = &Renderer::getInstance();
 	for (auto e : mEntities) {
-		renderMap[e->getRenderLayer()].push_back(e);
-	}
-	// render the entities
-	
-	for (auto it : renderMap){
-		
-		for (auto e : it.second){
-			window.draw(*e);
-		}
+		//e->draw(); // adds drawables to renderer
+		renderer->addDrawableToQueue(e, e->getRenderLayer());
 	}
 }
 

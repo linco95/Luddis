@@ -8,15 +8,16 @@
 #include "Dialogue.h"
 #include "Filter.h"
 #include "Debug.h"
+#include "Overlay.h"
 #include "SoundEngine.h"
 #include <SFML/Graphics/Rect.hpp>
 
 static const std::string LEVEL_CONFIG_PATH = "Resources/Configs/Levels/";
 static const std::string DOOR_TEXTURE = "Resources/Images/Rooms/Doorknob.png";
-static const std::string SHOP_TEXTURE = "Resources/Images/GUI/Button.png";
+static const std::string SHOPBUTTON_TEXTURE = "Resources/Images/Rooms/ButtonSockShop.png";
 static const std::string SOCKSHOP_TEXTURE = "Resources/Images/Rooms/Shop.png";
 static const std::string DIALOGUE_TEXTURE = "Resources/Images/GUI/Button.png";
-static const std::string OVERLAY_TEXTURE = "Resources/Images/Rooms/sockshop_overlay.png";
+static const char* OVERLAY_TEXTURE = "Resources/Images/Rooms/sockshop_overlay.png";
 static const std::string LEVEL1_TEXTURE = "Resources/Images/Rooms/Level1.png";
 static const std::string LEVEL2_TEXTURE = "Resources/Images/Rooms/Level2.png";
 
@@ -25,6 +26,7 @@ static const std::string DIALOGUE_PATH = "Resources/Configs/Dialogue/";
 Room::Room(GUIManager* guiManager, std::string textureFilename, EventManager* eventManager, sf::RenderWindow* window, GameState* gameState) :
 	mIsActive(false),
 	mIsAlive(true),
+	mOverlay(nullptr),
 	mBackground(ResourceManager::getInstance().getTexture(textureFilename)),
 	mGUIManager(guiManager),
 	mEventManager(eventManager),
@@ -37,6 +39,8 @@ Room::~Room() {
 	for (auto b : mLevelButtons) {
 		b->kill();
 	}
+	if (mOverlay != nullptr)
+		mOverlay->kill();
 }
 
 void Room::tick(const sf::Time& deltaTime) {
@@ -65,6 +69,8 @@ bool Room::isActive() const {
 void Room::setActive(const bool& active) {
 	for (auto b : mLevelButtons)
 		b->setActive(active);
+	if (mOverlay != nullptr)
+		mOverlay->setActive(active);
 	mIsActive = active;
 }
 
@@ -99,26 +105,32 @@ void Room::createButtons(int room) {
 		position.x = ViewUtility::getViewSize().getSize().x*0.85f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.50f;
 		addButton(DOOR_TEXTURE, "", "Room2", position, Button::ButtonType::RECTANGLE);
-		position.x = ViewUtility::getViewSize().getSize().x*0.60f;
-		addButton(SHOP_TEXTURE, "", "Shop", position, Button::ButtonType::RECTANGLE);
-		position.x = ViewUtility::getViewSize().getSize().x*0.40f;
-		addButton(SHOP_TEXTURE, "", "Dialogue", position, Button::ButtonType::RECTANGLE);
 
-		position = ViewUtility::getViewSize().getCenter();
-		addButton(OVERLAY_TEXTURE, "", "Do nothing, capishe?", position, Button::ButtonType::RECTANGLE);
-		mLevelButtons.back()->setStrata(THIRD);
+		position = { 164, 209 };
+		addButton(SHOPBUTTON_TEXTURE, "", "Shop", position, Button::ButtonType::RECTANGLE);
+		mLevelButtons.back()->setStrata(InterfaceElement::SECOND);
+
+		//position.x = ViewUtility::getViewSize().getSize().x*0.40f;
+		//addButton(SHOPBUTTON_TEXTURE, "", "Dialogue", position, Button::ButtonType::RECTANGLE);
+
+		mOverlay = new Overlay(OVERLAY_TEXTURE, InterfaceElement::Strata::THIRD);
+		mOverlay->setActive(false);
+		mGUIManager->addInterfaceElement(mOverlay);
 		break;
 
 	case 2:
 		position.x = ViewUtility::getViewSize().getSize().x*0.22f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.62f;
 		addButton(SOCKSHOP_TEXTURE, "", "Room1", position, Button::RECTANGLE);
+
 		position.x = ViewUtility::getViewSize().getSize().x*0.513f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.643f;
 		addButton(LEVEL1_TEXTURE, "", "Level01", position, Button::RECTANGLE);
+
 		position.x = ViewUtility::getViewSize().getSize().x*0.93f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.45f;
 		addButton(DOOR_TEXTURE, "", "Level03", position, Button::RECTANGLE);
+
 		position.x = ViewUtility::getViewSize().getSize().x*0.755f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.585f;
 		addButton(LEVEL2_TEXTURE, "", "Level02", position, Button::RECTANGLE);
@@ -128,13 +140,16 @@ void Room::createButtons(int room) {
 		position.x = ViewUtility::getViewSize().getSize().x*0.15f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.50f;
 		addButton(DOOR_TEXTURE, "", "Room2", position, Button::RECTANGLE);
+
 		mLevelButtons.back()->setScale(-1.0f, 1.0f);
 		position.x = ViewUtility::getViewSize().getSize().x*0.755f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.585f;
 		addButton(LEVEL2_TEXTURE, "", "Level02", position, Button::RECTANGLE);
+
 		position.x = ViewUtility::getViewSize().getSize().x*0.93f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.445f;
 		addButton(DOOR_TEXTURE, "", "Level03", position, Button::RECTANGLE);
+
 		break;
 
 	default:

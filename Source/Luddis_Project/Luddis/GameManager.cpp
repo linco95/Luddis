@@ -6,6 +6,8 @@
 #include "EventObserver.h"
 #include "EventManager.h"
 #include "ResourceManager.h"
+//#include "SoundEngine.h"
+#include "Renderer.h"
 #include "SoundEngine.h"
 #include "GUIManager.h"
 #include "Dialogue.h"
@@ -14,6 +16,7 @@
 #include <vector>
 #include "ScoreCounter.h"
 #include "ScoreGauge.h"
+#include "GameStateStart.h"
 #include "GameStateLevel.h"
 #include "GameStatePaused.h"
 #include "GameStateMap.h"
@@ -78,7 +81,7 @@ struct GameManagerImp : public EventObserver {
 		srand((unsigned int)time(NULL));
 		initializeWindow();
 		initializeEntities();
-		
+
 	}
 	// http://acamara.es/blog/2012/02/keep-screen-aspect-ratio-with-different-resolutions-using-libgdx/
 	void initializeWindow(){
@@ -144,10 +147,11 @@ struct GameManagerImp : public EventObserver {
 	void gameLoop(){
 		// To avoid multiple functioncalls every iteration of gameloop
 		CollisionManager* cm = &CollisionManager::getInstance();
-		
+
 		SoundEngine* se = &SoundEngine::getInstance();
 
 		//The string bank contains all paths for the events etc.
+		se->setMainVolume(5);
 		se->loadBank(MASTERBANK);
 		se->loadBank(MASTER_BANK_STRINGS);
 		se->loadBank(MUSIC_BANK);
@@ -163,19 +167,21 @@ struct GameManagerImp : public EventObserver {
 		se->createEvent("event:/Menu/Button/Button_Fail", SoundEngine::SOUND);
 		se->createEvent("event:/Music/Levels/Lvl2", SoundEngine::MUSIC);
 		se->createEvent("event:/Music/Sockshop", SoundEngine::MUSIC);
-		
-		
+		se->createEvent("event:/Music/Meny", SoundEngine::MUSIC);
+
+		mGameStateStart = &GameStateStart::getInstance();
 		mGameStatePaused = &GameStatePaused::getInstance();
 		mGameStateLevel = &GameStateLevel::getInstance();
 		mGameStateMap = &GameStateMap::getInstance();
 		mGameStatePaused->initialize(&mMainWindow, &mEntityManager, &mGUIManager);
 		mGameStateLevel->initialize(&mMainWindow, &mEntityManager, &mGUIManager);
 		mGameStateMap->initialize(&mMainWindow);
-		mGameStateLevel->setupLevel(TEST_LEVEL);
-		mCurrentGameState = mGameStateLevel;
+		mGameStateStart->initialize(&mMainWindow);
+		//mGameStateLevel->setupLevel(TEST_LEVEL);
+		mCurrentGameState = mGameStateStart;
 
+		Renderer* renderer = &Renderer::getInstance();
 		View mapView;
-		se->setMainVolume(10);
 		Clock gameClock;
 		while (mMainWindow.isOpen()){
 			//Update soundengine
@@ -189,12 +195,14 @@ struct GameManagerImp : public EventObserver {
 
 			// Render according to the game's state
 			mMainWindow.clear();
-			mCurrentGameState->render();
 
+
+			mCurrentGameState->render();
+	
 			// Render the mouse on top of everything, always
 			mCursor.tick();
 			mMainWindow.draw(mCursor);
-
+			
 			// Swap the buffers
 			mMainWindow.display();
 		}
@@ -203,6 +211,7 @@ struct GameManagerImp : public EventObserver {
 	EntityManager mEntityManager;
 	EventManager mEventManager;
 
+	GameStateStart* mGameStateStart;
 	GameStateLevel* mGameStateLevel;
 	GameStatePaused* mGameStatePaused;
 	GameStateMap* mGameStateMap;
@@ -243,4 +252,3 @@ GameManager& GameManager::getInstance(){
 void GameManager::setGameState(GameState* gameState){
 	mGMImp->setGameState(gameState);
 }
-

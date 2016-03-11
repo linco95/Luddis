@@ -44,8 +44,8 @@ void EventZone::setActive(const bool& active){
 	mIsActive = active;
 }
 
-EventZone::RenderLayer EventZone::getRenderLayer() const{
-	return BACKGROUND;
+Renderer::RenderLayer EventZone::getRenderLayer() const{
+	return Renderer::BACKGROUND;
 }
 
 sf::FloatRect EventZone::getHitBox(){

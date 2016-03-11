@@ -26,7 +26,7 @@ public:
 	bool isAlive() const override;
 	bool isActive() const override;
 	void setActive(const bool& active) override;
-	Entity::RenderLayer getRenderLayer() const override;
+	Renderer::RenderLayer getRenderLayer() const override;
 	void initializeEntities(sf::RenderWindow* window, const rapidjson::Document& configDoc);
 	void readInitMap(const std:: string& filename);
 	void stun(const sf::Time& deltatime) override;
@@ -41,6 +41,7 @@ private:
 	sf::RenderWindow *mWindow;
 	typedef std::vector<sf::Sprite> SpriteVector;
 	SpriteVector mBackgroundImages;
+	SpriteVector mForegroundImages;
 	sf::Music *mLevelMusic;
 	sf::IntRect mMapBounds;
 	std::vector<float> mPointsOfNoReturn;

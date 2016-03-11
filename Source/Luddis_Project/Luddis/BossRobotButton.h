@@ -14,7 +14,7 @@ public:
 	bool isAlive() const override;
 	bool isActive() const override;
 	void setActive(const bool& active) override;
-	RenderLayer getRenderLayer() const override;
+	Renderer::RenderLayer getRenderLayer() const override;
 	Category getCollisionCategory() override;
 	Type getCollisionType() override;
 	void collide(CollidableEntity *collidable, const sf::Vector2f& moveAway) override;

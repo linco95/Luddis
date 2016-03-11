@@ -12,7 +12,7 @@
 #include <math.h>
 
 static float SPEED = 180;
-static const Entity::RenderLayer LAYER = Entity::RenderLayer::PLAYER;
+static const Renderer::RenderLayer LAYER = Renderer::PLAYER;
 static const std::string ANIMATION_ENTER = "resources/images/spritesheets/Spider_enter";
 static const std::string ANIMATION_IDLE = "resources/images/spritesheets/Spider_idle";
 static const std::string ANIMATION_LEAVE = "resources/images/spritesheets/Spider_climb";

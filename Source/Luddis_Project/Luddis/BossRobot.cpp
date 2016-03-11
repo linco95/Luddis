@@ -116,8 +116,8 @@ void BossRobot::setActive(const bool& active) {
 	mIsActive = active;
 }
 
-BossRobot::RenderLayer BossRobot::getRenderLayer() const {
-	return PLAYER;
+Renderer::RenderLayer BossRobot::getRenderLayer() const {
+	return Renderer::PLAYER;
 }
 
 BossRobot::Category BossRobot::getCollisionCategory() {

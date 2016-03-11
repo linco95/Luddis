@@ -150,6 +150,7 @@ void GameStateLevel::update(sf::Clock& clock) {
 void GameStateLevel::render(){
 	//Draw objects
 	mEntityM->renderEntities(*mWindow);
+	Renderer::getInstance().render(*mWindow);
 	//Change the view when drawing GUI elements
 	mMapView = mWindow->getView();
 	mWindow->setView(mGUIView);
@@ -267,12 +268,12 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	cinState->addCinematicSequence(&pauseCin);
 	cinState->addCinematicSequence(&tween2);*/
 	//cinState->addCinematicSequence(&movePoint);
-	cinState->addSpeedShift(50, 1);
-	cinState->addSpeedShift(100, 1);
-	cinState->addSpeedShift(50, 1);
-	cinState->addSpeedShift(100, 1);
-	cinState->addSpeedShift(50, 1);
-	cinState->addSpeedShift(100, 1);
+	//cinState->addSpeedShift(50, 1);
+	//cinState->addSpeedShift(100, 1);
+	//cinState->addSpeedShift(50, 1);
+	//cinState->addSpeedShift(100, 1);
+	//cinState->addSpeedShift(50, 1);
+	//cinState->addSpeedShift(100, 1);
 	mPlayer->setPlayerState(cinState);
 	mPlayer->setPosition(-50.0f, (float)ViewUtility::VIEW_HEIGHT/2.0f);
 	//END CINEMATIC TEST
