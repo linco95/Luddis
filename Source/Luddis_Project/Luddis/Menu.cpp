@@ -17,25 +17,38 @@ static const std::string STARTMENUBUTTON_QUIT = "Resources/Images/GUI/StartmenuQ
 static const std::string MENUBUTTON_TEXTURE_RETURN = "Resources/Images/GUI/ButtonReturn.png";
 static const std::string MENUBUTTON_TEXTURE_QUITGAME = "Resources/Images/GUI/ButtonQuitGame.png";
 static const std::string MENUBUTTON_TEXTURE_EXITLEVEL = "Resources/Images/GUI/ButtonExitLevel.png";
-static const std::string MENUBUTTON_TEXTURE_DERP = "Resources/Images/GUI/derp.png";
+static const std::string MENUBUTTON_TEXTURE_DERP = "Resources/Images/GUI/ButtonSound.png";
 static const std::string MENU_BACKGROUND_TEXTURE = "Resources/Images/GUI/Filter.png";
+static const std::string MENUSLIDER = "Resources/Images/GUI/Slider.png";
+static const std::string MENUSLIDER_GAUGE = "Resources/Images/GUI/LuddGaugeFrame.png";
 
-Menu::Menu(sf::RenderWindow* window, EventManager* eventManager, GUIManager* gUIManager, MenuType menuType) :
-	mBackground(new sf::RectangleShape()),
-	mIsActive(false),
+static bool CLICK = false;
+
+Menu::Menu(sf::RenderWindow* window, EventManager* eventManager, GUIManager* gUIManager, MenuType menuType, Menu* previousMenu) :
+	mBackground(nullptr),
+	mIsActive(true),
 	mIsAlive(true),
 	mMenuType(menuType),
 	mWindow(window),
 	mEventManager(eventManager),
-	mGUIManager(gUIManager) {
+	mGUIManager(gUIManager),
+	mPreviousMenu(previousMenu) {
 
-	//SoundEngine::getInstance().setEventParameter("event:/Menu/Button/Button_Change", "Menu", 1.0f);
-	//SoundEngine::getInstance().setEventParameter("event:/Music/Levels/Lvl2", "PauseMenu", 0.0f);
+	mEventManager->attatch(this, sf::Event::EventType::KeyPressed);
+
+	if (mPreviousMenu != nullptr)
+		mPreviousMenu->setActive(false);
+
+	mBackground = new sf::RectangleShape();
+	mBackground->setSize(ViewUtility::getViewSize().getSize());
+	mBackground->setOrigin(mBackground->getGlobalBounds().width / 2, mBackground->getGlobalBounds().height / 2);
+	mBackground->setTexture(&ResourceManager::getInstance().getTexture(MENU_BACKGROUND_TEXTURE));
+	mBackground->setOutlineThickness(0.0f);
+	mBackground->setFillColor(sf::Color(255, 255, 255, 255));
 }
 
 Menu::~Menu() {
-	//SoundEngine::getInstance().setEventParameter("event:/Menu/Button/Button_Change", "Menu", 0.0f);
-	//SoundEngine::getInstance().setEventParameter("event:/Music/Levels/Lvl2", "PauseMenu", 1.0f);
+	mEventManager->detatch(this, sf::Event::EventType::KeyPressed);
 	internalClear();
 }
 
@@ -43,18 +56,17 @@ void Menu::internalClear() {
 	for (auto e : mButtons) {
 		e->kill();
 	}
-	delete mBackground;
+	for (auto s : mSliders) {
+		s->kill();
+	}
+	if (mBackground != nullptr)
+		delete mBackground;
+	if (mPreviousMenu != nullptr)
+		mPreviousMenu->setActive(true);
 }
 
 void Menu::initialize(GameState* gameState) {
 	mGameState = gameState;
-	sf::Vector2f vector(mWindow->getView().getSize());
-	vector = vector*(2.0f / 3.0f);
-	mBackground->setSize(ViewUtility::getViewSize().getSize());
-	mBackground->setOrigin(mBackground->getGlobalBounds().width / 2, mBackground->getGlobalBounds().height / 2);
-	mBackground->setTexture(&ResourceManager::getInstance().getTexture(MENU_BACKGROUND_TEXTURE));
-	mBackground->setOutlineThickness(0.0f);
-	mBackground->setFillColor(sf::Color(255, 255, 255, 255));
 	sf::Vector2f vector2 = mWindow->getView().getCenter();
 	setPosition(vector2);
 	initializeButtons();
@@ -67,7 +79,7 @@ void Menu::initializeButtons() {
 	{
 	case Menu::MAINMENU:
 		offset = { -300, -400 };
-		addButton(STARTMENUBUTTON_PLAY, "", "NewGame", position + offset, Button::ButtonType::RECTANGLE);
+		addButton(STARTMENUBUTTON_PLAY, "", "Play", position + offset, Button::ButtonType::RECTANGLE);
 		//offset = { -450, 0 };
 		//addButton(MENUBUTTON_TEXTURE, "Ladda Spel", "LoadGame", position + offset, Button::ButtonType::RECTANGLE);
 		offset = { -300, -150 };
@@ -86,7 +98,7 @@ void Menu::initializeButtons() {
 		offset = { 450, 0 };
 		addButton(MENUBUTTON_TEXTURE_EXITLEVEL, "", "ExitLevel", position + offset, Button::ButtonType::CIRCLE);
 		offset = { 0, 275 };
-		addButton(MENUBUTTON_TEXTURE_RETURN, "", "Continue", position + offset, Button::ButtonType::CIRCLE);
+		addButton(MENUBUTTON_TEXTURE_RETURN, "", "Previous", position + offset, Button::ButtonType::CIRCLE);
 		break;
 
 	case Menu::ROOMMENU:
@@ -95,7 +107,7 @@ void Menu::initializeButtons() {
 		offset = { -150, 50 };
 		addButton(MENUBUTTON_TEXTURE_SETTINGS, "", "Settings", position + offset, Button::ButtonType::CIRCLE);
 		offset = { 0, 275 };
-		addButton(MENUBUTTON_TEXTURE_RETURN, "", "Continue", position + offset, Button::ButtonType::CIRCLE);
+		addButton(MENUBUTTON_TEXTURE_RETURN, "", "Previous", position + offset, Button::ButtonType::CIRCLE);
 		break;
 
 	case Menu::DEATHMENU:
@@ -108,6 +120,20 @@ void Menu::initializeButtons() {
 		offset = { 200, 150 };
 		addButton(MENUBUTTON_TEXTURE_QUITGAME, "", "QuitGame", position + offset, Button::ButtonType::CIRCLE);
 		break;
+
+	case Menu::SETTINGSMENU:
+		float mainVolume = SoundEngine::getInstance().getMainVolume();
+		float audioVolume = SoundEngine::getInstance().getSoundVolume();
+		float musicVolume = SoundEngine::getInstance().getMusicVolume();
+		offset = { 0,275 };
+		addButton(MENUBUTTON_TEXTURE_RETURN, "", "Previous", position + offset, Button::ButtonType::CIRCLE);
+		offset = { 200, -400 };
+		addSlider(MENUSLIDER, MENUSLIDER_GAUGE, "Huvud Volym : ", audioVolume, "MainV", position + offset);
+		offset = { 200, -200 };
+		addSlider(MENUSLIDER,MENUSLIDER_GAUGE, "Musik Volym : ", musicVolume, "Music", position + offset);
+		offset = { 200, 0 };
+		addSlider(MENUSLIDER, MENUSLIDER_GAUGE, "Ljud Volym : ", audioVolume, "Audio", position + offset);
+		break;
 	}
 }
 
@@ -118,13 +144,22 @@ void Menu::addButton(std::string buttonFile, std::string buttonText, std::string
 	mGUIManager->addInterfaceElement(button);
 }
 
-void Menu::tick(const sf::Time& deltaTime) {
+void Menu::addSlider(std::string sliderFile, std::string gaugeFile, std::string attribute, float percent, std::string buttonFunc, sf::Vector2f pos){
+	Slider* slider = new Slider(gaugeFile, sliderFile, percent, attribute, buttonFunc, pos, mWindow, mEventManager, this);
+	slider->setActive(true);
+	mSliders.push_back(slider);
+	mGUIManager->addInterfaceElement(slider);
+}
 
+void Menu::tick(const sf::Time& deltaTime) {
+	CLICK = false;
 }
 
 void Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-	states.transform *= getTransform();
-	target.draw(*mBackground, states);
+	if (mBackground != nullptr) {
+		states.transform *= getTransform();
+		target.draw(*mBackground, states);
+	}
 }
 
 Menu::Strata Menu::getRenderLayer() const {
@@ -141,17 +176,28 @@ bool Menu::isActive() const {
 
 void Menu::setActive(const bool& active) {
 	mIsActive = active;
+	for (auto b : mButtons) {
+		b->setActive(active);
+	}
+	for (auto s : mSliders) {
+		s->setActive(active);
+	}
 }
 
 void Menu::onClick(std::string buttonFunc) {
+	std::string soundSubstrs = buttonFunc.substr(0, 5);
+
 	if (buttonFunc == "NewGame") {
-		mGameState->handleClicks(buttonFunc);
+		buttonFuncNewGame();
+	}
+	else if (buttonFunc == "Play") {
+		buttonFuncPlay();
 	}
 	else if (buttonFunc == "LoadGame") {
 		buttonFuncLoadGame();
 	}
-	else if (buttonFunc == "Continue") {
-		buttonFuncContinue();
+	else if (buttonFunc == "Previous") {
+		buttonFuncPrevious();
 	}
 	else if (buttonFunc == "ExitLevel") {
 		buttonFuncExitLevel();
@@ -165,6 +211,24 @@ void Menu::onClick(std::string buttonFunc) {
 	else if (buttonFunc == "ResetLevel") {
 		buttonFuncResetLevel();
 	}
+	else if (buttonFunc == "PreviousMenu") {
+		buttonFuncResetLevel();
+	}
+	else if (soundSubstrs == "MainV") {
+		std::string volumeString = buttonFunc.substr(5, buttonFunc.size());
+		float volume = std::stof(volumeString);
+		SoundEngine::getInstance().setMainVolume(volume);
+	}
+	else if (soundSubstrs == "Audio") {
+		std::string volumeString = buttonFunc.substr(5, buttonFunc.size());
+		float volume = std::stof(volumeString);
+		SoundEngine::getInstance().setSoundVolume(volume);
+	}
+	else if (soundSubstrs == "Music") {
+		std::string volumeString = buttonFunc.substr(5, buttonFunc.size());
+		float volume = std::stof(volumeString);
+		SoundEngine::getInstance().setMusicVolume(volume);
+	}
 }
 
 Menu::MenuType Menu::getMenuType() const {
@@ -176,16 +240,27 @@ void Menu::kill() {
 }
 
 void Menu::buttonFuncNewGame() {
-	
+
+}
+
+void Menu::buttonFuncPlay() {
+	GameManager::getInstance().setGameState(&GameStateMap::getInstance());
+	SoundEngine::getInstance().stopEvent("event:/Music/Meny");
 }
 
 void Menu::buttonFuncLoadGame() {
 
 }
 
-void Menu::buttonFuncContinue() {
-	GameManager::getInstance().setGameState(mGameState);
-	mIsAlive = false;
+void Menu::buttonFuncPrevious() {
+	if (mMenuType != MAINMENU)
+		mIsAlive = false;
+	if (mPreviousMenu == nullptr) {
+		SoundEngine::getInstance().setEventParameter("event:/Menu/Button/Button_Change", "Menu", 0.0f);
+		SoundEngine::getInstance().setEventParameter("event:/Music/Levels/Lvl2", "PauseMenu", 1.0f);
+
+		GameManager::getInstance().setGameState(mGameState);
+	}
 }
 
 void Menu::buttonFuncExitLevel() {
@@ -198,7 +273,10 @@ void Menu::buttonFuncExitLevel() {
 }
 
 void Menu::buttonFuncSettings() {
-	//TODO: Implement functionality
+	setActive(false);
+	Menu* menu = new Menu(mWindow, mEventManager, mGUIManager, SETTINGSMENU, this);
+	menu->initialize(mGameState);
+	mGUIManager->addInterfaceElement(menu);
 }
 
 void Menu::buttonFuncQuitGame() {
@@ -209,4 +287,17 @@ void Menu::buttonFuncQuitGame() {
 void Menu::buttonFuncResetLevel() {
 	mGameState->resetLevel();
 	GameManager::getInstance().setGameState(mGameState);
+}
+
+void Menu::onEvent(const sf::Event & aEvent)
+{
+	if (!CLICK && mIsActive)
+		switch (aEvent.type) {
+		case sf::Event::EventType::KeyPressed:
+			if (aEvent.key.code == sf::Keyboard::Escape) {
+				CLICK = true;
+				buttonFuncPrevious();
+			}
+			break;
+		}
 }

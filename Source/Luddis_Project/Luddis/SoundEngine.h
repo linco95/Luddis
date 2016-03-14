@@ -45,11 +45,14 @@ public:
 
 	//Volume is a value from 0-100
 	void setMainVolume(float volume);
+	float getMainVolume() const;
 	//Volume is a value from 0-100
 	void setSoundVolume(float volume);
+	float getSoundVolume() const;
 	//Volume is a value from 0-100
 	void setMusicVolume(float volume);
-	
+	float getMusicVolume() const;
+
 	//Plays a sound on the low level system, and returns
 	//the channel index used to play it.
 	int playSound(const char* filename);

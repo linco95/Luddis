@@ -67,9 +67,9 @@ void GameStateMap::initialize(sf::RenderWindow* window) {
 
 void GameStateMap::changeRoom(int room) {
 	if (!mOccupied) {
+		mRooms.at(room - 1)->setActive(true);
 		mRooms.at(mCurrentRoom - 1)->setActive(false);
 		mCurrentRoom = room;
-		mRooms.at(mCurrentRoom - 1)->setActive(true);
 	}
 	if (mCurrentRoom == 1) {
 		mSock->setActive(true);
