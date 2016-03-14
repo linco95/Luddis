@@ -19,7 +19,7 @@ static const std::string ANIMATION2_DEAD = "resources/images/spritesheets/Goldfi
 static float SPEED = 80;
 static const Renderer::RenderLayer LAYER = Renderer::PLAYER;
 static const int DAMAGE = 10;
-static const int LIFE = 15;
+static const int LIFE = 10;
 static const sf::Vector2f FRONTVECTOR(-1, 0);
 static const float INVULNERABLE_TIMER = 1.0f;
 
