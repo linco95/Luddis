@@ -132,6 +132,8 @@
     <ClInclude Include="Tween.h" />
     <ClInclude Include="VectorMath.h" />
     <ClInclude Include="ViewUtility.h" />
+    <ClInclude Include="GameStateStart.h" />
+    <ClInclude Include="Renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

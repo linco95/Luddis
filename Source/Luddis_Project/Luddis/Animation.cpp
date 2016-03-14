@@ -97,7 +97,7 @@ struct AnimationImp : public Drawable, public sf::Transformable {
 
 		// Set the current tile in the spritesheet
 		mCurrTile.y = mCurrSprite / mColumns;
-		mCurrTile.x = mCurrSprite % (mColumns);
+		mCurrTile.x = mCurrSprite % mColumns;
 
 		mSprite.setTextureRect(IntRect(mCurrTile.x * mTileSize.x, mCurrTile.y * mTileSize.y, mTileSize.x, mTileSize.y));
 	}
