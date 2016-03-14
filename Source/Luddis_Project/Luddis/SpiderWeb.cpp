@@ -1,4 +1,5 @@
 #include "SpiderWeb.h"
+#include "Inventory.h"
 
 float const PAUSE_TIME = 3.0f;
 
@@ -18,7 +19,10 @@ SpiderWeb::~SpiderWeb() {
 
 void SpiderWeb::activate(sf::Time deltaTime) {
 	if (mDisplay->getCooldown() <= 0) {
-		mEntityManager->stunEntities(deltaTime);
-		mDisplay->activateCooldown();
+		if (Inventory::getInstance().getDust() > 10){
+			Inventory::getInstance().addDust(-10);
+			mEntityManager->stunEntities(deltaTime);
+			mDisplay->activateCooldown();
+		}
 	}
 }

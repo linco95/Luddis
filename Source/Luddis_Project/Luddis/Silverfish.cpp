@@ -19,9 +19,9 @@ static const std::string ANIMATION2_DEAD = "resources/images/spritesheets/Goldfi
 static float SPEED = 80;
 static const Renderer::RenderLayer LAYER = Renderer::PLAYER;
 static const int DAMAGE = 10;
-static const int LIFE = 15;
+static const int LIFE = 10;
 static const sf::Vector2f FRONTVECTOR(-1, 0);
-static const float INVULNERABLE_TIMER = 1.0f;
+static const float INVULNERABLE_TIMER = 1.5f;
 
 static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(55, 17));
 
@@ -175,7 +175,12 @@ void Silverfish::collide(CollidableEntity *collidable, const sf::Vector2f& moveA
 	}
 	if (collidable->getCollisionCategory() == PLAYER_OBJECT) {
 		if (mInvulnerable <= 0) {
-			Inventory::getInstance().addDust(-1);
+			if (mType == SILVER) {
+				Inventory::getInstance().addDust(-1);
+			}
+			else if (mType == GOLD) {
+				Inventory::getInstance().addDust(-15);
+			}
 			SoundEngine* se = &SoundEngine::getInstance();
 			se->playEvent("event:/Gameplay/Luddis/Interaction/Luddis_Hit");
 			mInvulnerable += INVULNERABLE_TIMER;
