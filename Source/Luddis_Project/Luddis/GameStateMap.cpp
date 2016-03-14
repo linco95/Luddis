@@ -11,7 +11,7 @@
 #include "EntityManager.h"
 #include "GameManager.h"
 
-static const int MAXROOMS = 3;
+static const int MAXROOMS = 2;
 static const float FADEMAXTIMER = 1.0f;
 static const std::string BACKGROUND_TEXTURE_FILENAME = "Resources/Images/Rooms/Room";
 

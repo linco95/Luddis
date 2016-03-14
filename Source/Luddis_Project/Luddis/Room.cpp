@@ -135,26 +135,10 @@ void Room::createButtons(int room) {
 		position.x = ViewUtility::getViewSize().getSize().x*0.755f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.585f;
 		addButton(LEVEL2_TEXTURE, "", "Level02", position, Button::RECTANGLE);
-		
+	
 		mOverlay = new Overlay(OVERLAY_TEXTURE2, InterfaceElement::Strata::THIRD);
 		mOverlay->setActive(false);
 		mGUIManager->addInterfaceElement(mOverlay);
-		
-		break;
-
-	case 3:
-		position.x = ViewUtility::getViewSize().getSize().x*0.15f;
-		position.y = ViewUtility::getViewSize().getSize().y*0.50f;
-		addButton(DOOR_TEXTURE, "", "Room2", position, Button::RECTANGLE);
-
-		mLevelButtons.back()->setScale(-1.0f, 1.0f);
-		position.x = ViewUtility::getViewSize().getSize().x*0.755f;
-		position.y = ViewUtility::getViewSize().getSize().y*0.585f;
-		addButton(LEVEL2_TEXTURE, "", "Level02", position, Button::RECTANGLE);
-
-		position.x = ViewUtility::getViewSize().getSize().x*0.93f;
-		position.y = ViewUtility::getViewSize().getSize().y*0.445f;
-		addButton(DOOR_TEXTURE, "", "Level03", position, Button::RECTANGLE);
 
 		break;
 
