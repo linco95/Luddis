@@ -49,6 +49,7 @@ private:
 	void buttonFuncNewGame();
 	void buttonFuncPlay();
 	void buttonFuncLoadGame();
+	void buttonFuncEraseSave();
 	void buttonFuncPrevious();
 	void buttonFuncExitLevel();
 	void buttonFuncSettings();

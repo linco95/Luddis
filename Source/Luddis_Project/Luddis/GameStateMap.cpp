@@ -26,6 +26,7 @@ GameStateMap::GameStateMap() :
 	mEntityM(),
 	mGUIM(),
 	mEventM() {
+
 	sf::Vector2f offset(0.0f, (float)ViewUtility::VIEW_HEIGHT / 3.0f);
 	mMannequin->move(offset);
 	mGUIM.addInterfaceElement(mSock);
