@@ -19,7 +19,7 @@ static const std::string ANIMATION2_DEAD = "resources/images/spritesheets/Goldfi
 static float SPEED = 80;
 static const Renderer::RenderLayer LAYER = Renderer::PLAYER;
 static const int DAMAGE = 10;
-static const int LIFE = 15;
+static const int LIFE = 10;
 static const sf::Vector2f FRONTVECTOR(-1, 0);
 static const float INVULNERABLE_TIMER = 1.5f;
 
@@ -154,6 +154,8 @@ void Silverfish::collide(CollidableEntity *collidable, const sf::Vector2f& moveA
 	if (collidable->getCollisionCategory() == PLAYER_PROJECTILE){
 		if (mSwimAway== false){
 		mLife -= 5;
+		SoundEngine* se = &SoundEngine::getInstance();
+		se->playEvent("event:/Gameplay/Luddis/Interaction/Luddis_Hit");
 		if (mLife <= 0){
 			if (mType == GOLD) {
 				mAnimation.replaceAnimation(ANIMATION2_HIT);

@@ -27,7 +27,7 @@ Obstacle::Obstacle(sf::RenderWindow* window, ObstacleType type, const sf::Vector
 	mLevel(level),
 	//mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
 	mHitbox(new sf::RectangleShape(size)),
-	mActiveHitbox(new sf::RectangleShape(sf::Vector2f(150, 300))),
+	mActiveHitbox(new sf::RectangleShape(sf::Vector2f(75, 180))),
 	mIsDamaging(false),
 	mIsEmpty(false),
 	mDamageTime(DAMAGE_TIME),
@@ -42,7 +42,7 @@ mAngle(angle)
 	//If damaging obstacle (steam)
 	if (type == DAMAGE) {
 
-		mActiveHitbox->setOrigin(mActiveHitbox->getLocalBounds().width / 2, mActiveHitbox->getLocalBounds().height / 2);
+		mActiveHitbox->setOrigin(mActiveHitbox->getLocalBounds().width / 2, mActiveHitbox->getLocalBounds().height / 4);
 		mActiveHitbox->setPosition(getPosition());
 		mActiveHitbox->setScale(getScale());
 		mActiveHitbox->setRotation(getRotation());

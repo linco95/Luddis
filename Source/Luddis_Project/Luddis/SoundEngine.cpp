@@ -51,6 +51,10 @@ void SoundEngine::setMainVolume(float volume) {
 	setMusicVolume(mMusicVolume);
 }
 
+float SoundEngine::getMainVolume() const{
+	return mMainVolume;
+}
+
 void SoundEngine::setSoundVolume(float volume) {
 	mSoundVolume = volume;
 	mFinalVolume = mMainVolume*mSoundVolume / 100;
@@ -64,6 +68,10 @@ void SoundEngine::setSoundVolume(float volume) {
 	mChannel->setVolume(mFinalVolume);
 }
 
+float SoundEngine::getSoundVolume() const{
+	return mSoundVolume;
+}
+
 void SoundEngine::setMusicVolume(float volume) {
 	mMusicVolume = volume;
 	mFinalVolume = mMainVolume*mMusicVolume / 100;
@@ -71,6 +79,10 @@ void SoundEngine::setMusicVolume(float volume) {
 	for (auto s : mMusicEventInstances) {
 		s.second->setVolume(mFinalVolume);
 	}
+}
+
+float SoundEngine::getMusicVolume() const{
+	return mMusicVolume;
 }
 
 
