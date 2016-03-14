@@ -185,18 +185,18 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 	}
 
 	/*
-	Debug::log("Rob begin");
+	Debug::log("Rob begin", Debug::INFO);
 	//Robot test
 	BossRobotButton* robotButton = new BossRobotButton(mWindow, sf::Vector2f(500, 500), 0, mTarget);
 	mEntityManager->addEntity(robotButton);
 	cm->addCollidable(robotButton);
-	Debug::log("Rob mid");
+	Debug::log("Rob mid", Debug::INFO);
 	
 	BossRobot* robot = new BossRobot(mWindow, sf::Vector2f(200, 200), 0, mTarget, robotButton);
 	mEntityManager->addEntity(robot);
 	cm->addCollidable(robot);
 	
-	Debug::log("Rob end");
+	Debug::log("Rob end", Debug::INFO);
 	*/
 	
 	//Event zones

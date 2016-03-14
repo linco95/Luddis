@@ -3,6 +3,7 @@
 
 #include "CollidableEntity.h"
 #include <SFML\Graphics.hpp>
+#include "AnimationQueue.h"
 
 class BossRobotButton : public CollidableEntity {
 public:
@@ -29,8 +30,8 @@ private:
 	bool mIsAlive;
 	bool mIsActive;
 	sf::Shape* mHitbox;
-	sf::Sprite mSprite;
 	int mLife;
+	AnimationQueue mAnimation;
 };
 
 #endif // !INCLUDED_BOSSROBOTBUTTON
