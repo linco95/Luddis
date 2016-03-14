@@ -134,6 +134,10 @@ void Menu::initializeButtons() {
 		offset = { 200, 0 };
 		addSlider(MENUSLIDER, MENUSLIDER_GAUGE, "Ljud Volym : ", audioVolume, "Audio", position + offset);
 		break;
+
+	case Menu::SAVEFILESMENU:
+
+		break;
 	}
 }
 
@@ -240,12 +244,12 @@ void Menu::kill() {
 }
 
 void Menu::buttonFuncNewGame() {
-
+	GameManager::getInstance().setGameState(&GameStateMap::getInstance());
+	SoundEngine::getInstance().stopEvent("event:/Music/Meny");
 }
 
 void Menu::buttonFuncPlay() {
-	GameManager::getInstance().setGameState(&GameStateMap::getInstance());
-	SoundEngine::getInstance().stopEvent("event:/Music/Meny");
+	
 }
 
 void Menu::buttonFuncLoadGame() {

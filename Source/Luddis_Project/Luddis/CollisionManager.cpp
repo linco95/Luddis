@@ -275,9 +275,11 @@ void CollisionManager::detectCollisions() {
 	for (CollidableVector::size_type i = 0; i < collidables.size(); i++) {
 		CollidableEntity *collidable0 = collidables.at(i);
 		if (!collidable0->isActive()) continue;
+		if (collidable0->getCollisionCategory == CollidableEntity::Category::IGNORE) continue;
 		for (CollidableVector::size_type j = i + 1; j < collidables.size(); j++) {
 			CollidableEntity *collidable1 = collidables.at(j);
 			if (!collidable1->isActive()) continue;
+			if (collidable1->getCollisionCategory == CollidableEntity::Category::IGNORE) continue;
 			if (collidable0->getHitBox().intersects(collidable1->getHitBox()) && (collidable0->getCollisionCategory() != collidable1->getCollisionCategory())) {
 				colliding.push(std::make_pair(collidable0, collidable1));
 			}
