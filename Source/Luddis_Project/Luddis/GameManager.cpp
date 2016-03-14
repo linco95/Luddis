@@ -151,7 +151,6 @@ struct GameManagerImp : public EventObserver {
 		SoundEngine* se = &SoundEngine::getInstance();
 
 		//The string bank contains all paths for the events etc.
-		se->setMainVolume(5);
 		se->loadBank(MASTERBANK);
 		se->loadBank(MASTER_BANK_STRINGS);
 		se->loadBank(MUSIC_BANK);
@@ -198,11 +197,11 @@ struct GameManagerImp : public EventObserver {
 
 
 			mCurrentGameState->render();
-	
+
 			// Render the mouse on top of everything, always
 			mCursor.tick();
 			mMainWindow.draw(mCursor);
-			
+
 			// Swap the buffers
 			mMainWindow.display();
 		}
@@ -218,7 +217,7 @@ struct GameManagerImp : public EventObserver {
 
 	GameState* mCurrentGameState;
 	RenderWindow mMainWindow;
-	
+
 	MouseCursor mCursor;
 	// Needs to be moved to corresponding level later.
 

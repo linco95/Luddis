@@ -5,6 +5,7 @@
 #include "GameManager.h"
 #include "ResourceManager.h"
 #include "PowerupDisplay.h"
+#include "SoundEngine.h"
 #include "Dialogue.h"
 #include "Level.h"
 #include "Silverfish.h"
@@ -101,12 +102,12 @@ void GameStateLevel::update(sf::Clock& clock) {
 		mResetView = false;
 	}
 	//Change the view when updating GUI elements
-	mMapView = mWindow->getView();
-	mWindow->setView(mGUIView);
+	//mMapView = mWindow->getView();
+	//mWindow->setView(mGUIView);
 	mResettableGUI.updateElements(clock.getElapsedTime());
 	mGUIM->updateElements(clock.getElapsedTime());
 	//Then change it back
-	mWindow->setView(mMapView);
+	//mWindow->setView(mMapView);
 
 	//Look to see if Luddis is dead, before garbage collection
 	if (!mPlayer->isAlive()) {
@@ -174,6 +175,8 @@ void GameStateLevel::onEvent(const sf::Event &aEvent) {
 			if (aEvent.key.code == sf::Keyboard::Escape) {
 				mGameStatePaused->createMenu(Menu::PAUSEMENU, this);
 				mGameStatePaused->setBackgroundParameters(mEntityM, mGUIM, this);
+				SoundEngine::getInstance().setEventParameter("event:/Menu/Button/Button_Change", "Menu", 1.0f);
+				SoundEngine::getInstance().setEventParameter("event:/Music/Levels/Lvl2", "PauseMenu", 0.0f);
 				GameManager::getInstance().setGameState(mGameStatePaused);
 			}
 			break;
