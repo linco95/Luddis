@@ -7,11 +7,9 @@
 GameStatePaused::GameStatePaused() :
 	mEventM(),
 	mGUIView(ViewUtility::getViewSize()) {
-	mEventM.attatch(this, sf::Event::EventType::KeyPressed);
 }
 
 GameStatePaused::~GameStatePaused() {
-	mEventM.detatch(this, sf::Event::EventType::KeyPressed);
 	if (mMenu != nullptr)
 		mMenu->kill();
 	mMenuGUIM.clearInterfaceElements();
@@ -77,17 +75,8 @@ void GameStatePaused::render() {
 	mWindow->setView(mMapView);
 }
 
-void GameStatePaused::onEvent(const sf::Event &aEvent) {
-	if (true) {
-		switch (aEvent.type) {
-		case sf::Event::EventType::KeyPressed:
-			if (aEvent.key.code == sf::Keyboard::Escape) {
-				mMenu->kill();
-				GameManager::getInstance().setGameState(mLastGameState);
-			}
-			break;
-		}
-	}
+void GameStatePaused::onEvent(const sf::Event & aEvent){
+
 }
 
 void GameStatePaused::handleEvents() {

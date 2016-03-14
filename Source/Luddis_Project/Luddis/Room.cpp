@@ -17,7 +17,8 @@ static const std::string DOOR_TEXTURE = "Resources/Images/Rooms/Doorknob.png";
 static const std::string SHOPBUTTON_TEXTURE = "Resources/Images/Rooms/ButtonSockShop.png";
 static const std::string SOCKSHOP_TEXTURE = "Resources/Images/Rooms/Shop.png";
 static const std::string DIALOGUE_TEXTURE = "Resources/Images/GUI/Button.png";
-static const char* OVERLAY_TEXTURE = "Resources/Images/Rooms/sockshop_overlay.png";
+static const char* OVERLAY_TEXTURE1 = "Resources/Images/Rooms/sockshop_overlay.png";
+static const char* OVERLAY_TEXTURE2 = "Resources/Images/Rooms/Room1_overlay.png";
 static const std::string LEVEL1_TEXTURE = "Resources/Images/Rooms/Level1.png";
 static const std::string LEVEL2_TEXTURE = "Resources/Images/Rooms/Level2.png";
 
@@ -113,7 +114,7 @@ void Room::createButtons(int room) {
 		//position.x = ViewUtility::getViewSize().getSize().x*0.40f;
 		//addButton(SHOPBUTTON_TEXTURE, "", "Dialogue", position, Button::ButtonType::RECTANGLE);
 
-		mOverlay = new Overlay(OVERLAY_TEXTURE, InterfaceElement::Strata::THIRD);
+		mOverlay = new Overlay(OVERLAY_TEXTURE1, InterfaceElement::Strata::THIRD);
 		mOverlay->setActive(false);
 		mGUIManager->addInterfaceElement(mOverlay);
 		break;
@@ -134,6 +135,11 @@ void Room::createButtons(int room) {
 		position.x = ViewUtility::getViewSize().getSize().x*0.755f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.585f;
 		addButton(LEVEL2_TEXTURE, "", "Level02", position, Button::RECTANGLE);
+		
+		mOverlay = new Overlay(OVERLAY_TEXTURE2, InterfaceElement::Strata::THIRD);
+		mOverlay->setActive(false);
+		mGUIManager->addInterfaceElement(mOverlay);
+		
 		break;
 
 	case 3:

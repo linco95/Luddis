@@ -1,6 +1,7 @@
 #include "LuddisStateDead.h"
 #include "Luddis.h"
 #include "GameManager.h"
+#include "GameStateLevel.h"
 #include "GameStatePaused.h"
 #include "Menu.h"
 #include <cmath>
@@ -11,7 +12,7 @@ LuddisStateDead::LuddisStateDead(Luddis* playerPtr):
 mPlayerPtr(playerPtr){
 	mPlayerPtr->getAnimation()->setDefaultAnimation(ANIMATION_ALMOSTDEAD);
 	GameManager::getInstance().setGameState(&GameStatePaused::getInstance());
-	GameStatePaused::getInstance().createMenu(Menu::MenuType::DEATHMENU, &GameStatePaused::getInstance());
+	GameStatePaused::getInstance().createMenu(Menu::MenuType::DEATHMENU, &GameStateLevel::getInstance());
 }
 
 LuddisStateDead::~LuddisStateDead(){

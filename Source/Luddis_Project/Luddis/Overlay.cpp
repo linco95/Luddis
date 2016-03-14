@@ -2,6 +2,8 @@
 #include "ResourceManager.h"
 
 Overlay::Overlay(const char * filename, Strata strata) :
+	mIsActive(false),
+	mIsAlive(true),
 	mSprite(ResourceManager::getInstance().getTexture(filename)),
 	mStrata(strata) {
 
@@ -32,7 +34,7 @@ bool Overlay::isActive() const {
 	return mIsActive;
 }
 
-void Overlay::setActive(const bool & active) {
+void Overlay::setActive(const bool& active) {
 	mIsActive = active;
 }
 

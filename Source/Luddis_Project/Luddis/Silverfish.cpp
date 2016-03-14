@@ -154,6 +154,8 @@ void Silverfish::collide(CollidableEntity *collidable, const sf::Vector2f& moveA
 	if (collidable->getCollisionCategory() == PLAYER_PROJECTILE){
 		if (mSwimAway== false){
 		mLife -= 5;
+		SoundEngine* se = &SoundEngine::getInstance();
+		se->playEvent("event:/Gameplay/Luddis/Interaction/Luddis_Hit");
 		if (mLife <= 0){
 			if (mType == GOLD) {
 				mAnimation.replaceAnimation(ANIMATION2_HIT);
