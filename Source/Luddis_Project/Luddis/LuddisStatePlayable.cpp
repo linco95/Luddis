@@ -56,7 +56,8 @@ LuddisStatePlayable::LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* wi
 	mPlayerPtr(playerPtr),
 	mEntityManager(entityManager),
 	mWindow(window),
-	mDisplay(display)
+	mDisplay(display),
+	mHurt(true)
 {
 	Inventory::getInstance().choseFirst(new SpiderWeb(entityManager, display));
 }
@@ -200,23 +201,29 @@ void LuddisStatePlayable::updateRotation() {
 void LuddisStatePlayable::changeScale() {
 	//int dust = Inventory::getInstance().getDust();
 	//int max = Inventory::getInstance().getMaxDust();
-	float percentDust = float((float(Inventory::getInstance().getDust()) / float(Inventory::getInstance().getMaxDust())) * 100);
+	int percentDust = int((float(Inventory::getInstance().getDust()) / float(Inventory::getInstance().getMaxDust())) * 100);
 	//Debug::log("Dust%" + std::to_string(percentDust));
-	if (percentDust < 19 && mScale != sf::Vector2f(1.0f, 1.0f)) {
-		mScale = { 1.0f , 1.0f };
+	if (percentDust <= 10 && mHurt == false) {
+		if (mScale != sf::Vector2f(1.0f, 1.0f)) {
+			mScale = { 1.0f , 1.0f };
+		}
 		mPlayerPtr->getAnimation()->setDefaultAnimation(ANIMATION_ALMOSTDEAD);
+		mHurt = true;
 	}
-	else if (percentDust < 39 && percentDust > 18 && mScale != sf::Vector2f(1.10f, 1.10f)) {
-		mScale = { 1.1f , 1.1f };
+	else if (percentDust <= 20 && percentDust > 10 && mHurt == true) {
+		if (mScale != sf::Vector2f(1.0f, 1.0f)) {
+			mScale = { 1.0f , 1.0f };
+		}
 		mPlayerPtr->getAnimation()->setDefaultAnimation(ANIMATION_FILEPATH);
+		mHurt = false;
 	}
-	else if (percentDust < 59 && percentDust > 38 && mScale != sf::Vector2f(1.20f, 1.20f)) {
+	else if (percentDust <= 50 && percentDust > 20 && mScale != sf::Vector2f(1.2f, 1.2f)) {
 		mScale = { 1.2f , 1.2f };
 	}
-	else if (percentDust < 79 && percentDust > 58 && mScale != sf::Vector2f(1.30f, 1.30f)) {
+	else if (percentDust <= 99 && percentDust > 50 && mScale != sf::Vector2f(1.3f, 1.3f)) {
 		mScale = { 1.3f , 1.3f };
 	}
-	else if (percentDust > 89 && mScale != sf::Vector2f(1.4f, 1.4f)) {
+	else if (percentDust <= 100 && percentDust > 99 && mScale != sf::Vector2f(1.4f, 1.4f)) {
 		mScale = { 1.4f , 1.4f };
 	}
 	if (mIsFlipped == false)
