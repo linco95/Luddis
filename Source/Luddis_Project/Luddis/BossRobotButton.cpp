@@ -3,9 +3,9 @@
 
 //Takes five shots to "die"
 static const int MAX_LIFE = 25;
-static const std::string SPRITE = ("Resources/Images/...");
+static const std::string ANIMATION = ("Resources/Images/SpriteSheets/robot/robotButton");
 
-static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(225, 225));
+static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(50, 70));
 
 BossRobotButton::BossRobotButton(sf::RenderWindow * window, const sf::Vector2f & position, const float & activation, Transformable * aTarget) :
 mWindow(window),
@@ -14,9 +14,10 @@ mActivate(activation),
 mIsAlive(true),
 mIsActive(true),
 mHitbox(new sf::RectangleShape(HITBOX_SHAPE)),
-mLife(MAX_LIFE)
+mLife(MAX_LIFE),
+mAnimation(Animation(ANIMATION))
 {
-	//mSprite = sf::Sprite(ResourceManager::getInstance().getTexture(SPRITE));
+	ResourceManager::getInstance().loadTexture(ANIMATION + ".png");
 	setPosition(position);
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
 }
@@ -26,11 +27,12 @@ BossRobotButton::~BossRobotButton() {
 }
 
 void BossRobotButton::tick(const sf::Time & deltaTime) {
+
 }
 
 void BossRobotButton::draw(sf::RenderTarget & target, sf::RenderStates states) const {
 	states.transform *= getTransform();
-	target.draw(mSprite, states);
+	target.draw(mAnimation.getCurrAnimation(), states);
 }
 
 bool BossRobotButton::isAlive() const {
@@ -59,15 +61,15 @@ BossRobotButton::Type BossRobotButton::getCollisionType() {
 
 void BossRobotButton::collide(CollidableEntity * collidable, const sf::Vector2f & moveAway) {
 	if (mLife <= 0) {
-		return;
+		mAnimation.getCurrAnimation().setFrame(mAnimation.getCurrAnimation().getSpriteAmount() - 1);
 	}
-	if (collidable->getCollisionCategory() == PLAYER_PROJECTILE) {
+	else if (collidable->getCollisionCategory() == PLAYER_PROJECTILE) {
 		mLife -= 5;
 	}
 }
 
 sf::FloatRect BossRobotButton::getHitBox() {
-	return getTransform().transformRect(mSprite.getGlobalBounds());
+	return getTransform().transformRect(mAnimation.getCurrAnimation().getSprite().getGlobalBounds());
 }
 
 sf::Shape* BossRobotButton::getNarrowHitbox() const {

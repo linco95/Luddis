@@ -177,3 +177,8 @@ Animation& Animation::operator=(const Animation& aAnim){
 	mAImp = new AnimationImp(*aAnim.mAImp);
 	return *this;
 }
+
+int Animation::getSpriteAmount()
+{
+	return mAImp->mSpriteAmt;
+}

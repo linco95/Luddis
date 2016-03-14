@@ -28,8 +28,6 @@ private:
 	void attack();
 
 	AnimationQueue mAnimation;
-	sf::Sprite mIdleSprite;
-	sf::Sprite mHitSprite;
 	sf::RenderWindow* mWindow;
 	sf::Transformable* mTarget;
 	const float mActivate;
@@ -43,10 +41,21 @@ private:
 	BossRobotButton* mButton;
 
 	int mCurrentHealth;
-	bool mHitBool;
 	float mHitTimer;
-	bool mDying;
-	bool mAttacking;
+
+	enum RobotState {
+		IDLE,
+		PREPARING,
+		ATTACKING,
+		RETURNING,
+		DYING,
+		DEAD
+	};
+
+	RobotState mState;
+	float mPhaseOneTimer;
+	float mPhaseTwoTimerOne;
+	float mPhaseTwoTimerTwo;
 };
 
 #endif // !INCLUDED_BOSSROBOT
