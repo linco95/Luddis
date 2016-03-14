@@ -48,8 +48,8 @@ void GUIManager::renderElements(sf::RenderWindow& window){
 
 		for (auto e : it.second){
 			if (e->isActive()){
-				//window.draw(*e);
-				renderer->addDrawableToQueue(e, Renderer::GUI);
+				window.draw(*e);
+				//renderer->addDrawableToQueue(e, Renderer::GUI);
 			}
 		}
 	}
