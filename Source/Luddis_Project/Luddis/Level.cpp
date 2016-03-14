@@ -4,6 +4,7 @@
 #include "BossDishCloth.h"
 #include "BossRobot.h"
 #include "BossRobotButton.h"
+#include "BossFinal.h"
 #include "BackgroundEffect.h"
 #include "EventZone.h"
 #include "Obstacle.h"
@@ -171,16 +172,26 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		assert(itr->HasMember("x") && (*itr)["x"].IsInt());
 		assert(itr->HasMember("y") && (*itr)["y"].IsInt());
 		assert(itr->HasMember("activationpos") && (*itr)["activationpos"].IsInt());
+		assert(itr->HasMember("level") && (*itr)["level"].IsInt());
 
 		float x = (float)(*itr)["x"].GetInt();
 		float y = (float)(*itr)["y"].GetInt();
 		sf::Vector2f pos(x, y);
 		float act = (float)(*itr)["activationpos"].GetInt();
+		int levelNr = (*itr)["level"].GetInt();
 
-		BossDishCloth* boss = new BossDishCloth(mWindow, pos, act, mTarget, mEntityManager);
-		mEntityManager->addEntity(boss);
-		cm->addCollidable(boss);
-		Debug::log("Spawning boss at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
+		if (levelNr == 1) {
+			BossDishCloth* boss = new BossDishCloth(mWindow, pos, act, mTarget, mEntityManager);
+			mEntityManager->addEntity(boss);
+			cm->addCollidable(boss);
+			Debug::log("Spawning boss at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
+		}
+		else if (levelNr == 3) {
+			BossFinal* boss = new BossFinal(mWindow, pos, act, mTarget, mEntityManager);
+			mEntityManager->addEntity(boss);
+			cm->addCollidable(boss);
+			Debug::log("Spawning boss at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
+		}
 	}
 	}
 
