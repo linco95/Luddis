@@ -41,6 +41,8 @@ private:
 	bool mMoved;
 
 	PowerupDisplay* mDisplay;
+
+	bool mHurt;
 };
 
 #endif // !_INCLUDED_LUDDISSTATEPLAYABLE_

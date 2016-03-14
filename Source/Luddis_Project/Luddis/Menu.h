@@ -21,7 +21,8 @@ public:
 		ROOMMENU,
 		DEATHMENU,
 		PLAYMENU,
-		SETTINGSMENU
+		SETTINGSMENU,
+		SAVEFILESMENU
 	};
 	Menu(sf::RenderWindow* window, EventManager* eventManager, GUIManager* gUIManager, MenuType menuType, Menu* previousMenu = nullptr);
 	virtual ~Menu();
@@ -48,6 +49,7 @@ private:
 	void buttonFuncNewGame();
 	void buttonFuncPlay();
 	void buttonFuncLoadGame();
+	void buttonFuncEraseSave();
 	void buttonFuncPrevious();
 	void buttonFuncExitLevel();
 	void buttonFuncSettings();

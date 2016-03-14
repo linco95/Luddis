@@ -11,7 +11,7 @@
 #include "EntityManager.h"
 #include "GameManager.h"
 
-static const int MAXROOMS = 3;
+static const int MAXROOMS = 2;
 static const float FADEMAXTIMER = 1.0f;
 static const std::string BACKGROUND_TEXTURE_FILENAME = "Resources/Images/Rooms/Room";
 
@@ -26,6 +26,7 @@ GameStateMap::GameStateMap() :
 	mEntityM(),
 	mGUIM(),
 	mEventM() {
+
 	sf::Vector2f offset(0.0f, (float)ViewUtility::VIEW_HEIGHT / 3.0f);
 	mMannequin->move(offset);
 	mGUIM.addInterfaceElement(mSock);

@@ -179,8 +179,8 @@ void Silverfish::collide(CollidableEntity *collidable, const sf::Vector2f& moveA
 	}
 	if (collidable->getCollisionCategory() == PLAYER_OBJECT) {
 		if (mInvulnerable <= 0) {
-			if (mType == SILVER){
-				Inventory::getInstance().addDust(-1);
+			if (mType == SILVER) {
+			Inventory::getInstance().addDust(-1);
 			}
 			else if (mType == GOLD) {
 				Inventory::getInstance().addDust(-15);

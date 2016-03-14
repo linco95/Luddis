@@ -21,6 +21,8 @@ public:
 		MOUSE
 	};
 
+	//void addDrawableToQueue(const sf::Drawable* a_Drawable, const RenderLayer& a_Layer, const sf::View)
+
 	// Add an object to be drawn
 	void addDrawableToQueue(const sf::Drawable* a_Drawable, const RenderLayer& a_Layer);
 
@@ -38,7 +40,7 @@ public:
 private:
 	typedef std::vector<const sf::Drawable*> DrawableVector;
 	typedef std::map<RenderLayer, DrawableVector> DrawableMap;
-
+	//typedef std::map<sf::View, DrawableMap> ViewMap;
 	Renderer();
 
 	DrawableMap m_Drawables;

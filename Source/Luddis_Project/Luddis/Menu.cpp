@@ -9,7 +9,6 @@
 #include "SoundEngine.h"
 #include "VectorMath.h"
 
-static const std::string MENUBUTTON_TEXTURE = "Resources/Images/GUI/MenuButton.png";
 static const std::string MENUBUTTON_TEXTURE_SETTINGS = "Resources/Images/GUI/ButtonSettings.png";
 static const std::string STARTMENUBUTTON_PLAY = "Resources/Images/GUI/StartmenuPlay.png";
 static const std::string STARTMENUBUTTON_SETTINGS = "Resources/Images/GUI/StartmenuSettings.png";
@@ -21,6 +20,10 @@ static const std::string MENUBUTTON_TEXTURE_DERP = "Resources/Images/GUI/ButtonS
 static const std::string MENU_BACKGROUND_TEXTURE = "Resources/Images/GUI/Filter.png";
 static const std::string MENUSLIDER = "Resources/Images/GUI/Slider.png";
 static const std::string MENUSLIDER_GAUGE = "Resources/Images/GUI/LuddGaugeFrame.png";
+
+static const std::string MENUSELECTGAME_PLAY = "Resources/Images/GUI/ButtonPlay.png";
+static const std::string MENUSELECTGAME_ERASE = "Resources/Images/GUI/ButtonErase.png";
+static const std::string MENUSELECTGAME_RETURN = "Resources/Images/GUI/ButtonReturnSmall.png";
 
 static bool CLICK = false;
 
@@ -75,6 +78,9 @@ void Menu::initialize(GameState* gameState) {
 void Menu::initializeButtons() {
 	sf::Vector2f position(getPosition());
 	sf::Vector2f offset(0, 0);
+	float mainVolume = SoundEngine::getInstance().getMainVolume();
+	float audioVolume = SoundEngine::getInstance().getSoundVolume();
+	float musicVolume = SoundEngine::getInstance().getMusicVolume();
 	switch (mMenuType)
 	{
 	case Menu::MAINMENU:
@@ -114,7 +120,7 @@ void Menu::initializeButtons() {
 		//offset = { -200,-150 };
 		//addButton(MENUBUTTON_TEXTURE_RETURN, "", "Continue", position + offset, Button::ButtonType::CIRCLE);
 		offset = { 200,-150 };
-		addButton(MENUBUTTON_TEXTURE, "Starta Om Nivå", "ResetLevel", position + offset, Button::ButtonType::CIRCLE);
+		addButton(MENUBUTTON_TEXTURE_RETURN, "Starta Om Nivå", "ResetLevel", position + offset, Button::ButtonType::CIRCLE);
 		offset = { -200, 150 };
 		addButton(MENUBUTTON_TEXTURE_EXITLEVEL, "", "ExitLevel", position + offset, Button::ButtonType::CIRCLE);
 		offset = { 200, 150 };
@@ -122,17 +128,23 @@ void Menu::initializeButtons() {
 		break;
 
 	case Menu::SETTINGSMENU:
-		float mainVolume = SoundEngine::getInstance().getMainVolume();
-		float audioVolume = SoundEngine::getInstance().getSoundVolume();
-		float musicVolume = SoundEngine::getInstance().getMusicVolume();
 		offset = { 0,275 };
 		addButton(MENUBUTTON_TEXTURE_RETURN, "", "Previous", position + offset, Button::ButtonType::CIRCLE);
 		offset = { 200, -400 };
-		addSlider(MENUSLIDER, MENUSLIDER_GAUGE, "Huvud Volym : ", audioVolume, "MainV", position + offset);
+		addSlider(MENUSLIDER, MENUSLIDER_GAUGE, "Huvud Volym : ", mainVolume, "MainV", position + offset);
 		offset = { 200, -200 };
-		addSlider(MENUSLIDER,MENUSLIDER_GAUGE, "Musik Volym : ", musicVolume, "Music", position + offset);
+		addSlider(MENUSLIDER, MENUSLIDER_GAUGE, "Musik Volym : ", musicVolume, "Music", position + offset);
 		offset = { 200, 0 };
 		addSlider(MENUSLIDER, MENUSLIDER_GAUGE, "Ljud Volym : ", audioVolume, "Audio", position + offset);
+		break;
+
+	case Menu::SAVEFILESMENU:
+		offset = { 1600, 300 };
+		addButton(MENUSELECTGAME_PLAY, "", "NewGame", offset, Button::ButtonType::CIRCLE);
+		offset = { 1600, 550 };
+		addButton(MENUSELECTGAME_ERASE, "", "EraseSave", offset, Button::ButtonType::CIRCLE);
+		offset = { 1600, 800 };
+		addButton(MENUSELECTGAME_RETURN, "", "Previous", offset, Button::ButtonType::CIRCLE);
 		break;
 	}
 }
@@ -144,7 +156,7 @@ void Menu::addButton(std::string buttonFile, std::string buttonText, std::string
 	mGUIManager->addInterfaceElement(button);
 }
 
-void Menu::addSlider(std::string sliderFile, std::string gaugeFile, std::string attribute, float percent, std::string buttonFunc, sf::Vector2f pos){
+void Menu::addSlider(std::string sliderFile, std::string gaugeFile, std::string attribute, float percent, std::string buttonFunc, sf::Vector2f pos) {
 	Slider* slider = new Slider(gaugeFile, sliderFile, percent, attribute, buttonFunc, pos, mWindow, mEventManager, this);
 	slider->setActive(true);
 	mSliders.push_back(slider);
@@ -196,6 +208,9 @@ void Menu::onClick(std::string buttonFunc) {
 	else if (buttonFunc == "LoadGame") {
 		buttonFuncLoadGame();
 	}
+	else if (buttonFunc == "EraseSave") {
+
+	}
 	else if (buttonFunc == "Previous") {
 		buttonFuncPrevious();
 	}
@@ -240,15 +255,23 @@ void Menu::kill() {
 }
 
 void Menu::buttonFuncNewGame() {
-
-}
-
-void Menu::buttonFuncPlay() {
+	mIsAlive = false;
 	GameManager::getInstance().setGameState(&GameStateMap::getInstance());
 	SoundEngine::getInstance().stopEvent("event:/Music/Meny");
 }
 
+void Menu::buttonFuncPlay() {
+	setActive(false);
+	Menu* menu = new Menu(mWindow, mEventManager, mGUIManager, SAVEFILESMENU, this);
+	menu->initialize(mGameState);
+	mGUIManager->addInterfaceElement(menu);
+}
+
 void Menu::buttonFuncLoadGame() {
+
+}
+
+void Menu::buttonFuncEraseSave() {
 
 }
 

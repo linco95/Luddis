@@ -4,14 +4,16 @@
 #include "SoundEngine.h"
 #include "GameStateMap.h"
 #include "GameManager.h"
+#include "Mannequin.h"
 #include <SFML/Window/Event.hpp>
 
 static const char* BACKGROUNDTEXTURE = "";
 
 GameStateStart::GameStateStart() :
 	mGUIM(),
-	mEventM() {
-
+	mEventM(),
+	mMannequin(new Mannequin()){
+	mMannequin->scale(-1.0f, 1.0f);
 }
 
 GameStateStart::~GameStateStart() {
