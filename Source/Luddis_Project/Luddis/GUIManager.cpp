@@ -11,6 +11,15 @@ GUIManager::~GUIManager(){
 	clearInterfaceElements();
 }
 
+GUIManager& GUIManager::operator+(const GUIManager& guiM)
+{
+	
+	for (auto g : guiM.mElements) {
+		this->addInterfaceElement(g);
+	}
+	return *this;
+}
+
 void GUIManager::addInterfaceElement(InterfaceElement* ie){
 	assert(ie != nullptr);
 	mElements.push_back(ie);

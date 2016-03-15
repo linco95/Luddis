@@ -40,8 +40,8 @@ Slider::Slider(std::string gaugeFile, std::string sliderFile, float percent, std
 	sf::Vector2f maxPos(mXMaxPos, mYMaxPos);
 	sf::Vector2f minPos(mXMinPos, mYMinPos);
 
-	float percentile = percent / 100;
-	float xPos = (percentile*mXMaxPos - percentile*mXMinPos + mXMinPos);
+	mIntensity = percent / 100;
+	float xPos = (mIntensity*mXMaxPos - mIntensity*mXMinPos + mXMinPos);
 	mSlider.setPosition(xPos, 0);
 
 	mAttributeText.setString(mAttribute + " " + std::to_string((int)(mIntensity * 100)));

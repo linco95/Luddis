@@ -7,6 +7,7 @@
 #include <SFML/Graphics/Sprite.hpp>
 
 class Menu;
+class Mannequin;
 
 class GameStateStart : public GameState {
 public:
@@ -26,6 +27,7 @@ public:
 private:
 	GameStateStart();
 	Menu* mMenu;
+	Mannequin* mMannequin;
 	sf::Sprite mBackground;
 	GUIManager mGUIM;
 	EventManager mEventM;

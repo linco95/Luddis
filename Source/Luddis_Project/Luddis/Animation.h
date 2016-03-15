@@ -28,6 +28,7 @@ public:
 	bool hasLooped() const;
 	Animation(const Animation& aAnim);
 	Animation& operator=(const Animation& aAnim);
+	int getSpriteAmount();
 private:
 	AnimationImp* mAImp;
 };

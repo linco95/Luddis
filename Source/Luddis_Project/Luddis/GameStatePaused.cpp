@@ -7,6 +7,7 @@
 GameStatePaused::GameStatePaused() :
 	mEventM(),
 	mGUIView(ViewUtility::getViewSize()) {
+
 }
 
 GameStatePaused::~GameStatePaused() {
@@ -28,7 +29,7 @@ void GameStatePaused::initialize(sf::RenderWindow* window, EntityManager* entity
 	mBackgroundGUIM = guiManager;
 }
 
-void GameStatePaused::setBackgroundParameters(EntityManager * entityManager, GUIManager * guiManager, GameState* gameState) {
+void GameStatePaused::setBackgroundParameters(EntityManager* entityManager, GUIManager* guiManager, GameState* gameState) {
 	mEntityM = entityManager;
 	mBackgroundGUIM = guiManager;
 	mLastGameState = gameState;
@@ -75,7 +76,7 @@ void GameStatePaused::render() {
 	mWindow->setView(mMapView);
 }
 
-void GameStatePaused::onEvent(const sf::Event & aEvent){
+void GameStatePaused::onEvent(const sf::Event& aEvent) {
 
 }
 

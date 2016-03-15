@@ -1,14 +1,16 @@
-#ifndef INCLUDED_BOSSROBOTBUTTON
-#define INCLUDED_BOSSROBOTBUTTON
+#ifndef _INCLUDED_BOSSFINAL_
+#define _INCLUDED_BOSSFINAL_
 
-#include "CollidableEntity.h"
-#include <SFML\Graphics.hpp>
 #include "AnimationQueue.h"
+#include "CollidableEntity.h"
+#include <SFML/Graphics/RenderWindow.hpp>
 
-class BossRobotButton : public CollidableEntity {
+class EntityManager;
+
+class BossFinal : public CollidableEntity {
 public:
-	BossRobotButton(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget);
-	~BossRobotButton();
+	BossFinal(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget, EntityManager* entityManager);
+	virtual ~BossFinal();
 
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -22,16 +24,27 @@ public:
 	sf::FloatRect getHitBox() override;
 	sf::Shape* getNarrowHitbox() const override;
 	void stun(const sf::Time& deltatime) override;
-	int getLife();
 private:
+	void updateMovement(const sf::Time& deltaTime);
+	void attack();
+
+	AnimationQueue mAnimation;
+	EntityManager* mEntityManager;
 	sf::RenderWindow* mWindow;
 	sf::Transformable* mTarget;
 	const float mActivate;
+	bool mShooting;
 	bool mIsAlive;
+	bool mDead;
 	bool mIsActive;
-	sf::Shape* mHitbox;
+	float mAttackInterval1;
+	float mAttackInterval2;
+	float mAttackTime2;
+	sf::Vector2f mDirection;
 	int mLife;
-	AnimationQueue mAnimation;
+	sf::Shape* mHitbox;
+	float mTimeStunned;
+	float mInvulnerable;
 };
 
-#endif // !INCLUDED_BOSSROBOTBUTTON
+#endif // !_INCLUDED_BOSSFINAL
