@@ -17,6 +17,7 @@ public:
 	virtual bool isActive() const override;
 	virtual void setActive(const bool & active) override;
 
+	void setAnimate(bool animate);
 	void setHeadAccessory(const char* filename);
 	void setTailAccessory(const char* filename);
 
@@ -25,6 +26,7 @@ private:
 	sf::Sprite mHeadAccessory;
 	sf::Sprite mTailAccessory;
 
+	bool mAnimate;
 	bool mIsAlive;
 	bool mIsActive;
 };

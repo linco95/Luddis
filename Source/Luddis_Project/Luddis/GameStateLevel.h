@@ -16,6 +16,7 @@ class Level;
 class Spider;
 class Luddis;
 class ScoreGauge;
+class ScoreCounter;
 
 class GameStateLevel : public GameState{
 public:
@@ -65,6 +66,8 @@ private:
 	Spider* mSpider;
 	Luddis* mPlayer;
 	ScoreGauge* mLuddGauge;
+	ScoreCounter *mChipsCounter;
+	ScoreCounter *mLuddCounter;
 	sf::RectangleShape mCinematicBox[2];
 	bool mFirstTime;
 	bool mPlayable;
