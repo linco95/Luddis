@@ -28,6 +28,7 @@ public:
 	Strata getRenderLayer() const override;
 	void setScore(int score);
 	void addToScore(int score);
+
 private:
 	bool mAlive;
 	bool mIsActive;

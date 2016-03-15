@@ -12,6 +12,7 @@
 #include "Spider.h"
 #include "EventZone.h"
 #include "ScoreGauge.h"
+#include "ScoreCounter.h"
 #include "Inventory.h"
 #include "Luddis.h"
 #include "LuddisStateCinematic.h"
@@ -25,6 +26,9 @@ static const std::string COMMON_RESOURCES = "Resources/Configs/Levels/CommonReso
 
 static const char* TEXTURE_LUDDGAUGE_FRAME = "Resources/Images/GUI/LuddGaugeFrame.png";
 static const char* TEXTURE_LUDDGAUGE_BAR = "Resources/Images/GUI/LuddGaugeBar.png";
+
+static const std::string TEXTURE_CHIPSCOUNTER = "Resources/Images/GUI/HUD_Chips_Icon.png";
+static const std::string TEXTURE_LUDDCOUNTER = "Resources/Images/GUI/HUD_Ludd_Icon.png";
 
 static const char* LOADINGBAR_FRAME = "Resources/Images/GUI/Loadingbar_Frame.png";
 static const char* LOADINGBAR_BAR = "Resources/Images/GUI/Loadingbar_Bar.png";
@@ -88,6 +92,14 @@ void GameStateLevel::initialize(sf::RenderWindow* window, EntityManager* entityM
 
 	mGUIM->addInterfaceElement(mPowerupDisplays[0]);
 	mGameStatePaused = &GameStatePaused::getInstance();
+
+	mChipsCounter = new ScoreCounter(mWindow, TEXTURE_CHIPSCOUNTER, sf::Vector2f(ViewUtility::VIEW_WIDTH*0.7f, ViewUtility::VIEW_HEIGHT - 60), ScoreCounter::ScoreType::CHIPS);
+	mChipsCounter->setScore(Inventory::getInstance().getChips());
+	mGUIM->addInterfaceElement(mChipsCounter);
+
+	mLuddCounter = new ScoreCounter(mWindow, TEXTURE_LUDDCOUNTER, sf::Vector2f(ViewUtility::VIEW_WIDTH * 0.3f, ViewUtility::VIEW_HEIGHT - 60), ScoreCounter::ScoreType::DUST);
+	mLuddCounter->setScore(Inventory::getInstance().getDust());
+	mGUIM->addInterfaceElement(mLuddCounter);
 }
 
 void GameStateLevel::update(sf::Clock& clock) {
@@ -174,10 +186,11 @@ void GameStateLevel::onEvent(const sf::Event &aEvent) {
 		switch (aEvent.type) {
 		case sf::Event::EventType::KeyPressed:
 			if (aEvent.key.code == sf::Keyboard::Escape) {
-				mGameStatePaused->setBackgroundParameters(mEntityM, &mResettableGUI, this);
+				mGameStatePaused->setBackgroundParameters(mEntityM, mGUIM, this);
 				SoundEngine::getInstance().setEventParameter("event:/Menu/Button/Button_Change", "Menu", 1.0f);
 				SoundEngine::getInstance().setEventParameter("event:/Music/Levels/Lvl2", "PauseMenu", 0.0f);
 				GameManager::getInstance().setGameState(mGameStatePaused);
+				mGameStatePaused->createMenu(Menu::PAUSEMENU, this);
 			}
 			break;
 		}
@@ -298,7 +311,14 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	}
 
 	mCurrentLevelFile = levelFile;
-	mCurrentLevel = levelFile.at(33);
+
+	std::string configText = ResourceManager::getInstance().loadJsonFile(levelFile);
+	rapidjson::Document configDoc;
+	configDoc.Parse(configText.c_str());
+	assert(configDoc.IsObject());
+
+	if (configDoc.HasMember("Level"))
+	mCurrentLevel = configDoc["Level"].GetInt();
 	mPlayable = true;
 }
 

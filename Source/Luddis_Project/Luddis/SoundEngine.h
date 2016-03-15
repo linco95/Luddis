@@ -43,13 +43,13 @@ public:
 	//Frees up allocated memory.
 	FMOD_RESULT releaseSound(const char* filepath);
 
-	//Volume is a value from 0-100
+	//Volume is a value from 0-1
 	void setMainVolume(float volume);
 	float getMainVolume() const;
-	//Volume is a value from 0-100
+	//Volume is a value from 0-1
 	void setSoundVolume(float volume);
 	float getSoundVolume() const;
-	//Volume is a value from 0-100
+	//Volume is a value from 0-1
 	void setMusicVolume(float volume);
 	float getMusicVolume() const;
 
