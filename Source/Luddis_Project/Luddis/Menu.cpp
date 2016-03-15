@@ -135,9 +135,9 @@ void Menu::initializeButtons() {
 		addSlider(MENUSLIDER, MENUSLIDER_GAUGE, "Ljud Volym : ", audioVolume, "Audio", position + offset);
 		break;
 
-	case Menu::SAVEFILESMENU:
-
-		break;
+	/*case Menu::SAVEFILESMENU:
+	
+		break;*/
 	}
 }
 
@@ -249,7 +249,7 @@ void Menu::buttonFuncNewGame() {
 }
 
 void Menu::buttonFuncPlay() {
-	
+	buttonFuncNewGame();
 }
 
 void Menu::buttonFuncLoadGame() {

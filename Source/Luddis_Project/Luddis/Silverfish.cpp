@@ -111,7 +111,7 @@ void Silverfish::updateMovement(const sf::Time& deltaTime){
 	float speed = SPEED;
 	if (mSwimAway && mAnimation.getCurrAnimation().hasLooped()) {
 		if (mDirection != mNextDir) mDirection = mNextDir;
-		speed = 250;
+		speed = SPEED * 8;
 	}
 	else if (mSwimAway && !mAnimation.getCurrAnimation().hasLooped()) {
 		speed = 0;

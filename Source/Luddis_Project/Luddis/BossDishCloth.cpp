@@ -69,13 +69,14 @@ void BossDishCloth::tick(const sf::Time& deltaTime){
 	if (mTarget->getPosition().x >= mActivate) {
 		mIsActive = true;
 	}
+	if (!mIsActive) return;
 	if (mTimeStunned <= 0) {
 		mAttackInterval -= deltaTime.asSeconds();
 		updateMovement(deltaTime);
 		mAnimation.tick(deltaTime);
 		if (mAttackInterval <= 0) {
 			attack();
-			mAttackInterval = ATTACK_INTERVAL;
+			mAttackInterval = ATTACK_INTERVAL + ((rand() % 30 - 30 / 2) / 10);
 		}
 	}
 	else {
@@ -86,7 +87,6 @@ void BossDishCloth::tick(const sf::Time& deltaTime){
 		mInvulnerable -= deltaTime.asSeconds();
 	}
 
-	if (!mIsActive) return;
 	if (mLife <= 0) {
 		mIsAlive = false;
 	}
@@ -161,8 +161,8 @@ void BossDishCloth::updateMovement(const sf::Time& deltaTime){
 void BossDishCloth::attack() {
 	sf::Vector2f vec(-1, 0);
 	int max = 8;
-	
-	if (mLife < 50){
+
+	if (mLife < 50) {
 		max = 2;
 	}
 	for (int i = 0; i < max; i++)
@@ -173,10 +173,15 @@ void BossDishCloth::attack() {
 		mEntityManager->addEntity(proj);
 		CollisionManager::getInstance().addCollidable(proj);
 	}
+
+	sf::Vector2f vecToTarget = VectorMath::normalizeVector(getPosition() - mTarget->getPosition());
+	const float ANGLE = 30;
 	
-	Projectile* proj = new Projectile(PROJECTILE_FILEPATH, vec*PROJECTILE_SPEED, sf::Vector2f(getPosition().x, 590) + vec*PROJECTILE_SPEED / 3.0f, PROJECTILE_LIFETIME, ENEMY_STUN);
-	mEntityManager->addEntity(proj);
-	CollisionManager::getInstance().addCollidable(proj);
+	Projectile*[] projectiles =	{	new Projectile(PROJECTILE_FILEPATH, vecToTarget*PROJECTILE_SPEED, getPosition() + vecToTarget*PROJECTILE_SPEED / 3.0f, PROJECTILE_LIFETIME, ENEMY_STUN),
+									new Projectile(PROJECTILE_FILEPATH, vecToTarget*PROJECTILE_SPEED, getPosition() + vecToTarget*PROJECTILE_SPEED / 3.0f, PROJECTILE_LIFETIME, ENEMY_STUN),
+									new Projectile(PROJECTILE_FILEPATH, vecToTarget*PROJECTILE_SPEED, getPosition() + vecToTarget*PROJECTILE_SPEED / 3.0f, PROJECTILE_LIFETIME, ENEMY_STUN)
+								}
+
 }
 
 BossDishCloth::Category BossDishCloth::getCollisionCategory() {
