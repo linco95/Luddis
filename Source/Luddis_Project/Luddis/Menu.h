@@ -22,7 +22,8 @@ public:
 		DEATHMENU,
 		PLAYMENU,
 		SETTINGSMENU,
-		SAVEFILESMENU
+		SAVEFILESMENU,
+		CONFIRMMENU
 	};
 	Menu(sf::RenderWindow* window, EventManager* eventManager, GUIManager* gUIManager, MenuType menuType, Menu* previousMenu = nullptr);
 	virtual ~Menu();

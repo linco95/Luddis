@@ -104,6 +104,8 @@ FMOD_RESULT SoundEngine::playEvent(const char * path) {
 	FMOD_RESULT result;
 	//See if it can be found in the sound map,
 	//otherwise assume that its in the music map.
+	int i = 0;
+	i = 2;
 	if (mMusicEventInstances.find(path) != mMusicEventInstances.end()) {
 		result = mMusicEventInstances[path]->start();
 		result = mMusicEventInstances[path]->setVolume(mMainVolume* mSoundVolume / 100);
@@ -112,9 +114,6 @@ FMOD_RESULT SoundEngine::playEvent(const char * path) {
 		result = mSoundEventInstances[path]->start();
 		result = mSoundEventInstances[path]->setVolume(mMainVolume* mMusicVolume / 100);
 	}
-
-	float volume;
-	mMusicEventInstances[path]->getVolume(&volume);
 
 	return result;
 }

@@ -7,8 +7,8 @@ static const char* CHARACTER_TEXTURE = "Resources/Images/Spritesheets/Luddis_wal
 Mannequin::Mannequin() :
 	mIsActive(true),
 	mIsAlive(true),
+	mAnimate(true),
 	mAnimation(CHARACTER_TEXTURE) {
-
 	setScale(-3.0f, 3.0f);
 	sf::Vector2f position(ViewUtility::getViewSize().getCenter());
 	setPosition(position);
@@ -26,7 +26,9 @@ void Mannequin::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 }
 
 void Mannequin::tick(const sf::Time& deltaTime) {
-	mAnimation.tick(deltaTime);
+	if (mAnimate) {
+		mAnimation.tick(deltaTime);
+	}
 }
 
 Mannequin::Strata Mannequin::getRenderLayer() const {
@@ -43,6 +45,10 @@ bool Mannequin::isActive() const {
 
 void Mannequin::setActive(const bool & active) {
 	mIsActive = active;
+}
+
+void Mannequin::setAnimate(bool animate) {
+	mAnimate = animate;
 }
 
 void Mannequin::setHeadAccessory(const char * filename) {

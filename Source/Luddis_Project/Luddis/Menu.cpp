@@ -24,6 +24,7 @@ static const std::string MENUSLIDER_GAUGE = "Resources/Images/GUI/LuddGaugeFrame
 static const std::string MENUSELECTGAME_PLAY = "Resources/Images/GUI/ButtonPlay.png";
 static const std::string MENUSELECTGAME_ERASE = "Resources/Images/GUI/ButtonErase.png";
 static const std::string MENUSELECTGAME_RETURN = "Resources/Images/GUI/ButtonReturnSmall.png";
+static const std::string MENUSELECTGAME_FILE = "Resources/Images/GUI/ButtonSaveFile.png";
 
 static bool CLICK = false;
 
@@ -145,6 +146,22 @@ void Menu::initializeButtons() {
 		addButton(MENUSELECTGAME_ERASE, "", "EraseSave", offset, Button::ButtonType::CIRCLE);
 		offset = { 1600, 800 };
 		addButton(MENUSELECTGAME_RETURN, "", "Previous", offset, Button::ButtonType::CIRCLE);
+		offset = { 350, 200 };
+		addButton(MENUSELECTGAME_FILE, "", "File0", offset, Button::ButtonType::RECTANGLE);
+		offset = { 350, 425 };
+		addButton(MENUSELECTGAME_FILE, "", "File1", offset, Button::ButtonType::RECTANGLE);
+		offset = { 350, 650 };
+		addButton(MENUSELECTGAME_FILE, "", "File2", offset, Button::ButtonType::RECTANGLE);
+		offset = { 350, 875 };
+		addButton(MENUSELECTGAME_FILE, "", "File3", offset, Button::ButtonType::RECTANGLE);
+		break;
+
+	case Menu::CONFIRMMENU:
+		offset = { 640, 540 };
+		addButton(MENUSELECTGAME_PLAY, "", "NewGame", offset, Button::ButtonType::CIRCLE);
+		offset = { 1280, 540 };
+		addButton(MENUSELECTGAME_PLAY, "", "NewGame", offset, Button::ButtonType::CIRCLE);
+
 		break;
 	}
 }
@@ -198,11 +215,13 @@ void Menu::setActive(const bool& active) {
 
 void Menu::onClick(std::string buttonFunc) {
 	std::string soundSubstrs = buttonFunc.substr(0, 5);
+	std::string fileSubstr = buttonFunc.substr(0, 4);
 
 	if (buttonFunc == "NewGame") {
 		buttonFuncNewGame();
 	}
 	else if (buttonFunc == "Play") {
+		mGameState->handleClicks(buttonFunc);
 		buttonFuncPlay();
 	}
 	else if (buttonFunc == "LoadGame") {
@@ -212,6 +231,7 @@ void Menu::onClick(std::string buttonFunc) {
 
 	}
 	else if (buttonFunc == "Previous") {
+		mGameState->handleClicks(buttonFunc);
 		buttonFuncPrevious();
 	}
 	else if (buttonFunc == "ExitLevel") {
@@ -224,9 +244,6 @@ void Menu::onClick(std::string buttonFunc) {
 		buttonFuncQuitGame();
 	}
 	else if (buttonFunc == "ResetLevel") {
-		buttonFuncResetLevel();
-	}
-	else if (buttonFunc == "PreviousMenu") {
 		buttonFuncResetLevel();
 	}
 	else if (soundSubstrs == "MainV") {
@@ -243,6 +260,12 @@ void Menu::onClick(std::string buttonFunc) {
 		std::string volumeString = buttonFunc.substr(5, buttonFunc.size());
 		float volume = std::stof(volumeString);
 		SoundEngine::getInstance().setMusicVolume(volume);
+	}
+	else if (fileSubstr == "File") {
+		mGameState->handleClicks(buttonFunc);
+	}
+	else if (buttonFunc == "ConfirmYes") {
+		mPreviousMenu->onClick("");
 	}
 }
 
@@ -272,7 +295,12 @@ void Menu::buttonFuncLoadGame() {
 }
 
 void Menu::buttonFuncEraseSave() {
-
+	//This functionality should be in a private function called createSubmenu
+	//as it is repeated more than once.
+	setActive(false);
+	Menu* menu = new Menu(mWindow, mEventManager, mGUIManager, CONFIRMMENU, this);
+	menu->initialize(mGameState);
+	mGUIManager->addInterfaceElement(menu);
 }
 
 void Menu::buttonFuncPrevious() {
@@ -312,15 +340,15 @@ void Menu::buttonFuncResetLevel() {
 	GameManager::getInstance().setGameState(mGameState);
 }
 
-void Menu::onEvent(const sf::Event & aEvent)
-{
-	if (!CLICK && mIsActive)
+void Menu::onEvent(const sf::Event & aEvent) {
+	if (!CLICK && mIsActive) {
 		switch (aEvent.type) {
 		case sf::Event::EventType::KeyPressed:
 			if (aEvent.key.code == sf::Keyboard::Escape) {
 				CLICK = true;
-				buttonFuncPrevious();
+				onClick("Previous");
 			}
 			break;
 		}
+	}
 }

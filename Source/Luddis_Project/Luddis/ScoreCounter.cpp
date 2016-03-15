@@ -1,7 +1,6 @@
 #include "ScoreCounter.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "ResourceManager.h"
-#include "Inventory.h"
 
 static const std::string FONT_PATH = "Resources/Fonts/arial.ttf";
 
@@ -26,12 +25,7 @@ ScoreCounter::~ScoreCounter(){
 }
 
 void ScoreCounter::tick(const sf::Time& deltaTime){
-	if (mType == CHIPS){
-		mCounter.setString(" X " + std::to_string(Inventory::getInstance().getChips()));
-	}
-	if (mType == DUST){
-		mCounter.setString(" X " + std::to_string(Inventory::getInstance().getDust()));
-	}
+
 }
 
 void ScoreCounter::draw(sf::RenderTarget& target, sf::RenderStates states) const{
@@ -58,8 +52,10 @@ ScoreCounter::Strata ScoreCounter::getRenderLayer() const{
 
 void ScoreCounter::setScore(int score){
 	mScore = score;
+	mCounter.setString(" X " + std::to_string(mScore));
 }
 
 void ScoreCounter::addToScore(int score){
 	mScore += score;
+	mCounter.setString(" X " + std::to_string(mScore));
 }

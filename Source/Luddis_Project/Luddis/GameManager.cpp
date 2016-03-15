@@ -30,10 +30,9 @@ static const std::string APPNAME = "Luddis";
 static const std::string ICONPATH = "resources/images/luddisicon.png";
 static const float DESIRED_ASPECTRATIO = (float)ViewUtility::VIEW_WIDTH / (float)ViewUtility::VIEW_HEIGHT;
 static const Color BGCOLOR = Color::Black;
-static const std::string TEXTURE_CHIPSCOUNTER = "Resources/Images/GUI/HUD_Chips_Icon.png";
-static const std::string TEXTURE_LUDDCOUNTER = "Resources/Images/GUI/HUD_Ludd_Icon.png";
-static const std::string TEST_LEVEL = "Resources/Configs/Levels/Level01Entities.json";
 static const char* MOUSE_IMAGE = "Resources/Images/LuddisCursor.png";
+
+static const char* SAVEFILES = "Resources/Configs/Savefiles/Saves.json";
 
 static const char* MASTERBANK = "Resources/AudioBanks/Build/Desktop/Master Bank.bank";
 static const char* MASTER_BANK_STRINGS = "Resources/AudioBanks/Build/Desktop/Master Bank.strings.bank";
@@ -63,14 +62,6 @@ struct GameManagerImp : public EventObserver {
 
 	// Temporary function (might keep luddis init here). Most of this should be handled in the levelmanager/level class instead
 	void initializeEntities(){
-
-
-		mChipsCounter = new ScoreCounter(&mMainWindow, TEXTURE_CHIPSCOUNTER, sf::Vector2f(ViewUtility::VIEW_WIDTH*0.7f, ViewUtility::VIEW_HEIGHT-60), ScoreCounter::ScoreType::CHIPS);
-		mGUIManager.addInterfaceElement(mChipsCounter);
-
-		mLuddCounter = new ScoreCounter(&mMainWindow, TEXTURE_LUDDCOUNTER, sf::Vector2f(ViewUtility::VIEW_WIDTH * 0.3f, ViewUtility::VIEW_HEIGHT - 60), ScoreCounter::ScoreType::DUST);
-		mGUIManager.addInterfaceElement(mLuddCounter);		
-
 		// Initialize the custom mouse pointer
 		mCursor.initialize(MOUSE_IMAGE, mMainWindow);
 		//mEntityManager.addEntity(new MouseCursor(MOUSE_IMAGE, mMainWindow));
@@ -176,6 +167,7 @@ struct GameManagerImp : public EventObserver {
 		mGameStateLevel->initialize(&mMainWindow, &mEntityManager, &mGUIManager);
 		mGameStateMap->initialize(&mMainWindow);
 		mGameStateStart->initialize(&mMainWindow);
+		mGameStateStart->setupFiles(SAVEFILES);
 		//mGameStateLevel->setupLevel(TEST_LEVEL);
 		mCurrentGameState = mGameStateStart;
 
@@ -219,11 +211,6 @@ struct GameManagerImp : public EventObserver {
 	RenderWindow mMainWindow;
 
 	MouseCursor mCursor;
-	// Needs to be moved to corresponding level later.
-
-	ScoreCounter *mChipsCounter;
-	ScoreCounter *mLuddCounter;
-	ScoreGauge *mLuddGauge;
 };
 
 GameManager::GameManager() :

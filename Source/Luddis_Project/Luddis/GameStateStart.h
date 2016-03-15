@@ -4,10 +4,13 @@
 #include "GameState.h"
 #include "EventManager.h"
 #include "GUIManager.h"
+#include <vector>
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Text.hpp>
 
 class Menu;
 class Mannequin;
+class ScoreCounter;
 
 class GameStateStart : public GameState {
 public:
@@ -23,11 +26,26 @@ public:
 	virtual void onEvent(const sf::Event & aEvent) override;
 	virtual void handleEvents() override;
 	virtual void handleClicks(std::string command) override;
+	void setupFiles(std::string filename);
 
 private:
 	GameStateStart();
-	Menu* mMenu;
+	struct SaveInfo {
+		bool NEW;
+		std::string name;
+		sf::Text text;
+		int currentDust, maxDust;
+		int chips;
+		int headAccessory;
+		int tailAccessory;
+		ScoreCounter* scoreCounters[2];
+		Mannequin* mannequin;
+	} mFiles[4];
+
 	Mannequin* mMannequin;
+
+	int mSelectedSave;
+	Menu* mMenu;
 	sf::Sprite mBackground;
 	GUIManager mGUIM;
 	EventManager mEventM;
