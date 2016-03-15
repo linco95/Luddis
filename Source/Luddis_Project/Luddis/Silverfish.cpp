@@ -16,6 +16,7 @@ static const std::string ANIMATION1_HIT = "resources/images/spritesheets/Silverf
 static const std::string ANIMATION2_SWIM = "resources/images/spritesheets/Goldfish_Swim";
 static const std::string ANIMATION2_DEATH = "resources/images/spritesheets/Goldfish_death";
 static const std::string ANIMATION2_DEAD = "resources/images/spritesheets/Goldfish_dead";
+static const std::string ANIMATION2_HIT = "resources/images/spritesheets/Goldfish_hit";
 
 static float SPEED = 80;
 static const Renderer::RenderLayer LAYER = Renderer::PLAYER;
@@ -173,7 +174,8 @@ void Silverfish::collide(CollidableEntity *collidable, const sf::Vector2f& moveA
 			mTimeStunned = 0;
 			}
 		else if (mLife > 0) {
-			mAnimation.replaceAnimation(ANIMATION1_HIT);
+			if (mType == GOLD) mAnimation.replaceAnimation(ANIMATION2_HIT);
+			else if (mType == SILVER) mAnimation.replaceAnimation(ANIMATION1_HIT);
 			}
 		}
 	}
