@@ -296,7 +296,7 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 
 	mEntityM->addEntity(mPlayer);
 	mCM->addCollidable(mPlayer);
-	mLevel = new Level(mEntityM);
+	mLevel = new Level(mEntityM, mPlayer);
 	mEntityM->addEntity(mLevel);
 	mLevel->initializeLevel(*mWindow, mPlayer, levelFile);
 

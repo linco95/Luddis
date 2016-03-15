@@ -5,6 +5,7 @@
 #include <SFML\Graphics.hpp>
 #include <vector>
 #include <rapidjson\document.h>
+#include "Luddis.h"
 
 namespace sf{
 	class Music;
@@ -16,7 +17,7 @@ class GameStateLevel;
 class Level : public Entity {
 
 public:
-	Level(EntityManager* entityManager);
+	Level(EntityManager* entityManager, Luddis* luddis);
 	~Level();
 
 	void initializeLevel(sf::RenderWindow& aWindow, sf::Transformable* aTarget, std::string levelFilename);
@@ -39,6 +40,7 @@ private:
 	GameStateLevel* mGameStateLevel;
 	sf::Transformable* mTarget;
 	sf::RenderWindow *mWindow;
+	Luddis* mLuddis;
 	typedef std::vector<sf::Sprite> SpriteVector;
 	SpriteVector mBackgroundImages;
 	SpriteVector mForegroundImages;
