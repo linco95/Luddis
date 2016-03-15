@@ -13,6 +13,8 @@
 static const char* TEXTURE_SCORE_DUST = "Resources/Images/GUI/HUD_Ludd_Icon.png";
 static const char* TEXTURE_SCORE_CHIPS = "Resources/Images/GUI/HUD_Chips_Icon.png";
 
+static const char* ARIAL_FONT = "Resources/Fonts/arial.ttf";
+
 GameStateStart::GameStateStart() :
 	mGUIM(),
 	mEventM(),
@@ -57,6 +59,8 @@ void GameStateStart::render() {
 	//mWindow->draw(mBackground);
 	Renderer::getInstance().render(*mWindow);
 	mGUIM.renderElements(*mWindow);
+	for (int i = 0; i < 4; i++)
+		mWindow->draw(mFiles[i].text);
 }
 
 void GameStateStart::onEvent(const sf::Event& aEvent) {
@@ -85,6 +89,7 @@ void GameStateStart::handleClicks(std::string command) {
 	else if (command == "Play") {
 		for (auto m : mFiles) {
 			m.mannequin->setActive(true);
+			m.text.setString(m.name);
 		}
 		if (mMannequin != nullptr)
 			mMannequin->setActive(true);
@@ -96,6 +101,7 @@ void GameStateStart::handleClicks(std::string command) {
 	else if (command == "Previous") {
 		for (auto m : mFiles) {
 			m.mannequin->setActive(false);
+			m.text.setString("");
 		}
 		if (mMannequin != nullptr)
 			mMannequin->setActive(false);
@@ -113,11 +119,18 @@ void GameStateStart::handleClicks(std::string command) {
 		mSelectedSave = index;
 		mFiles[mSelectedSave].scoreCounters[0]->setActive(true);
 		mFiles[mSelectedSave].scoreCounters[1]->setActive(true);
+
 		//Set mannequin accessories
 		if (mMannequin != nullptr) {
-			mMannequin->setHeadAccessory("");
-			mMannequin->setTailAccessory("");
+			//mMannequin->setHeadAccessory("");
+			//mMannequin->setTailAccessory("");
 		}
+	}
+	else if (command == "ConfirmYes") {
+
+	}
+	else if (command == "ConfirmNo") {
+
 	}
 }
 
@@ -137,6 +150,13 @@ void GameStateStart::setupFiles(std::string filename) {
 			mFiles[itr].name = "Nytt Spel";
 		else
 			mFiles[itr].name = configDoc[itr]["Playername"].GetString();
+
+		mFiles[itr].text.setString(mFiles[itr].name);
+		mFiles[itr].text.setCharacterSize(36);
+		mFiles[itr].text.setFont(ResourceManager::getInstance().getFont(ARIAL_FONT));
+		mFiles[itr].text.setOrigin(0, mFiles[itr].text.getGlobalBounds().height / 2.0f);
+		mFiles[itr].text.setPosition(300.0f, 200.0f + (float)itr*225.0f);
+		mFiles[itr].text.setString("");
 
 		const rapidjson::Value& inventory = configDoc[itr]["Inventory"];
 		assert(inventory.HasMember("CurrentDust") && inventory["CurrentDust"].IsInt());

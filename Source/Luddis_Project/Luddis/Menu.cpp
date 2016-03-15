@@ -87,8 +87,6 @@ void Menu::initializeButtons() {
 	case Menu::MAINMENU:
 		offset = { -300, -400 };
 		addButton(STARTMENUBUTTON_PLAY, "", "Play", position + offset, Button::ButtonType::RECTANGLE);
-		//offset = { -450, 0 };
-		//addButton(MENUBUTTON_TEXTURE, "Ladda Spel", "LoadGame", position + offset, Button::ButtonType::RECTANGLE);
 		offset = { -300, -150 };
 		addButton(STARTMENUBUTTON_SETTINGS, "", "Settings", position + offset, Button::ButtonType::RECTANGLE);
 		offset = { -300, 100 };
@@ -158,9 +156,9 @@ void Menu::initializeButtons() {
 
 	case Menu::CONFIRMMENU:
 		offset = { 640, 540 };
-		addButton(MENUSELECTGAME_PLAY, "", "NewGame", offset, Button::ButtonType::CIRCLE);
+		addButton(MENUSELECTGAME_PLAY, "", "ConfirmYes", offset, Button::ButtonType::CIRCLE);
 		offset = { 1280, 540 };
-		addButton(MENUSELECTGAME_PLAY, "", "NewGame", offset, Button::ButtonType::CIRCLE);
+		addButton(MENUSELECTGAME_RETURN, "", "ConfirmNo", offset, Button::ButtonType::CIRCLE);
 
 		break;
 	}
@@ -228,7 +226,7 @@ void Menu::onClick(std::string buttonFunc) {
 		buttonFuncLoadGame();
 	}
 	else if (buttonFunc == "EraseSave") {
-
+		buttonFuncEraseSave();
 	}
 	else if (buttonFunc == "Previous") {
 		mGameState->handleClicks(buttonFunc);
@@ -265,7 +263,12 @@ void Menu::onClick(std::string buttonFunc) {
 		mGameState->handleClicks(buttonFunc);
 	}
 	else if (buttonFunc == "ConfirmYes") {
-		mPreviousMenu->onClick("");
+		mGameState->handleClicks("ConfirmYes");
+		mIsAlive = false;
+	}
+	else if (buttonFunc == "ConfirmNo") {
+		mGameState->handleClicks("ConfirmNo");
+		mIsAlive = false;
 	}
 }
 
@@ -280,7 +283,7 @@ void Menu::kill() {
 void Menu::buttonFuncNewGame() {
 	mIsAlive = false;
 	GameManager::getInstance().setGameState(&GameStateMap::getInstance());
-	SoundEngine::getInstance().stopEvent("event:/Music/Meny");
+	SoundEngine::getInstance().stopEvent("event:/Music/Meny", FMOD_STUDIO_STOP_ALLOWFADEOUT);
 }
 
 void Menu::buttonFuncPlay() {
