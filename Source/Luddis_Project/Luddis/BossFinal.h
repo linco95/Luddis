@@ -33,7 +33,6 @@ private:
 	sf::RenderWindow* mWindow;
 	sf::Transformable* mTarget;
 	const float mActivate;
-	bool mShooting;
 	bool mIsAlive;
 	bool mDead;
 	bool mIsActive;
@@ -45,6 +44,12 @@ private:
 	sf::Shape* mHitbox;
 	float mTimeStunned;
 	float mInvulnerable;
+
+	bool mState1;
+	bool mState2;
+	bool mState3;
+	bool mState4;
+	bool mState5;
 };
 
 #endif // !_INCLUDED_BOSSFINAL

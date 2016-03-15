@@ -6,6 +6,7 @@
 #include <SFML\Graphics\Shape.hpp>
 #include "ResourceManager.h"
 #include "Inventory.h"
+#include "Collectible.h"
 
 //Different states depending on how damaged the boss is.
 //State 1
@@ -33,9 +34,13 @@ BossFinal::BossFinal(sf::RenderWindow* window, const sf::Vector2f& position, con
 	mIsAlive(true),
 	mDead(false),
 	mIsActive(false),
+	mState1(true),
+	mState2(false),
+	mState3(false),
+	mState4(false),
+	mState5(false),
 	mWindow(window),
 	mEntityManager(entityManager),
-	mShooting(false),
 	mActivate(activation),
 	mLife(MAX_LIFE),
 	mAttackInterval1(ATTACK_INTERVAL1),
@@ -91,6 +96,8 @@ Renderer::RenderLayer BossFinal::getRenderLayer() const {
 	return Renderer::PLAYER;
 }
 
+#include <queue>
+
 void BossFinal::updateMovement(const sf::Time& deltaTime) {
 	if (getPosition().y < 300
 		|| getPosition().y > 1860) {
@@ -100,8 +107,16 @@ void BossFinal::updateMovement(const sf::Time& deltaTime) {
 	
 	if (mLife >= 75) {
 		if (mAttackInterval1 <= 0) {
+			//	std::queue<const char*> animations;
+			//	animations.push(ANIMATION_SHOOT_START.c_str());
+			//animations.push(ANIMATION_SHOOT.c_str());
+			//animations.push(ANIMATION_SHOOT_STOP.c_str());
+
+			//mAnimation.setDefaultAnimation()
+
 			mAnimation.setDefaultAnimation(ANIMATION_SHOOT_START);
 			mAnimation.replaceAnimation(ANIMATION_SHOOT);
+			attack();
 			mAnimation.setDefaultAnimation(ANIMATION_SHOOT_STOP);
 			mAnimation.setDefaultAnimation(ANIMATION_IDLE);
 			mAttackInterval1 = ATTACK_INTERVAL1;
@@ -109,9 +124,12 @@ void BossFinal::updateMovement(const sf::Time& deltaTime) {
 	}
 	
 	if (mLife >= 50 && mLife <= 74) {
+		mState1 = false;
+		mState2 = true;
 		if (mAttackInterval2 <= 0) {
 			mAnimation.replaceAnimation(ANIMATION_SUCK_START);
 			mAnimation.setDefaultAnimation(ANIMATION_SUCK);
+			attack();
 			mAttackTime2 -= deltaTime.asSeconds();
 			if (mAttackTime2 <= 0){
 				mAnimation.replaceAnimation(ANIMATION_SUCK_STOP);
@@ -123,6 +141,21 @@ void BossFinal::updateMovement(const sf::Time& deltaTime) {
 }
 
 void BossFinal::attack() {
+	if (mState1 == true) {
+		CollisionManager* cm = &CollisionManager::getInstance();
+		sf::Vector2f mPos(100, 100);
+
+		Collectible* chips = new Collectible(mWindow, "Resources/Images/Chips.png", mPos, Collectible::CollectibleType::CHIPS);
+		mEntityManager->addEntity(chips);
+		cm->addCollidable(chips);
+
+		Collectible* dust = new Collectible(mWindow, "Resources/Images/Dust.png", mPos, Collectible::CollectibleType::DUST);
+		mEntityManager->addEntity(dust);
+		cm->addCollidable(dust);
+	}
+	else if (mState2 == true) {
+
+	}
 }
 
 BossFinal::Category BossFinal::getCollisionCategory() {
