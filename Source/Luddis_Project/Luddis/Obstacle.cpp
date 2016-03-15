@@ -167,7 +167,7 @@ sf::Shape* Obstacle::getNarrowHitbox() const{
 Obstacle::Category Obstacle::getCollisionCategory(){
 	if (mType == DAMAGE){
 		if (mIsDamaging){
-			return ENEMY_DAMAGE;
+			return ENEMY_DAMAGE_OBSTACLE;
 		}
 		else{
 			return Category::IGNORE;

@@ -2,6 +2,7 @@
 #include "Inventory.h"
 #include "ResourceManager.h"
 #include "Debug.h"
+#include "VectorMath.h"
 
 static const std::string IDLE_SPRITE = ("Resources/Images/SpriteSheets/robot/robotIdle");
 static const std::string HIT_SPRITE = ("Resources/Images/SpriteSheets/robot/robotHit");
@@ -19,7 +20,7 @@ static const float PHASE_TWO_TWO_INTERVAL = 2.0f;
 
 static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(125, 10);
 
-BossRobot::BossRobot(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget, BossRobotButton* button) :
+BossRobot::BossRobot(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget, BossRobotButton* button, Luddis* luddis) :
 	mIsAlive(true),
 	mIsActive(false),
 	mWindow(window),
@@ -34,7 +35,10 @@ BossRobot::BossRobot(sf::RenderWindow* window, const sf::Vector2f& position, con
 	mPhaseTwoTimerOne(PHASE_TWO_ONE_INTERVAL),
 	mPhaseTwoTimerTwo(PHASE_TWO_TWO_INTERVAL),
 	mState(IDLE),
-	mCurrentHealth(0)
+	mCurrentHealth(0),
+	mPrepping(false),
+	mLuddis(luddis),
+	mStandardX(position.x)
 {
 	ResourceManager::getInstance().loadTexture(ATTACK_ANIMATION + ".png");
 	ResourceManager::getInstance().loadTexture(DYING_ANIMATION + ".png");
@@ -57,14 +61,21 @@ void BossRobot::tick(const sf::Time& deltaTime) {
 	}
 	//If not stunned
 	if (mTimeStunned <= 0) {
-		mAttackInterval -= deltaTime.asSeconds();
+		//If inactive
+		if (!mIsActive) return;
+
 		updateMovement(deltaTime);
-		mAnimation.tick(deltaTime);
-		
-		//If time to attack
-		if (mAttackInterval <= 0) {
-			attack();
-			mAttackInterval = ATTACK_INTERVAL;
+		if (mState == PREPARING) {
+			//TODO------------ FIX!
+			if (mPrepping == false) {
+				mAnimation.tick(deltaTime);
+			}
+			else if (mPrepping == true) {
+				mAnimation.getCurrAnimation().setFrame(0);
+			}
+		}
+		else {
+			mAnimation.tick(deltaTime);
 		}
 	}
 	else {
@@ -82,8 +93,10 @@ void BossRobot::tick(const sf::Time& deltaTime) {
 		mCurrentHealth = mButton->getLife();
 		Debug::log("Rob Health" + std::to_string(mCurrentHealth), Debug::INFO);
 		if (mCurrentHealth > 0) {
-			mHitTimer = HIT_TIMER;
 			mAnimation.replaceAnimation(HIT_SPRITE);
+			if (mState == IDLE) {
+				mState = PREPARING;
+			}
 		}
 	}
 
@@ -103,9 +116,12 @@ void BossRobot::tick(const sf::Time& deltaTime) {
 			break;
 		case BossRobot::PREPARING:
 			mPhaseTwoTimerOne -= deltaTime.asSeconds();
+			mAnimation.setDefaultAnimation(ATTACK_ANIMATION);
 			if (mPhaseTwoTimerOne <= 0) {
 				mState = ATTACKING;
 				mPhaseTwoTimerOne = PHASE_TWO_ONE_INTERVAL;
+				mAnimation.setDefaultAnimation(ATTACKING_SPRITE);
+				mAnimation.overrideAnimation(ATTACK_ANIMATION);
 			}
 			break;
 		case BossRobot::ATTACKING:
@@ -116,10 +132,12 @@ void BossRobot::tick(const sf::Time& deltaTime) {
 			}
 			break;
 		case BossRobot::RETURNING:
-			
+			if (getPosition().x < mStandardX + 5 && getPosition().x > mStandardX - 5) {
+				mState = IDLE;
+				mAnimation.setDefaultAnimation(IDLE_SPRITE);
+			}
 			break;
 		case BossRobot::DYING:
-			//Freeze dying animation
 			mAnimation.setDefaultAnimation(DEAD_SPRITE);
 			mAnimation.overrideAnimation(DYING_ANIMATION);
 			mState = DEAD;
@@ -138,15 +156,37 @@ void BossRobot::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 }
 
 void BossRobot::updateMovement(const sf::Time& deltaTime) {
-	//Phase 1
-
-	//Phase 2.1
-
+	//Phase 1 & 2.1
+	if (mState == IDLE || mState == PREPARING) {
+		int spriteHeight = mAnimation.getCurrAnimation().getSprite().getTextureRect().height;
+		if (getPosition().y < 0 + spriteHeight || getPosition().y> mWindow->getView().getSize().y - spriteHeight) {
+			mDirection = mDirection*-1.0f;
+		}
+		move(mDirection);
+	}
 	//Phase 2.2
+	else if (mState == ATTACKING) {
+		sf::Vector2f targetLudd = mLuddis->getPosition() - getPosition();
+		targetLudd = VectorMath::normalizeVector(targetLudd);
+		targetLudd = targetLudd*2.0f;
+		move(targetLudd);
+	}
+	//Phase 3
+	else if (mState == RETURNING) {
+		float currentY = getPosition().y;
+		sf::Vector2f targetHome = sf::Vector2f(mStandardX, currentY) - getPosition();
+		targetHome = VectorMath::normalizeVector(targetHome);
+		targetHome = targetHome*2.0f;
+		move(targetHome);
+	}
+	//Dead or dying -> don't move
+	else {
+		return;
+	}
 }
 
 void BossRobot::attack() {
-	//?
+	return;
 }
 
 bool BossRobot::isAlive() const {
@@ -166,7 +206,12 @@ Renderer::RenderLayer BossRobot::getRenderLayer() const {
 }
 
 BossRobot::Category BossRobot::getCollisionCategory() {
-	return ENEMY_DAMAGE;
+	if (mState == DEAD || mState == DYING) {
+		return SOLID;
+	}
+	else {
+		return ENEMY_DAMAGE;
+	}
 }
 
 BossRobot::Type BossRobot::getCollisionType() {
@@ -174,9 +219,14 @@ BossRobot::Type BossRobot::getCollisionType() {
 }
 
 void BossRobot::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway) {
-	if (collidable->getCollisionCategory() == PLAYER_OBJECT) {
-		if (mInvulnerable <= 0) {
-			Inventory::getInstance().addDust(-1);
+	if (mState == DEAD || mState == DYING) {
+		return;
+	}
+	else {
+		if (collidable->getCollisionCategory() == PLAYER_OBJECT) {
+			if (mInvulnerable <= 0) {
+				Inventory::getInstance().addDust(-1);
+			}
 		}
 	}
 }

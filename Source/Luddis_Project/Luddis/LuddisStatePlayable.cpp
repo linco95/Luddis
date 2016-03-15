@@ -89,7 +89,7 @@ void LuddisStatePlayable::collide(CollidableEntity * collidable, const sf::Vecto
 		mPlayerPtr->move(moveAway);
 	}
 	// Collision with damaging object
-	if (collidable->getCollisionCategory() == CollidableEntity::ENEMY_DAMAGE) {
+	if (collidable->getCollisionCategory() == CollidableEntity::ENEMY_DAMAGE || collidable->getCollisionCategory() == CollidableEntity::ENEMY_DAMAGE_OBSTACLE) {
 		mPlayerPtr->getAnimation()->replaceAnimation(HIT_ANIMATION);
 	}
 	// Collision with a stunning entity

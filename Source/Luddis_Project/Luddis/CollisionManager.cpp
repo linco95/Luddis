@@ -7,6 +7,8 @@
 #include "Debug.h"
 #include <cassert>
 
+static const int COLLISIONRADIUS = 600;
+
 CollisionManager::CollisionManager() :
 	mCollidables() {
 }
@@ -104,32 +106,9 @@ std::pair<float, float> getProjection(const sf::Shape& shape, const sf::Vector2f
 // Narrow collision phase, using the "Separating Axis Theorem"
 
 void CollisionManager::narrowCollision(std::pair<CollidableEntity*, CollidableEntity*>& colliding) {
-	//Do some culling of collision categories to reduce unneccessary calculations.
+	//Do some culling of collision categories to reduce unneccessary calculations
 	//Ugly as fuck...
-	CollidableEntity::Category catFirst = colliding.first->getCollisionCategory();
-	CollidableEntity::Category catSecond = colliding.second->getCollisionCategory();
-	if (
-		//If eighter the first or the second is IGNORE, proceed without checking for collisions.
-		catFirst == CollidableEntity::IGNORE || catSecond == CollidableEntity::IGNORE ||
-		(catFirst == CollidableEntity::SOLID && catSecond == CollidableEntity::SOLID) ||
-		(catFirst == CollidableEntity::PLAYER_OBJECT && catSecond == CollidableEntity::PLAYER_PROJECTILE) || (catSecond == CollidableEntity::PLAYER_OBJECT && catFirst == CollidableEntity::PLAYER_PROJECTILE) ||
-		(catFirst == CollidableEntity::PLAYER_PROJECTILE && catSecond == CollidableEntity::PLAYER_PROJECTILE)||
-		(catFirst == CollidableEntity::PLAYER_PROJECTILE && catSecond == CollidableEntity::COLLECT) || (catSecond == CollidableEntity::PLAYER_PROJECTILE && catFirst == CollidableEntity::COLLECT) ||
-		(catFirst == CollidableEntity::PLAYER_PROJECTILE && catSecond == CollidableEntity::EVENTZONE) || (catSecond == CollidableEntity::PLAYER_PROJECTILE && catFirst == CollidableEntity::EVENTZONE) ||
-		(catFirst == CollidableEntity::COLLECT && catSecond == CollidableEntity::COLLECT) ||
-		(catFirst == CollidableEntity::COLLECT && catSecond == CollidableEntity::ENEMY_DAMAGE) || (catSecond == CollidableEntity::COLLECT && catFirst == CollidableEntity::ENEMY_DAMAGE) ||
-		(catFirst == CollidableEntity::COLLECT && catSecond == CollidableEntity::ENEMY_STUN) || (catSecond == CollidableEntity::COLLECT && catFirst == CollidableEntity::ENEMY_STUN) ||
-		(catFirst == CollidableEntity::COLLECT && catSecond == CollidableEntity::SOLID) || (catSecond == CollidableEntity::COLLECT && catFirst == CollidableEntity::SOLID) ||
-		(catFirst == CollidableEntity::COLLECT && catSecond == CollidableEntity::EVENTZONE) || (catSecond == CollidableEntity::COLLECT && catFirst == CollidableEntity::EVENTZONE) ||
-		//No enemies can collide with eachother, this might not be wanted behavior.
-		(catFirst == CollidableEntity::ENEMY_DAMAGE && catSecond == CollidableEntity::ENEMY_DAMAGE) ||
-		(catFirst == CollidableEntity::ENEMY_DAMAGE && catSecond == CollidableEntity::ENEMY_STUN) || (catSecond == CollidableEntity::ENEMY_DAMAGE && catFirst == CollidableEntity::ENEMY_STUN) ||
-		(catFirst == CollidableEntity::ENEMY_DAMAGE && catSecond == CollidableEntity::EVENTZONE) || (catSecond == CollidableEntity::ENEMY_DAMAGE && catFirst == CollidableEntity::EVENTZONE) ||
-		(catFirst == CollidableEntity::ENEMY_STUN && catSecond == CollidableEntity::ENEMY_STUN) ||
-		(catFirst == CollidableEntity::ENEMY_STUN && catSecond == CollidableEntity::EVENTZONE) || (catSecond == CollidableEntity::ENEMY_STUN && catFirst == CollidableEntity::EVENTZONE) ||
-		(catFirst == CollidableEntity::SOLID && catSecond == CollidableEntity::EVENTZONE) || (catSecond == CollidableEntity::SOLID && catFirst == CollidableEntity::EVENTZONE) ||
-		(catFirst == CollidableEntity::EVENTZONE && catSecond == CollidableEntity::EVENTZONE))
-		return;
+	
 
 	/*
 	Here we're getting every side in the first shape. Then we get the normal of that side and project every point in each shape on that vector.
@@ -278,6 +257,44 @@ void CollisionManager::detectCollisions() {
 		for (CollidableVector::size_type j = i + 1; j < collidables.size(); j++) {
 			CollidableEntity *collidable1 = collidables.at(j);
 			if (!collidable1->isActive()) continue;
+			CollidableEntity::Category catFirst = collidable0->getCollisionCategory();
+			CollidableEntity::Category catSecond = collidable1->getCollisionCategory();
+			if (
+				abs(collidable0->getPosition().x - collidable1->getPosition().x) > collidable0->getHitBox().width / 2 + collidable1->getHitBox().width / 2 ||
+				//If either the first or the second is IGNORE, proceed without checking for collisions.
+				catFirst == CollidableEntity::IGNORE || catSecond == CollidableEntity::IGNORE ||
+				(catFirst == CollidableEntity::SOLID && catSecond == CollidableEntity::SOLID) ||
+				(catFirst == CollidableEntity::PLAYER_OBJECT && catSecond == CollidableEntity::PLAYER_PROJECTILE) || 
+				(catSecond == CollidableEntity::PLAYER_OBJECT && catFirst == CollidableEntity::PLAYER_PROJECTILE) ||
+				(catFirst == CollidableEntity::PLAYER_PROJECTILE && catSecond == CollidableEntity::PLAYER_PROJECTILE) ||
+				(catFirst == CollidableEntity::PLAYER_PROJECTILE && catSecond == CollidableEntity::COLLECT) || 
+				(catSecond == CollidableEntity::PLAYER_PROJECTILE && catFirst == CollidableEntity::COLLECT) ||
+				(catFirst == CollidableEntity::PLAYER_PROJECTILE && catSecond == CollidableEntity::EVENTZONE) || 
+				(catSecond == CollidableEntity::PLAYER_PROJECTILE && catFirst == CollidableEntity::EVENTZONE) ||
+				catFirst == CollidableEntity::PLAYER_PROJECTILE && catSecond == CollidableEntity::ENEMY_DAMAGE_OBSTACLE ||
+				catSecond == CollidableEntity::PLAYER_PROJECTILE && catFirst == CollidableEntity::ENEMY_DAMAGE_OBSTACLE ||
+				(catFirst == CollidableEntity::COLLECT && catSecond == CollidableEntity::COLLECT) ||
+				(catFirst == CollidableEntity::COLLECT && catSecond == CollidableEntity::ENEMY_DAMAGE) || 
+				(catSecond == CollidableEntity::COLLECT && catFirst == CollidableEntity::ENEMY_DAMAGE) ||
+				(catFirst == CollidableEntity::COLLECT && catSecond == CollidableEntity::ENEMY_STUN) || 
+				(catSecond == CollidableEntity::COLLECT && catFirst == CollidableEntity::ENEMY_STUN) ||
+				(catFirst == CollidableEntity::COLLECT && catSecond == CollidableEntity::SOLID) || 
+				(catSecond == CollidableEntity::COLLECT && catFirst == CollidableEntity::SOLID) ||
+				(catFirst == CollidableEntity::COLLECT && catSecond == CollidableEntity::EVENTZONE) || 
+				(catSecond == CollidableEntity::COLLECT && catFirst == CollidableEntity::EVENTZONE) ||
+				//No enemies can collide with eachother, this might not be wanted behavior.
+				(catFirst == CollidableEntity::ENEMY_DAMAGE && catSecond == CollidableEntity::ENEMY_DAMAGE) ||
+				(catFirst == CollidableEntity::ENEMY_DAMAGE && catSecond == CollidableEntity::ENEMY_STUN) || 
+				(catSecond == CollidableEntity::ENEMY_DAMAGE && catFirst == CollidableEntity::ENEMY_STUN) ||
+				(catFirst == CollidableEntity::ENEMY_DAMAGE && catSecond == CollidableEntity::EVENTZONE) || 
+				(catSecond == CollidableEntity::ENEMY_DAMAGE && catFirst == CollidableEntity::EVENTZONE) ||
+				(catFirst == CollidableEntity::ENEMY_STUN && catSecond == CollidableEntity::ENEMY_STUN) ||
+				(catFirst == CollidableEntity::ENEMY_STUN && catSecond == CollidableEntity::EVENTZONE) || 
+				(catSecond == CollidableEntity::ENEMY_STUN && catFirst == CollidableEntity::EVENTZONE) ||
+				(catFirst == CollidableEntity::SOLID && catSecond == CollidableEntity::EVENTZONE) || 
+				(catSecond == CollidableEntity::SOLID && catFirst == CollidableEntity::EVENTZONE) ||
+				(catFirst == CollidableEntity::EVENTZONE && catSecond == CollidableEntity::EVENTZONE))
+				continue;
 			if (collidable0->getHitBox().intersects(collidable1->getHitBox()) && (collidable0->getCollisionCategory() != collidable1->getCollisionCategory())) {
 				colliding.push(std::make_pair(collidable0, collidable1));
 			}

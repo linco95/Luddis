@@ -296,7 +296,7 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 
 	mEntityM->addEntity(mPlayer);
 	mCM->addCollidable(mPlayer);
-	mLevel = new Level(mEntityM);
+	mLevel = new Level(mEntityM, mPlayer);
 	mEntityM->addEntity(mLevel);
 	mLevel->initializeLevel(*mWindow, mPlayer, levelFile);
 
@@ -311,7 +311,14 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	}
 
 	mCurrentLevelFile = levelFile;
-	mCurrentLevel = levelFile.at(33);
+
+	std::string configText = ResourceManager::getInstance().loadJsonFile(levelFile);
+	rapidjson::Document configDoc;
+	configDoc.Parse(configText.c_str());
+	assert(configDoc.IsObject());
+
+	if (configDoc.HasMember("Level"))
+	mCurrentLevel = configDoc["Level"].GetInt();
 	mPlayable = true;
 }
 

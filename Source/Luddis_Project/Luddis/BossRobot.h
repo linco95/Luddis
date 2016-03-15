@@ -5,10 +5,11 @@
 #include "EntityManager.h"
 #include "AnimationQueue.h"
 #include "BossRobotButton.h"
+#include "Luddis.h"
 
 class BossRobot : public CollidableEntity {
 public:
-	BossRobot(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget, BossRobotButton* button);
+	BossRobot(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget, BossRobotButton* button, Luddis* luddis);
 	~BossRobot();
 
 	void tick(const sf::Time& deltaTime) override;
@@ -30,11 +31,13 @@ private:
 	AnimationQueue mAnimation;
 	sf::RenderWindow* mWindow;
 	sf::Transformable* mTarget;
+	Luddis* mLuddis;
 	const float mActivate;
 	bool mIsAlive;
 	bool mIsActive;
 	float mAttackInterval;
 	sf::Vector2f mDirection;
+	float mStandardX;
 	sf::Shape* mHitbox;
 	float mTimeStunned;
 	float mInvulnerable;
@@ -56,6 +59,8 @@ private:
 	float mPhaseOneTimer;
 	float mPhaseTwoTimerOne;
 	float mPhaseTwoTimerTwo;
+	//Bad name, used for animation while prepping
+	bool mPrepping;
 };
 
 #endif // !INCLUDED_BOSSROBOT

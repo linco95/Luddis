@@ -18,7 +18,7 @@ static const std::string ANIMATION2_DEATH = "resources/images/spritesheets/Goldf
 static const std::string ANIMATION2_DEAD = "resources/images/spritesheets/Goldfish_dead";
 static const std::string ANIMATION2_HIT = "resources/images/spritesheets/Goldfish_hit";
 
-static float SPEED = 80;
+static const float SPEED = 80;
 static const Renderer::RenderLayer LAYER = Renderer::PLAYER;
 static const int DAMAGE = 10;
 static const int LIFE = 10;
@@ -113,7 +113,7 @@ void Silverfish::updateMovement(const sf::Time& deltaTime){
 	float speed = SPEED;
 	if (mSwimAway && mAnimation.getCurrAnimation().hasLooped()) {
 		if (mDirection != mNextDir) mDirection = mNextDir;
-		speed = 250;
+		speed = SPEED * 4;
 	}
 	else if (mSwimAway && !mAnimation.getCurrAnimation().hasLooped()) {
 		speed = 0;
