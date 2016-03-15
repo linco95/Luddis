@@ -40,11 +40,11 @@ Slider::Slider(std::string gaugeFile, std::string sliderFile, float percent, std
 	sf::Vector2f maxPos(mXMaxPos, mYMaxPos);
 	sf::Vector2f minPos(mXMinPos, mYMinPos);
 
-	mIntensity = percent / 100;
+	mIntensity = percent;
 	float xPos = (mIntensity*mXMaxPos - mIntensity*mXMinPos + mXMinPos);
 	mSlider.setPosition(xPos, 0);
 
-	mAttributeText.setString(mAttribute + " " + std::to_string((int)(mIntensity * 100)));
+	mAttributeText.setString(mAttribute + " " + std::to_string((int)(mIntensity*100)));
 	mAttributeText.move(-40, 40);
 
 	mEventManager->attatch(this, std::vector < sf::Event::EventType > { sf::Event::MouseButtonReleased, sf::Event::MouseButtonPressed, sf::Event::MouseMoved });
@@ -118,7 +118,7 @@ void Slider::onEvent(const sf::Event & aEvent) {
 			mIntensity = (xPos - mXMinPos) / (mXMaxPos - mXMinPos);
 
 			mAttributeText.setString(mAttribute + " " + std::to_string((int)(mIntensity * 100)));
-			mOwner->onClick(mButtonFunc + std::to_string(mIntensity * 100));
+			mOwner->onClick(mButtonFunc + std::to_string(mIntensity));
 		}
 	}
 }
