@@ -35,12 +35,13 @@ static const char* EFFECT_FILEPATH = "Resources/Images/Rag_projectile.png";
 static const Renderer::RenderLayer LAYER = Renderer::BACKGROUND;
 static const char* mapfilepath;
 
-Level::Level(EntityManager* entityManager) :
+Level::Level(EntityManager* entityManager, Luddis* luddis) :
 mIsActive(true),
 mProgress(0),
 mEntityManager(entityManager),
 mGameStateLevel(&GameStateLevel::getInstance()),
-mEffectInterval(EFFECT_INTERVAL)
+mEffectInterval(EFFECT_INTERVAL),
+mLuddis(luddis)
 {
 
 }
@@ -167,7 +168,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 	// The boss
 	if (configDoc.HasMember("Boss_spawns") && configDoc["Boss_spawns"].IsArray()) {
 	const rapidjson::Value& bossSpawns = configDoc["Boss_spawns"];
-		for (rapidjson::Value::ConstValueIterator itr = bossSpawns.Begin(); itr != bossSpawns.End(); itr++) {
+	for (rapidjson::Value::ConstValueIterator itr = bossSpawns.Begin(); itr != bossSpawns.End(); itr++) {
 		assert(itr->IsObject());
 		assert(itr->HasMember("x") && (*itr)["x"].IsInt());
 		assert(itr->HasMember("y") && (*itr)["y"].IsInt());
@@ -186,6 +187,17 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 			cm->addCollidable(boss);
 			Debug::log("Spawning boss at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
 		}
+		else if (levelNr == 2){
+			//TODO pos
+			/*
+			BossRobotButton* robotButton = new BossRobotButton(mWindow, sf::Vector2f(500, 500), 0, mTarget);
+			mEntityManager->addEntity(robotButton);
+			cm->addCollidable(robotButton);
+
+			BossRobot* robot = new BossRobot(mWindow, pos, act, mTarget, robotButton);
+			mEntityManager->addEntity(robot);
+			cm->addCollidable(robot);*/
+		}
 		else if (levelNr == 3) {
 			BossFinal* boss = new BossFinal(mWindow, pos, act, mTarget, mEntityManager);
 			mEntityManager->addEntity(boss);
@@ -196,18 +208,14 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 	}
 
 	/*
-	Debug::log("Rob begin", Debug::INFO);
 	//Robot test
-	BossRobotButton* robotButton = new BossRobotButton(mWindow, sf::Vector2f(500, 500), 0, mTarget);
+	BossRobotButton* robotButton = new BossRobotButton(mWindow, sf::Vector2f(250, 250), 0, mTarget);
 	mEntityManager->addEntity(robotButton);
 	cm->addCollidable(robotButton);
-	Debug::log("Rob mid", Debug::INFO);
 	
-	BossRobot* robot = new BossRobot(mWindow, sf::Vector2f(200, 200), 0, mTarget, robotButton);
+	BossRobot* robot = new BossRobot(mWindow, sf::Vector2f(600, 600), 0, mTarget, robotButton, mLuddis);
 	mEntityManager->addEntity(robot);
 	cm->addCollidable(robot);
-	
-	Debug::log("Rob end", Debug::INFO);
 	*/
 	
 	//Event zones
