@@ -3,6 +3,7 @@
 #include "ResourceManager.h"
 #include "Debug.h"
 #include "VectorMath.h"
+#include "GameStateLevel.h"
 
 static const std::string IDLE_SPRITE = ("Resources/Images/SpriteSheets/robot/robotIdle");
 static const std::string HIT_SPRITE = ("Resources/Images/SpriteSheets/robot/robotHit");
@@ -10,6 +11,9 @@ static const std::string ATTACK_ANIMATION = ("Resources/Images/SpriteSheets/robo
 static const std::string DYING_ANIMATION = ("Resources/Images/SpriteSheets/robot/robotDying");
 static const std::string DEAD_SPRITE = ("Resources/Images/SpriteSheets/robot/robotDead");
 static const std::string ATTACKING_SPRITE = ("Resources/Images/SpriteSheets/robot/robotAttacking");
+
+static const std::string BOSS_START = "Resources/Configs/Dialogue/RobotBoss1.json";
+static const std::string BOSS_DEFEATED = "Resources/Configs/Dialogue/RobotBoss2.json";
 
 static const float PHASE_ONE_INTERVAL = 10.0f;
 static const float PHASE_TWO_ONE_INTERVAL = 1.5f;
@@ -30,6 +34,8 @@ BossRobot::BossRobot(sf::RenderWindow* window, const sf::Vector2f& position, con
 	mPhaseOneTimer(PHASE_ONE_INTERVAL),
 	mPhaseTwoTimerOne(PHASE_TWO_ONE_INTERVAL),
 	mPhaseTwoTimerTwo(PHASE_TWO_TWO_INTERVAL),
+	mGameStateLevel(&GameStateLevel::getInstance()),
+	mMeet(true),
 	mState(IDLE),
 	mCurrentHealth(0),
 	mLuddis(luddis),
@@ -54,6 +60,10 @@ BossRobot::~BossRobot() {
 void BossRobot::tick(const sf::Time& deltaTime) {
 	if (mTarget->getPosition().x >= mActivate) {
 		mIsActive = true;
+	}
+	if (mTarget->getPosition().x >= 18800 && mMeet == true) {
+		mGameStateLevel->createDialogue(BOSS_START);
+		mMeet = false;
 	}
 	//If not stunned
 	if (mTimeStunned <= 0) {
@@ -125,6 +135,7 @@ void BossRobot::tick(const sf::Time& deltaTime) {
 		case BossRobot::DYING:
 			mAnimation.setDefaultAnimation(DEAD_SPRITE);
 			mAnimation.overrideAnimation(DYING_ANIMATION);
+			mGameStateLevel->createDialogue(BOSS_DEFEATED);
 			mState = DEAD;
 			break;
 		case BossRobot::DEAD:

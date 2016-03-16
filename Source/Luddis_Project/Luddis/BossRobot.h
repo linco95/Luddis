@@ -7,6 +7,8 @@
 #include "BossRobotButton.h"
 #include "Luddis.h"
 
+class GameStateLevel;
+
 class BossRobot : public CollidableEntity {
 public:
 	BossRobot(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget, BossRobotButton* button, Luddis* luddis);
@@ -31,10 +33,12 @@ private:
 	AnimationQueue mAnimation;
 	sf::RenderWindow* mWindow;
 	sf::Transformable* mTarget;
+	GameStateLevel* mGameStateLevel;
 	Luddis* mLuddis;
 	const float mActivate;
 	bool mIsAlive;
 	bool mIsActive;
+	bool mMeet;
 	sf::Vector2f mDirection;
 	float mStandardX;
 	sf::Shape* mHitbox;
