@@ -200,7 +200,10 @@
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
     <ClCompile Include="BossFinal.cpp">
-      <Filter>Source Files\Entities</Filter>
+      <Filter>Source Files\Entities\FinalBoss</Filter>
+    </ClCompile>
+    <ClCompile Include="BossFinalState1.cpp">
+      <Filter>Source Files\Entities\FinalBoss</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -409,7 +412,10 @@
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
     <ClInclude Include="BossFinal.h">
-      <Filter>Header Files\Entities</Filter>
+      <Filter>Header Files\Entities\FinalBoss</Filter>
+    </ClInclude>
+    <ClInclude Include="BossFinalState1.h">
+      <Filter>Header Files\Entities\FinalBoss</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -457,6 +463,12 @@
     </Filter>
     <Filter Include="Source Files\Cinematic">
       <UniqueIdentifier>{5ff35a5c-be7b-459c-aa12-2dd1e6dc7884}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entities\FinalBoss">
+      <UniqueIdentifier>{25a26290-d62e-4a1a-9a5d-c4a6d2878a0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\FinalBoss">
+      <UniqueIdentifier>{ae64907c-c313-40a7-b138-82bd676d301a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

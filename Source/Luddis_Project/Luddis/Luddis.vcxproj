@@ -90,6 +90,7 @@
     <ClCompile Include="BackgroundEffect.cpp" />
     <ClCompile Include="BossDishCloth.cpp" />
     <ClCompile Include="BossFinal.cpp" />
+    <ClCompile Include="BossFinalState1.cpp" />
     <ClCompile Include="BossRobot.cpp" />
     <ClCompile Include="BossRobotButton.cpp" />
     <ClCompile Include="Button.cpp" />
@@ -158,6 +159,7 @@
     <ClInclude Include="BackgroundEffect.h" />
     <ClInclude Include="BossDishCloth.h" />
     <ClInclude Include="BossFinal.h" />
+    <ClInclude Include="BossFinalState1.h" />
     <ClInclude Include="BossRobot.h" />
     <ClInclude Include="BossRobotButton.h" />
     <ClInclude Include="Button.h" />

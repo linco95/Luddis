@@ -446,19 +446,6 @@ void GameStateLevel::readSetupFiles(const std::string& filename, bool allocate) 
 				;//rm->clearJsonFile(file);
 		}
 
-		assert(setupFiles.HasMember("PNG_files") && setupFiles["PNG_files"].IsArray());
-		const rapidjson::Value& pngFiles = setupFiles["PNG_files"];
-
-		for (rapidjson::Value::ConstValueIterator itr = pngFiles.Begin(); itr != pngFiles.End(); itr++) {
-			assert(itr->IsObject());
-			assert(itr->HasMember("filename") && (*itr)["filename"].IsString());
-			std::string file = (*itr)["filename"].GetString();
-
-			if (allocate)
-				rm->readMap(file);
-			else
-				;//rm->clearMap(file);
-		}
 	}
 	//loadingbar->kill();
 }
