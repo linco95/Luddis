@@ -189,14 +189,14 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		}
 		else if (levelNr == 2){
 			//TODO pos
-			/*
-			BossRobotButton* robotButton = new BossRobotButton(mWindow, sf::Vector2f(500, 500), 0, mTarget);
+			
+			BossRobotButton* robotButton = new BossRobotButton(mWindow, sf::Vector2f(19517, pos.y), 0, mTarget);
 			mEntityManager->addEntity(robotButton);
 			cm->addCollidable(robotButton);
 
-			BossRobot* robot = new BossRobot(mWindow, pos, act, mTarget, robotButton);
+			BossRobot* robot = new BossRobot(mWindow, pos, act, mTarget, robotButton, mLuddis);
 			mEntityManager->addEntity(robot);
-			cm->addCollidable(robot);*/
+			cm->addCollidable(robot);
 		}
 		else if (levelNr == 3) {
 			BossFinal* boss = new BossFinal(mWindow, pos, act, mTarget, mEntityManager);
@@ -206,17 +206,6 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		}
 	}
 	}
-
-	/*
-	//Robot test
-	BossRobotButton* robotButton = new BossRobotButton(mWindow, sf::Vector2f(250, 250), 0, mTarget);
-	mEntityManager->addEntity(robotButton);
-	cm->addCollidable(robotButton);
-	
-	BossRobot* robot = new BossRobot(mWindow, sf::Vector2f(600, 600), 0, mTarget, robotButton, mLuddis);
-	mEntityManager->addEntity(robot);
-	cm->addCollidable(robot);
-	*/
 	
 	//Event zones
 	if (configDoc.HasMember("EventZone_rect_spawns")) {

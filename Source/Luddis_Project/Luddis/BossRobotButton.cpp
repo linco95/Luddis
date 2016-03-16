@@ -48,7 +48,7 @@ void BossRobotButton::setActive(const bool & active) {
 }
 
 Renderer::RenderLayer BossRobotButton::getRenderLayer() const {
-	return Renderer::OBSTACLES;
+	return Renderer::FOREGROUND;
 }
 
 BossRobotButton::Category BossRobotButton::getCollisionCategory() {

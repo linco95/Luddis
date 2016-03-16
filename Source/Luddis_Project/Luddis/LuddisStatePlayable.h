@@ -13,7 +13,7 @@ namespace sf {
 
 class LuddisStatePlayable : public LuddisState {
 public:
-	LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* window, EntityManager* entityManager, PowerupDisplay* display);
+	LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* window, EntityManager* entityManager, PowerupDisplay* display, sf::Shape* hitbox);
 	virtual ~LuddisStatePlayable();
 	void tick(const sf::Time& deltaTime) override;
 	void collide(CollidableEntity *collidable, const sf::Vector2f& moveAway) override;
@@ -43,6 +43,7 @@ private:
 	PowerupDisplay* mDisplay;
 
 	bool mHurt;
+	sf::Shape* mHitbox;
 };
 
 #endif // !_INCLUDED_LUDDISSTATEPLAYABLE_
