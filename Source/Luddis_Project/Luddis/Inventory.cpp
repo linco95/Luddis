@@ -8,7 +8,9 @@ mDust(10),
 mEggs(0),
 mMaxDust(50)
 {
-	
+#ifdef _DESIGNER_HAX_
+	mDust = 50;
+#endif // _DESIGNER_HAX_
 }
 
 Inventory::~Inventory(){

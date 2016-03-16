@@ -279,7 +279,7 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	Tween tween2(poly, 3, 0, false);
 	CinematicPause pauseCin(1.2f);
 	CinematicMoveToPoint movePoint(sf::Vector2f(500, 500), mPlayer);
-	LuddisStateCinematic* cinState = new LuddisStateCinematic(100, mPlayer, mWindow, mEntityM, mPowerupDisplays[0]);
+	LuddisStateCinematic* cinState = new LuddisStateCinematic(100, mPlayer, mWindow, mEntityM, mPowerupDisplays[0], mPlayer->getNarrowHitbox());
 	/*cinState->addCinematicSequence(&tween);
 	cinState->addCinematicSequence(&pauseCin);
 	cinState->addCinematicSequence(&tween2);*/

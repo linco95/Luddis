@@ -1,7 +1,7 @@
 #include "SpiderWeb.h"
 #include "Inventory.h"
 
-float const PAUSE_TIME = 3.0f;
+float const PAUSE_TIME = 2.0f;
 
 SpiderWeb::SpiderWeb(EntityManager* entityManager, PowerupDisplay* display):
 mPauseTime(PAUSE_TIME),

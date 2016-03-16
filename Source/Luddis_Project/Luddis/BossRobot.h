@@ -35,7 +35,6 @@ private:
 	const float mActivate;
 	bool mIsAlive;
 	bool mIsActive;
-	float mAttackInterval;
 	sf::Vector2f mDirection;
 	float mStandardX;
 	sf::Shape* mHitbox;
@@ -44,7 +43,6 @@ private:
 	BossRobotButton* mButton;
 
 	int mCurrentHealth;
-	float mHitTimer;
 
 	enum RobotState {
 		IDLE,
@@ -59,8 +57,6 @@ private:
 	float mPhaseOneTimer;
 	float mPhaseTwoTimerOne;
 	float mPhaseTwoTimerTwo;
-	//Bad name, used for animation while prepping
-	bool mPrepping;
 };
 
 #endif // !INCLUDED_BOSSROBOT

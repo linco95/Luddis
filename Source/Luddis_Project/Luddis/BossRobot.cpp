@@ -11,11 +11,8 @@ static const std::string DYING_ANIMATION = ("Resources/Images/SpriteSheets/robot
 static const std::string DEAD_SPRITE = ("Resources/Images/SpriteSheets/robot/robotDead");
 static const std::string ATTACKING_SPRITE = ("Resources/Images/SpriteSheets/robot/robotAttacking");
 
-static const float ATTACK_INTERVAL = 3.5f;
-static const float HIT_TIMER = 0.3f;
-
 static const float PHASE_ONE_INTERVAL = 10.0f;
-static const float PHASE_TWO_ONE_INTERVAL = 2.0f;
+static const float PHASE_TWO_ONE_INTERVAL = 1.5f;
 static const float PHASE_TWO_TWO_INTERVAL = 2.0f;
 
 static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(125, 10);
@@ -25,7 +22,6 @@ BossRobot::BossRobot(sf::RenderWindow* window, const sf::Vector2f& position, con
 	mIsActive(false),
 	mWindow(window),
 	mActivate(activation),
-	mAttackInterval(ATTACK_INTERVAL),
 	mDirection(0, 1.0f),
 	mAnimation(Animation(IDLE_SPRITE)),
 	mHitbox(new sf::CircleShape(HITBOX_SHAPE)),
@@ -36,9 +32,9 @@ BossRobot::BossRobot(sf::RenderWindow* window, const sf::Vector2f& position, con
 	mPhaseTwoTimerTwo(PHASE_TWO_TWO_INTERVAL),
 	mState(IDLE),
 	mCurrentHealth(0),
-	mPrepping(false),
 	mLuddis(luddis),
-	mStandardX(position.x)
+	mStandardX(position.x),
+	mInvulnerable(0)
 {
 	ResourceManager::getInstance().loadTexture(ATTACK_ANIMATION + ".png");
 	ResourceManager::getInstance().loadTexture(DYING_ANIMATION + ".png");
@@ -64,19 +60,8 @@ void BossRobot::tick(const sf::Time& deltaTime) {
 		//If inactive
 		if (!mIsActive) return;
 
-		updateMovement(deltaTime);
-		if (mState == PREPARING) {
-			//TODO------------ FIX!
-			if (mPrepping == false) {
-				mAnimation.tick(deltaTime);
-			}
-			else if (mPrepping == true) {
-				mAnimation.getCurrAnimation().setFrame(0);
-			}
-		}
-		else {
-			mAnimation.tick(deltaTime);
-		}
+		updateMovement(deltaTime);		
+		mAnimation.tick(deltaTime);
 	}
 	else {
 		mTimeStunned -= deltaTime.asSeconds();
@@ -91,12 +76,12 @@ void BossRobot::tick(const sf::Time& deltaTime) {
 	// Retrieve health & reset hit timer if health is less than current
 	if (mButton->getLife() < mCurrentHealth) {
 		mCurrentHealth = mButton->getLife();
-		Debug::log("Rob Health" + std::to_string(mCurrentHealth), Debug::INFO);
 		if (mCurrentHealth > 0) {
-			mAnimation.replaceAnimation(HIT_SPRITE);
 			if (mState == IDLE) {
+				mAnimation.setDefaultAnimation(ATTACK_ANIMATION);
 				mState = PREPARING;
 			}
+			mAnimation.replaceAnimation(HIT_SPRITE);
 		}
 	}
 
@@ -111,12 +96,12 @@ void BossRobot::tick(const sf::Time& deltaTime) {
 			mPhaseOneTimer -= deltaTime.asSeconds();
 			if (mPhaseOneTimer <= 0) {
 				mState = PREPARING;
+				mAnimation.setDefaultAnimation(ATTACK_ANIMATION);
 				mPhaseOneTimer = PHASE_ONE_INTERVAL;
 			}
 			break;
 		case BossRobot::PREPARING:
 			mPhaseTwoTimerOne -= deltaTime.asSeconds();
-			mAnimation.setDefaultAnimation(ATTACK_ANIMATION);
 			if (mPhaseTwoTimerOne <= 0) {
 				mState = ATTACKING;
 				mPhaseTwoTimerOne = PHASE_TWO_ONE_INTERVAL;
@@ -158,10 +143,6 @@ void BossRobot::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 void BossRobot::updateMovement(const sf::Time& deltaTime) {
 	//Phase 1 & 2.1
 	if (mState == IDLE || mState == PREPARING) {
-		int spriteHeight = mAnimation.getCurrAnimation().getSprite().getTextureRect().height;
-		if (getPosition().y < 0 + spriteHeight || getPosition().y> mWindow->getView().getSize().y - spriteHeight) {
-			mDirection = mDirection*-1.0f;
-		}
 		move(mDirection);
 	}
 	//Phase 2.2
@@ -227,6 +208,15 @@ void BossRobot::collide(CollidableEntity *collidable, const sf::Vector2f& moveAw
 			if (mInvulnerable <= 0) {
 				Inventory::getInstance().addDust(-1);
 			}
+		}
+	}
+	// Collision with solid object
+	if (collidable->getCollisionCategory() == CollidableEntity::SOLID) {
+		if (mState == IDLE) {
+			mDirection = mDirection*-1.0f;
+		}
+		else {
+			move(-moveAway);
 		}
 	}
 }

@@ -14,7 +14,7 @@ namespace sf {
 
 class LuddisStateCinematic : public LuddisState{
 public:
-	LuddisStateCinematic(float defaultSpeed, Luddis* playerPtr, sf::RenderWindow* window, EntityManager* entityManager, PowerupDisplay* display);
+	LuddisStateCinematic(float defaultSpeed, Luddis* playerPtr, sf::RenderWindow* window, EntityManager* entityManager, PowerupDisplay* display, sf::Shape* hitbox);
 	~LuddisStateCinematic();
 
 	void tick(const sf::Time& deltaTime) override;
@@ -35,6 +35,7 @@ private:
 	float mDefaultSpeed;
 	PowerupDisplay* mDisplay;
 	bool mIsFlipped;
+	sf::Shape* mHitbox;
 };
 
 #endif // !_INCLUDED_LUDDISSTATECINEMATIC_
