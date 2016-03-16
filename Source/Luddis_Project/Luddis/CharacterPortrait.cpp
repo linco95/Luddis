@@ -14,7 +14,7 @@ static const int EMOTION_SHEET_COLUMNS = 9;
 static const float HIGHLIGHT_MAXTIME = 0.8f;
 static const float FACTOR = 0.2f;
 
-CharacterPortrait::CharacterPortrait(std::string textureFilename, std::string characterName, sf::Vector2f pos, bool mirror) :
+CharacterPortrait::CharacterPortrait(std::string textureFilename, sf::Vector2f pos, bool mirror) :
 	mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
 	mIsAlive(true),
 	mIsActive(false),
@@ -23,19 +23,13 @@ CharacterPortrait::CharacterPortrait(std::string textureFilename, std::string ch
 	//mHighlightScale(DEFAULT_SCALE),
 	mHighlightMoveTimer(0.0f),
 	mEmotion(ResourceManager::getInstance().getTexture(EMOTION_TEXTURE)),
-	mBubble(ResourceManager::getInstance().getTexture(EMOTION_BUBBLE)),
-	mName(characterName, ResourceManager::getInstance().getFont(DEFAULT_FONT), DEFAULT_FONTSIZE) {
+	mBubble(ResourceManager::getInstance().getTexture(EMOTION_BUBBLE)) {
 
 	setPosition(pos);
 	float spriteOrigoX = (float)mSprite.getTextureRect().width / 2;
 	float spriteOrigoY = (float)mSprite.getTextureRect().height / 2;
 	mSprite.setOrigin(spriteOrigoX, spriteOrigoY);
-	float textOrigoX = mName.getGlobalBounds().width / 2;
-	float textOrigoY = mName.getGlobalBounds().height / 2;
-	mName.setColor(sf::Color::White);
-	mName.setOrigin(textOrigoX, textOrigoY);
-	mName.move(0, spriteOrigoY*1.5f);
-	move(spriteOrigoX*2.5f, -spriteOrigoY);
+	move(spriteOrigoX, -spriteOrigoY);
 
 	int TEXTURE_WIDTH = (int)mEmotion.getTexture()->getSize().x;
 	int TEXTURE_HEIGHT = (int)mEmotion.getTexture()->getSize().y;
@@ -61,7 +55,6 @@ CharacterPortrait::CharacterPortrait(std::string textureFilename, std::string ch
 	mEmotion.move(285, -250);
 	if (mirror) {
 		setScale(-1, 1);
-		mName.setScale(-1, 1);
 	}
 	mDefaultSpritePos = mSprite.getPosition();
 	mEmotion.setTextureRect(mFrame[mEmotionFrame]);
@@ -95,7 +88,6 @@ void CharacterPortrait::tick(const sf::Time& deltaTime) {
 void CharacterPortrait::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	states.transform *= getTransform();
 	target.draw(mSprite, states);
-	target.draw(mName, states);
 	if (mEmotionFrame != 0) {
 		target.draw(mBubble, states);
 		target.draw(mEmotion, states);

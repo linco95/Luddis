@@ -6,6 +6,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 
 class EntityManager;
+class GameStateLevel;
 
 class BossDishCloth: public CollidableEntity{
 public:
@@ -36,12 +37,14 @@ private:
 	bool mShooting;
 	bool mIsAlive;
 	bool mIsActive;
+	bool mMeet;
 	float mAttackInterval;
 	sf::Vector2f mDirection;
 	int mLife;
 	sf::Shape* mHitbox;
 	float mTimeStunned;
 	float mInvulnerable;
+	GameStateLevel* mGameStateLevel;
 };
 
 #endif // !_INCLUDED_BOSSDISHCLOTH
