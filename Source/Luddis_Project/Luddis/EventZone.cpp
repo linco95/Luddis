@@ -1,5 +1,6 @@
 #include "EventZone.h"
 #include "GameStateLevel.h"
+#include "Inventory.h"
 
 static const std::string SPIDER_DIALOGUE = "Resources/Configs/Dialogue/SpiderDialogue";
 
@@ -82,13 +83,26 @@ void EventZone::collide(CollidableEntity* collidable, const sf::Vector2f& moveAw
 			break;
 
 		case SPIDER_2_END:
-			filename += std::to_string(mLevel) + "end2.json";
+			if (mLevel == 1) {
+				if (Inventory::getInstance().getEggs() == 10)
+					filename += std::to_string(mLevel) + "end2.json";
+				else if (Inventory::getInstance().getEggs() <= 9 && Inventory::getInstance().getEggs() >= 1)
+					filename += std::to_string(mLevel) + "end2b.json";
+				else if (Inventory::getInstance().getEggs() == 0)
+					filename += std::to_string(mLevel) + "end1.json";
+			}
 			mGameStateLevel->createDialogue(filename);
 			break;
 
 		case SPIDER_3_END:
-			//TODO: Add some kind of check to see if the mission has accually been completed
-			filename += std::to_string(mLevel) + "end3.json";
+			if (mLevel == 1) {
+				if (Inventory::getInstance().getEggs() == 10)
+					filename += std::to_string(mLevel) + "end3.json";
+				else if (Inventory::getInstance().getEggs() <= 9 && Inventory::getInstance().getEggs() >= 1)
+					filename += std::to_string(mLevel) + "end3b.json";
+				else if (Inventory::getInstance().getEggs() == 0)
+					filename += std::to_string(mLevel) + "end1.json";
+			}
 			mGameStateLevel->createDialogue(filename);
 			break;
 		}

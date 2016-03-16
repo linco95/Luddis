@@ -7,6 +7,7 @@
 #include "ResourceManager.h"
 #include "Inventory.h"
 #include "Collectible.h"
+#include "GameStateLevel.h"
 
 //Different states depending on how damaged the boss is.
 //State 1
@@ -20,6 +21,9 @@ static const std::string ANIMATION_SHOOT_STOP = ("Resources/Images/Spritesheets/
 static const std::string ANIMATION_SUCK = ("Resources/Images/Spritesheets/Finalboss_suck");
 static const std::string ANIMATION_SUCK_START = ("Resources/Images/Spritesheets/Finalboss_suckstart");
 static const std::string ANIMATION_SUCK_STOP = ("Resources/Images/Spritesheets/Finalboss_suckstop");
+
+static const std::string BOSS_START = "Resources/Configs/Dialogue/FinalBoss.json";
+
 
 static const int MAX_LIFE = 100;
 static const float ATTACK_INTERVAL1 = 10.0f;
@@ -39,6 +43,7 @@ BossFinal::BossFinal(sf::RenderWindow* window, const sf::Vector2f& position, con
 	mState3(false),
 	mState4(false),
 	mState5(false),
+	mMeet(true),
 	mWindow(window),
 	mEntityManager(entityManager),
 	mActivate(activation),
@@ -49,6 +54,7 @@ BossFinal::BossFinal(sf::RenderWindow* window, const sf::Vector2f& position, con
 	mDirection(0, 1.0f),
 	mAnimation(Animation(ANIMATION_IDLE)),
 	mHitbox(new sf::RectangleShape(HITBOX_SHAPE)),
+	mGameStateLevel(&GameStateLevel::getInstance()),
 	mTarget(aTarget)
 {
 	setPosition(position);
@@ -65,6 +71,11 @@ void BossFinal::tick(const sf::Time& deltaTime) {
 	if (mDead == true) return;
 	if (mTarget->getPosition().x >= mActivate) {
 		mIsActive = true;
+		if (mMeet == true) {
+			mGameStateLevel->createDialogue(BOSS_START);
+			mMeet = false;
+		}
+		
 	}
 		mAttackInterval1 -= deltaTime.asSeconds();
 		mAttackInterval2 -= deltaTime.asSeconds();

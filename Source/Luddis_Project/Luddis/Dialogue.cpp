@@ -64,30 +64,26 @@ void Dialogue::initialize(std::string dialogueFile){
 	assert(configDoc.IsObject());
 
 	sf::Vector2f offset(0, -RECT_HEIGHT + INDENT*3);
-	sf::Vector2f portraitPos(ViewUtility::VIEW_WIDTH*0.25f, offset.y+getPosition().y);
+	sf::Vector2f portraitPos(ViewUtility::VIEW_WIDTH/20.0f, offset.y+getPosition().y);
 
 	//A character portrait is optional.
-	if (configDoc.HasMember("Left_character_filename") &&
-		configDoc.HasMember("Left_character_displayname")){
+	if (configDoc.HasMember("Left_character_filename")){
 
 		std::string textureFilename = configDoc["Left_character_filename"].GetString();
-		std::string characterName = configDoc["Left_character_displayname"].GetString();
 
 
-		mCharacterDisplayLeft = new CharacterPortrait(textureFilename, characterName, portraitPos);
+		mCharacterDisplayLeft = new CharacterPortrait(textureFilename, portraitPos);
 		mGUIManager->addInterfaceElement(mCharacterDisplayLeft);
 	}
 	//So is the second one
-	if (configDoc.HasMember("Right_character_filename") &&
-		configDoc.HasMember("Right_character_displayname")){
+	if (configDoc.HasMember("Right_character_filename")){
 
 		std::string textureFilename = configDoc["Right_character_filename"].GetString();
-		std::string characterName = configDoc["Right_character_displayname"].GetString();
 
 
 		sf::Vector2f rightPortraitPos = portraitPos;
-		rightPortraitPos.x = ViewUtility::VIEW_WIDTH*0.75f;
-		mCharacterDisplayRight = new CharacterPortrait(textureFilename, characterName, rightPortraitPos, true);
+		rightPortraitPos.x = ViewUtility::VIEW_WIDTH*0.65f;
+		mCharacterDisplayRight = new CharacterPortrait(textureFilename, rightPortraitPos, true);
 		mGUIManager->addInterfaceElement(mCharacterDisplayRight);
 	}
 
@@ -108,7 +104,7 @@ void Dialogue::initialize(std::string dialogueFile){
 			std::string buttonImage = buttonInfo["Button_image"].GetString();
 			assert(buttonInfo.HasMember("Button_func") && buttonInfo["Button_func"].IsString());
 			std::string buttonFunc = buttonInfo["Button_func"].GetString();
-			addButton(buttonImage, buttonText, buttonFunc, offset +  sf::Vector2f((float)INDENT*4, (float)INDENT + (float)i * 33.0f), (int)itr);
+			addButton(buttonImage, buttonText, buttonFunc, offset +  sf::Vector2f((float)INDENT*4, (float)INDENT + (float)i * 65.0f), (int)itr);
 		}
 		TextBox textBox(DEFAULT_RECT, pages[itr]["Text"].GetString(), 24, true);
 		textBox.setPosition(offset);

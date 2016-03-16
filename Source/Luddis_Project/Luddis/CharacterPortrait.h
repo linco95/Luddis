@@ -8,7 +8,7 @@
 
 class CharacterPortrait : public InterfaceElement{
 public:
-	CharacterPortrait(std::string textureFilename, std::string characterName, sf::Vector2f pos, bool mirror = false);
+	CharacterPortrait(std::string textureFilename, sf::Vector2f pos, bool mirror = false);
 	virtual ~CharacterPortrait();
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
