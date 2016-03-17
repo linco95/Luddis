@@ -308,8 +308,26 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 			mEntityManager->addEntity(chips);
 			cm->addCollidable(chips);
 			Debug::log("Spawning chips at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
-}
-}
+		}
+	}
+	//SpiderEgg
+	if (configDoc.HasMember("Spider_egg_spawns") && configDoc["Spider_egg_spawns"].IsArray()) {
+		const rapidjson::Value& spiderEggSpawns = configDoc["Spider_egg_spawns"];
+		for (rapidjson::Value::ConstValueIterator itr = spiderEggSpawns.Begin(); itr != spiderEggSpawns.End(); itr++) {
+			assert(itr->IsObject());
+			assert(itr->HasMember("x") && (*itr)["x"].IsInt());
+			assert(itr->HasMember("y") && (*itr)["y"].IsInt());
+
+			float x = (float)(*itr)["x"].GetInt();
+			float y = (float)(*itr)["y"].GetInt();
+			sf::Vector2f pos(x, y);
+
+			Collectible* chips = new Collectible(mWindow, "Resources/Images/Spritesheets/Spider_egg", pos, Collectible::CollectibleType::SPIDEREGG);
+			mEntityManager->addEntity(chips);
+			cm->addCollidable(chips);
+			Debug::log("Spawning spider egg at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
+		}
+	}
 }
 
 void Level::increaseMapBounds(sf::IntRect size) {
