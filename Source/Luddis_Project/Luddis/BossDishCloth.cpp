@@ -8,6 +8,7 @@
 #include "Inventory.h"
 #include "GameStateLevel.h"
 #include "Dialogue.h"
+#include "SoundEngine.h"
 
 //Different states depending on how damaged the boss is.
 //State 1
@@ -205,6 +206,8 @@ void BossDishCloth::collide(CollidableEntity* collidable, const sf::Vector2f& mo
 	if (collidable->getCollisionCategory() == PLAYER_PROJECTILE){
 		if (!mShooting){
 		mLife -= 15;
+		SoundEngine* se = &SoundEngine::getInstance();
+		se->playEvent("event:/Gameplay/Luddis/Interaction/Luddis_Hit");
 		// For different states of damages
 		//State 1
 		if (mLife < 26){
