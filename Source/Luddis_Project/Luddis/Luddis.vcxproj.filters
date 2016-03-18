@@ -43,9 +43,6 @@
     <ClCompile Include="SoundCue.cpp">
       <Filter>Cinematic</Filter>
     </ClCompile>
-    <ClCompile Include="BackgroundEffect.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
     <ClCompile Include="BossDishCloth.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
@@ -205,6 +202,9 @@
     <ClCompile Include="BossFinalState1.cpp" />
     <ClCompile Include="CollisionManager.cpp">
       <Filter>Managers/Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="BackgroundEffect.cpp">
+      <Filter>Entities\Luddis</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

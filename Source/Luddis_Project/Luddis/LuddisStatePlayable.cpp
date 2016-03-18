@@ -39,6 +39,8 @@ static const float STUNTIME = 3.0f;
 static const std::string ANIMATION_FILEPATH = "Resources/Images/Spritesheets/Luddis_walkcykle";
 static const std::string ANIMATION_ALMOSTDEAD = "Resources/Images/Spritesheets/luddis_CriticalHealth";
 
+static const std::string ANIMATION_ALMOSTDEAD_SHOT = "Resources/Images/Spritesheets/luddis_CriticalHealth_Shot";
+
 static const std::string SHOT_ANIMATION = "Resources/Images/Spritesheets/Luddis_shot";
 static const std::string HIT_ANIMATION = "Resources/Images/Spritesheets/Luddis_hit";
 
@@ -169,7 +171,14 @@ void LuddisStatePlayable::attack() {
 	sf::Vector2f direction = VectorMath::rotateVector(FRONTVECTOR, mPlayerPtr->getRotation());
 
 	// Replace the current animation with an shooting animation and play a shooting sound
-	mPlayerPtr->getAnimation()->overrideAnimation(SHOT_ANIMATION);
+	int percentDust = int((float(Inventory::getInstance().getDust()) / float(Inventory::getInstance().getMaxDust())) * 100);
+	if (percentDust <= 10) {
+		mPlayerPtr->getAnimation()->overrideAnimation(ANIMATION_ALMOSTDEAD_SHOT);
+	}
+	else {
+		mPlayerPtr->getAnimation()->overrideAnimation(SHOT_ANIMATION);
+	}
+
 	// TODO Pull out constant variable
 	SoundEngine* se = &SoundEngine::getInstance();
 	se->playEvent("event:/Gameplay/Luddis/Interaction/Luddis_Shot");

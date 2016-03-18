@@ -36,6 +36,8 @@ static const std::string ANIMATION_DEATH = "Resources/Images/Spritesheets/RagDea
 
 static const int MAX_LIFE = 100;
 static const float ATTACK_INTERVAL = 3.5f;
+static const float ATTACK_TIME = 1.0f;
+static const float ATTACK_FIRE_INTERVAL = 0.3f;
 static const float PROJECTILE_LIFETIME = 2.5f;
 static const float PROJECTILE_SPEED = 300;
 static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(225, 225));
@@ -69,7 +71,9 @@ mDirection(0, 1.0f),
 mAnimation(Animation(ANIMATION_IDLE)),
 mHitbox(new sf::RectangleShape(HITBOX_SHAPE)),
 mTarget(aTarget),
-mDead(false)
+mDead(false),
+mAttackTimer(ATTACK_TIME),
+mFireInterval(ATTACK_FIRE_INTERVAL)
 {
 	loadResources();
 	setPosition(position);
@@ -90,12 +94,29 @@ void BossDishCloth::tick(const sf::Time& deltaTime){
 	}
 
 	if (mTimeStunned <= 0) {
+		//Move if alive and active
 		if (mDead == false && mIsActive == true) {
-			mAttackInterval -= deltaTime.asSeconds();
-			updateMovement(deltaTime);
+			//Attack timer
 			if (mAttackInterval <= 0) {
-				attack();
-				mAttackInterval = ATTACK_INTERVAL;
+				mAttackTimer -= deltaTime.asSeconds();
+				//Reload timer
+				if (mFireInterval <= 0) {
+					mFireInterval = ATTACK_FIRE_INTERVAL;
+					attack();
+					//End of attack phase
+					if (mAttackTimer <= 0) {
+						mAttackInterval = ATTACK_INTERVAL;
+						mAttackTimer = ATTACK_TIME;
+					}
+				}
+				else {
+					mFireInterval -= deltaTime.asSeconds();
+				}
+			}
+			//Move when not firing
+			else {
+				mAttackInterval -= deltaTime.asSeconds();
+				updateMovement(deltaTime);
 			}
 		}		
 		mAnimation.tick(deltaTime);

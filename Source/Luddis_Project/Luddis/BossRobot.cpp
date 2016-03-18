@@ -227,7 +227,7 @@ void BossRobot::collide(CollidableEntity *collidable, const sf::Vector2f& moveAw
 			mDirection = mDirection*-1.0f;
 		}
 		else {
-			move(-moveAway);
+			move(moveAway);
 		}
 	}
 }
