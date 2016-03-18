@@ -39,6 +39,8 @@ private:
 	bool mIsActive;
 	bool mMeet;
 	float mAttackInterval;
+	float mFireInterval;
+	float mAttackTimer;
 	sf::Vector2f mDirection;
 	int mLife;
 	sf::Shape* mHitbox;
