@@ -107,6 +107,8 @@ void HUD::tick(const sf::Time & deltaTime) {
 		float fillPercent = (float)currentDust / (float)maxDust;
 		mLuddGauge->updateGauge(fillPercent);
 	}
+	mScoreCounter[0]->setScore(Inventory::getInstance().getChips());
+	mScoreCounter[1]->setScore(Inventory::getInstance().getDust());
 }
 
 HUD::Strata HUD::getRenderLayer() const {

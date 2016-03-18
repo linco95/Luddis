@@ -13,8 +13,9 @@ public:
 		BLUE,
 		GREEN
 	};
-
+	//Creates an animated version using luddis.
 	Mannequin();
+	//Creates a static image.
 	Mannequin(std::string filename);
 	~Mannequin();
 
@@ -44,6 +45,7 @@ private:
 	static const int COLORVARIATIONS = 4;
 
 	Animation mAnimation[COLORVARIATIONS];
+	sf::Sprite mStaticPortrait;
 	sf::Sprite mHeadAccessory;
 	std::string mCurrentHeadImage;
 	sf::Sprite mTailAccessory;
@@ -53,6 +55,7 @@ private:
 
 	bool mShowHeadAccessory;
 	bool mShowTailAccessory;
+	bool mStatic;
 	bool mAnimate;
 	bool mIsAlive;
 	bool mIsActive;

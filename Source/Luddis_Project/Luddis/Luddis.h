@@ -29,13 +29,17 @@ public:
 	AnimationQueue* getAnimation();
 	void setPlayerState(LuddisState* luddisState);
 	void stun(const sf::Time& deltatime) override;
-private:
+	void setAccessoryHead(std::string filename);
+	void setAccessoryTail(std::string filename);
+	void setColorScheme(int index);
 
+private:
 	Category getCollisionCategory() override;
 	Type getCollisionType() override;
 	void collide(CollidableEntity *collidable, const sf::Vector2f& moveAway) override;
 
 	AnimationQueue mAnimation;
+	sf::Sprite mAccessoryHead, mAccessoryTail;
 	EntityManager* mEntityManager;
 	sf::RenderWindow* mWindow;
 	GameStateLevel* mGameStateLevel;

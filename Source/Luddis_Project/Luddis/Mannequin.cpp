@@ -12,6 +12,7 @@ Mannequin::Mannequin() :
 	mIsActive(true),
 	mIsAlive(true),
 	mAnimate(true),
+	mStatic(false),
 	mStrata(FOURTH),
 	mCurrentHeadImage(""),
 	mCurrentTailImage(""),
@@ -23,11 +24,10 @@ Mannequin::Mannequin() :
 }
 
 Mannequin::Mannequin(std::string filename) :
-	mIsActive(true),
-	mIsAlive(true),
-	mAnimate(true),
-	mAnimation{ (filename), (filename), (filename), (filename) },
-	mColor(ColorScheme::DEFAULT){
+	Mannequin() {
+
+	mStaticPortrait.setTexture(ResourceManager::getInstance().getTexture(filename));
+	mStatic = true;
 
 }
 
@@ -37,11 +37,15 @@ Mannequin::~Mannequin() {
 
 void Mannequin::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	states.transform *= getTransform();
-	if (mShowTailAccessory)
-		target.draw(mTailAccessory);
-	target.draw(mAnimation[mColor], states);
-	if (mShowHeadAccessory)
-		target.draw(mHeadAccessory);
+	if (mStatic)
+		target.draw(mStaticPortrait);
+	else {
+		if (mShowTailAccessory)
+			target.draw(mTailAccessory);
+		target.draw(mAnimation[mColor], states);
+		if (mShowHeadAccessory)
+			target.draw(mHeadAccessory);
+	}
 }
 
 void Mannequin::tick(const sf::Time& deltaTime) {
@@ -77,6 +81,7 @@ void Mannequin::setPosition(float x, float y) {
 		mAnimation[i].setPosition(x, y);
 	mTailAccessory.setPosition(x, y);
 	mHeadAccessory.setPosition(x, y);
+	mStaticPortrait.setPosition(x, y);
 }
 
 void Mannequin::setPosition(const sf::Vector2f & position) {
@@ -89,6 +94,7 @@ void Mannequin::setScale(float x, float y) {
 		mAnimation[i].setScale(x, y);
 	mTailAccessory.setScale(x, y);
 	mHeadAccessory.setScale(x, y);
+	mStaticPortrait.setScale(x, y);
 }
 
 void Mannequin::setScale(const sf::Vector2f & scale) {

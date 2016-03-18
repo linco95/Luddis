@@ -7,9 +7,6 @@
     <ClCompile Include="Debug.cpp">
       <Filter>DEBUG</Filter>
     </ClCompile>
-    <ClCompile Include="CollisionManager.cpp">
-      <Filter>Source Files\Managers</Filter>
-    </ClCompile>
     <ClCompile Include="GameStateLevel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -203,6 +200,10 @@
       <Filter>Managers/Engine</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
+      <Filter>Managers/Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="BossFinalState1.cpp" />
+    <ClCompile Include="CollisionManager.cpp">
       <Filter>Managers/Engine</Filter>
     </ClCompile>
   </ItemGroup>
@@ -420,6 +421,7 @@
     <ClInclude Include="Accessories.h">
       <Filter>Managers/Engine</Filter>
     </ClInclude>
+    <ClInclude Include="BossFinalState1.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -451,12 +453,6 @@
     </Filter>
     <Filter Include="Drawables">
       <UniqueIdentifier>{67b04470-3d7d-49e4-bbcd-fb1f4d229fe5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Entities\FinalBoss">
-      <UniqueIdentifier>{25a26290-d62e-4a1a-9a5d-c4a6d2878a0b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Entities\FinalBoss">
-      <UniqueIdentifier>{ae64907c-c313-40a7-b138-82bd676d301a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -44,6 +44,7 @@ private:
 	sf::Sprite mMuteGraphic;
 	Button* mSoundButton;
 	ScoreGauge* mLuddGauge;
+	//0 is chips and 1 is dust
 	ScoreCounter* mScoreCounter[2];
 
 	bool mMute;

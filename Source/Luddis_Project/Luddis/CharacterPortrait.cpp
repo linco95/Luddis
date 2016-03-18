@@ -15,7 +15,7 @@ static const int EMOTION_SHEET_COLUMNS = 9;
 static const float HIGHLIGHT_MAXTIME = 0.8f;
 static const float FACTOR = 0.2f;
 
-CharacterPortrait::CharacterPortrait(std::string textureFilename, std::string characterName, sf::Vector2f pos, bool mirror) :
+CharacterPortrait::CharacterPortrait(std::string textureFilename, sf::Vector2f pos, bool mirror) :
 	mCharacter(new Mannequin(textureFilename)),
 	mIsAlive(true),
 	mIsActive(false),

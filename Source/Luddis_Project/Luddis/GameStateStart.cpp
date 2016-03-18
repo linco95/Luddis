@@ -205,15 +205,18 @@ void GameStateStart::setupFiles(std::string filename) {
 		assert(inventory.HasMember("Accessories") && inventory["Accessories"].IsObject());
 
 		if (inventory["CurrentDust"].GetInt() != 0 || inventory["Chips"].GetInt() != 0) {
+			mFiles[itr].chips = inventory["Chips"].GetInt();
+			mFiles[itr].maxDust = inventory["MaxDust"].GetInt();
+			mFiles[itr].currentDust = inventory["CurrentDust"].GetInt();
 			sf::Vector2f position(ViewUtility::getViewSize().getSize() / 2.0f);
 			position.y += 200;
 			mFiles[itr].scoreCounters[0] = new ScoreCounter(mWindow, TEXTURE_SCORE_DUST, position, ScoreCounter::ScoreType::DUST);
-			mFiles[itr].scoreCounters[0]->setScore(inventory["CurrentDust"].GetInt());
+			mFiles[itr].scoreCounters[0]->setScore(mFiles[itr].currentDust);
 			mFiles[itr].scoreCounters[0]->setActive(false);
 			mGUIM.addInterfaceElement(mFiles[itr].scoreCounters[0]);
 			position.y += 90;
 			mFiles[itr].scoreCounters[1] = new ScoreCounter(mWindow, TEXTURE_SCORE_CHIPS, position, ScoreCounter::ScoreType::CHIPS);
-			mFiles[itr].scoreCounters[1]->setScore(inventory["Chips"].GetInt());
+			mFiles[itr].scoreCounters[1]->setScore(mFiles[itr].chips);
 			mFiles[itr].scoreCounters[1]->setActive(false);
 			mGUIM.addInterfaceElement(mFiles[itr].scoreCounters[1]);
 		}

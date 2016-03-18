@@ -38,6 +38,7 @@ private:
 		int chips;
 		int headAccessory;
 		int tailAccessory;
+		//0 is chips and 1 is dust
 		ScoreCounter* scoreCounters[2];
 		Mannequin* mannequin;
 	} mFiles[4];

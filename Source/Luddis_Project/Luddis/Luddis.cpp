@@ -20,6 +20,7 @@
 static const std::string ANIMATION_FILEPATH = "Resources/Images/Spritesheets/Luddis_walkcykle";
 
 static const sf::Vector2f FRONTVECTOR(1, 0);
+static const int COLORVARIATIONS = 4;
 
 static const Renderer::RenderLayer LAYER = Renderer::PLAYER;
 static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(35, 8);
@@ -29,9 +30,9 @@ static Animation STASISANIMATION("Resources/Images/Spritesheets/Stasis_ring");
 
 
 Luddis::Luddis(sf::RenderWindow* window, EntityManager* entityManager) :
-	mIsAlive(true), 
+	mIsAlive(true),
 	mIsActive(true),
-	mWindow(window), 
+	mWindow(window),
 	mEntityManager(entityManager),
 	mAnimation(ANIMATION_FILEPATH),
 	mHitbox(new sf::CircleShape(HITBOX_SHAPE)),
@@ -41,28 +42,28 @@ Luddis::Luddis(sf::RenderWindow* window, EntityManager* entityManager) :
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
 }
 
-Luddis::~Luddis(){
+Luddis::~Luddis() {
 	delete mHitbox;
 }
 
-bool Luddis::isAlive() const{
+bool Luddis::isAlive() const {
 	return mIsAlive;
 }
 
-bool Luddis::isActive() const{
+bool Luddis::isActive() const {
 	return mIsActive;
 }
 
-void Luddis::setActive(const bool& active){
+void Luddis::setActive(const bool& active) {
 	mIsActive = active;
 }
 
-void Luddis::tick(const sf::Time& deltaTime){
+void Luddis::tick(const sf::Time& deltaTime) {
 	//Update the currently active state, unless null pointer.
-	if(mCurrentLuddState!= nullptr)
+	if (mCurrentLuddState != nullptr)
 		mCurrentLuddState->tick(deltaTime);
 
-	
+
 	mAnimation.tick(deltaTime);
 
 	// Temporary
@@ -71,7 +72,7 @@ void Luddis::tick(const sf::Time& deltaTime){
 	static const float interval = 1.f;
 	static const float pulseSpeed = 0.5f;
 
-	STASISANIMATION.setScale(getScale() + sf::Vector2f(1,1) * interval * ((float)std::sin(x * pulseSpeed) + 0.5f) * deltaTime.asSeconds());
+	STASISANIMATION.setScale(getScale() + sf::Vector2f(1, 1) * interval * ((float)std::sin(x * pulseSpeed) + 0.5f) * deltaTime.asSeconds());
 	STASISANIMATION.setPosition(getPosition());
 	STASISANIMATION.rotate(ROTATIONSPEED * deltaTime.asSeconds());
 	STASISANIMATION.tick(deltaTime);
@@ -81,18 +82,18 @@ void Luddis::tick(const sf::Time& deltaTime){
 
 }
 
-void Luddis::draw(sf::RenderTarget& target, sf::RenderStates states) const{
+void Luddis::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	//target.draw(STASISANIMATION, states);
 	states.transform *= getTransform();
 	target.draw(mAnimation.getCurrAnimation(), states);
 
 }
 
-Luddis::Category Luddis::getCollisionCategory(){
+Luddis::Category Luddis::getCollisionCategory() {
 	return PLAYER_OBJECT;
 }
 
-Luddis::Type Luddis::getCollisionType(){
+Luddis::Type Luddis::getCollisionType() {
 	return REC;
 }
 
@@ -102,7 +103,7 @@ void Luddis::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway)
 
 }
 
-void Luddis::setPlayerState(LuddisState * luddisState){
+void Luddis::setPlayerState(LuddisState * luddisState) {
 	//Right now each state handles the creation of new states.
 	//Perhaps it would be better if Luddis handles it instead?
 	//It would save having to pass on useless parameters, and also
@@ -111,11 +112,11 @@ void Luddis::setPlayerState(LuddisState * luddisState){
 	mCurrentLuddState = luddisState;
 }
 
-sf::FloatRect Luddis::getHitBox(){
+sf::FloatRect Luddis::getHitBox() {
 	return getTransform().transformRect(mAnimation.getCurrAnimation().getSprite().getGlobalBounds());
 }
 
-sf::Shape* Luddis::getNarrowHitbox() const{
+sf::Shape* Luddis::getNarrowHitbox() const {
 	mHitbox->setPosition(getPosition());
 	mHitbox->setScale(getScale());
 	return mHitbox;
@@ -131,10 +132,29 @@ void Luddis::reset(GameStateLevel* gameStateLevel) {
 	GameManager::getInstance().setGameState(mGameStateLevel);
 }
 
-AnimationQueue* Luddis::getAnimation(){
+AnimationQueue* Luddis::getAnimation() {
 	return &mAnimation;
 }
 
 void Luddis::stun(const sf::Time& deltatime) {
 
+}
+
+void Luddis::setAccessoryHead(std::string filename) {
+	if (filename != "")
+		mAccessoryHead.setTexture(ResourceManager::getInstance().getTexture(filename));
+}
+
+void Luddis::setAccessoryTail(std::string filename) {
+	if (filename != "") {
+		mAccessoryTail.setTexture(ResourceManager::getInstance().getTexture(filename));
+		mAccessoryTail.setOrigin(mAccessoryTail.getGlobalBounds().width / 2, mAccessoryTail.getGlobalBounds().height / 2);
+	}
+}
+
+void Luddis::setColorScheme(int index) {
+	//Do derpy things
+	if (index > 0 && index <= COLORVARIATIONS) {
+
+	}
 }
