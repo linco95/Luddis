@@ -452,5 +452,11 @@
     <Filter Include="Drawables">
       <UniqueIdentifier>{67b04470-3d7d-49e4-bbcd-fb1f4d229fe5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Entities\FinalBoss">
+      <UniqueIdentifier>{25a26290-d62e-4a1a-9a5d-c4a6d2878a0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\FinalBoss">
+      <UniqueIdentifier>{ae64907c-c313-40a7-b138-82bd676d301a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

@@ -32,6 +32,9 @@ private:
 	sf::Shape* mHitbox;
 	int mLife;
 	AnimationQueue mAnimation;
+	float mInvulnerableTimer;
+	float mAnimationHitTimer;
+	bool mHit;
 };
 
 #endif // !INCLUDED_BOSSROBOTBUTTON

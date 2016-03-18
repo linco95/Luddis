@@ -256,9 +256,12 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	Tween tween(poly, 0, 3);
 	Tween tween2(poly, 3, 0, false);
 	CinematicPause pauseCin(1.2f);
-	CinematicMoveToPoint movePoint(sf::Vector2f(100, ViewUtility::getViewSize().getCenter().y), mPlayer);
-	LuddisStateCinematic* cinState = new LuddisStateCinematic(100, mPlayer, mWindow, mEntityM, mPowerupDisplays[0]);
-	cinState->addCinematicSequence(&movePoint);
+	CinematicMoveToPoint movePoint(sf::Vector2f(500, 500), mPlayer);
+	LuddisStateCinematic* cinState = new LuddisStateCinematic(100, mPlayer, mWindow, mEntityM, mPowerupDisplays[0], mPlayer->getNarrowHitbox());
+	/*cinState->addCinematicSequence(&tween);
+	cinState->addCinematicSequence(&pauseCin);
+	cinState->addCinematicSequence(&tween2);*/
+	//cinState->addCinematicSequence(&movePoint);
 	//cinState->addSpeedShift(50, 1);
 	//cinState->addSpeedShift(100, 1);
 	//cinState->addSpeedShift(50, 1);
@@ -293,7 +296,7 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	assert(configDoc.IsObject());
 
 	if (configDoc.HasMember("Level"))
-		mCurrentLevel = configDoc["Level"].GetInt();
+	mCurrentLevel = configDoc["Level"].GetInt();
 	mPlayable = true;
 }
 
@@ -421,19 +424,6 @@ void GameStateLevel::readSetupFiles(const std::string& filename, bool allocate) 
 				;//rm->clearJsonFile(file);
 		}
 
-		assert(setupFiles.HasMember("PNG_files") && setupFiles["PNG_files"].IsArray());
-		const rapidjson::Value& pngFiles = setupFiles["PNG_files"];
-
-		for (rapidjson::Value::ConstValueIterator itr = pngFiles.Begin(); itr != pngFiles.End(); itr++) {
-			assert(itr->IsObject());
-			assert(itr->HasMember("filename") && (*itr)["filename"].IsString());
-			std::string file = (*itr)["filename"].GetString();
-
-			if (allocate)
-				rm->readMap(file);
-			else
-				;//rm->clearMap(file);
-		}
 	}
 	//loadingbar->kill();
 }

@@ -12,7 +12,7 @@ namespace sf {
 
 class LuddisStateStunned :public LuddisState {
 public:
-	LuddisStateStunned(Luddis* playerPtr, float stunDuration, sf::RenderWindow* window, EntityManager* entityManager, PowerupDisplay* display);
+	LuddisStateStunned(Luddis* playerPtr, float stunDuration, sf::RenderWindow* window, EntityManager* entityManager, PowerupDisplay* display, sf::Shape* hitbox);
 	virtual ~LuddisStateStunned();
 	void tick(const sf::Time& deltaTime) override;
 	void collide(CollidableEntity *collidable, const sf::Vector2f& moveAway) override;
@@ -26,6 +26,7 @@ private:
 	float mInvincibility;
 
 	PowerupDisplay* mDisplay;
+	sf::Shape* mHitbox;
 };
 
 #endif // !_INCLUDED_LUDDISSTATESTUNNED

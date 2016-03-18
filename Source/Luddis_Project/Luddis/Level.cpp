@@ -189,14 +189,14 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		}
 		else if (levelNr == 2){
 			//TODO pos
-			/*
-			BossRobotButton* robotButton = new BossRobotButton(mWindow, sf::Vector2f(500, 500), 0, mTarget);
+			
+			BossRobotButton* robotButton = new BossRobotButton(mWindow, sf::Vector2f(19517, pos.y), 0, mTarget);
 			mEntityManager->addEntity(robotButton);
 			cm->addCollidable(robotButton);
 
-			BossRobot* robot = new BossRobot(mWindow, pos, act, mTarget, robotButton);
+			BossRobot* robot = new BossRobot(mWindow, pos, act, mTarget, robotButton, mLuddis);
 			mEntityManager->addEntity(robot);
-			cm->addCollidable(robot);*/
+			cm->addCollidable(robot);
 		}
 		else if (levelNr == 3) {
 			BossFinal* boss = new BossFinal(mWindow, pos, act, mTarget, mEntityManager);
@@ -206,17 +206,6 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 		}
 	}
 	}
-
-	/*
-	//Robot test
-	BossRobotButton* robotButton = new BossRobotButton(mWindow, sf::Vector2f(250, 250), 0, mTarget);
-	mEntityManager->addEntity(robotButton);
-	cm->addCollidable(robotButton);
-	
-	BossRobot* robot = new BossRobot(mWindow, sf::Vector2f(600, 600), 0, mTarget, robotButton, mLuddis);
-	mEntityManager->addEntity(robot);
-	cm->addCollidable(robot);
-	*/
 	
 	//Event zones
 	if (configDoc.HasMember("EventZone_rect_spawns")) {
@@ -319,8 +308,26 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 			mEntityManager->addEntity(chips);
 			cm->addCollidable(chips);
 			Debug::log("Spawning chips at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
-}
-}
+		}
+	}
+	//SpiderEgg
+	if (configDoc.HasMember("Spider_egg_spawns") && configDoc["Spider_egg_spawns"].IsArray()) {
+		const rapidjson::Value& spiderEggSpawns = configDoc["Spider_egg_spawns"];
+		for (rapidjson::Value::ConstValueIterator itr = spiderEggSpawns.Begin(); itr != spiderEggSpawns.End(); itr++) {
+			assert(itr->IsObject());
+			assert(itr->HasMember("x") && (*itr)["x"].IsInt());
+			assert(itr->HasMember("y") && (*itr)["y"].IsInt());
+
+			float x = (float)(*itr)["x"].GetInt();
+			float y = (float)(*itr)["y"].GetInt();
+			sf::Vector2f pos(x, y);
+
+			Collectible* chips = new Collectible(mWindow, "Resources/Images/Spritesheets/Spider_egg", pos, Collectible::CollectibleType::SPIDEREGG);
+			mEntityManager->addEntity(chips);
+			cm->addCollidable(chips);
+			Debug::log("Spawning spider egg at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
+		}
+	}
 }
 
 void Level::increaseMapBounds(sf::IntRect size) {

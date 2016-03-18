@@ -22,23 +22,17 @@ Collectible::Collectible(sf::RenderWindow* window, const std::string& textureFil
 		mAnimation.setOrigin(mAnimation.getSprite().getTextureRect().width / 2.f, mAnimation.getSprite().getTextureRect().height / 2.f);
 		// Set the animation to start at a random frame. Should be read from the animation TODO
 		mAnimation.setFrame(std::rand() % 4);
-		setPosition(aPos);
-		mHitbox->setPosition(getPosition());
-		mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
 	}
 	else {
 		mSprite = sf::Sprite(ResourceManager::getInstance().getTexture(textureFilename));
 		mHitbox = new sf::CircleShape(HITBOX_SHAPE);
 
-		mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
-		// Set spawn position
-		setPosition(aPos);
-
-		mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
-
-		mHitbox->setPosition(getPosition());
-		mHitbox->setScale(getScale());
+		mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);		
 	}
+	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
+	setPosition(aPos);
+	mHitbox->setPosition(getPosition());
+	mHitbox->setScale(getScale());
 }
 
 Collectible::~Collectible() {
@@ -109,6 +103,7 @@ void Collectible::collide(CollidableEntity *collidable, const sf::Vector2f& move
 			break;
 		case SPIDEREGG:
 			Inventory::getInstance().changeEggs(1);
+			se->playEvent("event:/Gameplay/Luddis/Interaction/Luddis_Dust");
 			break;
 		case POWERUP:
 			break;

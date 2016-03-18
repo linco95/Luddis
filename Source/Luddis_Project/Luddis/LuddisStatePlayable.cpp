@@ -48,7 +48,7 @@ static const std::array<std::string, 3> PROJECTILE_FILENAME = { "Resources/Image
 "Resources/Images/Luddis_attack3.png"
 };
 
-LuddisStatePlayable::LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* window, EntityManager* entityManager, PowerupDisplay* display) :
+LuddisStatePlayable::LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* window, EntityManager* entityManager, PowerupDisplay* display, sf::Shape* hitbox) :
 	mProjectileCooldown(0),
 	mPrevPos(0, 0),
 	mIsFlipped(false),
@@ -57,7 +57,8 @@ LuddisStatePlayable::LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* wi
 	mEntityManager(entityManager),
 	mWindow(window),
 	mDisplay(display),
-	mHurt(true)
+	mHurt(true),
+	mHitbox(hitbox)
 {
 	Inventory::getInstance().choseFirst(new SpiderWeb(entityManager, display));
 }
@@ -97,7 +98,7 @@ void LuddisStatePlayable::collide(CollidableEntity * collidable, const sf::Vecto
 		//Replace animation before changing state or a crash will occur.
 		mPlayerPtr->getAnimation()->replaceAnimation(HIT_ANIMATION);
 		//TODO: add a way to make stun timers modular.
-		mPlayerPtr->setPlayerState(new LuddisStateStunned(mPlayerPtr, 1.0f, mWindow, mEntityManager, mDisplay));
+		mPlayerPtr->setPlayerState(new LuddisStateStunned(mPlayerPtr, 1.0f, mWindow, mEntityManager, mDisplay, mHitbox));
 	}
 }
 
@@ -206,6 +207,7 @@ void LuddisStatePlayable::changeScale() {
 	if (percentDust <= 10 && mHurt == false) {
 		if (mScale != sf::Vector2f(1.0f, 1.0f)) {
 			mScale = { 1.0f , 1.0f };
+			mHitbox->setScale(mScale);
 		}
 		mPlayerPtr->getAnimation()->setDefaultAnimation(ANIMATION_ALMOSTDEAD);
 		mHurt = true;
@@ -213,18 +215,22 @@ void LuddisStatePlayable::changeScale() {
 	else if (percentDust <= 20 && percentDust > 10 && mHurt == true) {
 		if (mScale != sf::Vector2f(1.0f, 1.0f)) {
 			mScale = { 1.0f , 1.0f };
+			mHitbox->setScale(mScale);
 		}
 		mPlayerPtr->getAnimation()->setDefaultAnimation(ANIMATION_FILEPATH);
 		mHurt = false;
 	}
 	else if (percentDust <= 50 && percentDust > 20 && mScale != sf::Vector2f(1.2f, 1.2f)) {
 		mScale = { 1.2f , 1.2f };
+		mHitbox->setScale(mScale);
 	}
 	else if (percentDust <= 99 && percentDust > 50 && mScale != sf::Vector2f(1.3f, 1.3f)) {
 		mScale = { 1.3f , 1.3f };
+		mHitbox->setScale(mScale);
 	}
 	else if (percentDust <= 100 && percentDust > 99 && mScale != sf::Vector2f(1.4f, 1.4f)) {
 		mScale = { 1.4f , 1.4f };
+		mHitbox->setScale(mScale);
 	}
 	if (mIsFlipped == false)
 		mPlayerPtr->setScale(mScale.y, mScale.y);

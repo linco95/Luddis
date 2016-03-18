@@ -6,6 +6,9 @@
 #include <SFML\Graphics\Shape.hpp>
 #include "ResourceManager.h"
 #include "Inventory.h"
+#include "GameStateLevel.h"
+#include "Dialogue.h"
+#include "SoundEngine.h"
 
 //Different states depending on how damaged the boss is.
 //State 1
@@ -25,11 +28,15 @@ static const std::string PROJECTILE_FILEPATH = "Resources/Images/Rag_projectile.
 
 static const std::string POWERUP1_FILEPATH = "Resources/Images/Rag_projectile.png";
 
+static const std::string BOSS_START = "Resources/Configs/Dialogue/RagDialogue1.json";
+static const std::string BOSS_DEFEATED = "Resources/Configs/Dialogue/RagDialogue2.json";
+
 static const int MAX_LIFE = 100;
 static const float ATTACK_INTERVAL = 3.5f;
 static const float PROJECTILE_LIFETIME = 2.5f;
 static const float PROJECTILE_SPEED = 300;
 static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(225, 225));
+
 
 void loadResources(){
 	ResourceManager::getInstance().loadTexture(ANIMATION_IDLE + ".png");
@@ -45,12 +52,14 @@ void loadResources(){
 BossDishCloth::BossDishCloth(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget, EntityManager* entityManager) :
 mIsAlive(true),
 mIsActive(false),
+mMeet(true),
 mWindow(window),
 mEntityManager(entityManager),
 mShooting(false),
 mActivate(activation),
 mLife(MAX_LIFE),
 mAttackInterval(ATTACK_INTERVAL),
+mGameStateLevel(&GameStateLevel::getInstance()),
 mDirection(0, 1.0f),
 mAnimation(Animation(ANIMATION_IDLE)),
 mHitbox(new sf::RectangleShape(HITBOX_SHAPE)),
@@ -68,15 +77,19 @@ BossDishCloth::~BossDishCloth(){
 void BossDishCloth::tick(const sf::Time& deltaTime){
 	if (mTarget->getPosition().x >= mActivate) {
 		mIsActive = true;
+		if (mMeet == true) { 
+			mGameStateLevel->createDialogue(BOSS_START); 
+			mMeet = false;
+		}
 	}
-	if (!mIsActive) return;
+
 	if (mTimeStunned <= 0) {
 		mAttackInterval -= deltaTime.asSeconds();
 		updateMovement(deltaTime);
 		mAnimation.tick(deltaTime);
 		if (mAttackInterval <= 0) {
 			attack();
-			mAttackInterval = ATTACK_INTERVAL + ((rand() % 30 - 30 / 2) / 10);
+			mAttackInterval = ATTACK_INTERVAL;
 		}
 	}
 	else {
@@ -87,8 +100,10 @@ void BossDishCloth::tick(const sf::Time& deltaTime){
 		mInvulnerable -= deltaTime.asSeconds();
 	}
 
+	if (!mIsActive) return;
 	if (mLife <= 0) {
 		mIsAlive = false;
+		mGameStateLevel->createDialogue(BOSS_DEFEATED);
 	}
 }
 
@@ -160,10 +175,10 @@ void BossDishCloth::updateMovement(const sf::Time& deltaTime){
 
 void BossDishCloth::attack() {
 	sf::Vector2f vec(-1, 0);
-	int max = 16;
-
-	if (mLife < 50) {
-		max = 8;
+	int max = 8;
+	
+	if (mLife < 50){
+		max = 2;
 	}
 	for (int i = 0; i < max; i++)
 	{
@@ -173,21 +188,10 @@ void BossDishCloth::attack() {
 		mEntityManager->addEntity(proj);
 		CollisionManager::getInstance().addCollidable(proj);
 	}
-
-	// shoot at target
-	sf::Vector2f vecToTarget = VectorMath::normalizeVector(mTarget->getPosition() - getPosition());
-	const float ANGLE = 25;
 	
-	Projectile	*projectile1 = new Projectile(PROJECTILE_FILEPATH, vecToTarget*PROJECTILE_SPEED * 1.5f, getPosition() + vecToTarget*PROJECTILE_SPEED / 3.0f, PROJECTILE_LIFETIME, ENEMY_STUN),
-				*projectile2 = new Projectile(PROJECTILE_FILEPATH, VectorMath::rotateVector(vecToTarget, ANGLE)*PROJECTILE_SPEED * 1.5f, getPosition() + vecToTarget*PROJECTILE_SPEED  / 3.0f, PROJECTILE_LIFETIME, ENEMY_STUN),
-				*projectile3 = new Projectile(PROJECTILE_FILEPATH, VectorMath::rotateVector(vecToTarget, -ANGLE)*PROJECTILE_SPEED * 1.5f, getPosition() + vecToTarget*PROJECTILE_SPEED / 3.0f, PROJECTILE_LIFETIME, ENEMY_STUN);
-	
-	mEntityManager->addEntity(projectile1);
-	CollisionManager::getInstance().addCollidable(projectile1);
-	mEntityManager->addEntity(projectile2);
-	CollisionManager::getInstance().addCollidable(projectile2);
-	mEntityManager->addEntity(projectile3);
-	CollisionManager::getInstance().addCollidable(projectile3);
+	Projectile* proj = new Projectile(PROJECTILE_FILEPATH, vec*PROJECTILE_SPEED, sf::Vector2f(getPosition().x, 590) + vec*PROJECTILE_SPEED / 3.0f, PROJECTILE_LIFETIME, ENEMY_STUN);
+	mEntityManager->addEntity(proj);
+	CollisionManager::getInstance().addCollidable(proj);
 }
 
 BossDishCloth::Category BossDishCloth::getCollisionCategory() {
@@ -202,6 +206,8 @@ void BossDishCloth::collide(CollidableEntity* collidable, const sf::Vector2f& mo
 	if (collidable->getCollisionCategory() == PLAYER_PROJECTILE){
 		if (!mShooting){
 		mLife -= 15;
+		SoundEngine* se = &SoundEngine::getInstance();
+		se->playEvent("event:/Gameplay/Luddis/Interaction/Luddis_Hit");
 		// For different states of damages
 		//State 1
 		if (mLife < 26){

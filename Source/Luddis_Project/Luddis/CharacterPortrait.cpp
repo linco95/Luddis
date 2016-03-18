@@ -24,8 +24,7 @@ CharacterPortrait::CharacterPortrait(std::string textureFilename, std::string ch
 	//mHighlightScale(DEFAULT_SCALE),
 	mHighlightMoveTimer(0.0f),
 	mEmotion(ResourceManager::getInstance().getTexture(EMOTION_TEXTURE)),
-	mBubble(ResourceManager::getInstance().getTexture(EMOTION_BUBBLE)),
-	mName(characterName, ResourceManager::getInstance().getFont(DEFAULT_FONT), DEFAULT_FONTSIZE) {
+	mBubble(ResourceManager::getInstance().getTexture(EMOTION_BUBBLE)) {
 
 	setPosition(pos);
 	mCharacter->setAnimate(false);
@@ -62,7 +61,6 @@ CharacterPortrait::CharacterPortrait(std::string textureFilename, std::string ch
 	mEmotion.move(285, -250);
 	if (mirror) {
 		setScale(-1, 1);
-		mName.setScale(-1, 1);
 	}
 	mDefaultSpritePos = mCharacter->getPosition();
 	mEmotion.setTextureRect(mFrame[mEmotionFrame]);

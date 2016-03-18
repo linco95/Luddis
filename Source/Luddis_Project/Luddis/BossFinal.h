@@ -6,6 +6,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 
 class EntityManager;
+class GameStateLevel;
 
 class BossFinal : public CollidableEntity {
 public:
@@ -32,10 +33,12 @@ private:
 	EntityManager* mEntityManager;
 	sf::RenderWindow* mWindow;
 	sf::Transformable* mTarget;
+	GameStateLevel* mGameStateLevel;
 	const float mActivate;
 	bool mIsAlive;
 	bool mDead;
 	bool mIsActive;
+	bool mMeet;
 	float mAttackInterval1;
 	float mAttackInterval2;
 	float mAttackTime2;
