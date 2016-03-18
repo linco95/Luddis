@@ -31,6 +31,9 @@ static const std::string POWERUP1_FILEPATH = "Resources/Images/Rag_projectile.pn
 static const std::string BOSS_START = "Resources/Configs/Dialogue/RagDialogue1.json";
 static const std::string BOSS_DEFEATED = "Resources/Configs/Dialogue/RagDialogue2.json";
 
+static const std::string ANIMATION_DEAD = "Resources/Images/Spritesheets/RagDead";
+static const std::string ANIMATION_DEATH = "Resources/Images/Spritesheets/RagDeath";
+
 static const int MAX_LIFE = 100;
 static const float ATTACK_INTERVAL = 3.5f;
 static const float PROJECTILE_LIFETIME = 2.5f;
@@ -47,6 +50,8 @@ void loadResources(){
 	ResourceManager::getInstance().loadTexture(SHOOTING_ANIMATION_3 + ".png");
 	ResourceManager::getInstance().loadTexture(ANIMATION_IDLE_4 + ".png");
 	ResourceManager::getInstance().loadTexture(SHOOTING_ANIMATION_4 + ".png");
+	ResourceManager::getInstance().loadTexture(ANIMATION_DEATH + ".png");
+	ResourceManager::getInstance().loadTexture(ANIMATION_DEAD + ".png");
 }
 
 BossDishCloth::BossDishCloth(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget, EntityManager* entityManager) :
@@ -63,7 +68,8 @@ mGameStateLevel(&GameStateLevel::getInstance()),
 mDirection(0, 1.0f),
 mAnimation(Animation(ANIMATION_IDLE)),
 mHitbox(new sf::RectangleShape(HITBOX_SHAPE)),
-mTarget(aTarget)
+mTarget(aTarget),
+mDead(false)
 {
 	loadResources();
 	setPosition(position);
@@ -84,13 +90,15 @@ void BossDishCloth::tick(const sf::Time& deltaTime){
 	}
 
 	if (mTimeStunned <= 0) {
-		mAttackInterval -= deltaTime.asSeconds();
-		updateMovement(deltaTime);
+		if (mDead == false && mIsActive == true) {
+			mAttackInterval -= deltaTime.asSeconds();
+			updateMovement(deltaTime);
+			if (mAttackInterval <= 0) {
+				attack();
+				mAttackInterval = ATTACK_INTERVAL;
+			}
+		}		
 		mAnimation.tick(deltaTime);
-		if (mAttackInterval <= 0) {
-			attack();
-			mAttackInterval = ATTACK_INTERVAL;
-		}
 	}
 	else {
 		mTimeStunned -= deltaTime.asSeconds();
@@ -101,9 +109,12 @@ void BossDishCloth::tick(const sf::Time& deltaTime){
 	}
 
 	if (!mIsActive) return;
-	if (mLife <= 0) {
-		mIsAlive = false;
+
+	if (mLife <= 0 && mDead == false) {
+		mAnimation.setDefaultAnimation(ANIMATION_DEAD);
+		mAnimation.overrideAnimation(ANIMATION_DEATH);
 		mGameStateLevel->createDialogue(BOSS_DEFEATED);
+		mDead = true;
 	}
 }
 
@@ -195,7 +206,12 @@ void BossDishCloth::attack() {
 }
 
 BossDishCloth::Category BossDishCloth::getCollisionCategory() {
-	return ENEMY_DAMAGE;
+	if (mDead == true) {
+		return SOLID;
+	}
+	else {
+		return ENEMY_DAMAGE;
+	}
 }
 
 BossDishCloth::Type BossDishCloth::getCollisionType() {
@@ -203,7 +219,10 @@ BossDishCloth::Type BossDishCloth::getCollisionType() {
 }
 
 void BossDishCloth::collide(CollidableEntity* collidable, const sf::Vector2f& moveAway){
-	if (collidable->getCollisionCategory() == PLAYER_PROJECTILE){
+	if (mDead == true) {
+		return;
+	}
+	else if (collidable->getCollisionCategory() == PLAYER_PROJECTILE){
 		if (!mShooting){
 		mLife -= 15;
 		SoundEngine* se = &SoundEngine::getInstance();
@@ -261,7 +280,7 @@ void BossDishCloth::collide(CollidableEntity* collidable, const sf::Vector2f& mo
 			}
 		}
 	}
-	if (collidable->getCollisionCategory() == PLAYER_OBJECT) {
+	else if (collidable->getCollisionCategory() == PLAYER_OBJECT) {
 		if (mInvulnerable <= 0) {
 			Inventory::getInstance().addDust(-1);
 		}

@@ -322,9 +322,9 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 			float y = (float)(*itr)["y"].GetInt();
 			sf::Vector2f pos(x, y);
 
-			Collectible* chips = new Collectible(mWindow, "Resources/Images/Spritesheets/Spider_egg", pos, Collectible::CollectibleType::SPIDEREGG);
-			mEntityManager->addEntity(chips);
-			cm->addCollidable(chips);
+			Collectible* egg = new Collectible(mWindow, "Resources/Images/Spritesheets/Spider_egg", pos, Collectible::CollectibleType::SPIDEREGG);
+			mEntityManager->addEntity(egg);
+			cm->addCollidable(egg);
 			Debug::log("Spawning spider egg at: [" + std::to_string(x) + ", " + std::to_string(y) + "]", Debug::INFO);
 		}
 	}
