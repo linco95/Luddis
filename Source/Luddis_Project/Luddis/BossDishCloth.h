@@ -45,6 +45,7 @@ private:
 	float mTimeStunned;
 	float mInvulnerable;
 	GameStateLevel* mGameStateLevel;
+	bool mDead;
 };
 
 #endif // !_INCLUDED_BOSSDISHCLOTH
