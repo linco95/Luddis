@@ -17,10 +17,16 @@
 #include <string>
 #include <array>
 
-static const std::string ANIMATION_FILEPATH = "Resources/Images/Spritesheets/Luddis_walkcykle";
+static const int COLORVARIATIONS = 4;
+
+static const std::string ANIMATION_FILEPATH[COLORVARIATIONS]{ 
+	"Resources/Images/Spritesheets/Luddis_walkcykle",
+	"Resources/Images/Spritesheets/Luddis_walkcykle_pink",
+	"Resources/Images/Spritesheets/Luddis_walkcykle_blue",
+	"Resources/Images/Spritesheets/Luddis_walkcykle_green"
+};
 
 static const sf::Vector2f FRONTVECTOR(1, 0);
-static const int COLORVARIATIONS = 4;
 
 static const Renderer::RenderLayer LAYER = Renderer::PLAYER;
 static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(35, 8);
@@ -34,7 +40,7 @@ Luddis::Luddis(sf::RenderWindow* window, EntityManager* entityManager) :
 	mIsActive(true),
 	mWindow(window),
 	mEntityManager(entityManager),
-	mAnimation(ANIMATION_FILEPATH),
+	mAnimation(ANIMATION_FILEPATH[0]),
 	mHitbox(new sf::CircleShape(HITBOX_SHAPE)),
 	mLife(Inventory::getInstance().getDust())
 {
@@ -85,8 +91,9 @@ void Luddis::tick(const sf::Time& deltaTime) {
 void Luddis::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	//target.draw(STASISANIMATION, states);
 	states.transform *= getTransform();
+	target.draw(mAccessoryTail, states);
 	target.draw(mAnimation.getCurrAnimation(), states);
-
+	target.draw(mAccessoryHead, states);
 }
 
 Luddis::Category Luddis::getCollisionCategory() {
@@ -141,8 +148,10 @@ void Luddis::stun(const sf::Time& deltatime) {
 }
 
 void Luddis::setAccessoryHead(std::string filename) {
-	if (filename != "")
+	if (filename != "") {
 		mAccessoryHead.setTexture(ResourceManager::getInstance().getTexture(filename));
+		mAccessoryHead.setOrigin(mAccessoryHead.getGlobalBounds().width / 2, mAccessoryHead.getGlobalBounds().height / 2);
+	}
 }
 
 void Luddis::setAccessoryTail(std::string filename) {
@@ -154,7 +163,12 @@ void Luddis::setAccessoryTail(std::string filename) {
 
 void Luddis::setColorScheme(int index) {
 	//Do derpy things
-	if (index > 0 && index <= COLORVARIATIONS) {
-
+	if (index >= 0 && index < COLORVARIATIONS) {
+		mColorScheme = index;
+		mAnimation.setDefaultAnimation(ANIMATION_FILEPATH[mColorScheme]);
 	}
+}
+
+int Luddis::getColorScheme() const{
+	return mColorScheme;
 }

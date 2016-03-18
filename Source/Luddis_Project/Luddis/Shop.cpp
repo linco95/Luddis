@@ -66,7 +66,9 @@ Shop::~Shop() {
 			mDescriptions[i].pop_back();
 		}
 	}
-
+	Inventory::getInstance().setAccessoryHead(mMannequin->getHeadAccessory());
+	Inventory::getInstance().setAccessoryTail(mMannequin->getTailAccessory());
+	Inventory::getInstance().setColorScheme(mMannequin->getColorScheme());
 	if (mMannequin != nullptr)
 		mMannequin->setActive(false);
 

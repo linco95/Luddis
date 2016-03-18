@@ -112,7 +112,7 @@ void Mannequin::setHeadAccessory(const char* filename) {
 		mShowHeadAccessory = false;
 	else {
 		mShowHeadAccessory = true;
-		mHeadAccessory.setTexture(ResourceManager::getInstance().getTexture(filename));
+		mHeadAccessory.setTexture(ResourceManager::getInstance().getTexture(filename), true);
 		mHeadAccessory.setOrigin(mHeadAccessory.getLocalBounds().width*0.5f, mHeadAccessory.getLocalBounds().height*0.5f);
 	}
 }
@@ -127,7 +127,7 @@ void Mannequin::setTailAccessory(const char* filename) {
 		mShowTailAccessory = false;
 	else {
 		mShowTailAccessory = true;
-		mTailAccessory.setTexture(ResourceManager::getInstance().getTexture(filename));
+		mTailAccessory.setTexture(ResourceManager::getInstance().getTexture(filename), true);
 		mTailAccessory.setOrigin(mTailAccessory.getLocalBounds().width*0.5f, mTailAccessory.getLocalBounds().height*0.5f);
 	}
 }

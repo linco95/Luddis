@@ -247,6 +247,9 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	mInv.dust = inv->getDust();
 	mInv.eggs = inv->getEggs();
 	mPlayer = new Luddis(mWindow, mEntityM);
+	mPlayer->setAccessoryHead(inv->getAccessoryHead());
+	mPlayer->setAccessoryTail(inv->getAccessorTail());
+	mPlayer->setColorScheme(inv->getColorScheme());
 
 	//CINEMATIC TEST
 	Polynomial poly;

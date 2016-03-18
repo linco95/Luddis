@@ -32,6 +32,7 @@ public:
 	void setAccessoryHead(std::string filename);
 	void setAccessoryTail(std::string filename);
 	void setColorScheme(int index);
+	int getColorScheme() const;
 
 private:
 	Category getCollisionCategory() override;
@@ -40,6 +41,7 @@ private:
 
 	AnimationQueue mAnimation;
 	sf::Sprite mAccessoryHead, mAccessoryTail;
+	int mColorScheme;
 	EntityManager* mEntityManager;
 	sf::RenderWindow* mWindow;
 	GameStateLevel* mGameStateLevel;
