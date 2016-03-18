@@ -1,6 +1,7 @@
 #define _USE_MATH_DEFINES
 #include "CharacterPortrait.h"
 #include "ResourceManager.h"
+#include "Mannequin.h"
 
 static const char* DEFAULT_FONT = "Resources/fonts/arial.ttf";
 static const char* EMOTION_TEXTURE = "Resources/Images/Portraits/Emotions.png";
@@ -14,8 +15,8 @@ static const int EMOTION_SHEET_COLUMNS = 9;
 static const float HIGHLIGHT_MAXTIME = 0.8f;
 static const float FACTOR = 0.2f;
 
-CharacterPortrait::CharacterPortrait(std::string textureFilename, sf::Vector2f pos, bool mirror) :
-	mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
+CharacterPortrait::CharacterPortrait(std::string textureFilename, std::string characterName, sf::Vector2f pos, bool mirror) :
+	mCharacter(new Mannequin(textureFilename)),
 	mIsAlive(true),
 	mIsActive(false),
 	mEmotionFrame(0),
@@ -26,10 +27,15 @@ CharacterPortrait::CharacterPortrait(std::string textureFilename, sf::Vector2f p
 	mBubble(ResourceManager::getInstance().getTexture(EMOTION_BUBBLE)) {
 
 	setPosition(pos);
-	float spriteOrigoX = (float)mSprite.getTextureRect().width / 2;
-	float spriteOrigoY = (float)mSprite.getTextureRect().height / 2;
-	mSprite.setOrigin(spriteOrigoX, spriteOrigoY);
-	move(spriteOrigoX, -spriteOrigoY);
+	mCharacter->setAnimate(false);
+	float spriteOrigoX = (float)mCharacter->getSprite()->getTextureRect().width / 2;
+	float spriteOrigoY = (float)mCharacter->getSprite()->getTextureRect().height / 2;
+	float textOrigoX = mName.getGlobalBounds().width / 2;
+	float textOrigoY = mName.getGlobalBounds().height / 2;
+	mName.setColor(sf::Color::White);
+	mName.setOrigin(textOrigoX, textOrigoY);
+	mName.move(0, spriteOrigoY*1.5f);
+	move(spriteOrigoX*2.5f, -spriteOrigoY);
 
 	int TEXTURE_WIDTH = (int)mEmotion.getTexture()->getSize().x;
 	int TEXTURE_HEIGHT = (int)mEmotion.getTexture()->getSize().y;
@@ -56,12 +62,12 @@ CharacterPortrait::CharacterPortrait(std::string textureFilename, sf::Vector2f p
 	if (mirror) {
 		setScale(-1, 1);
 	}
-	mDefaultSpritePos = mSprite.getPosition();
+	mDefaultSpritePos = mCharacter->getPosition();
 	mEmotion.setTextureRect(mFrame[mEmotionFrame]);
 }
 
 CharacterPortrait::~CharacterPortrait() {
-
+	delete mCharacter;
 }
 
 void CharacterPortrait::tick(const sf::Time& deltaTime) {
@@ -71,14 +77,14 @@ void CharacterPortrait::tick(const sf::Time& deltaTime) {
 		//The portrait will "bob" __ times here with a magnitude of __ pixels.
 		sf::Vector2f toMove(0.0f, sinf(scalePercent * 8 * (float)M_PI) * 15); //sin(x) lambda = 2PI
 		//mHighlightScale = DEFAULT_SCALE + DEFAULT_SCALE * scalePercent * FACTOR;
-		mSprite.setPosition(mDefaultSpritePos + toMove);
+		mCharacter->setPosition(mDefaultSpritePos + toMove);
 		//mSprite.setScale(mHighlightScale);
 	}
 	else if (!mIsHighlighted && mHighlightMoveTimer > 0.0f) {
 		mHighlightMoveTimer = std::max(mHighlightMoveTimer -= deltaTime.asSeconds(), 0.0f);
 		float scalePercent = mHighlightMoveTimer / HIGHLIGHT_MAXTIME;
-		if (mSprite.getPosition() != mDefaultSpritePos)
-			mSprite.setPosition(mDefaultSpritePos);
+		if (mCharacter->getPosition() != mDefaultSpritePos)
+			mCharacter->setPosition(mDefaultSpritePos);
 
 		//mHighlightScale = DEFAULT_SCALE + DEFAULT_SCALE * scalePercent * FACTOR;
 		//mSprite.setScale(mHighlightScale);
@@ -87,7 +93,8 @@ void CharacterPortrait::tick(const sf::Time& deltaTime) {
 
 void CharacterPortrait::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	states.transform *= getTransform();
-	target.draw(mSprite, states);
+	target.draw(*mCharacter, states);
+	target.draw(mName, states);
 	if (mEmotionFrame != 0) {
 		target.draw(mBubble, states);
 		target.draw(mEmotion, states);

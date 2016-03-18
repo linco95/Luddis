@@ -39,13 +39,13 @@ mDialogueTexts(){
 	setPosition(pos);
 	initialize(dialogueFile);
 	static const char* parameter = "PauseMenu";
-	SoundEngine::getInstance().setEventParameter("event:/Music/Levels/Lvl2", parameter, 1.0f);
+	SoundEngine::getInstance().playEvent("snapshot:/Music/Dialogue");
 }
 
 Dialogue::~Dialogue(){
 	internalClear();
 	static const char* parameter = "PauseMenu";
-	SoundEngine::getInstance().setEventParameter("event:/Music/Levels/Lvl2", parameter, 0.0f);
+	SoundEngine::getInstance().stopEvent("snapshot:/Music/Dialogue");
 	mGameState->handleClicks("DeleteDialogue");
 	mSoundEngine->stopSound(mCurrentVoiceDialogue);
 }

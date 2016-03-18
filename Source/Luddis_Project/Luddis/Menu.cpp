@@ -85,11 +85,11 @@ void Menu::initializeButtons() {
 	switch (mMenuType)
 	{
 	case Menu::MAINMENU:
-		offset = { -300, -400 };
+		offset = { 0, -100 };
 		addButton(STARTMENUBUTTON_PLAY, "", "Play", position + offset, Button::ButtonType::RECTANGLE);
-		offset = { -300, -150 };
+		offset = { 0, 150 };
 		addButton(STARTMENUBUTTON_SETTINGS, "", "Settings", position + offset, Button::ButtonType::RECTANGLE);
-		offset = { -300, 100 };
+		offset = { 0, 400 };
 		addButton(STARTMENUBUTTON_QUIT, "", "QuitGame", position + offset, Button::ButtonType::RECTANGLE);
 		break;
 
@@ -140,18 +140,28 @@ void Menu::initializeButtons() {
 	case Menu::SAVEFILESMENU:
 		offset = { 1600, 300 };
 		addButton(MENUSELECTGAME_PLAY, "", "NewGame", offset, Button::ButtonType::CIRCLE);
+
 		offset = { 1600, 550 };
 		addButton(MENUSELECTGAME_ERASE, "", "EraseSave", offset, Button::ButtonType::CIRCLE);
+
 		offset = { 1600, 800 };
 		addButton(MENUSELECTGAME_RETURN, "", "Previous", offset, Button::ButtonType::CIRCLE);
+
 		offset = { 350, 200 };
 		addButton(MENUSELECTGAME_FILE, "", "File0", offset, Button::ButtonType::RECTANGLE);
+		mButtons.back()->setStrata(InterfaceElement::THIRD);
+
 		offset = { 350, 425 };
 		addButton(MENUSELECTGAME_FILE, "", "File1", offset, Button::ButtonType::RECTANGLE);
+		mButtons.back()->setStrata(InterfaceElement::THIRD);
+
 		offset = { 350, 650 };
 		addButton(MENUSELECTGAME_FILE, "", "File2", offset, Button::ButtonType::RECTANGLE);
+		mButtons.back()->setStrata(InterfaceElement::THIRD);
+
 		offset = { 350, 875 };
 		addButton(MENUSELECTGAME_FILE, "", "File3", offset, Button::ButtonType::RECTANGLE);
+		mButtons.back()->setStrata(InterfaceElement::THIRD);
 		break;
 
 	case Menu::CONFIRMMENU:
@@ -159,7 +169,6 @@ void Menu::initializeButtons() {
 		addButton(MENUSELECTGAME_PLAY, "", "ConfirmYes", offset, Button::ButtonType::CIRCLE);
 		offset = { 1280, 540 };
 		addButton(MENUSELECTGAME_RETURN, "", "ConfirmNo", offset, Button::ButtonType::CIRCLE);
-
 		break;
 	}
 }
@@ -216,7 +225,7 @@ void Menu::onClick(std::string buttonFunc) {
 	std::string fileSubstr = buttonFunc.substr(0, 4);
 
 	if (buttonFunc == "NewGame") {
-		buttonFuncNewGame();
+		mGameState->handleClicks(buttonFunc);
 	}
 	else if (buttonFunc == "Play") {
 		mGameState->handleClicks(buttonFunc);
@@ -310,8 +319,7 @@ void Menu::buttonFuncPrevious() {
 	if (mMenuType != MAINMENU)
 		mIsAlive = false;
 	if (mPreviousMenu == nullptr) {
-		SoundEngine::getInstance().setEventParameter("event:/Menu/Button/Button_Change", "Menu", 0.0f);
-		SoundEngine::getInstance().setEventParameter("event:/Music/Levels/Lvl2", "PauseMenu", 1.0f);
+		SoundEngine::getInstance().stopEvent("snapshot:/Music/Pausemenu");
 
 		GameManager::getInstance().setGameState(mGameState);
 	}
@@ -321,6 +329,7 @@ void Menu::buttonFuncExitLevel() {
 	GameStateLevel::getInstance().resetInventory();
 	GameManager::getInstance().setGameState(&GameStateMap::getInstance());
 	SoundEngine* se = &SoundEngine::getInstance();
+	SoundEngine::getInstance().stopEvent("snapshot:/Music/Pausemenu");
 	se->stopEvent("event:/Music/Levels/Lvl2", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_ALLOWFADEOUT);
 	se->playEvent("event:/Music/Sockshop");
 	mIsAlive = false;
@@ -339,6 +348,7 @@ void Menu::buttonFuncQuitGame() {
 }
 
 void Menu::buttonFuncResetLevel() {
+	SoundEngine::getInstance().stopEvent("snapshot:/Music/Pausemenu");
 	mGameState->resetLevel();
 	GameManager::getInstance().setGameState(mGameState);
 }

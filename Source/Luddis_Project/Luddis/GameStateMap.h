@@ -13,6 +13,7 @@
 class Mannequin;
 class SockNPC;
 class GameStatePaused;
+class HUD;
 
 class GameStateMap : public GameState {
 public:
@@ -40,6 +41,7 @@ private:
 	bool mOccupied;
 	int mCurrentDialogueID;
 	GameStatePaused* mGameStatePaused;
+	HUD* mHUD;
 	SockNPC* mSock;
 	Mannequin* mMannequin;
 	Menu* mMenu;

@@ -14,21 +14,14 @@
 #include "ScoreGauge.h"
 #include "ScoreCounter.h"
 #include "Inventory.h"
+#include "HUD.h"
 #include "Luddis.h"
 #include "LuddisStateCinematic.h"
 #include "CinematicPause.h"
 #include "CinematicMoveToPoint.h"
 
-static const std::string LUDDIS_TEXTURE = "Resources/Images/Grafik_Luddis120x80_s1d3v1.png";
 static const std::string POWER_DISPLAY = "Resources/Images/GUI/PowerButton.png";
-static const std::string BUTTON_TEXTURE = "Resources/Images/GUI/Button.png";
 static const std::string COMMON_RESOURCES = "Resources/Configs/Levels/CommonResources.json";
-
-static const char* TEXTURE_LUDDGAUGE_FRAME = "Resources/Images/GUI/LuddGaugeFrame.png";
-static const char* TEXTURE_LUDDGAUGE_BAR = "Resources/Images/GUI/LuddGaugeBar.png";
-
-static const std::string TEXTURE_CHIPSCOUNTER = "Resources/Images/GUI/HUD_Chips_Icon.png";
-static const std::string TEXTURE_LUDDCOUNTER = "Resources/Images/GUI/HUD_Ludd_Icon.png";
 
 static const char* LOADINGBAR_FRAME = "Resources/Images/GUI/Loadingbar_Frame.png";
 static const char* LOADINGBAR_BAR = "Resources/Images/GUI/Loadingbar_Bar.png";
@@ -72,39 +65,25 @@ GameStateLevel& GameStateLevel::getInstance() {
 	return gs;
 }
 
-void GameStateLevel::updateLuddGauge() {
-	int maxDust = Inventory::getInstance().getMaxDust();
-	int currentDust = Inventory::getInstance().getDust();
-	float fillPercent = (float)currentDust / (float)maxDust;
-
-	mLuddGauge->updateGauge(fillPercent);
-}
-
 void GameStateLevel::initialize(sf::RenderWindow* window, EntityManager* entityManager, GUIManager* guiManager) {
 	mWindow = window;
 	mEntityM = entityManager;
 	mGUIM = guiManager;
-	//TODO: Move to levelSetup(), as theese can change when selecting level.
+
+	mHUD = new HUD(mWindow, mGUIM, &mEventM, this);
+	mHUD->initialize(HUD::HUDType::LEVEL);
+	mGUIM->addInterfaceElement(mHUD);
+
+	//TODO: Move to levelSetup(), as these can change when selecting level.
+	//Or move them to HUD, whatever, fuck it.
 	mPowerupDisplays[0] = new PowerupDisplay(POWER_DISPLAY, sf::Vector2f((float)ViewUtility::VIEW_WIDTH*0.8f, (float)ViewUtility::VIEW_HEIGHT - 60), 15.0f);
-
-	mLuddGauge = new ScoreGauge(mWindow, TEXTURE_LUDDGAUGE_FRAME, TEXTURE_LUDDGAUGE_BAR, sf::Vector2f(ViewUtility::VIEW_WIDTH * 0.45f, ViewUtility::VIEW_HEIGHT - 60));
-	mGUIM->addInterfaceElement(mLuddGauge);
-
 	mGUIM->addInterfaceElement(mPowerupDisplays[0]);
+
 	mGameStatePaused = &GameStatePaused::getInstance();
-
-	mChipsCounter = new ScoreCounter(mWindow, TEXTURE_CHIPSCOUNTER, sf::Vector2f(ViewUtility::VIEW_WIDTH*0.7f, ViewUtility::VIEW_HEIGHT - 60), ScoreCounter::ScoreType::CHIPS);
-	mChipsCounter->setScore(Inventory::getInstance().getChips());
-	mGUIM->addInterfaceElement(mChipsCounter);
-
-	mLuddCounter = new ScoreCounter(mWindow, TEXTURE_LUDDCOUNTER, sf::Vector2f(ViewUtility::VIEW_WIDTH * 0.3f, ViewUtility::VIEW_HEIGHT - 60), ScoreCounter::ScoreType::DUST);
-	mLuddCounter->setScore(Inventory::getInstance().getDust());
-	mGUIM->addInterfaceElement(mLuddCounter);
 }
 
 void GameStateLevel::update(sf::Clock& clock) {
 	//Do game logic
-	updateLuddGauge();
 	if (!mInDialogue) {
 		mEntityM->updateEntities(clock.getElapsedTime());
 		mCM->detectCollisions();
@@ -187,8 +166,7 @@ void GameStateLevel::onEvent(const sf::Event &aEvent) {
 		case sf::Event::EventType::KeyPressed:
 			if (aEvent.key.code == sf::Keyboard::Escape) {
 				mGameStatePaused->setBackgroundParameters(mEntityM, mGUIM, this);
-				SoundEngine::getInstance().setEventParameter("event:/Menu/Button/Button_Change", "Menu", 1.0f);
-				SoundEngine::getInstance().setEventParameter("event:/Music/Levels/Lvl2", "PauseMenu", 0.0f);
+				SoundEngine::getInstance().playEvent("snapshot:/Music/Pausemenu");
 				GameManager::getInstance().setGameState(mGameStatePaused);
 				mGameStatePaused->createMenu(Menu::PAUSEMENU, this);
 			}
@@ -268,7 +246,7 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	mInv.chips = inv->getChips();
 	mInv.dust = inv->getDust();
 	mInv.eggs = inv->getEggs();
-	mPlayer = new Luddis(LUDDIS_TEXTURE, mWindow, mEntityM);
+	mPlayer = new Luddis(mWindow, mEntityM);
 
 	//CINEMATIC TEST
 	Polynomial poly;
@@ -290,8 +268,8 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	//cinState->addSpeedShift(100, 1);
 	//cinState->addSpeedShift(50, 1);
 	//cinState->addSpeedShift(100, 1);
-	mPlayer->setPlayerState(cinState);
 	mPlayer->setPosition(-50.0f, (float)ViewUtility::VIEW_HEIGHT / 2.0f);
+	mPlayer->setPlayerState(cinState);
 	//END CINEMATIC TEST
 
 	mEntityM->addEntity(mPlayer);

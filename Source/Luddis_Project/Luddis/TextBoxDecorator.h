@@ -17,6 +17,8 @@ public:
 	bool isActive() const override;
 	void setActive(const bool & active) override;
 
+	void setOrigin(float x, float y);
+	void setOrigin(const sf::Vector2f& vector);
 
 private:
 	TextBox* mTextBox;

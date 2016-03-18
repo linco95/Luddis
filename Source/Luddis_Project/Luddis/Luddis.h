@@ -15,7 +15,7 @@ class GameStateLevel;
 
 class Luddis : public CollidableEntity{
 public:
-	Luddis(std::string textureFilename, sf::RenderWindow* windowm, EntityManager* entityManager);
+	Luddis(sf::RenderWindow* windowm, EntityManager* entityManager);
 	~Luddis();
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

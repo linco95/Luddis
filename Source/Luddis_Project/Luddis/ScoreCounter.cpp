@@ -12,7 +12,7 @@ mIsActive(true),
 mWindow(aWindow),
 mPosition(screenPos),
 mType(type),
-mCounter(std::to_string(mScore), ResourceManager::getInstance().getFont(FONT_PATH), 24)
+mCounter(std::to_string(mScore), ResourceManager::getInstance().getFont(FONT_PATH), 32)
 {
 	setPosition(mPosition);
 	mSprite.setOrigin((float)mSprite.getTextureRect().height / 2, (float)mSprite.getTextureRect().width / 2);

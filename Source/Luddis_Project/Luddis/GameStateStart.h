@@ -46,7 +46,7 @@ private:
 
 	int mSelectedSave;
 	Menu* mMenu;
-	sf::Sprite mBackground;
+	sf::Sprite mLogo, mBackground;
 	GUIManager mGUIM;
 	EventManager mEventM;
 	sf::RenderWindow* mWindow;

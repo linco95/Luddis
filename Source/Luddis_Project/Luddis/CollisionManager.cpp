@@ -243,7 +243,7 @@ void CollisionManager::narrowCollision(std::pair<CollidableEntity*, CollidableEn
 
 	// If no gaps were found, collide. We give the smallestOverlap vector in the direction that the shape has to move to not be colliding anymore.
 	pair.first->collide(pair.second, smallest * overlap);
-	pair.second->collide(pair.first, smallest * overlap);
+	pair.second->collide(pair.first, -smallest * overlap);
 }
 #pragma endregion Helper functions handeling the narrow collision using Separating Axis Theorem
 
