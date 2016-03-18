@@ -1,10 +1,14 @@
 #include "SockNPC.h"
 #include "ViewUtility.h"
+#include "SoundEngine.h"
 #include <SFML/Graphics/RenderTarget.hpp>
 
 static const std::string SOCKANIMATION_DILE_FILEPATH = "Resources/Images/Spritesheets/Sock_idle";
 static const std::string SOCKANIMATION_DIVE_FILEPATH = "Resources/Images/Spritesheets/Sock_exit";
-static const std::string SOCKANIMATION_SURFACE_FILEPATH = "Resources/Images/Spritesheets/Sock_exit";
+static const std::string SOCKANIMATION_SURFACE_FILEPATH = "Resources/Images/Spritesheets/Sock_entry";
+
+static const char* SOCK_SOUND_DIVE = "event:/Gameplay/Shop/Sock Move Down";
+static const char* SOCK_SOUND_SURFACE = "event:/Gameplay/Shop/Sock Move Up";
 
 static const float MAX_DIVE_TIMER = 0.65f;
 
@@ -43,7 +47,8 @@ void SockNPC::tick(const sf::Time & deltaTime) {
 		mDiveTimer = std::min(mDiveTimer, MAX_DIVE_TIMER);
 		if (mDiveTimer >= MAX_DIVE_TIMER) {
 			mDiveDown = false;
-			mAnimation.replaceAnimation(SOCKANIMATION_SURFACE_FILEPATH);
+			mAnimation.overrideAnimation(SOCKANIMATION_SURFACE_FILEPATH);
+			SoundEngine::getInstance().playEvent(SOCK_SOUND_SURFACE);
 			if (mLeftSide) {
 				mLeftSide = !mLeftSide;
 				scale(-1, 1);
@@ -90,4 +95,5 @@ void SockNPC::dive() {
 	mDive = true;
 	mDiveDown = true;
 	mAnimation.replaceAnimation(SOCKANIMATION_DIVE_FILEPATH);
+	SoundEngine::getInstance().playEvent(SOCK_SOUND_DIVE);
 }

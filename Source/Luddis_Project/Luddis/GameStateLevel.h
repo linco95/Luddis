@@ -17,6 +17,7 @@ class Spider;
 class Luddis;
 class ScoreGauge;
 class ScoreCounter;
+class HUD;
 
 class GameStateLevel : public GameState{
 public:
@@ -49,7 +50,6 @@ public:
 
 private:
 	GameStateLevel();
-	void updateLuddGauge();
 
 	void readSetupFiles(const std::string& filename, bool allocate = true);
 
@@ -59,15 +59,13 @@ private:
 	CollisionManager* mCM;
 	EventManager mEventM;
 	GameStatePaused* mGameStatePaused;
+	HUD* mHUD;
 	sf::View mGUIView;
 	sf::View mMapView;
 	sf::RenderWindow* mWindow;
 	Level* mLevel;
 	Spider* mSpider;
 	Luddis* mPlayer;
-	ScoreGauge* mLuddGauge;
-	ScoreCounter *mChipsCounter;
-	ScoreCounter *mLuddCounter;
 	sf::RectangleShape mCinematicBox[2];
 	bool mFirstTime;
 	bool mPlayable;

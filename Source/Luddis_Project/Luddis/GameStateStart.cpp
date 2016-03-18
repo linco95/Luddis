@@ -7,11 +7,15 @@
 #include "Mannequin.h"
 #include "ScoreCounter.h"
 #include "ResourceManager.h"
+#include "Inventory.h"
 #include "rapidjson/document.h"
 #include <SFML/Window/Event.hpp>
 
 static const char* TEXTURE_SCORE_DUST = "Resources/Images/GUI/HUD_Ludd_Icon.png";
 static const char* TEXTURE_SCORE_CHIPS = "Resources/Images/GUI/HUD_Chips_Icon.png";
+static const char* TEXTURE_LOGO = "Resources/Images/Luddis_logo.png";
+static const char* TEXTURE_BACKROUND = "Resources/Images/Startmenu_background.jpg";
+static const char* ACCESSORIES_LIST = "Resources/Configs/Inventory/Accessories.json";
 
 static const char* ARIAL_FONT = "Resources/Fonts/arial.ttf";
 
@@ -19,11 +23,17 @@ GameStateStart::GameStateStart() :
 	mGUIM(),
 	mEventM(),
 	mSelectedSave(0),
+	mLogo(ResourceManager::getInstance().getTexture(TEXTURE_LOGO)),
+	mBackground(ResourceManager::getInstance().getTexture(TEXTURE_BACKROUND)),
 	mMannequin(new Mannequin) {
 
+
+	mLogo.setScale(0.5f, 0.5f);
+	mLogo.setOrigin(mLogo.getLocalBounds().width / 2, mLogo.getLocalBounds().height / 2);
+	mLogo.setPosition((float)ViewUtility::VIEW_WIDTH*0.5f, (float)ViewUtility::VIEW_HEIGHT*0.3f);
 	mMannequin->setActive(false);
-	mMannequin->setScale(2.0f, 2.0f);
 	mMannequin->setPosition(ViewUtility::getViewSize().getCenter());
+	mMannequin->setScale(2.0f, 2.0f);
 	mGUIM.addInterfaceElement(mMannequin);
 }
 
@@ -56,11 +66,13 @@ void GameStateStart::update(sf::Clock& clock) {
 
 void GameStateStart::render() {
 	//Draw objects
-	//mWindow->draw(mBackground);
 	Renderer::getInstance().render(*mWindow);
+	mWindow->draw(mBackground);
+	mWindow->draw(mLogo);
 	mGUIM.renderElements(*mWindow);
 	for (int i = 0; i < 4; i++)
 		mWindow->draw(mFiles[i].text);
+
 }
 
 void GameStateStart::onEvent(const sf::Event& aEvent) {
@@ -77,14 +89,22 @@ void GameStateStart::handleEvents() {
 void GameStateStart::handleClicks(std::string command) {
 	std::string fileSubstr = command.substr(0, 4);
 
-
+	//Very missleading, but this will use the currently selected savefile.
 	if (command == "NewGame") {
-		//Just a copy of ExitLevel for now
+		Inventory* inv = &Inventory::getInstance();
+		inv->setChips(mFiles[mSelectedSave].chips);
+		inv->setDust(mFiles[mSelectedSave].currentDust);
+		inv->setMaxDust(mFiles[mSelectedSave].maxDust);
+		inv->setAccessoryHead(mFiles[mSelectedSave].mannequin->getHeadAccessory());
+		inv->setAccessoryTail(mFiles[mSelectedSave].mannequin->getTailAccessory());
+		inv->setColorScheme(mFiles[mSelectedSave].mannequin->getColorScheme());
 		GameManager::getInstance().setGameState(&GameStateMap::getInstance());
 		SoundEngine* se = &SoundEngine::getInstance();
 
 		se->stopEvent("event:/Music/Meny", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_ALLOWFADEOUT);
 		se->playEvent("event:/Music/Sockshop");
+		se->playEvent("event:/Gameplay/Menu/Start_Game");
+
 	}
 	else if (command == "Play") {
 		for (auto m : mFiles) {
@@ -114,16 +134,31 @@ void GameStateStart::handleClicks(std::string command) {
 		std::string subString = command.substr(4, command.size());
 		int index = std::stoi(subString);
 
-		mFiles[mSelectedSave].scoreCounters[0]->setActive(false);
-		mFiles[mSelectedSave].scoreCounters[1]->setActive(false);
+		if (mFiles[mSelectedSave].scoreCounters[0] != nullptr &&
+			mFiles[mSelectedSave].scoreCounters[1] != nullptr) {
+			mFiles[mSelectedSave].scoreCounters[0]->setActive(false);
+			mFiles[mSelectedSave].scoreCounters[1]->setActive(false);
+		}
 		mSelectedSave = index;
-		mFiles[mSelectedSave].scoreCounters[0]->setActive(true);
-		mFiles[mSelectedSave].scoreCounters[1]->setActive(true);
+		if (mFiles[mSelectedSave].scoreCounters[0] != nullptr &&
+			mFiles[mSelectedSave].scoreCounters[1] != nullptr) {
+			mFiles[mSelectedSave].scoreCounters[0]->setActive(true);
+			mFiles[mSelectedSave].scoreCounters[1]->setActive(true);
+		}
 
 		//Set mannequin accessories
 		if (mMannequin != nullptr) {
-			//mMannequin->setHeadAccessory("");
-			//mMannequin->setTailAccessory("");
+			std::string headAccessory, tailAccessory;
+			Mannequin::ColorScheme color;
+
+			headAccessory = mFiles[index].mannequin->getHeadAccessory();
+			tailAccessory = mFiles[index].mannequin->getTailAccessory();
+			color = mFiles[index].mannequin->getColorScheme();
+
+			mMannequin->setHeadAccessory(headAccessory.c_str());
+			mMannequin->setTailAccessory(tailAccessory.c_str());
+			mMannequin->setColorScheme(color);
+			mMannequin->setScale(2.0f, 2.0f);
 		}
 	}
 	else if (command == "ConfirmYes") {
@@ -139,6 +174,11 @@ void GameStateStart::setupFiles(std::string filename) {
 	rapidjson::Document configDoc;
 	configDoc.Parse(configText.c_str());
 	assert(configDoc.IsArray());
+
+	std::string configTextAccessories = ResourceManager::getInstance().getJsonFile(ACCESSORIES_LIST);
+	rapidjson::Document configDocAccessories;
+	configDocAccessories.Parse(configTextAccessories.c_str());
+	assert(configDocAccessories.IsArray());
 
 	for (rapidjson::SizeType itr = 0; itr < configDoc.Size(); itr++) {
 		assert(configDoc[itr].HasMember("NEW") && configDoc[itr]["NEW"].IsBool());
@@ -185,11 +225,33 @@ void GameStateStart::setupFiles(std::string filename) {
 		const rapidjson::Value& accessories = inventory["Accessories"];
 		assert(accessories.HasMember("Head") && accessories["Head"].IsInt());
 		assert(accessories.HasMember("Tail") && accessories["Tail"].IsInt());
+		assert(accessories.HasMember("Color") && accessories["Color"].IsInt());
+		int headID = accessories["Head"].GetInt();
+		int tailID = accessories["Tail"].GetInt();
+		int colorID = accessories["Color"].GetInt();
+
 		mFiles[itr].mannequin = new Mannequin();
-		mFiles[itr].mannequin->setAnimate(false);
+		//mFiles[itr].mannequin->setAnimate(false);
 		mFiles[itr].mannequin->setActive(false);
-		mFiles[itr].mannequin->setScale(1.0f, 1.0f);
+		mFiles[itr].mannequin->setScale(1.5f, 1.5f);
 		mFiles[itr].mannequin->setPosition(125.0f, 200.0f + (float)itr*225.0f);
+
+		for (rapidjson::SizeType itr2 = 0; itr2 < configDocAccessories.Size(); itr2++) {
+			assert(configDocAccessories[itr2].HasMember("ID") && configDocAccessories[itr2]["ID"].IsInt());
+			int accessoryID = configDocAccessories[itr2]["ID"].GetInt();
+			if (colorID != -1 && accessoryID == colorID) {
+				mFiles[itr].mannequin->setColorScheme(Mannequin::ColorScheme(accessoryID));
+			}
+			if (colorID != -1 && accessoryID == headID) {
+				std::string image = configDocAccessories[itr2]["image"].GetString();
+				mFiles[itr].mannequin->setHeadAccessory(image.c_str());
+			}
+			if (colorID != -1 && accessoryID == tailID) {
+				std::string image = configDocAccessories[itr2]["image"].GetString();
+				mFiles[itr].mannequin->setHeadAccessory(image.c_str());
+			}
+		}
+
 		mGUIM.addInterfaceElement(mFiles[itr].mannequin);
 	}
 }

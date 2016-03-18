@@ -4,11 +4,11 @@
 
 Inventory::Inventory():
 mChips(0),
-mDust(10),
+mDust(30),
 mEggs(0),
 mMaxDust(50)
 {
-	
+
 }
 
 Inventory::~Inventory(){
@@ -75,6 +75,31 @@ void Inventory::changeEggs(int eggs){
 	mEggs += eggs;
 }
 #pragma endregion Egg related functions
+
+void Inventory::setAccessoryHead(std::string filename){
+	mAccessoryHead = filename;
+}
+
+std::string Inventory::getAccessoryHead() const{
+	return mAccessoryHead;
+}
+
+void Inventory::setAccessoryTail(std::string filename){
+	mAccessoryTail = filename;
+}
+
+std::string Inventory::getAccessorTail() const{
+	return mAccessoryTail;
+}
+
+void Inventory::setColorScheme(int index){
+	mColorScheme = index;
+}
+
+int Inventory::getColorScheme() const{
+	return mColorScheme;
+}
+
 
 #pragma region POWER-UPS
 void Inventory::activateFirst(sf::Time deltaTime) {

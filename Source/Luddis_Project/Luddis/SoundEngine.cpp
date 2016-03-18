@@ -4,8 +4,9 @@
 #include <cassert>
 
 SoundEngine::SoundEngine() :
-mMainVolume(1), mSoundVolume(1), mMusicVolume(1),
-mStudioSystem(NULL), mLowLvlSystem(NULL),
+	mMainVolume(1), mSoundVolume(1), mMusicVolume(1),
+	mMute(false),
+	mStudioSystem(NULL), mLowLvlSystem(NULL),
 	mSounds(), mChannel(NULL) {
 
 	initialize();
@@ -46,43 +47,61 @@ void SoundEngine::finalize() {
 }
 
 void SoundEngine::setMainVolume(float volume) {
-	mMainVolume = volume;
+	if (!mMute)
+		mMainVolume = volume;
+
 	setSoundVolume(mSoundVolume);
 	setMusicVolume(mMusicVolume);
 }
 
-float SoundEngine::getMainVolume() const{
+float SoundEngine::getMainVolume() const {
 	return mMainVolume;
 }
 
 void SoundEngine::setSoundVolume(float volume) {
-	mSoundVolume = volume;
-	mFinalVolume = mMainVolume*mSoundVolume;
+	if (!mMute)
+		mSoundVolume = volume;
+
+	float _volume = mMainVolume*volume;
 	//Studio instances
 	for (auto se : mSoundEventInstances) {
-		se.second->setVolume(mFinalVolume);
+		se.second->setVolume(_volume);
 	}
 	FMOD_RESULT result;
-	result = mChannel->setVolume(mFinalVolume);
+	result = mChannel->setVolume(_volume);
 	//Low level instances
-	mChannel->setVolume(mFinalVolume);
+	mChannel->setVolume(_volume);
 }
 
-float SoundEngine::getSoundVolume() const{
+float SoundEngine::getSoundVolume() const {
 	return mSoundVolume;
 }
 
 void SoundEngine::setMusicVolume(float volume) {
-	mMusicVolume = volume;
-	mFinalVolume = mMainVolume*mMusicVolume;
+	if (!mMute)
+		mMusicVolume = volume;
+
+	float _volume = mMainVolume*volume;
 	//Studio instances
 	for (auto s : mMusicEventInstances) {
-		s.second->setVolume(mFinalVolume);
+		s.second->setVolume(_volume);
 	}
 }
 
-float SoundEngine::getMusicVolume() const{
+float SoundEngine::getMusicVolume() const {
 	return mMusicVolume;
+}
+
+void SoundEngine::mute(bool mute) {
+	mMute = mute;
+	if (mMute) {
+		setSoundVolume(0);
+		setMusicVolume(0);
+	}
+	else {
+		setMusicVolume(mMusicVolume);
+		setSoundVolume(mSoundVolume);
+	}
 }
 
 
@@ -92,11 +111,12 @@ int SoundEngine::playSound(const char* filename) {
 	}
 	FMOD_RESULT result;
 	result = mLowLvlSystem->playSound(mSounds[filename], 0, false, &mChannel);
-	result = mChannel->setVolume(mMainVolume*mSoundVolume);
-	float volume = 0;
-	mChannel->getVolume(&volume);
+	if (mMute)
+		result = mChannel->setVolume(0);
+	else
+		result = mChannel->setVolume(mMainVolume*mSoundVolume);
 	int channelIndex = 0;
-	mChannel->getIndex(&channelIndex);
+	result = mChannel->getIndex(&channelIndex);
 	return channelIndex;
 }
 
@@ -108,12 +128,25 @@ FMOD_RESULT SoundEngine::playEvent(const char * path) {
 	i = 2;
 	if (mMusicEventInstances.find(path) != mMusicEventInstances.end()) {
 		result = mMusicEventInstances[path]->start();
-		result = mMusicEventInstances[path]->setVolume(mMainVolume* mSoundVolume);
+		if (mMute) {
+			result = mMusicEventInstances[path]->setVolume(0);
+		}
+		else {
+			result = mMusicEventInstances[path]->setVolume(mMainVolume* mMusicVolume);
+		}
 	}
 	else {
 		result = mSoundEventInstances[path]->start();
-		result = mSoundEventInstances[path]->setVolume(mMainVolume* mMusicVolume);
+		if (mMute) {
+			result = mSoundEventInstances[path]->setVolume(0);
+		}
+		else {
+			result = mSoundEventInstances[path]->setVolume(mMainVolume* mSoundVolume);
+
+		}
 	}
+
+
 
 	return result;
 }

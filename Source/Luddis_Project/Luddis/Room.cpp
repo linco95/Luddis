@@ -12,8 +12,8 @@
 #include "SoundEngine.h"
 #include <SFML/Graphics/Rect.hpp>
 
-static const std::string LEVEL_CONFIG_PATH = "Resources/Configs/Levels/";
 static const std::string DOOR_TEXTURE = "Resources/Images/Rooms/Doorknob.png";
+static const std::string GET_OUT_TEXTURE = "Resources/Images/GUI/ButtonExitLevel.png";
 static const std::string SHOPBUTTON_TEXTURE = "Resources/Images/Rooms/ButtonSockShop.png";
 static const std::string SOCKSHOP_TEXTURE = "Resources/Images/Rooms/Shop.png";
 static const std::string DIALOGUE_TEXTURE = "Resources/Images/GUI/Button.png";
@@ -86,11 +86,10 @@ void Room::onClick(std::string buttonFunc) {
 		buttonFuncShop();
 	}
 	else if (buttonFunc == "Dialogue") {
-		buttonFuncDialogue();
+		mGameState->handleClicks("Dialogue");
 	}
 	else if (levelSubstr == "Level") {
-		std::string string = buttonFunc.substr(levelSubstr.length(), buttonFunc.length());
-		buttonFuncLevel(string);
+		mGameState->handleClicks(buttonFunc);
 	}
 	else if (roomSubstr == "Room") {
 		std::string string = buttonFunc.substr(roomSubstr.length(), buttonFunc.length());
@@ -103,12 +102,12 @@ void Room::createButtons(int room) {
 	sf::Vector2f position(0, 0);
 	switch (room) {
 	case 1:
-		position.x = ViewUtility::getViewSize().getSize().x*0.85f;
-		position.y = ViewUtility::getViewSize().getSize().y*0.50f;
-		addButton(DOOR_TEXTURE, "", "Room2", position, Button::ButtonType::RECTANGLE);
+		position = {1700, 150};
+		addButton(GET_OUT_TEXTURE, "", "Room2", position, Button::ButtonType::CIRCLE);
+		mLevelButtons.back()->setStrata(InterfaceElement::SECOND);
 
 		position = { 164, 209 };
-		addButton(SHOPBUTTON_TEXTURE, "", "Shop", position, Button::ButtonType::RECTANGLE);
+		addButton(SHOPBUTTON_TEXTURE, "", "Shop", position, Button::ButtonType::CIRCLE);
 		mLevelButtons.back()->setStrata(InterfaceElement::SECOND);
 
 		//position.x = ViewUtility::getViewSize().getSize().x*0.40f;
@@ -120,19 +119,19 @@ void Room::createButtons(int room) {
 		break;
 
 	case 2:
-		position.x = ViewUtility::getViewSize().getSize().x*0.22f;
-		position.y = ViewUtility::getViewSize().getSize().y*0.62f;
+		position.x = ViewUtility::getViewSize().getSize().x*0.223f;
+		position.y = ViewUtility::getViewSize().getSize().y*0.619f;
 		addButton(SOCKSHOP_TEXTURE, "", "Room1", position, Button::RECTANGLE);
 
-		position.x = ViewUtility::getViewSize().getSize().x*0.513f;
-		position.y = ViewUtility::getViewSize().getSize().y*0.643f;
+		position.x = ViewUtility::getViewSize().getSize().x*0.510f;
+		position.y = ViewUtility::getViewSize().getSize().y*0.646f;
 		addButton(LEVEL1_TEXTURE, "", "Level01", position, Button::RECTANGLE);
 
-		position.x = ViewUtility::getViewSize().getSize().x*0.93f;
-		position.y = ViewUtility::getViewSize().getSize().y*0.45f;
+		position.x = ViewUtility::getViewSize().getSize().x*0.945f;
+		position.y = ViewUtility::getViewSize().getSize().y*0.405f;
 		addButton(DOOR_TEXTURE, "", "Level03", position, Button::RECTANGLE);
 
-		position.x = ViewUtility::getViewSize().getSize().x*0.755f;
+		position.x = ViewUtility::getViewSize().getSize().x*0.752f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.585f;
 		addButton(LEVEL2_TEXTURE, "", "Level02", position, Button::RECTANGLE);
 	
@@ -158,18 +157,6 @@ void Room::addButton(std::string buttonFile, std::string buttonText, std::string
 
 void Room::buttonFuncShop() {
 	mGameState->handleClicks("Shop");
-}
-
-void Room::buttonFuncDialogue() {
-	mGameState->handleClicks("Dialogue");
-}
-
-void Room::buttonFuncLevel(std::string level) {
-	std::string filename = LEVEL_CONFIG_PATH + "Level" + level + "Entities.json";
-	GameStateLevel::getInstance().setupLevel(filename);
-	SoundEngine::getInstance().stopEvent("event:/Music/Sockshop", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
-
-	GameManager::getInstance().setGameState(&GameStateLevel::getInstance());
 }
 
 void Room::buttonFuncRoom(int room) {

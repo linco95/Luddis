@@ -1,5 +1,6 @@
 #include "SpiderWeb.h"
 #include "Inventory.h"
+#include "SoundEngine.h"
 
 float const PAUSE_TIME = 3.0f;
 
@@ -23,6 +24,7 @@ void SpiderWeb::activate(sf::Time deltaTime) {
 			Inventory::getInstance().addDust(-10);
 			mEntityManager->stunEntities(deltaTime);
 			mDisplay->activateCooldown();
+			SoundEngine::getInstance().playEvent("event:/Gameplay/Luddis/Skills/Spiderweb");
 		}
 	}
 }

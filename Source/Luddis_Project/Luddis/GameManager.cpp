@@ -152,12 +152,28 @@ struct GameManagerImp : public EventObserver {
 		se->createEvent("event:/Gameplay/Luddis/Interaction/Luddis_Crumb", SoundEngine::SOUND);
 		se->createEvent("event:/Gameplay/Luddis/Interaction/Luddis_Hit", SoundEngine::SOUND);
 		se->createEvent("event:/Gameplay/Luddis/Interaction/Luddis_Shot", SoundEngine::SOUND);
-		se->createEvent("event:/Menu/Button/Button_Change", SoundEngine::SOUND);
-		se->createEvent("event:/Menu/Button/Button_Click", SoundEngine::SOUND);
-		se->createEvent("event:/Menu/Button/Button_Fail", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Level/Wall_Hit", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Luddis/Skills/Spiderweb", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Luddis/Skills/Static", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Obstacles/Electricity", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Obstacles/Steam", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Shop/Buy", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Shop/Sock Move Down", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Shop/Sock Move Up", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Menu/Start_Game", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Menu/Button/Button_Change", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Menu/Button/Button_Click", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Menu/Button/Button_Fail", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Ambience/Fan", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Ambience/Room", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Ambience/Shop", SoundEngine::SOUND);
+	
 		se->createEvent("event:/Music/Levels/Lvl2", SoundEngine::MUSIC);
 		se->createEvent("event:/Music/Sockshop", SoundEngine::MUSIC);
 		se->createEvent("event:/Music/Meny", SoundEngine::MUSIC);
+
+		se->createEvent("snapshot:/Music/Pausemenu", SoundEngine::MUSIC);
+		se->createEvent("snapshot:/Music/Dialogue", SoundEngine::MUSIC);
 
 		mGameStateStart = &GameStateStart::getInstance();
 		mGameStatePaused = &GameStatePaused::getInstance();

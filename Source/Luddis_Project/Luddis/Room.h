@@ -34,8 +34,6 @@ public:
 
 private:
 	void buttonFuncShop();
-	void buttonFuncDialogue();
-	void buttonFuncLevel(std::string);
 	void buttonFuncRoom(int room);
 
 	sf::Sprite mBackground;

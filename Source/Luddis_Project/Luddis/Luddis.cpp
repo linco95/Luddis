@@ -28,7 +28,7 @@ static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(35, 8);
 static Animation STASISANIMATION("Resources/Images/Spritesheets/Stasis_ring");
 
 
-Luddis::Luddis(std::string textureFilename, sf::RenderWindow* window, EntityManager* entityManager) :
+Luddis::Luddis(sf::RenderWindow* window, EntityManager* entityManager) :
 	mIsAlive(true), 
 	mIsActive(true),
 	mWindow(window), 

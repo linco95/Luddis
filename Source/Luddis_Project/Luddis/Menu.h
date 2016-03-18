@@ -37,7 +37,7 @@ public:
 	bool isAlive() const override;
 	bool isActive() const  override;
 	void setActive(const bool& active) override;
-	void onClick(std::string) override;
+	void onClick(std::string buttonFunc) override;
 	virtual void onEvent(const sf::Event & aEvent) override;
 	MenuType getMenuType() const;
 	void kill();

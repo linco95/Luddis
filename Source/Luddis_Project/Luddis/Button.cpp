@@ -121,7 +121,7 @@ void Button::onEvent(const sf::Event &aEvent) {
 				if (rect.contains(mousePos)) {
 					mSprite.setTextureRect(mRects[2]);
 					SoundEngine* se = &SoundEngine::getInstance();
-					se->playEvent("event:/Menu/Button/Button_Click");
+					se->playEvent("event:/Gameplay/Menu/Button/Button_Click");
 					mClick = true;
 				}
 			}
@@ -144,7 +144,7 @@ void Button::onEvent(const sf::Event &aEvent) {
 					mInside = true;
 					mSprite.setTextureRect(mRects[1]);
 					SoundEngine* se = &SoundEngine::getInstance();
-					se->playEvent("event:/Menu/Button/Button_Change");
+					se->playEvent("event:/Gameplay/Menu/Button/Button_Change");
 				}
 				else if (!mSprite.getGlobalBounds().contains(mousePos) && mInside) {
 					mSprite.setTextureRect(mRects[0]);
@@ -164,7 +164,7 @@ void Button::onEvent(const sf::Event &aEvent) {
 				if (distance <= mSprite.getGlobalBounds().height / 2) {
 					mSprite.setTextureRect(mRects[2]);
 					SoundEngine* se = &SoundEngine::getInstance();
-					se->playEvent("event:/Menu/Button/Button_Click");
+					se->playEvent("event:/Gameplay/Menu/Button/Button_Click");
 					mClick = true;
 				}
 			}
@@ -187,7 +187,7 @@ void Button::onEvent(const sf::Event &aEvent) {
 					mInside = true;
 					mSprite.setTextureRect(mRects[1]);
 					SoundEngine* se = &SoundEngine::getInstance();
-					se->playEvent("event:/Menu/Button/Button_Change");
+					se->playEvent("event:/Gameplay/Menu/Button/Button_Change");
 				}
 				else if (distance > mSprite.getGlobalBounds().height / 2 && mInside) {
 					mInside = false;

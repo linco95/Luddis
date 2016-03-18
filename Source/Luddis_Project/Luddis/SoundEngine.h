@@ -53,6 +53,8 @@ public:
 	void setMusicVolume(float volume);
 	float getMusicVolume() const;
 
+	void mute(bool mute);
+
 	//Plays a sound on the low level system, and returns
 	//the channel index used to play it.
 	int playSound(const char* filename);
@@ -91,10 +93,10 @@ private:
 	FMOD::Studio::System* mStudioSystem;
 	FMOD::System* mLowLvlSystem;
 	FMOD::Channel* mChannel;
+	bool mMute;
 	float mMainVolume;
 	float mSoundVolume;
 	float mMusicVolume;
-	float mFinalVolume;
 };
 
 #endif // !_INCLUDED_SOUNDENGINE_

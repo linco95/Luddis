@@ -107,6 +107,7 @@
     <ClCompile Include="GameStateMap.cpp" />
     <ClCompile Include="GameStatePaused.cpp" />
     <ClCompile Include="GameStateStart.cpp" />
+    <ClCompile Include="HUD.cpp" />
     <ClCompile Include="LuddisStateCinematic.cpp" />
     <ClCompile Include="LuddisStateDead.cpp" />
     <ClCompile Include="LuddisStatePlayable.cpp" />
@@ -153,6 +154,7 @@
     <ClCompile Include="VectorMath.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Accessories.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="AnimationQueue.h" />
     <ClInclude Include="BackgroundEffect.h" />
@@ -177,6 +179,7 @@
     <ClInclude Include="GameStateMap.h" />
     <ClInclude Include="GameStatePaused.h" />
     <ClInclude Include="GameStateStart.h" />
+    <ClInclude Include="HUD.h" />
     <ClInclude Include="LuddisState.h" />
     <ClInclude Include="LuddisStateCinematic.h" />
     <ClInclude Include="LuddisStateDead.h" />
