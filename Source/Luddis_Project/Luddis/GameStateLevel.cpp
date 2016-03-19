@@ -185,7 +185,6 @@ void GameStateLevel::handleEvents() {
 void GameStateLevel::handleClicks(std::string command) {
 	if (command == "DeleteDialogue") {
 		mInDialogue = false;
-		fuckOffSpider();
 	}
 	else if (command == "Spider1") {
 		std::string jsonFilename = FILENAME + std::to_string(mCurrentLevel) + "Spider1.json";
@@ -205,18 +204,9 @@ void GameStateLevel::createDialogue(std::string dialogueFilename) {
 	sf::Vector2f pos(0.0f, (float)ViewUtility::VIEW_HEIGHT);
 	Dialogue* dialogue = new Dialogue(dialogueFilename, mWindow, &mResettableGUI, &mEventM, pos, this);
 	mResettableGUI.addInterfaceElement(dialogue);
-	if (dialogueFilename.find("SpiderDialogue") != std::string::npos) {
-		mSpider = new Spider(mWindow, sf::Vector2f((float)ViewUtility::VIEW_WIDTH*0.6f, 0));
-		mResettableGUI.addInterfaceElement(mSpider);
-	}
+	//if (dialogueFilename.find("SpiderDialogue") != std::string::npos) {
+	//}
 	setInDialogue(true);
-}
-
-void GameStateLevel::fuckOffSpider() {
-	if (mSpider != nullptr) {
-		mSpider->turn();
-		mSpider = nullptr;
-	}
 }
 
 //Retarded name, but it returns if there is currently a dialogue
@@ -261,6 +251,7 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	CinematicPause pauseCin(1.2f);
 	CinematicMoveToPoint movePoint(sf::Vector2f(500, 500), mPlayer);
 	LuddisStateCinematic* cinState = new LuddisStateCinematic(100, mPlayer, mWindow, mEntityM, mPowerupDisplays[0], mPlayer->getNarrowHitbox());
+	cinState->addCinematicSequence(&movePoint);
 	/*cinState->addCinematicSequence(&tween);
 	cinState->addCinematicSequence(&pauseCin);
 	cinState->addCinematicSequence(&tween2);*/
@@ -271,7 +262,7 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	//cinState->addSpeedShift(100, 1);
 	//cinState->addSpeedShift(50, 1);
 	//cinState->addSpeedShift(100, 1);
-	mPlayer->setPosition(-50.0f, (float)ViewUtility::VIEW_HEIGHT / 2.0f);
+	mPlayer->setPosition(-300.0f, (float)ViewUtility::VIEW_HEIGHT / 2.0f);
 	mPlayer->setPlayerState(cinState);
 	//END CINEMATIC TEST
 
@@ -299,7 +290,7 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	assert(configDoc.IsObject());
 
 	if (configDoc.HasMember("Level"))
-	mCurrentLevel = configDoc["Level"].GetInt();
+		mCurrentLevel = configDoc["Level"].GetInt();
 	mPlayable = true;
 }
 
@@ -325,6 +316,10 @@ void GameStateLevel::setupMission(const std::string& jsonFilename) {
 
 	mLevel->initializeEntities(mWindow, configDoc);
 	//mLevel->readInitMap(mapFilename);
+}
+
+void GameStateLevel::setPlayable(bool playable){
+	mPlayable = playable;
 }
 
 void GameStateLevel::readSetupFiles(const std::string& filename, bool allocate) {
@@ -433,4 +428,8 @@ void GameStateLevel::readSetupFiles(const std::string& filename, bool allocate) 
 
 bool GameStateLevel::playable() const {
 	return mPlayable;
+}
+
+int GameStateLevel::getCurrentLevel() const{
+	return mCurrentLevel;
 }

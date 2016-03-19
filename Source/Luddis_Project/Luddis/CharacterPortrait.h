@@ -26,11 +26,10 @@ public:
 private:
 	static const int MAX_FRAMES = 16;
 
-	Mannequin* mCharacter;
+	sf::Sprite mCharacter;
 	sf::Sprite mBubble;
 	sf::Sprite mEmotion;
 	sf::IntRect mFrame[MAX_FRAMES];
-	sf::Text mName;
 
 	bool mIsAlive;
 	bool mIsActive;

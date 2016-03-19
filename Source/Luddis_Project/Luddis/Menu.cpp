@@ -85,11 +85,11 @@ void Menu::initializeButtons() {
 	switch (mMenuType)
 	{
 	case Menu::MAINMENU:
-		offset = { 0, -100 };
+		offset = { 0, 70 };
 		addButton(STARTMENUBUTTON_PLAY, "", "Play", position + offset, Button::ButtonType::RECTANGLE);
-		offset = { 0, 150 };
+		offset = { 0, 260 };
 		addButton(STARTMENUBUTTON_SETTINGS, "", "Settings", position + offset, Button::ButtonType::RECTANGLE);
-		offset = { 0, 400 };
+		offset = { 0, 450 };
 		addButton(STARTMENUBUTTON_QUIT, "", "QuitGame", position + offset, Button::ButtonType::RECTANGLE);
 		break;
 
@@ -129,11 +129,11 @@ void Menu::initializeButtons() {
 	case Menu::SETTINGSMENU:
 		offset = { 0,275 };
 		addButton(MENUBUTTON_TEXTURE_RETURN, "", "Previous", position + offset, Button::ButtonType::CIRCLE);
-		offset = { 200, -400 };
+		offset = { 0, -400 };
 		addSlider(MENUSLIDER, MENUSLIDER_GAUGE, "Huvud Volym : ", mainVolume, "MainV", position + offset);
-		offset = { 200, -200 };
+		offset = { 0, -250 };
 		addSlider(MENUSLIDER, MENUSLIDER_GAUGE, "Musik Volym : ", musicVolume, "Music", position + offset);
-		offset = { 200, 0 };
+		offset = { 0, -100 };
 		addSlider(MENUSLIDER, MENUSLIDER_GAUGE, "Ljud Volym : ", audioVolume, "Audio", position + offset);
 		break;
 
@@ -330,7 +330,8 @@ void Menu::buttonFuncExitLevel() {
 	GameManager::getInstance().setGameState(&GameStateMap::getInstance());
 	SoundEngine* se = &SoundEngine::getInstance();
 	SoundEngine::getInstance().stopEvent("snapshot:/Music/Pausemenu");
-	se->stopEvent("event:/Music/Levels/Lvl2", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_ALLOWFADEOUT);
+	std::string musicEvent = "event:/Music/Levels/Lvl" + std::to_string(GameStateLevel::getInstance().getCurrentLevel());
+	se->stopEvent(musicEvent.c_str(), FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_ALLOWFADEOUT);
 	se->playEvent("event:/Music/Sockshop");
 	mIsAlive = false;
 }

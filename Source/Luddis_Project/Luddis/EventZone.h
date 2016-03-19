@@ -4,6 +4,7 @@
 #include "CollidableEntity.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 
+class EntityManager;
 class GameStateLevel;
 
 class EventZone : public CollidableEntity {
@@ -14,7 +15,7 @@ public:
 		SPIDER_2_END,
 		SPIDER_3_END
 	};
-	EventZone(EventType eventType, sf::Vector2f pos, sf::Shape* shape, float rotation, int level);
+	EventZone(EventType eventType, sf::Vector2f pos, sf::Shape* shape, float rotation, int level, EntityManager* entityManager);
 	~EventZone();
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -34,6 +35,7 @@ private:
 	sf::Shape* mHitbox;
 	sf::FloatRect mBigHitbox;
 	sf::RenderWindow* mWindow;
+	EntityManager* mEntityManager;
 	GameStateLevel* mGameStateLevel;
 	EventType mEventType;
 	Type mCollisionType;

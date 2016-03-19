@@ -60,7 +60,6 @@ void HUD::initialize(HUDType hudType) {
 		mGUIManager->addInterfaceElement(mSoundButton);
 
 		mMuteGraphic.setTexture(ResourceManager::getInstance().getTexture(TEXTURE_MUTEBUTTON));
-		mMuteGraphic.setScale(2.0f, 2.0f);
 		mMuteGraphic.setOrigin(mMuteGraphic.getLocalBounds().width / 2, mMuteGraphic.getLocalBounds().height / 2);
 		mMuteGraphic.setPosition(position);
 		break;

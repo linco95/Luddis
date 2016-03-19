@@ -198,7 +198,7 @@ void LuddisStatePlayable::attack() {
 		mPlayerPtr->getAnimation()->overrideAnimation(SHOT_ANIMATION[mPlayerPtr->getColorScheme()]);
 	}
 	else {
-		mPlayerPtr->getAnimation()->overrideAnimation(SHOT_ANIMATION);
+		mPlayerPtr->getAnimation()->overrideAnimation(SHOT_ANIMATION[mPlayerPtr->getColorScheme()]);
 	}
 
 	// TODO Pull out constant variable

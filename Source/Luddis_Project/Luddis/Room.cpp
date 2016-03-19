@@ -119,18 +119,22 @@ void Room::createButtons(int room) {
 		break;
 
 	case 2:
+		//Bed - Shop
 		position.x = ViewUtility::getViewSize().getSize().x*0.223f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.619f;
 		addButton(SOCKSHOP_TEXTURE, "", "Room1", position, Button::RECTANGLE);
 
+		//Radiator - Level 1
 		position.x = ViewUtility::getViewSize().getSize().x*0.510f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.646f;
 		addButton(LEVEL1_TEXTURE, "", "Level01", position, Button::RECTANGLE);
 
-		position.x = ViewUtility::getViewSize().getSize().x*0.945f;
+		//Door - Level 3
+		position.x = ViewUtility::getViewSize().getSize().x*0.946f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.405f;
 		addButton(DOOR_TEXTURE, "", "Level03", position, Button::RECTANGLE);
 
+		//Desktop - Level 2
 		position.x = ViewUtility::getViewSize().getSize().x*0.752f;
 		position.y = ViewUtility::getViewSize().getSize().y*0.585f;
 		addButton(LEVEL2_TEXTURE, "", "Level02", position, Button::RECTANGLE);

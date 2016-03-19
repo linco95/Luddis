@@ -17,7 +17,7 @@ static const char* TEXTURE_LOGO = "Resources/Images/Luddis_logo.png";
 static const char* TEXTURE_BACKROUND = "Resources/Images/Startmenu_background.jpg";
 static const char* ACCESSORIES_LIST = "Resources/Configs/Inventory/Accessories.json";
 
-static const char* ARIAL_FONT = "Resources/Fonts/arial.ttf";
+static const char* DEFAULT_FONT = "Resources/Fonts/phitradesign Handwritten-Thin.ttf";
 
 GameStateStart::GameStateStart() :
 	mGUIM(),
@@ -28,7 +28,7 @@ GameStateStart::GameStateStart() :
 	mMannequin(new Mannequin) {
 
 
-	mLogo.setScale(0.5f, 0.5f);
+	mLogo.setScale(1.0f, 1.0f);
 	mLogo.setOrigin(mLogo.getLocalBounds().width / 2, mLogo.getLocalBounds().height / 2);
 	mLogo.setPosition((float)ViewUtility::VIEW_WIDTH*0.5f, (float)ViewUtility::VIEW_HEIGHT*0.3f);
 	mMannequin->setActive(false);
@@ -193,7 +193,7 @@ void GameStateStart::setupFiles(std::string filename) {
 
 		mFiles[itr].text.setString(mFiles[itr].name);
 		mFiles[itr].text.setCharacterSize(36);
-		mFiles[itr].text.setFont(ResourceManager::getInstance().getFont(ARIAL_FONT));
+		mFiles[itr].text.setFont(ResourceManager::getInstance().getFont(DEFAULT_FONT));
 		mFiles[itr].text.setOrigin(0, mFiles[itr].text.getGlobalBounds().height / 2.0f);
 		mFiles[itr].text.setPosition(300.0f, 200.0f + (float)itr*225.0f);
 		mFiles[itr].text.setString("");

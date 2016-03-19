@@ -7,7 +7,7 @@
 #include "SoundEngine.h"
 #include <vector>
 
-static const std::string DEFAULT_FONTTYPE = "Resources/Fonts/Arial.ttf";
+static const std::string DEFAULT_FONTTYPE = "Resources/Fonts/phitradesign Handwritten-Thin.ttf";
 //GLOBAL_CLICK prevents more than one button from activating per loop.
 static bool GLOBAL_CLICK = false;
 

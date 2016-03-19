@@ -13,8 +13,8 @@ static const char* SOCK_SOUND_SURFACE = "event:/Gameplay/Shop/Sock Move Up";
 static const float MAX_DIVE_TIMER = 0.65f;
 
 static sf::Vector2f positions[]{
-sf::Vector2f(350, 550),
-sf::Vector2f(1360, 500)
+	sf::Vector2f(350, 550),
+	sf::Vector2f(1360, 500)
 };
 
 SockNPC::SockNPC() :
@@ -66,12 +66,6 @@ void SockNPC::tick(const sf::Time & deltaTime) {
 		mDiveTimer = std::max(mDiveTimer, 0.0f);
 		if (mDiveTimer <= 0.0f)
 			mDive = false;
-	}
-
-	tempTimer -= deltaTime.asSeconds();
-	if (tempTimer <= 0.0) {
-		dive();
-		tempTimer += 5.0f;
 	}
 }
 

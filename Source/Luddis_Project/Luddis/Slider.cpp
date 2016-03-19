@@ -7,7 +7,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 
-static const char* FONT = "Resources/Fonts/arial.ttf";
+static const char* FONT = "Resources/Fonts/phitradesign Handwritten-Thin.ttf";
 
 static sf::Vector2f direction = { 1.0f, 0.0f };
 

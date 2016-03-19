@@ -17,7 +17,7 @@ static const int MAXROOMS = 2;
 static const float FADEMAXTIMER = 1.0f;
 
 static bool PLAY_AMBIENCE = true;
-static const char* SOUND_AMBIENCE[MAXROOMS] = {"event:/Gameplay/Ambience/Shop","event:/Gameplay/Ambience/Room"};
+static const char* SOUND_AMBIENCE[MAXROOMS] = { "event:/Gameplay/Ambience/Shop","event:/Gameplay/Ambience/Room" };
 
 static const std::string BACKGROUND_TEXTURE_FILENAME = "Resources/Images/Rooms/Room";
 
@@ -80,7 +80,7 @@ void GameStateMap::initialize(sf::RenderWindow* window) {
 
 void GameStateMap::changeRoom(int room) {
 	PLAY_AMBIENCE = true;
-	SoundEngine::getInstance().stopEvent(SOUND_AMBIENCE[mCurrentRoom-1], FMOD_STUDIO_STOP_ALLOWFADEOUT);
+	SoundEngine::getInstance().stopEvent(SOUND_AMBIENCE[mCurrentRoom - 1], FMOD_STUDIO_STOP_ALLOWFADEOUT);
 	if (!mOccupied) {
 		mRooms.at(room - 1)->setActive(true);
 		mRooms.at(mCurrentRoom - 1)->setActive(false);
@@ -97,10 +97,14 @@ void GameStateMap::changeRoom(int room) {
 	}
 }
 
+void GameStateMap::setCurrentDialogueID(int ID){
+	mCurrentDialogueID = ID;
+}
+
 void GameStateMap::update(sf::Clock& clock) {
 	if (PLAY_AMBIENCE) {
 		PLAY_AMBIENCE = false;
-		SoundEngine::getInstance().playEvent(SOUND_AMBIENCE[mCurrentRoom-1]);
+		SoundEngine::getInstance().playEvent(SOUND_AMBIENCE[mCurrentRoom - 1]);
 	}
 
 	mWindow->setView(ViewUtility::getViewSize());

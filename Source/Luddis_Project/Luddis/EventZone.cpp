@@ -1,13 +1,15 @@
 #include "EventZone.h"
+#include "Spider.h"
 #include "GameStateLevel.h"
 #include "Inventory.h"
 
 static const std::string SPIDER_DIALOGUE = "Resources/Configs/Dialogue/SpiderDialogue";
 
-EventZone::EventZone(EventType eventType, sf::Vector2f pos, sf::Shape* shape, float rotation, int level) :
+EventZone::EventZone(EventType eventType, sf::Vector2f pos, sf::Shape* shape, float rotation, int level, EntityManager* entityManager) :
 mIsActive(true),
 mIsAlive(true),
 mEventType(eventType),
+mEntityManager(entityManager),
 mLevel(level),
 mHitbox(shape),
 mGameStateLevel(&GameStateLevel::getInstance()){
@@ -70,11 +72,15 @@ void EventZone::collide(CollidableEntity* collidable, const sf::Vector2f& moveAw
 	if (collidable->getCollisionCategory() == PLAYER_OBJECT){
 		mIsAlive = false;
 		std::string filename = SPIDER_DIALOGUE;
+		Spider* spider;
 		switch (mEventType)
 		{
 		case SPIDER:
 			filename += std::to_string(mLevel) + ".json";
 			mGameStateLevel->createDialogue(filename);
+			spider = new Spider(mWindow, sf::Vector2f(getPosition().x, 0.0f));
+			//mResettableGUI.addInterfaceElement(mSpider);
+
 			break;
 
 		case SPIDER_1_END:

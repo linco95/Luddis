@@ -64,7 +64,7 @@ void Dialogue::initialize(std::string dialogueFile){
 	assert(configDoc.IsObject());
 
 	sf::Vector2f offset(0, -RECT_HEIGHT + INDENT*3);
-	sf::Vector2f portraitPos(ViewUtility::VIEW_WIDTH/20.0f, offset.y+getPosition().y);
+	sf::Vector2f portraitPos(ViewUtility::VIEW_WIDTH*0.25, offset.y+getPosition().y);
 
 	//A character portrait is optional.
 	if (configDoc.HasMember("Left_character_filename")){
@@ -82,7 +82,7 @@ void Dialogue::initialize(std::string dialogueFile){
 
 
 		sf::Vector2f rightPortraitPos = portraitPos;
-		rightPortraitPos.x = ViewUtility::VIEW_WIDTH*0.65f;
+		rightPortraitPos.x = ViewUtility::VIEW_WIDTH*0.75f;
 		mCharacterDisplayRight = new CharacterPortrait(textureFilename, rightPortraitPos, true);
 		mGUIManager->addInterfaceElement(mCharacterDisplayRight);
 	}

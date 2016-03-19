@@ -35,7 +35,6 @@ public:
 
 	//Function to create a dialogue on the level.
 	void createDialogue(std::string dialogueFile);
-	void fuckOffSpider();
 	bool getInDialogue() const;
 	void setInDialogue(bool inDialogue);
 	//Used to setup a new level with its initial
@@ -46,7 +45,9 @@ public:
 	void resetInventory();
 
 	void setupMission(const std::string& jsonFilename);
+	void setPlayable(bool playable);
 	bool playable() const;
+	int getCurrentLevel() const;
 
 private:
 	GameStateLevel();

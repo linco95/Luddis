@@ -139,9 +139,6 @@
     <ClCompile Include="SockNPC.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
-    <ClCompile Include="Spider.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
     <ClCompile Include="TextBox.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
@@ -205,6 +202,9 @@
     </ClCompile>
     <ClCompile Include="BackgroundEffect.cpp">
       <Filter>Entities\Luddis</Filter>
+    </ClCompile>
+    <ClCompile Include="Spider.cpp">
+      <Filter>Entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -300,9 +300,6 @@
     </ClInclude>
     <ClInclude Include="MouseCursor.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Spider.h">
-      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="Luddis.h">
       <Filter>Entities\Luddis</Filter>
@@ -422,6 +419,9 @@
       <Filter>Managers/Engine</Filter>
     </ClInclude>
     <ClInclude Include="BossFinalState1.h" />
+    <ClInclude Include="Spider.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

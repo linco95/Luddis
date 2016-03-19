@@ -46,7 +46,7 @@ void GUIManager::clearInterfaceElements(){
 }
 
 void GUIManager::renderElements(sf::RenderWindow& window){
-	static Renderer* renderer = &Renderer::getInstance();
+	//static Renderer* renderer = &Renderer::getInstance();
 	// sort the entities renderlayer
 	std::map<InterfaceElement::Strata, InterfaceElementVector> renderMap;
 	for (auto e : mElements) {

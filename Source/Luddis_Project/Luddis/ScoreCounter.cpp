@@ -2,7 +2,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "ResourceManager.h"
 
-static const std::string FONT_PATH = "Resources/Fonts/arial.ttf";
+static const std::string FONT_PATH = "Resources/Fonts/phitradesign Handwritten-Bold.ttf";
 
 
 ScoreCounter::ScoreCounter(sf::RenderWindow* aWindow, std::string filename, sf::Vector2f screenPos, ScoreType type) :

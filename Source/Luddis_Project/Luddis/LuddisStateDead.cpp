@@ -10,8 +10,8 @@ static const std::string ANIMATION_ALMOSTDEAD = "Resources/Images/Spritesheets/l
 
 LuddisStateDead::LuddisStateDead(Luddis* playerPtr):
 mPlayerPtr(playerPtr){
-	mPlayerPtr->getAnimation()->setDefaultAnimation(ANIMATION_ALMOSTDEAD);
 	GameManager::getInstance().setGameState(&GameStatePaused::getInstance());
+	GameStateLevel::getInstance().setPlayable(false);
 	GameStatePaused::getInstance().createMenu(Menu::MenuType::DEATHMENU, &GameStateLevel::getInstance());
 }
 

@@ -25,12 +25,13 @@ public:
 
 	void initialize(sf::RenderWindow* window);
 	void changeRoom(int room);
+	void setCurrentDialogueID(int ID);
 
 	void update(sf::Clock& clock) override;
 	void render() override;
 	void onEvent(const sf::Event &aEvent) override;
 	void handleEvents() override;
-	void handleClicks(std::string command)override;
+	void handleClicks(std::string command) override;
 
 private:
 	GameStateMap();
