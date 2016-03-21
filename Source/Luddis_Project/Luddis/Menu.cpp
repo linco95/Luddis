@@ -71,7 +71,7 @@ void Menu::internalClear() {
 
 void Menu::initialize(GameState* gameState) {
 	mGameState = gameState;
-	sf::Vector2f vector2 = mWindow->getView().getCenter();
+	sf::Vector2f vector2 = ViewUtility::getViewSize().getCenter();
 	setPosition(vector2);
 	initializeButtons();
 }
