@@ -10,6 +10,8 @@ public:
 	GUIManager();
 	~GUIManager();
 
+	GUIManager& operator+(const GUIManager& guiM);
+
 	void addInterfaceElement(InterfaceElement* ie);
 	void removeObsoleteElements();
 	void renderElements(sf::RenderWindow& window);

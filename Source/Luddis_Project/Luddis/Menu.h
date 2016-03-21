@@ -3,6 +3,7 @@
 
 #include "InterfaceElement.h"
 #include "Button.h"
+#include "Slider.h"
 #include "GameState.h"
 #include "EventObserver.h"
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -12,15 +13,19 @@ class EventManager;
 class GUIManager;
 class GameStateLevel;
 
-class Menu: public InterfaceElement{
+class Menu: public InterfaceElement, public EventObserver{
 public:
 	enum MenuType{
 		MAINMENU,
 		PAUSEMENU,
 		ROOMMENU,
-		DEATHMENU
+		DEATHMENU,
+		PLAYMENU,
+		SETTINGSMENU,
+		SAVEFILESMENU,
+		CONFIRMMENU
 	};
-	Menu(sf::RenderWindow* window, EventManager* eventManager, GUIManager* gUIManager, MenuType menuType);
+	Menu(sf::RenderWindow* window, EventManager* eventManager, GUIManager* gUIManager, MenuType menuType, Menu* previousMenu = nullptr);
 	virtual ~Menu();
 
 	void initialize(GameState* gameState);
@@ -32,17 +37,21 @@ public:
 	bool isAlive() const override;
 	bool isActive() const  override;
 	void setActive(const bool& active) override;
-	void onClick(std::string) override;
+	void onClick(std::string buttonFunc) override;
+	virtual void onEvent(const sf::Event & aEvent) override;
 	MenuType getMenuType() const;
 	void kill();
 
 private:
 	void internalClear();
 	void addButton(std::string buttonFile, std::string buttonText, std::string buttonFunc, sf::Vector2f pos, Button::ButtonType buttonType);
+	void addSlider(std::string sliderFile, std::string gaugeFile, std::string attribute, float percent, std::string buttonFunc, sf::Vector2f pos);
 
 	void buttonFuncNewGame();
+	void buttonFuncPlay();
 	void buttonFuncLoadGame();
-	void buttonFuncContinue();
+	void buttonFuncEraseSave();
+	void buttonFuncPrevious();
 	void buttonFuncExitLevel();
 	void buttonFuncSettings();
 	void buttonFuncQuitGame();
@@ -51,14 +60,18 @@ private:
 	sf::RectangleShape* mBackground;
 	typedef std::vector<Button*> ButtonVector;
 	ButtonVector mButtons;
+	typedef std::vector<Slider*> SliderVector;
+	SliderVector mSliders;
 	EventManager* mEventManager;
 	GUIManager* mGUIManager;
 	GameState* mGameState;
 	sf::RenderWindow* mWindow;
 	MenuType mMenuType;
+	Menu* mPreviousMenu;
 
 	bool mIsAlive;
 	bool mIsActive;
+
 };
 
 #endif // !_INCLUDED_MENU_

@@ -16,6 +16,7 @@
 #include <vector>
 #include "ScoreCounter.h"
 #include "ScoreGauge.h"
+#include "GameStateStart.h"
 #include "GameStateLevel.h"
 #include "GameStatePaused.h"
 #include "GameStateMap.h"
@@ -29,10 +30,9 @@ static const std::string APPNAME = "Luddis";
 static const std::string ICONPATH = "resources/images/luddisicon.png";
 static const float DESIRED_ASPECTRATIO = (float)ViewUtility::VIEW_WIDTH / (float)ViewUtility::VIEW_HEIGHT;
 static const Color BGCOLOR = Color::Black;
-static const std::string TEXTURE_CHIPSCOUNTER = "Resources/Images/GUI/HUD_Chips_Icon.png";
-static const std::string TEXTURE_LUDDCOUNTER = "Resources/Images/GUI/HUD_Ludd_Icon.png";
-static const std::string TEST_LEVEL = "Resources/Configs/Levels/Level01Entities.json";
 static const char* MOUSE_IMAGE = "Resources/Images/LuddisCursor.png";
+
+static const char* SAVEFILES = "Resources/Configs/Savefiles/Saves.json";
 
 static const char* MASTERBANK = "Resources/AudioBanks/Build/Desktop/Master Bank.bank";
 static const char* MASTER_BANK_STRINGS = "Resources/AudioBanks/Build/Desktop/Master Bank.strings.bank";
@@ -62,14 +62,6 @@ struct GameManagerImp : public EventObserver {
 
 	// Temporary function (might keep luddis init here). Most of this should be handled in the levelmanager/level class instead
 	void initializeEntities(){
-
-
-		mChipsCounter = new ScoreCounter(&mMainWindow, TEXTURE_CHIPSCOUNTER, sf::Vector2f(ViewUtility::VIEW_WIDTH*0.7f, ViewUtility::VIEW_HEIGHT-60), ScoreCounter::ScoreType::CHIPS);
-		mGUIManager.addInterfaceElement(mChipsCounter);
-
-		mLuddCounter = new ScoreCounter(&mMainWindow, TEXTURE_LUDDCOUNTER, sf::Vector2f(ViewUtility::VIEW_WIDTH * 0.3f, ViewUtility::VIEW_HEIGHT - 60), ScoreCounter::ScoreType::DUST);
-		mGUIManager.addInterfaceElement(mLuddCounter);		
-
 		// Initialize the custom mouse pointer
 		mCursor.initialize(MOUSE_IMAGE, mMainWindow);
 		//mEntityManager.addEntity(new MouseCursor(MOUSE_IMAGE, mMainWindow));
@@ -80,7 +72,7 @@ struct GameManagerImp : public EventObserver {
 		srand((unsigned int)time(NULL));
 		initializeWindow();
 		initializeEntities();
-		
+
 	}
 	// http://acamara.es/blog/2012/02/keep-screen-aspect-ratio-with-different-resolutions-using-libgdx/
 	void initializeWindow(){
@@ -146,7 +138,7 @@ struct GameManagerImp : public EventObserver {
 	void gameLoop(){
 		// To avoid multiple functioncalls every iteration of gameloop
 		CollisionManager* cm = &CollisionManager::getInstance();
-		
+
 		SoundEngine* se = &SoundEngine::getInstance();
 
 		//The string bank contains all paths for the events etc.
@@ -160,25 +152,43 @@ struct GameManagerImp : public EventObserver {
 		se->createEvent("event:/Gameplay/Luddis/Interaction/Luddis_Crumb", SoundEngine::SOUND);
 		se->createEvent("event:/Gameplay/Luddis/Interaction/Luddis_Hit", SoundEngine::SOUND);
 		se->createEvent("event:/Gameplay/Luddis/Interaction/Luddis_Shot", SoundEngine::SOUND);
-		se->createEvent("event:/Menu/Button/Button_Change", SoundEngine::SOUND);
-		se->createEvent("event:/Menu/Button/Button_Click", SoundEngine::SOUND);
-		se->createEvent("event:/Menu/Button/Button_Fail", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Level/Wall_Hit", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Luddis/Skills/Spiderweb", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Luddis/Skills/Static", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Obstacles/Electricity", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Obstacles/Steam", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Shop/Buy", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Shop/Sock Move Down", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Shop/Sock Move Up", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Menu/Start_Game", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Menu/Button/Button_Change", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Menu/Button/Button_Click", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Menu/Button/Button_Fail", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Ambience/Fan", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Ambience/Room", SoundEngine::SOUND);
+		se->createEvent("event:/Gameplay/Ambience/Shop", SoundEngine::SOUND);
+	
 		se->createEvent("event:/Music/Levels/Lvl2", SoundEngine::MUSIC);
 		se->createEvent("event:/Music/Sockshop", SoundEngine::MUSIC);
-		
-		
+		se->createEvent("event:/Music/Meny", SoundEngine::MUSIC);
+
+		se->createEvent("snapshot:/Music/Pausemenu", SoundEngine::MUSIC);
+		se->createEvent("snapshot:/Music/Dialogue", SoundEngine::MUSIC);
+
+		mGameStateStart = &GameStateStart::getInstance();
 		mGameStatePaused = &GameStatePaused::getInstance();
 		mGameStateLevel = &GameStateLevel::getInstance();
 		mGameStateMap = &GameStateMap::getInstance();
 		mGameStatePaused->initialize(&mMainWindow, &mEntityManager, &mGUIManager);
 		mGameStateLevel->initialize(&mMainWindow, &mEntityManager, &mGUIManager);
 		mGameStateMap->initialize(&mMainWindow);
-		mGameStateLevel->setupLevel(TEST_LEVEL);
-		mCurrentGameState = mGameStateLevel;
+		mGameStateStart->initialize(&mMainWindow);
+		mGameStateStart->setupFiles(SAVEFILES);
+		//mGameStateLevel->setupLevel(TEST_LEVEL);
+		mCurrentGameState = mGameStateStart;
 
 		Renderer* renderer = &Renderer::getInstance();
 		View mapView;
-		se->setMainVolume(10);
 		Clock gameClock;
 		while (mMainWindow.isOpen()){
 			//Update soundengine
@@ -192,34 +202,31 @@ struct GameManagerImp : public EventObserver {
 
 			// Render according to the game's state
 			mMainWindow.clear();
+
+
 			mCurrentGameState->render();
 
 			// Render the mouse on top of everything, always
 			mCursor.tick();
-			renderer->addDrawableToQueue(&mCursor, Renderer::MOUSE);
+			mMainWindow.draw(mCursor);
 
 			// Swap the buffers
-			renderer->render(mMainWindow);
-			//mMainWindow.display();
+			mMainWindow.display();
 		}
 	}
 	GUIManager mGUIManager;
 	EntityManager mEntityManager;
 	EventManager mEventManager;
 
+	GameStateStart* mGameStateStart;
 	GameStateLevel* mGameStateLevel;
 	GameStatePaused* mGameStatePaused;
 	GameStateMap* mGameStateMap;
 
 	GameState* mCurrentGameState;
 	RenderWindow mMainWindow;
-	
-	MouseCursor mCursor;
-	// Needs to be moved to corresponding level later.
 
-	ScoreCounter *mChipsCounter;
-	ScoreCounter *mLuddCounter;
-	ScoreGauge *mLuddGauge;
+	MouseCursor mCursor;
 };
 
 GameManager::GameManager() :

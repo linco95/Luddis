@@ -10,18 +10,20 @@
 #include "Inventory.h"
 
 static const std::string ANIMATION1_SWIM = "resources/images/spritesheets/Silverfish_Swim";
-static const std::string ANIMATION1_HIT = "resources/images/spritesheets/Silverfish_death";
+static const std::string ANIMATION1_DEATH = "resources/images/spritesheets/Silverfish_death";
 static const std::string ANIMATION1_DEAD = "resources/images/spritesheets/Silverfish_dead";
+static const std::string ANIMATION1_HIT = "resources/images/spritesheets/Silverfish_hit";
 static const std::string ANIMATION2_SWIM = "resources/images/spritesheets/Goldfish_Swim";
-static const std::string ANIMATION2_HIT = "resources/images/spritesheets/Goldfish_death";
+static const std::string ANIMATION2_DEATH = "resources/images/spritesheets/Goldfish_death";
 static const std::string ANIMATION2_DEAD = "resources/images/spritesheets/Goldfish_dead";
+static const std::string ANIMATION2_HIT = "resources/images/spritesheets/Goldfish_hit";
 
-static float SPEED = 80;
+static const float SPEED = 80;
 static const Renderer::RenderLayer LAYER = Renderer::PLAYER;
 static const int DAMAGE = 10;
-static const int LIFE = 15;
+static const int LIFE = 10;
 static const sf::Vector2f FRONTVECTOR(-1, 0);
-static const float INVULNERABLE_TIMER = 1.0f;
+static const float INVULNERABLE_TIMER = 1.5f;
 
 static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(55, 17));
 
@@ -111,7 +113,7 @@ void Silverfish::updateMovement(const sf::Time& deltaTime){
 	float speed = SPEED;
 	if (mSwimAway && mAnimation.getCurrAnimation().hasLooped()) {
 		if (mDirection != mNextDir) mDirection = mNextDir;
-		speed = 250;
+		speed = SPEED * 4;
 	}
 	else if (mSwimAway && !mAnimation.getCurrAnimation().hasLooped()) {
 		speed = 0;
@@ -154,14 +156,16 @@ void Silverfish::collide(CollidableEntity *collidable, const sf::Vector2f& moveA
 	if (collidable->getCollisionCategory() == PLAYER_PROJECTILE){
 		if (mSwimAway== false){
 		mLife -= 5;
+		SoundEngine* se = &SoundEngine::getInstance();
+		se->playEvent("event:/Gameplay/Luddis/Interaction/Luddis_Hit");
 		if (mLife <= 0){
 			if (mType == GOLD) {
-				mAnimation.replaceAnimation(ANIMATION2_HIT);
+				mAnimation.replaceAnimation(ANIMATION2_DEATH);
 				mAnimation.setDefaultAnimation(ANIMATION2_DEAD);
 			}
 
 			else if (mType == SILVER){
-				mAnimation.replaceAnimation(ANIMATION1_HIT);
+				mAnimation.replaceAnimation(ANIMATION1_DEATH);
 				mAnimation.setDefaultAnimation(ANIMATION1_DEAD);
 			}
 			mSwimAway = true;
@@ -169,11 +173,20 @@ void Silverfish::collide(CollidableEntity *collidable, const sf::Vector2f& moveA
 			mBefriend = true;
 			mTimeStunned = 0;
 			}
+		else if (mLife > 0) {
+			if (mType == GOLD) mAnimation.replaceAnimation(ANIMATION2_HIT);
+			else if (mType == SILVER) mAnimation.replaceAnimation(ANIMATION1_HIT);
+			}
 		}
 	}
 	if (collidable->getCollisionCategory() == PLAYER_OBJECT) {
 		if (mInvulnerable <= 0) {
+			if (mType == SILVER) {
 			Inventory::getInstance().addDust(-1);
+			}
+			else if (mType == GOLD) {
+				Inventory::getInstance().addDust(-15);
+			}
 			SoundEngine* se = &SoundEngine::getInstance();
 			se->playEvent("event:/Gameplay/Luddis/Interaction/Luddis_Hit");
 			mInvulnerable += INVULNERABLE_TIMER;

@@ -13,8 +13,9 @@
 class Mannequin;
 class SockNPC;
 class GameStatePaused;
+class HUD;
 
-class GameStateMap: public GameState{
+class GameStateMap : public GameState {
 public:
 	GameStateMap(GameStateMap&) = delete;
 	GameStateMap& operator=(GameStateMap&) = delete;
@@ -24,12 +25,13 @@ public:
 
 	void initialize(sf::RenderWindow* window);
 	void changeRoom(int room);
+	void setCurrentDialogueID(int ID);
 
 	void update(sf::Clock& clock) override;
 	void render() override;
 	void onEvent(const sf::Event &aEvent) override;
 	void handleEvents() override;
-	void handleClicks(std::string command)override;
+	void handleClicks(std::string command) override;
 
 private:
 	GameStateMap();
@@ -40,6 +42,7 @@ private:
 	bool mOccupied;
 	int mCurrentDialogueID;
 	GameStatePaused* mGameStatePaused;
+	HUD* mHUD;
 	SockNPC* mSock;
 	Mannequin* mMannequin;
 	Menu* mMenu;

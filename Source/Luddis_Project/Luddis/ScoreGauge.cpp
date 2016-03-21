@@ -43,7 +43,7 @@ void ScoreGauge::setActive(const bool& active){
 }
 
 ScoreGauge::Strata ScoreGauge::getRenderLayer() const{
-	return FOURTH;
+	return THIRD;
 }
 
 void ScoreGauge::kill() {

@@ -12,6 +12,7 @@ class Inventory;
 class GameState;
 class EventManager;
 class GUIManager;
+class Mannequin;
 
 namespace sf {
 	class RenderWindow;
@@ -19,7 +20,7 @@ namespace sf {
 
 class Shop : public InterfaceElement{
 public:
-	Shop(sf::RenderWindow* window, GameState* gameState, EventManager* eventManager, GUIManager* guiManager);
+	Shop(sf::RenderWindow* window, GameState* gameState, EventManager* eventManager, GUIManager* guiManager, Mannequin* mannequin);
 	~Shop();
 
 	void draw(sf::RenderTarget & target, sf::RenderStates states) const override;
@@ -43,6 +44,7 @@ private:
 	GUIManager* mGUIManager;
 	GameState* mGameState;
 	Inventory* mInventory;
+	Mannequin* mMannequin;
 	sf::Sprite mBackground;
 	sf::Text mChips;
 	int mActivePage;
@@ -55,6 +57,7 @@ private:
 	ButtonVector mItems[MAX_PAGES];
 	typedef std::vector<TextBoxDecorator*> TextBoxVector;
 	TextBoxVector mDescriptions[MAX_PAGES];
+	std::string mAccessoryImages[MAX_PAGES*3];
 };
 
 #endif // !_INCLUDED_SHOP_

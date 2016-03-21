@@ -15,7 +15,7 @@ class GameStateLevel;
 
 class Luddis : public CollidableEntity{
 public:
-	Luddis(std::string textureFilename, sf::RenderWindow* windowm, EntityManager* entityManager);
+	Luddis(sf::RenderWindow* windowm, EntityManager* entityManager);
 	~Luddis();
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -29,13 +29,19 @@ public:
 	AnimationQueue* getAnimation();
 	void setPlayerState(LuddisState* luddisState);
 	void stun(const sf::Time& deltatime) override;
-private:
+	void setAccessoryHead(std::string filename);
+	void setAccessoryTail(std::string filename);
+	void setColorScheme(int index);
+	int getColorScheme() const;
 
+private:
 	Category getCollisionCategory() override;
 	Type getCollisionType() override;
 	void collide(CollidableEntity *collidable, const sf::Vector2f& moveAway) override;
 
 	AnimationQueue mAnimation;
+	sf::Sprite mAccessoryHead, mAccessoryTail;
+	int mColorScheme;
 	EntityManager* mEntityManager;
 	sf::RenderWindow* mWindow;
 	GameStateLevel* mGameStateLevel;

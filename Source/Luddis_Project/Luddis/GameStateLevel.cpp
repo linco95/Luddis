@@ -5,25 +5,23 @@
 #include "GameManager.h"
 #include "ResourceManager.h"
 #include "PowerupDisplay.h"
+#include "SoundEngine.h"
 #include "Dialogue.h"
 #include "Level.h"
 #include "Silverfish.h"
 #include "Spider.h"
 #include "EventZone.h"
 #include "ScoreGauge.h"
+#include "ScoreCounter.h"
 #include "Inventory.h"
+#include "HUD.h"
 #include "Luddis.h"
 #include "LuddisStateCinematic.h"
 #include "CinematicPause.h"
 #include "CinematicMoveToPoint.h"
 
-static const std::string LUDDIS_TEXTURE = "Resources/Images/Grafik_Luddis120x80_s1d3v1.png";
 static const std::string POWER_DISPLAY = "Resources/Images/GUI/PowerButton.png";
-static const std::string BUTTON_TEXTURE = "Resources/Images/GUI/Button.png";
 static const std::string COMMON_RESOURCES = "Resources/Configs/Levels/CommonResources.json";
-
-static const char* TEXTURE_LUDDGAUGE_FRAME = "Resources/Images/GUI/LuddGaugeFrame.png";
-static const char* TEXTURE_LUDDGAUGE_BAR = "Resources/Images/GUI/LuddGaugeBar.png";
 
 static const char* LOADINGBAR_FRAME = "Resources/Images/GUI/Loadingbar_Frame.png";
 static const char* LOADINGBAR_BAR = "Resources/Images/GUI/Loadingbar_Bar.png";
@@ -34,15 +32,16 @@ static const float DIALOGUEMAXFADE = 0.8f;
 static const float CINEMATICBOXMAXHEIGHT = 225;
 
 GameStateLevel::GameStateLevel() :
-mEventM(),
-mResettableGUI(),
-mCM(&CollisionManager::getInstance()),
-mGUIView(ViewUtility::getViewSize()),
-mInDialogue(false),
-mDialogueFadeTimer(0.0f),
-mFirstTime(true),
-mCurrentLevel(1),
-mResetView(false){
+	mEventM(),
+	mResettableGUI(),
+	mCM(&CollisionManager::getInstance()),
+	mGUIView(ViewUtility::getViewSize()),
+	mInDialogue(false),
+	mDialogueFadeTimer(0.0f),
+	mFirstTime(true),
+	mCurrentLevel(1),
+	mResetView(false) {
+
 	mEventM.attatch(this, sf::Event::EventType::KeyPressed);
 	readSetupFiles(COMMON_RESOURCES);
 	for (int i = 0; i < 2; i++) {
@@ -54,7 +53,7 @@ mResetView(false){
 	mCinematicBox[1].rotate(180);
 }
 
-GameStateLevel::~GameStateLevel(){
+GameStateLevel::~GameStateLevel() {
 	mResettableGUI.clearInterfaceElements();
 	mGUIM->clearInterfaceElements();
 	mEntityM->emptyVector();
@@ -66,31 +65,25 @@ GameStateLevel& GameStateLevel::getInstance() {
 	return gs;
 }
 
-void GameStateLevel::updateLuddGauge() {
-	int maxDust = Inventory::getInstance().getMaxDust();
-	int currentDust = Inventory::getInstance().getDust();
-	float fillPercent = (float)currentDust / (float)maxDust;
-
-	mLuddGauge->updateGauge(fillPercent);
-}
-
-void GameStateLevel::initialize(sf::RenderWindow* window, EntityManager* entityManager, GUIManager* guiManager){
+void GameStateLevel::initialize(sf::RenderWindow* window, EntityManager* entityManager, GUIManager* guiManager) {
 	mWindow = window;
 	mEntityM = entityManager;
 	mGUIM = guiManager;
-	//TODO: Move to levelSetup(), as theese can change when selecting level.
+
+	mHUD = new HUD(mWindow, mGUIM, &mEventM, this);
+	mHUD->initialize(HUD::HUDType::LEVEL);
+	mGUIM->addInterfaceElement(mHUD);
+
+	//TODO: Move to levelSetup(), as these can change when selecting level.
+	//Or move them to HUD, whatever, fuck it.
 	mPowerupDisplays[0] = new PowerupDisplay(POWER_DISPLAY, sf::Vector2f((float)ViewUtility::VIEW_WIDTH*0.8f, (float)ViewUtility::VIEW_HEIGHT - 60), 15.0f);
-
-	mLuddGauge = new ScoreGauge(mWindow, TEXTURE_LUDDGAUGE_FRAME, TEXTURE_LUDDGAUGE_BAR, sf::Vector2f(ViewUtility::VIEW_WIDTH * 0.45f, ViewUtility::VIEW_HEIGHT - 60));
-	mGUIM->addInterfaceElement(mLuddGauge);
-
 	mGUIM->addInterfaceElement(mPowerupDisplays[0]);
+
 	mGameStatePaused = &GameStatePaused::getInstance();
 }
 
 void GameStateLevel::update(sf::Clock& clock) {
 	//Do game logic
-	updateLuddGauge();
 	if (!mInDialogue) {
 		mEntityM->updateEntities(clock.getElapsedTime());
 		mCM->detectCollisions();
@@ -101,12 +94,12 @@ void GameStateLevel::update(sf::Clock& clock) {
 		mResetView = false;
 	}
 	//Change the view when updating GUI elements
-	mMapView = mWindow->getView();
-	mWindow->setView(mGUIView);
+	//mMapView = mWindow->getView();
+	//mWindow->setView(mGUIView);
 	mResettableGUI.updateElements(clock.getElapsedTime());
 	mGUIM->updateElements(clock.getElapsedTime());
 	//Then change it back
-	mWindow->setView(mMapView);
+	//mWindow->setView(mMapView);
 
 	//Look to see if Luddis is dead, before garbage collection
 	if (!mPlayer->isAlive()) {
@@ -132,7 +125,7 @@ void GameStateLevel::update(sf::Clock& clock) {
 		mCinematicBox[1].setSize(size);
 
 	}
-	else if (!mInDialogue && mDialogueFadeTimer>=0) {
+	else if (!mInDialogue && mDialogueFadeTimer >= 0) {
 		mDialogueFadeTimer -= clock.restart().asSeconds();
 		mDialogueFadeTimer = std::max(mDialogueFadeTimer, 0.0f);
 		float percent = mDialogueFadeTimer / DIALOGUEMAXFADE;
@@ -147,9 +140,10 @@ void GameStateLevel::update(sf::Clock& clock) {
 		clock.restart();
 }
 
-void GameStateLevel::render(){
+void GameStateLevel::render() {
 	//Draw objects
 	mEntityM->renderEntities(*mWindow);
+	Renderer::getInstance().render(*mWindow);
 	//Change the view when drawing GUI elements
 	mMapView = mWindow->getView();
 	mWindow->setView(mGUIView);
@@ -157,8 +151,8 @@ void GameStateLevel::render(){
 	mWindow->draw(mCinematicBox[0]);
 	mWindow->draw(mCinematicBox[1]);
 	mResettableGUI.renderElements(*mWindow);
-	if(!mInDialogue)
-	mGUIM->renderElements(*mWindow);
+	if (!mInDialogue)
+		mGUIM->renderElements(*mWindow);
 	//Then change it back
 	mWindow->setView(mMapView);
 #ifdef LUDDIS_DEBUG_DRAW_HITBOXES
@@ -171,26 +165,26 @@ void GameStateLevel::onEvent(const sf::Event &aEvent) {
 		switch (aEvent.type) {
 		case sf::Event::EventType::KeyPressed:
 			if (aEvent.key.code == sf::Keyboard::Escape) {
-				mGameStatePaused->createMenu(Menu::PAUSEMENU, this);
 				mGameStatePaused->setBackgroundParameters(mEntityM, mGUIM, this);
+				SoundEngine::getInstance().playEvent("snapshot:/Music/Pausemenu");
 				GameManager::getInstance().setGameState(mGameStatePaused);
+				mGameStatePaused->createMenu(Menu::PAUSEMENU, this);
 			}
 			break;
 		}
 	}
 }
 
-void GameStateLevel::handleEvents(){
+void GameStateLevel::handleEvents() {
 	sf::Event currEvent;
-	while (mWindow->pollEvent(currEvent)){
+	while (mWindow->pollEvent(currEvent)) {
 		mEventM.notify(currEvent);
 	}
 }
 
-void GameStateLevel::handleClicks(std::string command){
+void GameStateLevel::handleClicks(std::string command) {
 	if (command == "DeleteDialogue") {
 		mInDialogue = false;
-		fuckOffSpider();
 	}
 	else if (command == "Spider1") {
 		std::string jsonFilename = FILENAME + std::to_string(mCurrentLevel) + "Spider1.json";
@@ -206,31 +200,22 @@ void GameStateLevel::handleClicks(std::string command){
 	}
 }
 
-void GameStateLevel::createDialogue(std::string dialogueFilename){
+void GameStateLevel::createDialogue(std::string dialogueFilename) {
 	sf::Vector2f pos(0.0f, (float)ViewUtility::VIEW_HEIGHT);
 	Dialogue* dialogue = new Dialogue(dialogueFilename, mWindow, &mResettableGUI, &mEventM, pos, this);
 	mResettableGUI.addInterfaceElement(dialogue);
-	if (dialogueFilename.find("SpiderDialogue") != std::string::npos){
-		mSpider = new Spider(mWindow, sf::Vector2f((float)ViewUtility::VIEW_WIDTH*0.6f, 0));
-		mResettableGUI.addInterfaceElement(mSpider);
-	}
+	//if (dialogueFilename.find("SpiderDialogue") != std::string::npos) {
+	//}
 	setInDialogue(true);
-}
-
-void GameStateLevel::fuckOffSpider() {
-	if (mSpider != nullptr) {
-		mSpider->turn();
-		mSpider = nullptr;
-	}
 }
 
 //Retarded name, but it returns if there is currently a dialogue
 //playing or not.
-bool GameStateLevel::getInDialogue() const{
+bool GameStateLevel::getInDialogue() const {
 	return mInDialogue;
 }
 
-void GameStateLevel::setInDialogue(bool inDialogue){
+void GameStateLevel::setInDialogue(bool inDialogue) {
 	mInDialogue = inDialogue;
 }
 
@@ -251,7 +236,10 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	mInv.chips = inv->getChips();
 	mInv.dust = inv->getDust();
 	mInv.eggs = inv->getEggs();
-	mPlayer = new Luddis(LUDDIS_TEXTURE, mWindow, mEntityM);
+	mPlayer = new Luddis(mWindow, mEntityM);
+	mPlayer->setAccessoryHead(inv->getAccessoryHead());
+	mPlayer->setAccessoryTail(inv->getAccessorTail());
+	mPlayer->setColorScheme(inv->getColorScheme());
 
 	//CINEMATIC TEST
 	Polynomial poly;
@@ -262,24 +250,25 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	Tween tween2(poly, 3, 0, false);
 	CinematicPause pauseCin(1.2f);
 	CinematicMoveToPoint movePoint(sf::Vector2f(500, 500), mPlayer);
-	LuddisStateCinematic* cinState = new LuddisStateCinematic(100, mPlayer, mWindow, mEntityM, mPowerupDisplays[0]);
+	LuddisStateCinematic* cinState = new LuddisStateCinematic(100, mPlayer, mWindow, mEntityM, mPowerupDisplays[0], mPlayer->getNarrowHitbox());
+	cinState->addCinematicSequence(&movePoint);
 	/*cinState->addCinematicSequence(&tween);
 	cinState->addCinematicSequence(&pauseCin);
 	cinState->addCinematicSequence(&tween2);*/
 	//cinState->addCinematicSequence(&movePoint);
-	cinState->addSpeedShift(50, 1);
-	cinState->addSpeedShift(100, 1);
-	cinState->addSpeedShift(50, 1);
-	cinState->addSpeedShift(100, 1);
-	cinState->addSpeedShift(50, 1);
-	cinState->addSpeedShift(100, 1);
+	//cinState->addSpeedShift(50, 1);
+	//cinState->addSpeedShift(100, 1);
+	//cinState->addSpeedShift(50, 1);
+	//cinState->addSpeedShift(100, 1);
+	//cinState->addSpeedShift(50, 1);
+	//cinState->addSpeedShift(100, 1);
+	mPlayer->setPosition(-300.0f, (float)ViewUtility::VIEW_HEIGHT / 2.0f);
 	mPlayer->setPlayerState(cinState);
-	mPlayer->setPosition(-50.0f, (float)ViewUtility::VIEW_HEIGHT/2.0f);
 	//END CINEMATIC TEST
 
 	mEntityM->addEntity(mPlayer);
 	mCM->addCollidable(mPlayer);
-	mLevel = new Level(mEntityM);
+	mLevel = new Level(mEntityM, mPlayer);
 	mEntityM->addEntity(mLevel);
 	mLevel->initializeLevel(*mWindow, mPlayer, levelFile);
 
@@ -294,18 +283,25 @@ void GameStateLevel::setupLevel(std::string levelFile) {
 	}
 
 	mCurrentLevelFile = levelFile;
-	mCurrentLevel = levelFile.at(33);
+
+	std::string configText = ResourceManager::getInstance().loadJsonFile(levelFile);
+	rapidjson::Document configDoc;
+	configDoc.Parse(configText.c_str());
+	assert(configDoc.IsObject());
+
+	if (configDoc.HasMember("Level"))
+		mCurrentLevel = configDoc["Level"].GetInt();
 	mPlayable = true;
 }
 
-void GameStateLevel::resetLevel(){
-	if (!mCurrentLevelFile.empty()){
+void GameStateLevel::resetLevel() {
+	if (!mCurrentLevelFile.empty()) {
 		resetInventory();
 		setupLevel(mCurrentLevelFile);
 	}
 }
 
-void GameStateLevel::resetInventory(){
+void GameStateLevel::resetInventory() {
 	Inventory* inv = &Inventory::getInstance();
 	inv->setChips(mInv.chips);
 	inv->setDust(mInv.dust);
@@ -322,6 +318,10 @@ void GameStateLevel::setupMission(const std::string& jsonFilename) {
 	//mLevel->readInitMap(mapFilename);
 }
 
+void GameStateLevel::setPlayable(bool playable){
+	mPlayable = playable;
+}
+
 void GameStateLevel::readSetupFiles(const std::string& filename, bool allocate) {
 	ResourceManager* rm = &ResourceManager::getInstance();
 	rapidjson::Document configDoc;
@@ -329,7 +329,7 @@ void GameStateLevel::readSetupFiles(const std::string& filename, bool allocate) 
 	configDoc.Parse(configText.c_str());
 
 	//TODO: Create a pretty loading bar
-	
+
 	//ScoreGauge* loadingbar = new ScoreGauge(mWindow, LOADINGBAR_FRAME, LOADINGBAR_BAR, ViewUtility::getViewSize().getSize()/0.5f, false);
 	//mGUIM->addInterfaceElement(loadingbar);
 
@@ -422,23 +422,14 @@ void GameStateLevel::readSetupFiles(const std::string& filename, bool allocate) 
 				;//rm->clearJsonFile(file);
 		}
 
-		assert(setupFiles.HasMember("PNG_files") && setupFiles["PNG_files"].IsArray());
-		const rapidjson::Value& pngFiles = setupFiles["PNG_files"];
-
-		for (rapidjson::Value::ConstValueIterator itr = pngFiles.Begin(); itr != pngFiles.End(); itr++) {
-			assert(itr->IsObject());
-			assert(itr->HasMember("filename") && (*itr)["filename"].IsString());
-			std::string file = (*itr)["filename"].GetString();
-
-			if (allocate)
-				rm->readMap(file);
-			else
-				;//rm->clearMap(file);
-		}
 	}
 	//loadingbar->kill();
 }
 
 bool GameStateLevel::playable() const {
 	return mPlayable;
+}
+
+int GameStateLevel::getCurrentLevel() const{
+	return mCurrentLevel;
 }

@@ -27,7 +27,7 @@ public:
 
 	void update(sf::Clock& clock) override;
 	void render() override;
-	void onEvent(const sf::Event &aEvent) override;
+	void onEvent(const sf::Event &aEvent);
 	void handleEvents() override;
 	void handleClicks(std::string command)override;
 

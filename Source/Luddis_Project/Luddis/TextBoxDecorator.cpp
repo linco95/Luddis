@@ -35,3 +35,11 @@ bool TextBoxDecorator::isActive() const {
 void TextBoxDecorator::setActive(const bool & active) {
 	mIsActive = active;
 }
+
+void TextBoxDecorator::setOrigin(float x, float y){
+	mTextBox->setOrigin(x, y);
+}
+
+void TextBoxDecorator::setOrigin(const sf::Vector2f & vector){
+	mTextBox->setOrigin(vector);
+}

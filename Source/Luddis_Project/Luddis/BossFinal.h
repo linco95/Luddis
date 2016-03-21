@@ -1,18 +1,17 @@
-#ifndef INCLUDED_BOSSROBOT
-#define INCLUDED_BOSSROBOT
+#ifndef _INCLUDED_BOSSFINAL_
+#define _INCLUDED_BOSSFINAL_
 
-#include "CollidableEntity.h"
-#include "EntityManager.h"
 #include "AnimationQueue.h"
-#include "BossRobotButton.h"
-#include "Luddis.h"
+#include "CollidableEntity.h"
+#include <SFML/Graphics/RenderWindow.hpp>
 
+class EntityManager;
 class GameStateLevel;
 
-class BossRobot : public CollidableEntity {
+class BossFinal : public CollidableEntity {
 public:
-	BossRobot(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget, BossRobotButton* button, Luddis* luddis);
-	~BossRobot();
+	BossFinal(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget, EntityManager* entityManager);
+	virtual ~BossFinal();
 
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -31,36 +30,29 @@ private:
 	void attack();
 
 	AnimationQueue mAnimation;
+	EntityManager* mEntityManager;
 	sf::RenderWindow* mWindow;
 	sf::Transformable* mTarget;
 	GameStateLevel* mGameStateLevel;
-	Luddis* mLuddis;
 	const float mActivate;
 	bool mIsAlive;
+	bool mDead;
 	bool mIsActive;
 	bool mMeet;
+	float mAttackInterval1;
+	float mAttackInterval2;
+	float mAttackTime2;
 	sf::Vector2f mDirection;
-	float mStandardX;
+	int mLife;
 	sf::Shape* mHitbox;
 	float mTimeStunned;
 	float mInvulnerable;
-	BossRobotButton* mButton;
 
-	int mCurrentHealth;
-
-	enum RobotState {
-		IDLE,
-		PREPARING,
-		ATTACKING,
-		RETURNING,
-		DYING,
-		DEAD
-	};
-
-	RobotState mState;
-	float mPhaseOneTimer;
-	float mPhaseTwoTimerOne;
-	float mPhaseTwoTimerTwo;
+	bool mState1;
+	bool mState2;
+	bool mState3;
+	bool mState4;
+	bool mState5;
 };
 
-#endif // !INCLUDED_BOSSROBOT
+#endif // !_INCLUDED_BOSSFINAL

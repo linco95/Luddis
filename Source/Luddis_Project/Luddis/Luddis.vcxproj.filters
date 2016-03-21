@@ -1,95 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Entity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EventObserver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EventSubject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SoundEngine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VectorMath.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CollisionManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Animation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Debug.cpp">
       <Filter>DEBUG</Filter>
-    </ClCompile>
-    <ClCompile Include="CollisionManager.cpp">
-      <Filter>Source Files\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="EntityManager.cpp">
-      <Filter>Source Files\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="EventManager.cpp">
-      <Filter>Source Files\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="GraphicManager.cpp">
-      <Filter>Source Files\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
-      <Filter>Source Files\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="Level.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Obstacle.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Projectile.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Silverfish.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="AnimationQueue.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BossDishCloth.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Inventory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CollidableEntity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TextBox.cpp">
-      <Filter>Source Files\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="PowerupDisplay.cpp">
-      <Filter>Source Files\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="Dialogue.cpp">
-      <Filter>Source Files\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="Button.cpp">
-      <Filter>Source Files\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="InterfaceElement.cpp">
-      <Filter>Source Files\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUIManager.cpp">
-      <Filter>Source Files\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="CharacterPortrait.cpp">
-      <Filter>Source Files\GUI</Filter>
     </ClCompile>
     <ClCompile Include="GameStateLevel.cpp">
       <Filter>Source Files</Filter>
@@ -97,183 +13,254 @@
     <ClCompile Include="GameStatePaused.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Menu.cpp">
-      <Filter>Source Files\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="ScoreCounter.cpp">
-      <Filter>Source Files\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="ScoreGauge.cpp">
-      <Filter>Source Files\GUI</Filter>
-    </ClCompile>
     <ClCompile Include="GameStateMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EventZone.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="TutorialText.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="MouseCursor.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BackgroundEffect.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Room.cpp">
-      <Filter>Source Files\GUI</Filter>
     </ClCompile>
     <ClCompile Include="PowerUps.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SpiderWeb.cpp">
-      <Filter>Source Files\PowerUps</Filter>
+      <Filter>PowerUps</Filter>
     </ClCompile>
-    <ClCompile Include="Spider.cpp">
-      <Filter>Source Files\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="Luddis.cpp">
-      <Filter>Source Files\Entities\Luddis</Filter>
-    </ClCompile>
-    <ClCompile Include="LuddisStatePlayable.cpp">
-      <Filter>Source Files\Entities\Luddis</Filter>
-    </ClCompile>
-    <ClCompile Include="LuddisStateStunned.cpp">
-      <Filter>Source Files\Entities\Luddis</Filter>
-    </ClCompile>
-    <ClCompile Include="LuddisStateCinematic.cpp">
-      <Filter>Source Files\Entities\Luddis</Filter>
-    </ClCompile>
-    <ClCompile Include="LuddisStateDead.cpp">
-      <Filter>Source Files\Entities\Luddis</Filter>
-    </ClCompile>
-    <ClCompile Include="Polynomial.cpp">
-      <Filter>Source Files\Cinematic</Filter>
-    </ClCompile>
-    <ClCompile Include="Tween.cpp">
-      <Filter>Source Files\Cinematic</Filter>
-    </ClCompile>
-    <ClCompile Include="CinematicPause.cpp">
-      <Filter>Source Files\Cinematic</Filter>
-    </ClCompile>
-    <ClCompile Include="SoundCue.cpp">
-      <Filter>Source Files\Cinematic</Filter>
-    </ClCompile>
-    <ClCompile Include="CinematicMoveToPoint.cpp">
-      <Filter>Source Files\Cinematic</Filter>
-    </ClCompile>
-    <ClCompile Include="Collectible.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="SockNPC.cpp">
-      <Filter>Source Files\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="BossRobot.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Filter.cpp" />
-    <ClCompile Include="Shop.cpp" />
-    <ClCompile Include="BossRobotButton.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Mannequin.cpp">
-      <Filter>Source Files\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="Shop.cpp">
-      <Filter>Source Files\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
+    <ClCompile Include="GameStateStart.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TextBoxDecorator.cpp" />
-    <ClCompile Include="BossRobot.cpp" />
-    <ClCompile Include="Overlay.cpp" />
+    <ClCompile Include="Tween.cpp">
+      <Filter>Cinematic</Filter>
+    </ClCompile>
+    <ClCompile Include="CinematicMoveToPoint.cpp">
+      <Filter>Cinematic</Filter>
+    </ClCompile>
+    <ClCompile Include="CinematicPause.cpp">
+      <Filter>Cinematic</Filter>
+    </ClCompile>
+    <ClCompile Include="Polynomial.cpp">
+      <Filter>Cinematic</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundCue.cpp">
+      <Filter>Cinematic</Filter>
+    </ClCompile>
+    <ClCompile Include="BossDishCloth.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="BossFinal.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="BossRobot.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="BossRobotButton.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Collectible.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="EventZone.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Level.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Obstacle.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Silverfish.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialText.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Luddis.cpp">
+      <Filter>Entities\Luddis</Filter>
+    </ClCompile>
+    <ClCompile Include="LuddisStateCinematic.cpp">
+      <Filter>Entities\Luddis</Filter>
+    </ClCompile>
+    <ClCompile Include="LuddisStateDead.cpp">
+      <Filter>Entities\Luddis</Filter>
+    </ClCompile>
+    <ClCompile Include="LuddisStatePlayable.cpp">
+      <Filter>Entities\Luddis</Filter>
+    </ClCompile>
+    <ClCompile Include="LuddisStateStunned.cpp">
+      <Filter>Entities\Luddis</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterPortrait.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Dialogue.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Filter.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="HUD.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="InterfaceElement.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Mannequin.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Overlay.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="PowerupDisplay.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Room.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoreCounter.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoreGauge.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Shop.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Slider.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="SockNPC.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="TextBox.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="TextBoxDecorator.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager.cpp">
+      <Filter>Managers/Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="EventManager.cpp">
+      <Filter>Managers/Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicManager.cpp">
+      <Filter>Managers/Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIManager.cpp">
+      <Filter>Managers/Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Managers/Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Managers/Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationQueue.cpp">
+      <Filter>Managers/Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="CollidableEntity.cpp">
+      <Filter>Managers/Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Managers/Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Inventory.cpp">
+      <Filter>Managers/Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundEngine.cpp">
+      <Filter>Managers/Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="VectorMath.cpp">
+      <Filter>Managers/Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>Managers/Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>Managers/Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="EventObserver.cpp">
+      <Filter>Managers/Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="EventSubject.cpp">
+      <Filter>Managers/Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Managers/Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="BossFinalState1.cpp" />
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>Managers/Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="BackgroundEffect.cpp">
+      <Filter>Entities\Luddis</Filter>
+    </ClCompile>
+    <ClCompile Include="Spider.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EventObserver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EventSubject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SoundEngine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="VectorMath.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Animation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Debug.h">
       <Filter>DEBUG</Filter>
     </ClInclude>
-    <ClInclude Include="AnimationQueue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="EntityManager.h">
-      <Filter>Header Files\Managers</Filter>
+      <Filter>Managers/Engine</Filter>
     </ClInclude>
     <ClInclude Include="ResourceManager.h">
-      <Filter>Header Files\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="EventManager.h">
-      <Filter>Header Files</Filter>
+      <Filter>Managers/Engine</Filter>
     </ClInclude>
     <ClInclude Include="GraphicManager.h">
-      <Filter>Header Files\Managers</Filter>
+      <Filter>Managers/Engine</Filter>
     </ClInclude>
     <ClInclude Include="GameManager.h">
-      <Filter>Header Files\Managers</Filter>
+      <Filter>Managers/Engine</Filter>
     </ClInclude>
     <ClInclude Include="CollisionManager.h">
-      <Filter>Header Files\Managers</Filter>
+      <Filter>Managers/Engine</Filter>
     </ClInclude>
     <ClInclude Include="Silverfish.h">
-      <Filter>Header Files\Entities</Filter>
+      <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="Level.h">
-      <Filter>Header Files\Entities</Filter>
+      <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="Obstacle.h">
-      <Filter>Header Files\Entities</Filter>
+      <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="Projectile.h">
-      <Filter>Header Files\Entities</Filter>
+      <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="BossDishCloth.h">
-      <Filter>Header Files\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Inventory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CollidableEntity.h">
-      <Filter>Header Files</Filter>
+      <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="Button.h">
-      <Filter>Header Files\GUI</Filter>
+      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="Dialogue.h">
-      <Filter>Header Files\GUI</Filter>
+      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="PowerupDisplay.h">
-      <Filter>Header Files\GUI</Filter>
+      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="TextBox.h">
-      <Filter>Header Files\GUI</Filter>
+      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="InterfaceElement.h">
-      <Filter>Header Files\GUI</Filter>
+      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="GUIManager.h">
-      <Filter>Header Files\Managers</Filter>
+      <Filter>Managers/Engine</Filter>
     </ClInclude>
     <ClInclude Include="CharacterPortrait.h">
-      <Filter>Header Files\GUI</Filter>
+      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="GameState.h">
       <Filter>Header Files</Filter>
@@ -285,109 +272,155 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Menu.h">
-      <Filter>Header Files\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="ViewUtility.h">
-      <Filter>Header Files</Filter>
+      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="ScoreCounter.h">
-      <Filter>Header Files\GUI</Filter>
+      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="ScoreGauge.h">
-      <Filter>Header Files\GUI</Filter>
+      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="GameStateMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TutorialText.h">
-      <Filter>Header Files\Entities</Filter>
+      <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="EventZone.h">
-      <Filter>Header Files\Entities</Filter>
+      <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="BackgroundEffect.h">
-      <Filter>Header Files\Entities</Filter>
+      <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="Room.h">
-      <Filter>Header Files\GUI</Filter>
+      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="PowerUps.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SpiderWeb.h">
-      <Filter>Header Files\PowerUps</Filter>
-    </ClInclude>
     <ClInclude Include="MouseCursor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Spider.h">
-      <Filter>Header Files\GUI</Filter>
-    </ClInclude>
     <ClInclude Include="Luddis.h">
-      <Filter>Header Files\Entities\Luddis</Filter>
+      <Filter>Entities\Luddis</Filter>
     </ClInclude>
     <ClInclude Include="LuddisState.h">
-      <Filter>Header Files\Entities\Luddis</Filter>
+      <Filter>Entities\Luddis</Filter>
     </ClInclude>
     <ClInclude Include="LuddisStatePlayable.h">
-      <Filter>Header Files\Entities\Luddis</Filter>
+      <Filter>Entities\Luddis</Filter>
     </ClInclude>
     <ClInclude Include="LuddisStateStunned.h">
-      <Filter>Header Files\Entities\Luddis</Filter>
+      <Filter>Entities\Luddis</Filter>
     </ClInclude>
     <ClInclude Include="LuddisStateDead.h">
-      <Filter>Header Files\Entities\Luddis</Filter>
+      <Filter>Entities\Luddis</Filter>
     </ClInclude>
     <ClInclude Include="LuddisStateCinematic.h">
-      <Filter>Header Files\Entities\Luddis</Filter>
+      <Filter>Entities\Luddis</Filter>
     </ClInclude>
     <ClInclude Include="Tween.h">
-      <Filter>Header Files\Cinematic</Filter>
+      <Filter>Cinematic</Filter>
     </ClInclude>
     <ClInclude Include="Polynomial.h">
-      <Filter>Header Files\Cinematic</Filter>
+      <Filter>Cinematic</Filter>
     </ClInclude>
     <ClInclude Include="CinematicSequence.h">
-      <Filter>Header Files\Cinematic</Filter>
+      <Filter>Cinematic</Filter>
     </ClInclude>
     <ClInclude Include="CinematicPause.h">
-      <Filter>Header Files\Cinematic</Filter>
+      <Filter>Cinematic</Filter>
     </ClInclude>
     <ClInclude Include="SoundCue.h">
-      <Filter>Header Files\Cinematic</Filter>
+      <Filter>Cinematic</Filter>
     </ClInclude>
     <ClInclude Include="CinematicMoveToPoint.h">
-      <Filter>Header Files\Cinematic</Filter>
+      <Filter>Cinematic</Filter>
     </ClInclude>
     <ClInclude Include="Collectible.h">
-      <Filter>Header Files\Entities</Filter>
+      <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="SockNPC.h">
-      <Filter>Header Files\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="BossRobot.h">
-      <Filter>Header Files\Entities</Filter>
+      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="Filter.h">
-      <Filter>Header Files\GUI</Filter>
+      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="Mannequin.h">
-      <Filter>Header Files\GUI</Filter>
+      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="Shop.h">
-      <Filter>Header Files\GUI</Filter>
-    <ClInclude Include="Filter.h" />
-    <ClInclude Include="Shop.h" />
-    <ClInclude Include="BossRobotButton.h">
-      <Filter>Header Files\Entities</Filter>
+      <Filter>GUI</Filter>
     </ClInclude>
-    <ClInclude Include="TextBoxDecorator.h" />
-    <ClInclude Include="BossRobot.h" />
     <ClInclude Include="Overlay.h">
-      <Filter>Header Files\GUI</Filter>
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="BossRobotButton.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="BossRobot.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="TextBoxDecorator.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateStart.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Slider.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="BossFinal.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="SpiderWeb.h">
+      <Filter>PowerUps</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Managers/Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationQueue.h">
+      <Filter>Managers/Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="CollidableEntity.h">
+      <Filter>Managers/Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Managers/Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="EventManager.h">
+      <Filter>Managers/Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="EventObserver.h">
+      <Filter>Managers/Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSubject.h">
+      <Filter>Managers/Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Inventory.h">
+      <Filter>Managers/Engine</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
-      <Filter>Header Files</Filter>
+      <Filter>Managers/Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundEngine.h">
+      <Filter>Managers/Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="VectorMath.h">
+      <Filter>Managers/Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewUtility.h">
+      <Filter>Managers/Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Accessories.h">
+      <Filter>Managers/Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="BossFinalState1.h" />
+    <ClInclude Include="Spider.h">
+      <Filter>Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -400,44 +433,26 @@
     <Filter Include="DEBUG">
       <UniqueIdentifier>{9a859073-dce4-41dd-9e73-1cfd1f9738e0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Managers">
-      <UniqueIdentifier>{6950c300-ac92-4344-80a2-a2783a328fe2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Managers">
-      <UniqueIdentifier>{231adb1f-67b5-447f-890b-16d2cec76e18}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Entities">
-      <UniqueIdentifier>{18644f27-5724-4629-a64c-c17221acf26f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Entities">
-      <UniqueIdentifier>{562db5d3-9fd4-4a6a-a85b-b8ca6086fe9c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GUI">
-      <UniqueIdentifier>{6ee98c1a-26c2-4f91-afc7-30602071b91b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\GUI">
-      <UniqueIdentifier>{552173e4-367d-4e60-a497-9cde76ca1fcb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\PowerUps">
-      <UniqueIdentifier>{c024cc2b-d77a-4e8c-af08-a9250c49416b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\PowerUps">
-      <UniqueIdentifier>{7fb265d6-c6d7-46c9-9719-19c3de83c148}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Entities\Luddis">
-      <UniqueIdentifier>{565854a2-a227-43c0-8dab-7f0f019ec235}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Entities\Luddis">
-      <UniqueIdentifier>{e700d876-6ad8-421e-b981-18569eb54871}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Cinematic">
+    <Filter Include="Cinematic">
       <UniqueIdentifier>{0731d322-09c5-41bb-8af6-415ad40822ff}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Cinematic">
-      <UniqueIdentifier>{5ff35a5c-be7b-459c-aa12-2dd1e6dc7884}</UniqueIdentifier>
+    <Filter Include="Entities">
+      <UniqueIdentifier>{562db5d3-9fd4-4a6a-a85b-b8ca6086fe9c}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <Filter Include="Entities\Luddis">
+      <UniqueIdentifier>{565854a2-a227-43c0-8dab-7f0f019ec235}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{552173e4-367d-4e60-a497-9cde76ca1fcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers/Engine">
+      <UniqueIdentifier>{6950c300-ac92-4344-80a2-a2783a328fe2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PowerUps">
+      <UniqueIdentifier>{c024cc2b-d77a-4e8c-af08-a9250c49416b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drawables">
+      <UniqueIdentifier>{67b04470-3d7d-49e4-bbcd-fb1f4d229fe5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

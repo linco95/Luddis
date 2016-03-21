@@ -97,7 +97,7 @@ struct AnimationImp : public Drawable, public sf::Transformable {
 
 		// Set the current tile in the spritesheet
 		mCurrTile.y = mCurrSprite / mColumns;
-		mCurrTile.x = mCurrSprite % (mColumns);
+		mCurrTile.x = mCurrSprite % mColumns;
 
 		mSprite.setTextureRect(IntRect(mCurrTile.x * mTileSize.x, mCurrTile.y * mTileSize.y, mTileSize.x, mTileSize.y));
 	}
@@ -176,4 +176,9 @@ Animation& Animation::operator=(const Animation& aAnim){
 	delete mAImp;
 	mAImp = new AnimationImp(*aAnim.mAImp);
 	return *this;
+}
+
+int Animation::getSpriteAmount()
+{
+	return mAImp->mSpriteAmt;
 }

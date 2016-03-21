@@ -95,8 +95,12 @@ void Spider::setActive(const bool& active){
 	mIsActive = active;
 }
 
-Spider::Strata Spider::getRenderLayer() const{
-	return FOURTH;
+Renderer::RenderLayer Spider::getRenderLayer() const{
+	return Renderer::RenderLayer::PLAYER;
+}
+
+void Spider::stun(const sf::Time & deltaTime){
+
 }
 
 void Spider::turn(){

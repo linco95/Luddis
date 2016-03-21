@@ -43,13 +43,18 @@ public:
 	//Frees up allocated memory.
 	FMOD_RESULT releaseSound(const char* filepath);
 
-	//Volume is a value from 0-100
+	//Volume is a value from 0-1
 	void setMainVolume(float volume);
-	//Volume is a value from 0-100
+	float getMainVolume() const;
+	//Volume is a value from 0-1
 	void setSoundVolume(float volume);
-	//Volume is a value from 0-100
+	float getSoundVolume() const;
+	//Volume is a value from 0-1
 	void setMusicVolume(float volume);
-	
+	float getMusicVolume() const;
+
+	void mute(bool mute);
+
 	//Plays a sound on the low level system, and returns
 	//the channel index used to play it.
 	int playSound(const char* filename);
@@ -88,10 +93,10 @@ private:
 	FMOD::Studio::System* mStudioSystem;
 	FMOD::System* mLowLvlSystem;
 	FMOD::Channel* mChannel;
+	bool mMute;
 	float mMainVolume;
 	float mSoundVolume;
 	float mMusicVolume;
-	float mFinalVolume;
 };
 
 #endif // !_INCLUDED_SOUNDENGINE_

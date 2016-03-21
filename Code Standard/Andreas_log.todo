@@ -20,8 +20,8 @@ TODO:
  
  ☐ Maybe make the updates with an fixed timestamp
  ☐ Replace collision enum, with a bitmap? 
- ☐ Collision handles weirdly, kinda works from below, but not from above
-   -  Debug where the issue lies. Is it collision detection (don't think so), or the vector we get, or the handeling of collision (right now that is basically the vector)?
+ ✔ Collision handles weirdly, kinda works from below, but not from above @done (16-03-07 13:05)
+   ✔  Debug where the issue lies. Is it collision detection (don't think so), or the vector we get, or the handeling of collision (right now that is basically the vector)? @done (16-03-07 13:05)
  ☐ Remove redundant collisiontype, as we now only handle axial aligned bounding boxes + convex shapes (sf::Shape)
  ☐ Rewrite the handeling of collisions. The responsibilities are off now. 
  ✔ Make the silverfish swim away from luddis when they die @done (16-02-23 09:36)
@@ -211,3 +211,6 @@ Fixed the collision. The points were just transformed to the shapes location, wi
     Found out that collision had to be checked from both shapes
   2/3/16:
     Implementing the correct sounds
+  7-3/16:
+    Implemented overriding animation in animationqueue.
+    

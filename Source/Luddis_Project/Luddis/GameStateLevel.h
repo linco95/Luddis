@@ -16,6 +16,8 @@ class Level;
 class Spider;
 class Luddis;
 class ScoreGauge;
+class ScoreCounter;
+class HUD;
 
 class GameStateLevel : public GameState{
 public:
@@ -33,7 +35,6 @@ public:
 
 	//Function to create a dialogue on the level.
 	void createDialogue(std::string dialogueFile);
-	void fuckOffSpider();
 	bool getInDialogue() const;
 	void setInDialogue(bool inDialogue);
 	//Used to setup a new level with its initial
@@ -44,11 +45,12 @@ public:
 	void resetInventory();
 
 	void setupMission(const std::string& jsonFilename);
+	void setPlayable(bool playable);
 	bool playable() const;
+	int getCurrentLevel() const;
 
 private:
 	GameStateLevel();
-	void updateLuddGauge();
 
 	void readSetupFiles(const std::string& filename, bool allocate = true);
 
@@ -58,13 +60,13 @@ private:
 	CollisionManager* mCM;
 	EventManager mEventM;
 	GameStatePaused* mGameStatePaused;
+	HUD* mHUD;
 	sf::View mGUIView;
 	sf::View mMapView;
 	sf::RenderWindow* mWindow;
 	Level* mLevel;
 	Spider* mSpider;
 	Luddis* mPlayer;
-	ScoreGauge* mLuddGauge;
 	sf::RectangleShape mCinematicBox[2];
 	bool mFirstTime;
 	bool mPlayable;

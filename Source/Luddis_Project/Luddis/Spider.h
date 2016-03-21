@@ -1,7 +1,8 @@
 #ifndef INCLUDED_SPIDER
 #define INCLUDED_SPIDER
 
-#include "InterfaceElement.h"
+#include "Entity.h"
+#include "Renderer.h"
 #include "AnimationQueue.h"
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Window.hpp>
@@ -12,7 +13,7 @@ class GUIManager;
 class EventManager;
 class GameStateLevel;
 
-class Spider : public InterfaceElement {
+class Spider : public Entity {
 public:
 	Spider(sf::RenderWindow* window, const sf::Vector2f& position);
 	~Spider();
@@ -22,7 +23,8 @@ public:
 	bool isAlive() const override;
 	bool isActive() const override;
 	void setActive(const bool& active) override;
-	Strata getRenderLayer() const override;
+	Renderer::RenderLayer getRenderLayer() const override;
+	void stun(const sf::Time& deltaTime) override;
 	void turn();
 
 private:

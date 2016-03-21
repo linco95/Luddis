@@ -29,6 +29,8 @@ static const float GRACEAREA = 30;
 static const float SUPERMOVESPEED = 800;
 #endif //_DESIGNER_HAX_
 
+static const int COLORVARIATIONS = 4;
+
 static const float MOVESPEED = 200;
 
 static const float PROJECTILE_SPEED = 300;
@@ -36,11 +38,33 @@ static const float MUZZLEOFFSET = 50.0f;
 static const sf::Vector2f FRONTVECTOR(1, 0);
 static const float STUNTIME = 3.0f;
 
-static const std::string ANIMATION_FILEPATH = "Resources/Images/Spritesheets/Luddis_walkcykle";
-static const std::string ANIMATION_ALMOSTDEAD = "Resources/Images/Spritesheets/luddis_CriticalHealth";
+static const std::string ANIMATION_FILEPATH[COLORVARIATIONS]{
+	"Resources/Images/Spritesheets/Luddis_walkcykle",
+	"Resources/Images/Spritesheets/Luddis_walkcykle_pink",
+	"Resources/Images/Spritesheets/Luddis_walkcykle_blue",
+	"Resources/Images/Spritesheets/Luddis_walkcykle_green"
+};
 
-static const std::string SHOT_ANIMATION = "Resources/Images/Spritesheets/Luddis_shot";
-static const std::string HIT_ANIMATION = "Resources/Images/Spritesheets/Luddis_hit";
+static const std::string ANIMATION_ALMOSTDEAD[COLORVARIATIONS]{
+	"Resources/Images/Spritesheets/luddis_CriticalHealth",
+	"Resources/Images/Spritesheets/luddis_CriticalHealth_pink",
+	"Resources/Images/Spritesheets/luddis_CriticalHealth_blue",
+	"Resources/Images/Spritesheets/luddis_CriticalHealth_green"
+};
+
+static const std::string SHOT_ANIMATION[COLORVARIATIONS]{
+	"Resources/Images/Spritesheets/Luddis_shot",
+	"Resources/Images/Spritesheets/Luddis_shot_pink",
+	"Resources/Images/Spritesheets/Luddis_shot_blue",
+	"Resources/Images/Spritesheets/Luddis_shot_green"
+};
+
+static const std::string HIT_ANIMATION[COLORVARIATIONS]{
+	"Resources/Images/Spritesheets/Luddis_hit",
+	"Resources/Images/Spritesheets/Luddis_hit_pink",
+	"Resources/Images/Spritesheets/Luddis_hit_blue",
+	"Resources/Images/Spritesheets/Luddis_hit_green"
+};
 
 //This should be dynamic later to determine what texture to use for projectiles
 static const std::array<std::string, 3> PROJECTILE_FILENAME = { "Resources/Images/Luddis_attack1.png",
@@ -48,7 +72,7 @@ static const std::array<std::string, 3> PROJECTILE_FILENAME = { "Resources/Image
 "Resources/Images/Luddis_attack3.png"
 };
 
-LuddisStatePlayable::LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* window, EntityManager* entityManager, PowerupDisplay* display) :
+LuddisStatePlayable::LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* window, EntityManager* entityManager, PowerupDisplay* display, sf::Shape* hitbox) :
 	mProjectileCooldown(0),
 	mPrevPos(0, 0),
 	mIsFlipped(false),
@@ -56,7 +80,9 @@ LuddisStatePlayable::LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* wi
 	mPlayerPtr(playerPtr),
 	mEntityManager(entityManager),
 	mWindow(window),
-	mDisplay(display)
+	mDisplay(display),
+	mHurt(true),
+	mHitbox(hitbox)
 {
 	Inventory::getInstance().choseFirst(new SpiderWeb(entityManager, display));
 }
@@ -88,15 +114,15 @@ void LuddisStatePlayable::collide(CollidableEntity * collidable, const sf::Vecto
 		mPlayerPtr->move(moveAway);
 	}
 	// Collision with damaging object
-	if (collidable->getCollisionCategory() == CollidableEntity::ENEMY_DAMAGE) {
-		mPlayerPtr->getAnimation()->replaceAnimation(HIT_ANIMATION);
+	if (collidable->getCollisionCategory() == CollidableEntity::ENEMY_DAMAGE || collidable->getCollisionCategory() == CollidableEntity::ENEMY_DAMAGE_OBSTACLE) {
+		mPlayerPtr->getAnimation()->replaceAnimation(HIT_ANIMATION[mPlayerPtr->getColorScheme()]);
 	}
 	// Collision with a stunning entity
 	if (collidable->getCollisionCategory() == CollidableEntity::ENEMY_STUN) {
 		//Replace animation before changing state or a crash will occur.
-		mPlayerPtr->getAnimation()->replaceAnimation(HIT_ANIMATION);
+		mPlayerPtr->getAnimation()->replaceAnimation(HIT_ANIMATION[mPlayerPtr->getColorScheme()]);
 		//TODO: add a way to make stun timers modular.
-		mPlayerPtr->setPlayerState(new LuddisStateStunned(mPlayerPtr, 1.0f, mWindow, mEntityManager, mDisplay));
+		mPlayerPtr->setPlayerState(new LuddisStateStunned(mPlayerPtr, 1.0f, mWindow, mEntityManager, mDisplay, mHitbox));
 	}
 }
 
@@ -167,7 +193,14 @@ void LuddisStatePlayable::attack() {
 	sf::Vector2f direction = VectorMath::rotateVector(FRONTVECTOR, mPlayerPtr->getRotation());
 
 	// Replace the current animation with an shooting animation and play a shooting sound
-	mPlayerPtr->getAnimation()->overrideAnimation(SHOT_ANIMATION);
+	int percentDust = int((float(Inventory::getInstance().getDust()) / float(Inventory::getInstance().getMaxDust())) * 100);
+	if (percentDust <= 10) {
+		mPlayerPtr->getAnimation()->overrideAnimation(SHOT_ANIMATION[mPlayerPtr->getColorScheme()]);
+	}
+	else {
+		mPlayerPtr->getAnimation()->overrideAnimation(SHOT_ANIMATION[mPlayerPtr->getColorScheme()]);
+	}
+
 	// TODO Pull out constant variable
 	SoundEngine* se = &SoundEngine::getInstance();
 	se->playEvent("event:/Gameplay/Luddis/Interaction/Luddis_Shot");
@@ -200,24 +233,35 @@ void LuddisStatePlayable::updateRotation() {
 void LuddisStatePlayable::changeScale() {
 	//int dust = Inventory::getInstance().getDust();
 	//int max = Inventory::getInstance().getMaxDust();
-	float percentDust = float((float(Inventory::getInstance().getDust()) / float(Inventory::getInstance().getMaxDust())) * 100);
-	Debug::log("Dust%" + std::to_string(percentDust));
-	if (percentDust < 19 && mScale != sf::Vector2f(1.0f, 1.0f)) {
-		mScale = { 1.0f , 1.0f };
-		mPlayerPtr->getAnimation()->setDefaultAnimation(ANIMATION_ALMOSTDEAD);
+	int percentDust = int((float(Inventory::getInstance().getDust()) / float(Inventory::getInstance().getMaxDust())) * 100);
+	//Debug::log("Dust%" + std::to_string(percentDust));
+	if (percentDust <= 10 && mHurt == false) {
+		if (mScale != sf::Vector2f(1.0f, 1.0f)) {
+			mScale = { 1.0f , 1.0f };
+			mHitbox->setScale(mScale);
+		}
+		mPlayerPtr->getAnimation()->setDefaultAnimation(ANIMATION_ALMOSTDEAD[mPlayerPtr->getColorScheme()]);
+		mHurt = true;
 	}
-	else if (percentDust < 39 && percentDust > 18 && mScale != sf::Vector2f(1.10f, 1.10f)) {
-		mScale = { 1.1f , 1.1f };
-		mPlayerPtr->getAnimation()->setDefaultAnimation(ANIMATION_FILEPATH);
+	else if (percentDust <= 20 && percentDust > 10 && mHurt == true) {
+		if (mScale != sf::Vector2f(1.0f, 1.0f)) {
+			mScale = { 1.0f , 1.0f };
+			mHitbox->setScale(mScale);
+		}
+		mPlayerPtr->getAnimation()->setDefaultAnimation(ANIMATION_FILEPATH[mPlayerPtr->getColorScheme()]);
+		mHurt = false;
 	}
-	else if (percentDust < 59 && percentDust > 38 && mScale != sf::Vector2f(1.20f, 1.20f)) {
+	else if (percentDust <= 50 && percentDust > 20 && mScale != sf::Vector2f(1.2f, 1.2f)) {
 		mScale = { 1.2f , 1.2f };
+		mHitbox->setScale(mScale);
 	}
-	else if (percentDust < 79 && percentDust > 58 && mScale != sf::Vector2f(1.30f, 1.30f)) {
+	else if (percentDust <= 99 && percentDust > 50 && mScale != sf::Vector2f(1.3f, 1.3f)) {
 		mScale = { 1.3f , 1.3f };
+		mHitbox->setScale(mScale);
 	}
-	else if (percentDust > 89 && mScale != sf::Vector2f(1.4f, 1.4f)) {
+	else if (percentDust <= 100 && percentDust > 99 && mScale != sf::Vector2f(1.4f, 1.4f)) {
 		mScale = { 1.4f , 1.4f };
+		mHitbox->setScale(mScale);
 	}
 	if (mIsFlipped == false)
 		mPlayerPtr->setScale(mScale.y, mScale.y);

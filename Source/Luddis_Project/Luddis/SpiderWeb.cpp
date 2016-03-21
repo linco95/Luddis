@@ -1,6 +1,8 @@
 #include "SpiderWeb.h"
+#include "Inventory.h"
+#include "SoundEngine.h"
 
-float const PAUSE_TIME = 3.0f;
+float const PAUSE_TIME = 2.0f;
 
 SpiderWeb::SpiderWeb(EntityManager* entityManager, PowerupDisplay* display):
 mPauseTime(PAUSE_TIME),
@@ -18,7 +20,11 @@ SpiderWeb::~SpiderWeb() {
 
 void SpiderWeb::activate(sf::Time deltaTime) {
 	if (mDisplay->getCooldown() <= 0) {
-		mEntityManager->stunEntities(deltaTime);
-		mDisplay->activateCooldown();
+		if (Inventory::getInstance().getDust() > 10){
+			Inventory::getInstance().addDust(-10);
+			mEntityManager->stunEntities(deltaTime);
+			mDisplay->activateCooldown();
+			SoundEngine::getInstance().playEvent("event:/Gameplay/Luddis/Skills/Spiderweb");
+		}
 	}
 }

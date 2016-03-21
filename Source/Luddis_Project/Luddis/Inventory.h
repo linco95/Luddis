@@ -30,6 +30,13 @@ public:
 	void setEggs(int eggs);
 	void changeEggs(int eggs);
 
+	void setAccessoryHead(std::string filename);
+	std::string getAccessoryHead() const;
+	void setAccessoryTail(std::string filename);
+	std::string getAccessorTail() const;
+	void setColorScheme(int index);
+	int getColorScheme() const;
+
 	void activateFirst(sf::Time deltaTime);
 	void activateSecond(sf::Time deltaTime);
 	void activateThird(sf::Time deltaTime);
@@ -51,6 +58,8 @@ private:
 	int mDust;
 	int mMaxDust;
 	int mEggs;
+	std::string mAccessoryHead, mAccessoryTail;
+	int mColorScheme;
 	PowerUpVector mPowerUps;
 	PowerUps* mPowerOne;
 };

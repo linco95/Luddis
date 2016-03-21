@@ -1,6 +1,7 @@
 #define _USE_MATH_DEFINES
 #include "Projectile.h"
 #include "ResourceManager.h"
+#include "SoundEngine.h"
 #include <cmath>
 #include "Debug.h"
 #include <cassert>
@@ -133,6 +134,8 @@ void Projectile::collide(CollidableEntity *collidable, const sf::Vector2f& moveA
 		mIsAlive = false;
 	}
 	else if (collidable->getCollisionCategory() == SOLID) {
+		SoundEngine::getInstance().playEvent("event:/Gameplay/Level/Wall_Hit");
+
 		mIsAlive = false;
 	}
 }

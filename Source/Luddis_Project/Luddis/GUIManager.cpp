@@ -11,6 +11,15 @@ GUIManager::~GUIManager(){
 	clearInterfaceElements();
 }
 
+GUIManager& GUIManager::operator+(const GUIManager& guiM)
+{
+	
+	for (auto g : guiM.mElements) {
+		this->addInterfaceElement(g);
+	}
+	return *this;
+}
+
 void GUIManager::addInterfaceElement(InterfaceElement* ie){
 	assert(ie != nullptr);
 	mElements.push_back(ie);
@@ -37,7 +46,7 @@ void GUIManager::clearInterfaceElements(){
 }
 
 void GUIManager::renderElements(sf::RenderWindow& window){
-	static Renderer* renderer = &Renderer::getInstance();
+	//static Renderer* renderer = &Renderer::getInstance();
 	// sort the entities renderlayer
 	std::map<InterfaceElement::Strata, InterfaceElementVector> renderMap;
 	for (auto e : mElements) {
@@ -48,7 +57,8 @@ void GUIManager::renderElements(sf::RenderWindow& window){
 
 		for (auto e : it.second){
 			if (e->isActive()){
-				renderer->addDrawableToQueue(e, Renderer::GUI);
+				window.draw(*e);
+				//renderer->addDrawableToQueue(e, Renderer::GUI);
 			}
 		}
 	}

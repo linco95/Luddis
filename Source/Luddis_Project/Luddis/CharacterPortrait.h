@@ -2,13 +2,15 @@
 #define _INCLUDED_CHARACTERPORTRAIT_
 
 #include "InterfaceElement.h"
-#include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 #include <string>
+
+class Mannequin;
 
 class CharacterPortrait : public InterfaceElement{
 public:
-	CharacterPortrait(std::string textureFilename, std::string characterName, sf::Vector2f pos, bool mirror = false);
+	CharacterPortrait(std::string textureFilename, sf::Vector2f pos, bool mirror = false);
 	virtual ~CharacterPortrait();
 	void tick(const sf::Time& deltaTime) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -24,11 +26,10 @@ public:
 private:
 	static const int MAX_FRAMES = 16;
 
-	sf::Sprite mSprite;
+	sf::Sprite mCharacter;
 	sf::Sprite mBubble;
 	sf::Sprite mEmotion;
 	sf::IntRect mFrame[MAX_FRAMES];
-	sf::Text mName;
 
 	bool mIsAlive;
 	bool mIsActive;

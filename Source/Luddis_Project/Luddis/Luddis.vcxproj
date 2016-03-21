@@ -89,6 +89,8 @@
     <ClCompile Include="AnimationQueue.cpp" />
     <ClCompile Include="BackgroundEffect.cpp" />
     <ClCompile Include="BossDishCloth.cpp" />
+    <ClCompile Include="BossFinal.cpp" />
+    <ClCompile Include="BossFinalState1.cpp" />
     <ClCompile Include="BossRobot.cpp" />
     <ClCompile Include="BossRobotButton.cpp" />
     <ClCompile Include="Button.cpp" />
@@ -105,6 +107,8 @@
     <ClCompile Include="GameStateLevel.cpp" />
     <ClCompile Include="GameStateMap.cpp" />
     <ClCompile Include="GameStatePaused.cpp" />
+    <ClCompile Include="GameStateStart.cpp" />
+    <ClCompile Include="HUD.cpp" />
     <ClCompile Include="LuddisStateCinematic.cpp" />
     <ClCompile Include="LuddisStateDead.cpp" />
     <ClCompile Include="LuddisStatePlayable.cpp" />
@@ -138,6 +142,7 @@
     <ClCompile Include="ScoreGauge.cpp" />
     <ClCompile Include="Shop.cpp" />
     <ClCompile Include="Silverfish.cpp" />
+    <ClCompile Include="Slider.cpp" />
     <ClCompile Include="SockNPC.cpp" />
     <ClCompile Include="SoundCue.cpp" />
     <ClCompile Include="SoundEngine.cpp" />
@@ -150,10 +155,13 @@
     <ClCompile Include="VectorMath.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Accessories.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="AnimationQueue.h" />
     <ClInclude Include="BackgroundEffect.h" />
     <ClInclude Include="BossDishCloth.h" />
+    <ClInclude Include="BossFinal.h" />
+    <ClInclude Include="BossFinalState1.h" />
     <ClInclude Include="BossRobot.h" />
     <ClInclude Include="BossRobotButton.h" />
     <ClInclude Include="Button.h" />
@@ -172,6 +180,8 @@
     <ClInclude Include="GameStateLevel.h" />
     <ClInclude Include="GameStateMap.h" />
     <ClInclude Include="GameStatePaused.h" />
+    <ClInclude Include="GameStateStart.h" />
+    <ClInclude Include="HUD.h" />
     <ClInclude Include="LuddisState.h" />
     <ClInclude Include="LuddisStateCinematic.h" />
     <ClInclude Include="LuddisStateDead.h" />
@@ -205,6 +215,7 @@
     <ClInclude Include="ScoreGauge.h" />
     <ClInclude Include="Shop.h" />
     <ClInclude Include="Silverfish.h" />
+    <ClInclude Include="Slider.h" />
     <ClInclude Include="SockNPC.h" />
     <ClInclude Include="SoundCue.h" />
     <ClInclude Include="SoundEngine.h" />
@@ -216,9 +227,6 @@
     <ClInclude Include="Tween.h" />
     <ClInclude Include="VectorMath.h" />
     <ClInclude Include="ViewUtility.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

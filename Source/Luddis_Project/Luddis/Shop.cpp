@@ -5,6 +5,7 @@
 #include "GUIManager.h"
 #include "EventManager.h"
 #include "Inventory.h"
+#include "Mannequin.h"
 #include "rapidjson/document.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -12,17 +13,18 @@
 
 const char* BACKGROUND_TEXTURE = "Resources/Images/GUI/ShopBackground.png";
 const char* BUTTON_DIRECTION = "Resources/Images/GUI/DirectionButton.png";
-const char* BUTTON_EXIT = "Resources/Images/GUI/ExitButton.png";
+const char* BUTTON_EXIT = "Resources/Images/Rooms/ButtonSockShopDone.png";
 
 const char* FONT_NAME = "Resources/Fonts/trebuc.ttf";
 
 const char* CONFIG_FILE = "Resources/Configs/Inventory/Accessories.json";
 
-Shop::Shop(sf::RenderWindow* window, GameState* gameState, EventManager* eventManager, GUIManager* guiManager) :
+Shop::Shop(sf::RenderWindow* window, GameState* gameState, EventManager* eventManager, GUIManager* guiManager, Mannequin* mannequin) :
 	mWindow(window),
 	mEventManager(eventManager),
 	mGUIManager(guiManager),
 	mGameState(gameState),
+	mMannequin(mannequin),
 	mInventory(&Inventory::getInstance()),
 	mButtons(),
 	mChips("X " + std::to_string(mInventory->getChips()),
@@ -35,10 +37,17 @@ Shop::Shop(sf::RenderWindow* window, GameState* gameState, EventManager* eventMa
 
 	sf::Vector2f origin((float)mBackground.getTextureRect().width / 2, (float)mBackground.getTextureRect().height / 2);
 	mBackground.setOrigin(origin);
-	mBackground.setPosition(ViewUtility::getViewSize().getCenter());
-	mChips.setPosition(ViewUtility::getViewSize().getCenter() - sf::Vector2f(-100.0f, (float)mBackground.getTextureRect().height / 3.1f));
+	mBackground.setPosition(ViewUtility::getViewSize().getSize().x / 3, ViewUtility::getViewSize().getCenter().y);
+	mChips.setPosition(getPosition() - sf::Vector2f(-100.0f, (float)mBackground.getTextureRect().height / 3.1f));
 	mChips.setColor(sf::Color::Black);
 	mChips.setCharacterSize(60);
+
+	if (mMannequin != nullptr) {
+		mMannequin->reset();
+		mMannequin->setAnimate(true);
+		mMannequin->setActive(true);
+	}
+
 	initialize();
 }
 
@@ -47,7 +56,7 @@ Shop::~Shop() {
 		mButtons.back()->kill();
 		mButtons.pop_back();
 	}
-	for (int i = 0; i < mMaxPage; i++) {
+	for (int i = 0; i <= mMaxPage; i++) {
 		while (!mItems[i].empty()) {
 			mItems[i].back()->kill();
 			mItems[i].pop_back();
@@ -57,6 +66,12 @@ Shop::~Shop() {
 			mDescriptions[i].pop_back();
 		}
 	}
+	Inventory::getInstance().setAccessoryHead(mMannequin->getHeadAccessory());
+	Inventory::getInstance().setAccessoryTail(mMannequin->getTailAccessory());
+	Inventory::getInstance().setColorScheme(mMannequin->getColorScheme());
+	if (mMannequin != nullptr)
+		mMannequin->setActive(false);
+
 	mGameState->handleClicks("ShopDelete");
 }
 
@@ -76,7 +91,7 @@ void Shop::initialize() {
 	mButtons.push_back(button);
 	position.x -= offset / 3.0f;
 	position.y -= offset / 2.0f;
-	button = new Button(BUTTON_EXIT, "", "Close", mWindow, mEventManager, position, this, Button::RECTANGLE);
+	button = new Button(BUTTON_EXIT, "", "Close", mWindow, mEventManager, position, this, Button::CIRCLE);
 	button->setActive(true);
 	mGUIManager->addInterfaceElement(button);
 	mButtons.push_back(button);
@@ -92,23 +107,29 @@ void Shop::initializeContents() {
 	assert(configDoc.IsArray());
 	int counter = 0;
 	for (rapidjson::SizeType itr = 0; itr < configDoc.Size(); itr++) {
-		assert(configDoc[itr].HasMember("image"));
-		assert(configDoc[itr].HasMember("description"));
-		assert(configDoc[itr].HasMember("ID"));
-
-		std::string image = configDoc[itr]["image"].GetString();
-		std::string description = configDoc[itr]["description"].GetString();
-		int ID = configDoc[itr]["ID"].GetInt();
-		sf::Vector2f position = sf::Vector2f(176, (float)(486 + counter * 210)) + mBackground.getPosition() - mBackground.getOrigin();
-		addItemButton(image, "Accessory" + std::to_string(ID), position, mMaxPage);
-		sf::IntRect box(330, 418 + counter * 208, 382, 142);
-		mDescriptions[mMaxPage].push_back(new TextBoxDecorator(box, description, 32));
-		counter++;
-
-		if (counter % 3 == 0) {
+		if (counter == 3) {
 			counter = 0;
 			mMaxPage++;
 		}
+		assert(configDoc[itr].HasMember("icon") && configDoc[itr]["icon"].IsString());
+		assert(configDoc[itr].HasMember("image") && configDoc[itr]["image"].IsString());
+		assert(configDoc[itr].HasMember("description") && configDoc[itr]["description"].IsString());
+		assert(configDoc[itr].HasMember("ID") && configDoc[itr]["ID"].IsInt());
+
+		std::string icon = configDoc[itr]["icon"].GetString();
+		std::string description = configDoc[itr]["description"].GetString();
+		std::string image = configDoc[itr]["image"].GetString();
+		int ID = configDoc[itr]["ID"].GetInt();
+		sf::Vector2f position = sf::Vector2f(200, (float)(486 + counter * 200)) + mBackground.getPosition() - mBackground.getOrigin();
+		addItemButton(icon, "Accessory" + std::to_string(ID), position, mMaxPage);
+		sf::IntRect box(130, 0, 382, 142);
+		TextBoxDecorator* textBox = new TextBoxDecorator(box, description, 32);
+		textBox->setOrigin(0, (float)box.height / 2.0f);
+		textBox->setPosition(position);
+		mDescriptions[mMaxPage].push_back(textBox);
+		mAccessoryImages[ID] = image;
+		counter++;
+
 	}
 
 	for (auto d : mDescriptions[0]) {
@@ -130,6 +151,8 @@ void Shop::draw(sf::RenderTarget & target, sf::RenderStates states) const {
 	states.transform *= getTransform();
 	target.draw(mBackground, states);
 	target.draw(mChips, states);
+	for (auto d : mDescriptions[mActivePage])
+		target.draw(*d, states);
 }
 
 void Shop::tick(const sf::Time & deltaTime) {
@@ -164,7 +187,38 @@ void Shop::onClick(std::string command) {
 		mIsAlive = false;
 	}
 	else if (accessorySubstr == "Accessory") {
+		int ID = std::stoi(command.substr(9));
 		//Do things to luddis mannequin...horrible things
+		switch (ID) {
+		case 0:
+			mMannequin->setColorScheme(Mannequin::ColorScheme::PINK);
+			break;
+
+		case 1:
+			mMannequin->setColorScheme(Mannequin::ColorScheme::BLUE);
+			break;
+
+		case 2:
+			mMannequin->setColorScheme(Mannequin::ColorScheme::GREEN);
+			break;
+
+		case 3:
+			mMannequin->setHeadAccessory(mAccessoryImages[ID].c_str());
+			break;
+
+		case 4:
+			mMannequin->setHeadAccessory(mAccessoryImages[ID].c_str());
+			break;
+
+		case 5:
+			mMannequin->setHeadAccessory(mAccessoryImages[ID].c_str());
+			break;
+
+		case 6:
+			mMannequin->setHeadAccessory(mAccessoryImages[ID].c_str());
+			break;
+		}
+
 		Debug::log(command, Debug::INFO);
 	}
 }
@@ -176,11 +230,7 @@ void Shop::buttonFuncSwitchPage(int page) {
 
 	for (auto i : mItems[mActivePage])
 		i->setActive(false);
-	for (auto d : mDescriptions[mActivePage])
-		d->setActive(false);
 	mActivePage += page;
 	for (auto i : mItems[mActivePage])
 		i->setActive(true);
-	for (auto d : mDescriptions[mActivePage])
-		d->setActive(true);
 }

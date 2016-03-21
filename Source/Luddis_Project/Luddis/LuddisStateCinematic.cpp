@@ -9,12 +9,13 @@
 
 static const sf::Vector2f FRONTVECTOR(1, 0);
 
-LuddisStateCinematic::LuddisStateCinematic(float defaultSpeed, Luddis* playerPtr, sf::RenderWindow* window, EntityManager* entityManager, PowerupDisplay* display):
+LuddisStateCinematic::LuddisStateCinematic(float defaultSpeed, Luddis* playerPtr, sf::RenderWindow* window, EntityManager* entityManager, PowerupDisplay* display, sf::Shape* hitbox):
 mPlayerPtr(playerPtr),
 mWindow(window),
 mEntityManager(entityManager),
 mDefaultSpeed(defaultSpeed),
-mDisplay(display){
+mDisplay(display),
+mHitbox(hitbox){
 
 }
 
@@ -27,7 +28,7 @@ LuddisStateCinematic::~LuddisStateCinematic(){
 
 void LuddisStateCinematic::tick(const sf::Time & deltaTime){
 	if(mSequences.empty())
-		return mPlayerPtr->setPlayerState(new LuddisStatePlayable(mPlayerPtr, mWindow, mEntityManager, mDisplay));
+		return mPlayerPtr->setPlayerState(new LuddisStatePlayable(mPlayerPtr, mWindow, mEntityManager, mDisplay, mHitbox));
 	if (mSequences.front()->getFinished()) {
 		delete mSequences.front();
 		mSequences.pop();
@@ -66,7 +67,7 @@ void LuddisStateCinematic::tick(const sf::Time & deltaTime){
 			mPlayerPtr->move(direction*mDefaultSpeed*deltaTime.asSeconds());
 	}
 	else
-		mPlayerPtr->setPlayerState(new LuddisStatePlayable(mPlayerPtr, mWindow, mEntityManager, mDisplay));
+		mPlayerPtr->setPlayerState(new LuddisStatePlayable(mPlayerPtr, mWindow, mEntityManager, mDisplay, mHitbox));
 }
 
 void LuddisStateCinematic::collide(CollidableEntity * collidable, const sf::Vector2f & moveAway){

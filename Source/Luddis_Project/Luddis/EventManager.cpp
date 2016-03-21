@@ -35,7 +35,6 @@ void EventManager::notify(const sf::Event& aEvent) const{
 			o->onEvent(aEvent);
 		}
 	}
-	
 }
 
 
