@@ -369,24 +369,6 @@ void Level::tick(const sf::Time& deltaTime) {
 	else {
 		mTimeStunned -= deltaTime.asSeconds();
 	}
-
-
-	// TODO: This is temporary, and needs to be moved back to rendering function. It is put here for now because we need to rewrite all entities to add sprites to renderer instead of drawing them themselves. Until then this is here instead :)
-	static Renderer* renderer = &Renderer::getInstance();
-
-	const int max = mBackgroundImages.size();
-	for (int i = 0; i < max; i++)
-	{
-		float x = mWindow->getView().getCenter().x;
-		float xMin = (mMapBounds.width / max) * (i + 1) - mWindow->getView().getSize().x * 3;
-		float xMax = (mMapBounds.width / max) * (i + 1) + mWindow->getView().getSize().x * 3;
-
-		if (x < xMax && x >= xMin) {
-			renderer->addDrawableToQueue(&mBackgroundImages[i], Renderer::BACKGROUND);
-			if (!mForegroundImages.empty())
-				renderer->addDrawableToQueue(&mForegroundImages[i], Renderer::FOREGROUND);
-		}
-	}
 }
 
 void Level::updateView(const Time& deltaTime) {
@@ -458,6 +440,22 @@ void Level::setActive(const bool& active) {
 }
 
 Renderer::RenderLayer Level::getRenderLayer() const {
+	// TODO: This is temporary, and needs to be moved back to rendering function. It is put here for now because we need to rewrite all entities to add sprites to renderer instead of drawing them themselves. Until then this is here instead :)
+	static Renderer* renderer = &Renderer::getInstance();
+
+	const int max = mBackgroundImages.size();
+	for (int i = 0; i < max; i++)
+	{
+		float x = mWindow->getView().getCenter().x;
+		float xMin = (mMapBounds.width / max) * (i + 1) - mWindow->getView().getSize().x * 3;
+		float xMax = (mMapBounds.width / max) * (i + 1) + mWindow->getView().getSize().x * 3;
+
+		if (x < xMax && x >= xMin) {
+			renderer->addDrawableToQueue(&mBackgroundImages[i], Renderer::BACKGROUND);
+			if (!mForegroundImages.empty())
+				renderer->addDrawableToQueue(&mForegroundImages[i], Renderer::FOREGROUND);
+		}
+	}
 	return LAYER;
 }
 

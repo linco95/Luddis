@@ -62,9 +62,12 @@ void GameStatePaused::update(sf::Clock& clock) {
 }
 
 void GameStatePaused::render() {
+	static Renderer* renderer = &Renderer::getInstance();
 	//Draw objects (unless null pointer)
 	if (mEntityM != nullptr)
 		mEntityM->renderEntities(*mWindow);
+	//Draw objects
+	renderer->render(*mWindow);
 	//Renderer::getInstance().render(*mWindow);
 	//Change the view when drawing GUI elements
 	mMapView = mWindow->getView();
