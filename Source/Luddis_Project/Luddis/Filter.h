@@ -6,8 +6,14 @@
 
 class Filter :public InterfaceElement{
 public:
+	enum FilterType {
+		FADEIN,
+		FADEOUT,
+		FADEBOTH
+	};
 
-	Filter(float fadeTimer);
+	//Leave filename blank for a textureless filter.
+	Filter(float fadeTimer, FilterType filterType, std::string filename = "");
 	~Filter();
 
 	virtual void draw(sf::RenderTarget & target, sf::RenderStates states) const override;
@@ -30,7 +36,7 @@ private:
 	bool mComplete;
 	float mTimer;
 	float mMaxTimer;
-
+	FilterType mFilterType;
 };
 
 #endif // !_INCLUDED_FILTER_

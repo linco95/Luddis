@@ -433,3 +433,7 @@ bool GameStateLevel::playable() const {
 int GameStateLevel::getCurrentLevel() const{
 	return mCurrentLevel;
 }
+
+GUIManager& GameStateLevel::getGUIManager(){
+	return mResettableGUI;
+}

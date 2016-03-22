@@ -25,6 +25,7 @@ public:
 	sf::FloatRect getHitBox() override;
 	sf::Shape* getNarrowHitbox() const override;
 	void stun(const sf::Time& deltatime) override;
+
 private:
 	void updateMovement(const sf::Time& deltaTime);
 	void attack();
@@ -46,6 +47,8 @@ private:
 	sf::Shape* mHitbox;
 	float mTimeStunned;
 	float mInvulnerable;
+	float mDeathTimer;
+	bool mCompleteLevel;
 	GameStateLevel* mGameStateLevel;
 	bool mDead;
 };

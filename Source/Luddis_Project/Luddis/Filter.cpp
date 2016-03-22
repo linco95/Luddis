@@ -1,34 +1,47 @@
 #include "Filter.h"
+#include "ResourceManager.h"
 #include "ViewUtility.h"
 #include <SFML/Graphics/RenderTarget.hpp>
 
-Filter::Filter(float fadeTimer) :
+Filter::Filter(float fadeTimer, FilterType filterType, std::string filename) :
 	mTimer(0.0f), mMaxTimer(fadeTimer),
 	mIsAlive(true),
 	mFade(true), mFadeOut(true),
 	mHalfway(false), mComplete(false),
+	mFilterType(filterType),
 	mFadeEffect(ViewUtility::getViewSize().getSize()) {
 
-	mFadeEffect.setFillColor(sf::Color(0, 0, 0, 0));
-	mFadeEffect.setOutlineColor(sf::Color(0, 0, 0, 0));
+	mFadeEffect.setFillColor(sf::Color::White);
+	mFadeEffect.setOutlineColor(sf::Color::White);
+	if (filterType == FADEBOTH)
+		mMaxTimer /= 2;
+	else if (filterType == FADEOUT) {
+		mTimer = mMaxTimer;
+		mFadeOut = false;
+	}
+
+		if (filename != "")
+			mFadeEffect.setTexture(&ResourceManager::getInstance().getTexture(filename));
 }
 
 Filter::~Filter() {
 
 }
 
-void Filter::draw(sf::RenderTarget & target, sf::RenderStates states) const{
+void Filter::draw(sf::RenderTarget & target, sf::RenderStates states) const {
 	states.transform *= getTransform();
 	target.draw(mFadeEffect, states);
 }
 
-void Filter::tick(const sf::Time & deltaTime){
-	sf::Color fadeColor(0, 0, 0, (unsigned)(mTimer * 255.0f));
+void Filter::tick(const sf::Time & deltaTime) {
+	sf::Color fadeColor(0, 0, 0, (unsigned)(mTimer / mMaxTimer * 255.0f));
 	if (mFade && mFadeOut) {
 		mTimer += deltaTime.asSeconds();
 		mTimer = std::min(mTimer, mMaxTimer);
 		mFadeEffect.setFillColor(fadeColor);
 		if (mTimer >= mMaxTimer) {
+			if (mFilterType == FADEIN)
+				mFade = false;
 			//Halfway
 			mHalfway = true;
 			mFadeOut = false;
@@ -42,40 +55,41 @@ void Filter::tick(const sf::Time & deltaTime){
 			//Complete
 			mComplete = true;
 			mFade = false;
+			mIsAlive = false;
 		}
 	}
 }
 
-Filter::Strata Filter::getRenderLayer() const{
+Filter::Strata Filter::getRenderLayer() const {
 	return THIRD;
 }
 
-bool Filter::isAlive() const{
+bool Filter::isAlive() const {
 	return mIsAlive;
 }
 
-bool Filter::isActive() const{
+bool Filter::isActive() const {
 	return true;
 }
 
-void Filter::setActive(const bool & active){
+void Filter::setActive(const bool & active) {
 
 }
 
-void Filter::kill(){
+void Filter::kill() {
 	mIsAlive = false;
 }
 
-bool Filter::getHalfway(){
+bool Filter::getHalfway() {
 	if (mHalfway) {
 		mHalfway = false;
 		return true;
 	}
 	else
 		return false;
-}	
+}
 
-bool Filter::getComplete(){
+bool Filter::getComplete() {
 	if (mComplete) {
 		mComplete = false;
 		return true;

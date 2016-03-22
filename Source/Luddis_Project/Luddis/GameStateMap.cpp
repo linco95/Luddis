@@ -151,7 +151,7 @@ void GameStateMap::handleClicks(std::string command) {
 	if (dialogueString == "Dialogue" && !mOccupied) {
 		mOccupied = true;
 		sf::Vector2f pos(0.0f, (float)ViewUtility::VIEW_HEIGHT);
-		std::string string = DIALOGUE_PATH + "Sock" + command + std::to_string(mCurrentDialogueID) + ".json";
+		std::string string = DIALOGUE_PATH + "Room" + command + std::to_string(mCurrentDialogueID) + ".json";
 
 		Dialogue* dialogue = new Dialogue(string, mWindow, &mGUIM, &mEventM, pos, this);
 		mGUIM.addInterfaceElement(dialogue);

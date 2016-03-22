@@ -190,7 +190,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 			else if (levelNr == 2) {
 				//TODO pos
 
-				BossRobotButton* robotButton = new BossRobotButton(mWindow, sf::Vector2f(19517, pos.y), 0, mTarget);
+				BossRobotButton* robotButton = new BossRobotButton(mWindow, sf::Vector2f(19567, pos.y), 0, mTarget);
 				mEntityManager->addEntity(robotButton);
 				cm->addCollidable(robotButton);
 

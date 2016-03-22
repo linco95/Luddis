@@ -2,8 +2,9 @@
 #define INCLUDED_SIDERWEB
 
 #include "PowerUps.h"
-#include "EntityManager.h"
 #include "PowerupDisplay.h"
+
+class EntityManager;
 
 class SpiderWeb :public PowerUps {
 public:

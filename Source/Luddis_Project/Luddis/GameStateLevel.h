@@ -48,6 +48,7 @@ public:
 	void setPlayable(bool playable);
 	bool playable() const;
 	int getCurrentLevel() const;
+	GUIManager& getGUIManager();
 
 private:
 	GameStateLevel();

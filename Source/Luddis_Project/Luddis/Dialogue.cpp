@@ -4,6 +4,7 @@
 #include "GameStateLevel.h"
 #include "SoundEngine.h"
 #include "ViewUtility.h"
+#include "GameStateMap.h"
 #include "Debug.h"
 #include <rapidjson/document.h>
 #include <cmath>
@@ -312,5 +313,9 @@ void Dialogue::onClick(std::string buttonFunc){
 	}
 	else if (buttonFunc == "Spider3"){
 		spiderButton3();
+	}
+	else if (buttonFunc == "Shop") {
+		GameStateMap::getInstance().handleClicks("Shop");
+		closeButton();
 	}
 }

@@ -7,6 +7,8 @@
 #include "ResourceManager.h"
 #include "Inventory.h"
 #include "GameStateLevel.h"
+#include "GameStateMap.h"
+#include "GameManager.h"
 #include "Dialogue.h"
 #include "SoundEngine.h"
 
@@ -40,10 +42,11 @@ static const float ATTACK_TIME = 1.0f;
 static const float ATTACK_FIRE_INTERVAL = 0.3f;
 static const float PROJECTILE_LIFETIME = 2.5f;
 static const float PROJECTILE_SPEED = 300;
+static const float DEATH_TIMER = 1.5f;
 static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(225, 225));
 
 
-void loadResources(){
+void loadResources() {
 	ResourceManager::getInstance().loadTexture(ANIMATION_IDLE + ".png");
 	ResourceManager::getInstance().loadTexture(SHOOTING_ANIMATION + ".png");
 	ResourceManager::getInstance().loadTexture(ANIMATION_IDLE_2 + ".png");
@@ -57,38 +60,48 @@ void loadResources(){
 }
 
 BossDishCloth::BossDishCloth(sf::RenderWindow* window, const sf::Vector2f& position, const float& activation, Transformable* aTarget, EntityManager* entityManager) :
-mIsAlive(true),
-mIsActive(false),
-mMeet(true),
-mWindow(window),
-mEntityManager(entityManager),
-mShooting(false),
-mActivate(activation),
-mLife(MAX_LIFE),
-mAttackInterval(ATTACK_INTERVAL),
-mGameStateLevel(&GameStateLevel::getInstance()),
-mDirection(0, 1.0f),
-mAnimation(Animation(ANIMATION_IDLE)),
-mHitbox(new sf::RectangleShape(HITBOX_SHAPE)),
-mTarget(aTarget),
-mDead(false),
-mAttackTimer(ATTACK_TIME),
-mFireInterval(ATTACK_FIRE_INTERVAL)
+	mIsAlive(true),
+	mIsActive(false),
+	mMeet(true),
+	mWindow(window),
+	mEntityManager(entityManager),
+	mShooting(false),
+	mActivate(activation),
+	mLife(MAX_LIFE),
+	mAttackInterval(ATTACK_INTERVAL),
+	mGameStateLevel(&GameStateLevel::getInstance()),
+	mDirection(0, 1.0f),
+	mAnimation(Animation(ANIMATION_IDLE)),
+	mHitbox(new sf::RectangleShape(HITBOX_SHAPE)),
+	mTarget(aTarget),
+	mDead(false),
+	mCompleteLevel(false),
+	mDeathTimer(DEATH_TIMER),
+	mAttackTimer(ATTACK_TIME),
+	mFireInterval(ATTACK_FIRE_INTERVAL)
 {
 	loadResources();
 	setPosition(position);
 	mHitbox->setOrigin(mHitbox->getLocalBounds().width / 2, mHitbox->getLocalBounds().height / 2);
 }
 
-BossDishCloth::~BossDishCloth(){
+BossDishCloth::~BossDishCloth() {
 	delete mHitbox;
 }
 
-void BossDishCloth::tick(const sf::Time& deltaTime){
+void BossDishCloth::tick(const sf::Time& deltaTime) {
+	if (mDead)
+		mDeathTimer -= deltaTime.asSeconds();
+
+	if (mCompleteLevel) {
+		GameStateMap::getInstance();
+		GameManager::getInstance().setGameState(&GameStateMap::getInstance());
+	}
+
 	if (mTarget->getPosition().x >= mActivate) {
 		mIsActive = true;
-		if (mMeet == true) { 
-			mGameStateLevel->createDialogue(BOSS_START); 
+		if (mMeet == true) {
+			mGameStateLevel->createDialogue(BOSS_START);
 			mMeet = false;
 		}
 	}
@@ -118,7 +131,7 @@ void BossDishCloth::tick(const sf::Time& deltaTime){
 				mAttackInterval -= deltaTime.asSeconds();
 				updateMovement(deltaTime);
 			}
-		}		
+		}
 		mAnimation.tick(deltaTime);
 	}
 	else {
@@ -134,26 +147,29 @@ void BossDishCloth::tick(const sf::Time& deltaTime){
 	if (mLife <= 0 && mDead == false) {
 		mAnimation.setDefaultAnimation(ANIMATION_DEAD);
 		mAnimation.overrideAnimation(ANIMATION_DEATH);
-		mGameStateLevel->createDialogue(BOSS_DEFEATED);
 		mDead = true;
+	}
+	else if (mLife <= 0 && mDeathTimer <= 0) {
+		mGameStateLevel->createDialogue(BOSS_DEFEATED);
+		mCompleteLevel = true;
 	}
 }
 
-void BossDishCloth::draw(sf::RenderTarget& target, sf::RenderStates states) const{
+void BossDishCloth::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	if (!mIsActive) return;
 	states.transform *= getTransform();
 	target.draw(mAnimation.getCurrAnimation(), states);
 }
 
-bool BossDishCloth::isAlive() const{
+bool BossDishCloth::isAlive() const {
 	return mIsAlive;
 }
 
-bool BossDishCloth::isActive() const{
+bool BossDishCloth::isActive() const {
 	return mIsActive;
 }
 
-void BossDishCloth::setActive(const bool& active){
+void BossDishCloth::setActive(const bool& active) {
 	mIsActive = active;
 }
 
@@ -161,7 +177,7 @@ Renderer::RenderLayer BossDishCloth::getRenderLayer() const {
 	return Renderer::PLAYER;
 }
 
-void BossDishCloth::updateMovement(const sf::Time& deltaTime){
+void BossDishCloth::updateMovement(const sf::Time& deltaTime) {
 	int spriteHeight = mAnimation.getCurrAnimation().getSprite().getTextureRect().height;
 	if (getPosition().y < 0 + spriteHeight
 		|| getPosition().y> mWindow->getView().getSize().y - spriteHeight) {
@@ -172,8 +188,8 @@ void BossDishCloth::updateMovement(const sf::Time& deltaTime){
 		mShooting = false;
 		move(mDirection);
 	}
-	else{
-		if (!mShooting){
+	else {
+		if (!mShooting) {
 			mShooting = true;
 			//For different states of damage (changes happen next shot if hit when shooting)
 			//State 1
@@ -208,8 +224,8 @@ void BossDishCloth::updateMovement(const sf::Time& deltaTime){
 void BossDishCloth::attack() {
 	sf::Vector2f vec(-1, 0);
 	int max = 8;
-	
-	if (mLife < 50){
+
+	if (mLife < 50) {
 		max = 2;
 	}
 	for (int i = 0; i < max; i++)
@@ -220,7 +236,7 @@ void BossDishCloth::attack() {
 		mEntityManager->addEntity(proj);
 		CollisionManager::getInstance().addCollidable(proj);
 	}
-	
+
 	Projectile* proj = new Projectile(PROJECTILE_FILEPATH, vec*PROJECTILE_SPEED, sf::Vector2f(getPosition().x, 590) + vec*PROJECTILE_SPEED / 3.0f, PROJECTILE_LIFETIME, ENEMY_STUN);
 	mEntityManager->addEntity(proj);
 	CollisionManager::getInstance().addCollidable(proj);
@@ -239,62 +255,62 @@ BossDishCloth::Type BossDishCloth::getCollisionType() {
 	return REC;
 }
 
-void BossDishCloth::collide(CollidableEntity* collidable, const sf::Vector2f& moveAway){
+void BossDishCloth::collide(CollidableEntity* collidable, const sf::Vector2f& moveAway) {
 	if (mDead == true) {
 		return;
 	}
-	else if (collidable->getCollisionCategory() == PLAYER_PROJECTILE){
-		if (!mShooting){
-		mLife -= 15;
-		SoundEngine* se = &SoundEngine::getInstance();
-		se->playEvent("event:/Gameplay/Luddis/Interaction/Luddis_Hit");
-		// For different states of damages
-		//State 1
-		if (mLife < 26){
-			int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
-			mAnimation.setDefaultAnimation(ANIMATION_IDLE_4);
-			mAnimation.getCurrAnimation().setFrame(frame);
-		}
-		//State 2
-		if (25 < mLife && mLife < 51){
-			int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
-			mAnimation.setDefaultAnimation(ANIMATION_IDLE_3);
-			mAnimation.getCurrAnimation().setFrame(frame);
-		}
-		//State 3
-		if (50 < mLife && mLife < 76){
-			int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
-			mAnimation.setDefaultAnimation(ANIMATION_IDLE_2);
-			mAnimation.getCurrAnimation().setFrame(frame);
-		}
-		//State 4
-		if (75 < mLife){
-			int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
-			mAnimation.setDefaultAnimation(ANIMATION_IDLE);
-			mAnimation.getCurrAnimation().setFrame(frame);
-		}
-		}
-		if (mShooting){
+	else if (collidable->getCollisionCategory() == PLAYER_PROJECTILE) {
+		if (!mShooting) {
+			mLife -= 15;
+			SoundEngine* se = &SoundEngine::getInstance();
+			se->playEvent("event:/Gameplay/Luddis/Interaction/Luddis_Hit");
+			// For different states of damages
 			//State 1
-			if (mLife < 26){
+			if (mLife < 26) {
+				int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
+				mAnimation.setDefaultAnimation(ANIMATION_IDLE_4);
+				mAnimation.getCurrAnimation().setFrame(frame);
+			}
+			//State 2
+			if (25 < mLife && mLife < 51) {
+				int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
+				mAnimation.setDefaultAnimation(ANIMATION_IDLE_3);
+				mAnimation.getCurrAnimation().setFrame(frame);
+			}
+			//State 3
+			if (50 < mLife && mLife < 76) {
+				int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
+				mAnimation.setDefaultAnimation(ANIMATION_IDLE_2);
+				mAnimation.getCurrAnimation().setFrame(frame);
+			}
+			//State 4
+			if (75 < mLife) {
+				int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
+				mAnimation.setDefaultAnimation(ANIMATION_IDLE);
+				mAnimation.getCurrAnimation().setFrame(frame);
+			}
+		}
+		if (mShooting) {
+			//State 1
+			if (mLife < 26) {
 				int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
 				mAnimation.replaceAnimation(SHOOTING_ANIMATION_4);
 				mAnimation.getCurrAnimation().setFrame(frame);
 			}
 			//State 2
-			if (25 < mLife && mLife < 51){
+			if (25 < mLife && mLife < 51) {
 				int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
 				mAnimation.replaceAnimation(SHOOTING_ANIMATION_3);
 				mAnimation.getCurrAnimation().setFrame(frame);
 			}
 			//State 3
-			if (50 < mLife && mLife < 76){
+			if (50 < mLife && mLife < 76) {
 				int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
 				mAnimation.replaceAnimation(SHOOTING_ANIMATION_2);
 				mAnimation.getCurrAnimation().setFrame(frame);
 			}
 			//State 4
-			if (75 < mLife){
+			if (75 < mLife) {
 				int  frame = mAnimation.getCurrAnimation().getCurrentFrame();
 				mAnimation.replaceAnimation(SHOOTING_ANIMATION);
 				mAnimation.getCurrAnimation().setFrame(frame);
@@ -308,10 +324,10 @@ void BossDishCloth::collide(CollidableEntity* collidable, const sf::Vector2f& mo
 	}
 }
 
-sf::FloatRect BossDishCloth::getHitBox(){
+sf::FloatRect BossDishCloth::getHitBox() {
 	return getTransform().transformRect(mAnimation.getCurrAnimation().getSprite().getGlobalBounds());
 }
-sf::Shape* BossDishCloth::getNarrowHitbox() const{
+sf::Shape* BossDishCloth::getNarrowHitbox() const {
 	mHitbox->setPosition(getPosition());
 	mHitbox->setScale(getScale());
 	mHitbox->setRotation(getRotation());
