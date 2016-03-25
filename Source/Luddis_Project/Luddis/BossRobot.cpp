@@ -4,6 +4,8 @@
 #include "Debug.h"
 #include "VectorMath.h"
 #include "GameStateLevel.h"
+#include "GameStateMap.h"
+#include "GameManager.h"
 
 static const std::string IDLE_SPRITE = ("Resources/Images/SpriteSheets/robot/robotIdle");
 static const std::string HIT_SPRITE = ("Resources/Images/SpriteSheets/robot/robotHit");
@@ -18,6 +20,7 @@ static const std::string BOSS_DEFEATED = "Resources/Configs/Dialogue/RobotBoss2.
 static const float PHASE_ONE_INTERVAL = 10.0f;
 static const float PHASE_TWO_ONE_INTERVAL = 1.5f;
 static const float PHASE_TWO_TWO_INTERVAL = 2.0f;
+static const float LEVEL_END = 2.0f;
 
 static const sf::CircleShape HITBOX_SHAPE = sf::CircleShape(125, 10);
 
@@ -34,7 +37,9 @@ BossRobot::BossRobot(sf::RenderWindow* window, const sf::Vector2f& position, con
 	mPhaseOneTimer(PHASE_ONE_INTERVAL),
 	mPhaseTwoTimerOne(PHASE_TWO_ONE_INTERVAL),
 	mPhaseTwoTimerTwo(PHASE_TWO_TWO_INTERVAL),
+	mEndLevel(LEVEL_END),
 	mGameStateLevel(&GameStateLevel::getInstance()),
+	mCompleteLevel(false),
 	mMeet(true),
 	mState(IDLE),
 	mCurrentHealth(0),
@@ -61,6 +66,12 @@ void BossRobot::tick(const sf::Time& deltaTime) {
 	if (mTarget->getPosition().x >= mActivate) {
 		mIsActive = true;
 	}
+
+	if (mCompleteLevel) {
+		GameStateMap::getInstance();
+		GameManager::getInstance().setGameState(&GameStateMap::getInstance());
+	}
+
 	if (mTarget->getPosition().x >= 18800 && mMeet == true) {
 		mGameStateLevel->createDialogue(BOSS_START);
 		mMeet = false;
@@ -139,6 +150,9 @@ void BossRobot::tick(const sf::Time& deltaTime) {
 			mState = DEAD;
 			break;
 		case BossRobot::DEAD:
+			mEndLevel -= deltaTime.asSeconds();
+			if (mEndLevel <= 0)
+			mCompleteLevel = true;
 			break;
 		default:
 			break;

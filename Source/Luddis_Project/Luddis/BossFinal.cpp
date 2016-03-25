@@ -9,8 +9,7 @@
 #include "Collectible.h"
 #include "GameStateLevel.h"
 
-//Different states depending on how damaged the boss is.
-//State 1
+
 static const std::string ANIMATION_IDLE = ("Resources/Images/Spritesheets/Finalboss_idle");
 static const std::string ANIMATION_HIT = ("Resources/Images/Spritesheets/Finalboss_hit");
 static const std::string ANIMATION_DEATH = ("Resources/Images/Spritesheets/Finalboss_death");
@@ -152,7 +151,7 @@ void BossFinal::updateMovement(const sf::Time& deltaTime) {
 }
 
 void BossFinal::attack() {
-	if (mState1 == true) {
+/*	if (mState1 == true) {
 		CollisionManager* cm = &CollisionManager::getInstance();
 		sf::Vector2f mPos(100, 100);
 
@@ -166,7 +165,7 @@ void BossFinal::attack() {
 	}
 	else if (mState2 == true) {
 
-	}
+	}*/
 }
 
 BossFinal::Category BossFinal::getCollisionCategory() {

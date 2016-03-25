@@ -41,29 +41,21 @@ void TextBox::setColor(sf::Color color){
 	mText.setColor(color);
 }
 
-void TextBox::animate(const sf::Time& deltaTime){
-	if (mAnimateTime > 0){
+void TextBox::animate(const sf::Time& deltaTime) {
+	if (mAnimateTime > 0) {
 		mAnimateTime -= deltaTime.asSeconds();
 		mAnimateTime = std::max(mAnimateTime, 0.0f);
 		std::string tempString;
 		int maxStringLength = (int)((MAX_ANIMATE_TIME - mAnimateTime) * 30);
-		for (int i = 0; i < maxStringLength; i++){
+		for (int i = 0; i < maxStringLength; i++) {
 			tempString.push_back(mTextString[i]);
 		}
 		mText.setString(tempString);
 	}
-	else if (mAnimating){
-		mText.setString(mTextString);
-		mAnimating = false;
-	}
-}
-
-void TextBox::resetAnimation(){
-	mAnimateTime = MAX_ANIMATE_TIME;
 }
 
 void TextBox::draw(sf::RenderTarget& target, sf::RenderStates states) const{
-	states.transform *= getTransform();
+	states.transform *= getTransform(); 
 	target.draw(mText, states);
 }
 

@@ -100,9 +100,11 @@ void BossDishCloth::tick(const sf::Time& deltaTime) {
 
 	if (mTarget->getPosition().x >= mActivate) {
 		mIsActive = true;
-		if (mMeet == true) {
-			mGameStateLevel->createDialogue(BOSS_START);
-			mMeet = false;
+		if (mTarget->getPosition().x >= 11000){
+			if (mMeet == true) {
+				mGameStateLevel->createDialogue(BOSS_START);
+				mMeet = false;
+			}
 		}
 	}
 

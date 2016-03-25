@@ -194,7 +194,7 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 			else if (levelNr == 2) {
 				//TODO pos
 
-				BossRobotButton* robotButton = new BossRobotButton(mWindow, sf::Vector2f(19567, pos.y), 0, mTarget);
+				BossRobotButton* robotButton = new BossRobotButton(mWindow, sf::Vector2f(19530, pos.y), 0, mTarget);
 				mEntityManager->addEntity(robotButton);
 				cm->addCollidable(robotButton);
 
@@ -222,12 +222,14 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 			assert(itr->HasMember("width") && (*itr)["width"].IsInt());
 			assert(itr->HasMember("height") && (*itr)["height"].IsInt());
 			assert(itr->HasMember("eventtype") && (*itr)["eventtype"].IsInt());
+			assert(itr->HasMember("level") && (*itr)["level"].IsInt());
 
 			float x = (float)(*itr)["x"].GetInt();
 			float y = (float)(*itr)["y"].GetInt();
 			float width = (float)(*itr)["width"].GetInt();
 			float height = (float)(*itr)["height"].GetInt();
 			int eventType = (*itr)["eventtype"].GetInt();
+			int level = (*itr)["level"].GetInt();
 			Vector2f size(width, height);
 			Vector2f position(x, y);
 			Shape* shape = new RectangleShape(size);

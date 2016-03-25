@@ -44,6 +44,7 @@ void BossRobotButton::tick(const sf::Time & deltaTime) {
 	else {
 		mHit = false;
 		mAnimation.getCurrAnimation().setFrame(0);
+		mAnimationHitTimer = ANIMATION_HIT_INTERVAL;
 	}
 
 	if (mInvulnerableTimer > 0) {

@@ -40,6 +40,7 @@ private:
 	bool mIsAlive;
 	bool mIsActive;
 	bool mMeet;
+	bool mCompleteLevel;
 	sf::Vector2f mDirection;
 	float mStandardX;
 	sf::Shape* mHitbox;
@@ -62,6 +63,7 @@ private:
 	float mPhaseOneTimer;
 	float mPhaseTwoTimerOne;
 	float mPhaseTwoTimerTwo;
+	float mEndLevel;
 };
 
 #endif // !INCLUDED_BOSSROBOT
