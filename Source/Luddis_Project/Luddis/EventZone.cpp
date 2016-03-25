@@ -90,9 +90,9 @@ void EventZone::collide(CollidableEntity* collidable, const sf::Vector2f& moveAw
 
 		case SPIDER_2_END:
 			if (mLevel == 1) {
-				if (Inventory::getInstance().getEggs() == 10)
+				if (Inventory::getInstance().getEggs() == 9)
 					filename += std::to_string(mLevel) + "end2.json";
-				else if (Inventory::getInstance().getEggs() <= 9 && Inventory::getInstance().getEggs() >= 1)
+				else if (Inventory::getInstance().getEggs() <= 8 && Inventory::getInstance().getEggs() >= 1)
 					filename += std::to_string(mLevel) + "end2b.json";
 				else if (Inventory::getInstance().getEggs() == 0)
 					filename += std::to_string(mLevel) + "end1.json";
@@ -102,9 +102,9 @@ void EventZone::collide(CollidableEntity* collidable, const sf::Vector2f& moveAw
 
 		case SPIDER_3_END:
 			if (mLevel == 1) {
-				if (Inventory::getInstance().getEggs() == 10)
+				if (Inventory::getInstance().getEggs() == 9)
 					filename += std::to_string(mLevel) + "end3.json";
-				else if (Inventory::getInstance().getEggs() <= 9 && Inventory::getInstance().getEggs() >= 1)
+				else if (Inventory::getInstance().getEggs() <= 8 && Inventory::getInstance().getEggs() >= 1)
 					filename += std::to_string(mLevel) + "end3b.json";
 				else if (Inventory::getInstance().getEggs() == 0)
 					filename += std::to_string(mLevel) + "end1.json";
