@@ -232,12 +232,12 @@ void BossDishCloth::attack() {
 	{
 
 		vec = VectorMath::rotateVector(vec, 360 / (float)max);
-		Projectile* proj = new Projectile(PROJECTILE_FILEPATH, vec*PROJECTILE_SPEED, getPosition() + vec*PROJECTILE_SPEED / 3.0f, PROJECTILE_LIFETIME, ENEMY_STUN);
+		Projectile* proj = new Projectile(PROJECTILE_FILEPATH, vec*PROJECTILE_SPEED, getPosition() + vec*PROJECTILE_SPEED / 3.0f, PROJECTILE_LIFETIME, 0, ENEMY_STUN);
 		mEntityManager->addEntity(proj);
 		CollisionManager::getInstance().addCollidable(proj);
 	}
 
-	Projectile* proj = new Projectile(PROJECTILE_FILEPATH, vec*PROJECTILE_SPEED, sf::Vector2f(getPosition().x, 590) + vec*PROJECTILE_SPEED / 3.0f, PROJECTILE_LIFETIME, ENEMY_STUN);
+	Projectile* proj = new Projectile(PROJECTILE_FILEPATH, vec*PROJECTILE_SPEED, sf::Vector2f(getPosition().x, 590) + vec*PROJECTILE_SPEED / 3.0f, PROJECTILE_LIFETIME, 0, ENEMY_STUN);
 	mEntityManager->addEntity(proj);
 	CollisionManager::getInstance().addCollidable(proj);
 }
@@ -332,6 +332,10 @@ sf::Shape* BossDishCloth::getNarrowHitbox() const {
 	mHitbox->setScale(getScale());
 	mHitbox->setRotation(getRotation());
 	return mHitbox;
+}
+
+int BossDishCloth::getCollisionDamage() const{
+	return 0;
 }
 
 void BossDishCloth::stun(const sf::Time& deltatime) {

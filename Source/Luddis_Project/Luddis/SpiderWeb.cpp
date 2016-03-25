@@ -5,7 +5,7 @@
 #include "GameStateLevel.h"
 #include "SoundEngine.h"
 
-float const PAUSE_TIME = 2.0f;
+float const PAUSE_TIME = 2.3f;
 
 const char* TEXTURE = "Resources/Images/Powerup_web.png";
 

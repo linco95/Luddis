@@ -14,11 +14,12 @@ static const float FADINGFACTOR = 0.2f; /// < Fade the factor towards this value
 static const sf::Time MAXLIFETIME = sf::seconds(3);
 
 //The max life time should be entered in milliseconds
-Projectile::Projectile(std::string textureFilename, sf::Vector2f direction, sf::Vector2f position, float maxLifeTimeMS, Projectile::Category collisionCategory):
+Projectile::Projectile(std::string textureFilename, sf::Vector2f direction, sf::Vector2f position, float maxLifeTimeMS, int damageValue, Projectile::Category collisionCategory):
 	mIsAlive(true),
 	mIsActive(true),
 	mDirection(direction),
 	mLifeTime(maxLifeTimeMS),
+	mDamage(damageValue),
 	mCollisionCategory(collisionCategory),
 	mSprite(ResourceManager::getInstance().getTexture(textureFilename)),
 	mHitbox(new sf::CircleShape(HITBOX_SHAPE))
@@ -147,6 +148,11 @@ sf::FloatRect Projectile::getHitBox(){
 void Projectile::setTexture(std::string filename){
 	mSprite.setTexture(ResourceManager::getInstance().getTexture(filename), true);
 }
+
+int Projectile::getCollisionDamage() const{
+	return mDamage;
+}
+
 sf::Shape* Projectile::getNarrowHitbox() const{
 	mHitbox->setPosition(getPosition());
 	mHitbox->setRotation(getRotation());

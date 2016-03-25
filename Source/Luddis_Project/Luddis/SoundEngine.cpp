@@ -124,8 +124,6 @@ FMOD_RESULT SoundEngine::playEvent(const char * path) {
 	FMOD_RESULT result;
 	//See if it can be found in the sound map,
 	//otherwise assume that its in the music map.
-	int i = 0;
-	i = 2;
 	if (mMusicEventInstances.find(path) != mMusicEventInstances.end()) {
 		result = mMusicEventInstances[path]->start();
 		if (mMute) {
@@ -145,8 +143,6 @@ FMOD_RESULT SoundEngine::playEvent(const char * path) {
 
 		}
 	}
-
-
 
 	return result;
 }

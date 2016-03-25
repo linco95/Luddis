@@ -12,7 +12,7 @@ class TextBox: public sf::Drawable, public sf::Transformable{
 public:
 	//Class representing a box of text that will wrap
 	//around based on the size of the box passed on to it.
-	TextBox(sf::IntRect box, std::string text, int fontSize, bool animate = false, std::string fontName = "Resources/Fonts/phitradesign Handwritten-Thin.ttf");
+	TextBox(sf::IntRect box, std::string text, int fontSize, bool animate = false, std::string fontName = "Resources/Fonts/phitradesign Handwritten-Bold.ttf");
 	~TextBox();
 
 	void setString(const std::string& text);

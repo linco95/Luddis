@@ -37,6 +37,7 @@ static const float PROJECTILE_SPEED = 300;
 static const float MUZZLEOFFSET = 50.0f;
 static const sf::Vector2f FRONTVECTOR(1, 0);
 static const float STUNTIME = 3.0f;
+static const int PROJ_DAMAGE_STD = 5;
 
 static const std::string ANIMATION_FILEPATH[COLORVARIATIONS]{
 	"Resources/Images/Spritesheets/Luddis_walkcykle",
@@ -67,9 +68,16 @@ static const std::string HIT_ANIMATION[COLORVARIATIONS]{
 };
 
 //This should be dynamic later to determine what texture to use for projectiles
-static const std::array<std::string, 3> PROJECTILE_FILENAME = { "Resources/Images/Luddis_attack1.png",
-"Resources/Images/Luddis_attack2.png",
-"Resources/Images/Luddis_attack3.png"
+static const std::array<std::string, 3> PROJECTILE_FILENAME = {
+	"Resources/Images/Luddis_attack1.png",
+	"Resources/Images/Luddis_attack2.png",
+	"Resources/Images/Luddis_attack3.png"
+};
+
+static const std::array<std::string, 3> PROJECTILE_SP_FILENAME = {
+	"Resources/Images/Luddis_attack_sp1.png",
+	"Resources/Images/Luddis_attack_sp2.png",
+	"Resources/Images/Luddis_attack_sp3.png"
 };
 
 LuddisStatePlayable::LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* window, EntityManager* entityManager, PowerupDisplay* display, sf::Shape* hitbox) :
@@ -85,6 +93,7 @@ LuddisStatePlayable::LuddisStatePlayable(Luddis* playerPtr, sf::RenderWindow* wi
 	mHitbox(hitbox)
 {
 	Inventory::getInstance().choseFirst(new SpiderWeb(entityManager, display));
+	Inventory::getInstance().choseSecond(new SpiderWeb(entityManager, display));
 }
 
 LuddisStatePlayable::~LuddisStatePlayable() {
@@ -214,7 +223,7 @@ void LuddisStatePlayable::attack() {
 	int randValue = std::rand() % PROJECTILE_FILENAME.max_size();
 
 	// create the projectile
-	Projectile *proj = new Projectile(PROJECTILE_FILENAME[randValue], direction * PROJECTILE_SPEED, muzzlePoint, PROJECTILE_TIMER, CollidableEntity::Category::PLAYER_PROJECTILE);
+	Projectile *proj = new Projectile(PROJECTILE_FILENAME[randValue], direction * PROJECTILE_SPEED, muzzlePoint, PROJECTILE_TIMER, PROJ_DAMAGE_STD, CollidableEntity::Category::PLAYER_PROJECTILE);
 	mEntityManager->addEntity(proj);
 	CollisionManager::getInstance().addCollidable(proj);
 }

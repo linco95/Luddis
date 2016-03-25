@@ -32,6 +32,8 @@ public:
 	virtual Category getCollisionCategory() = 0;
 	// Check the shape of the object
 	virtual Type getCollisionType() = 0;
+	// returns the damage to be done in case of collision
+	virtual int getCollisionDamage() const = 0;
 	// Collide the object with "collidable"
 	virtual void collide(CollidableEntity *collidable, const sf::Vector2f& moveAway) = 0;
 	virtual sf::FloatRect getHitBox() = 0;

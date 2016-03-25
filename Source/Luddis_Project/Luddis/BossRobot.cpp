@@ -243,6 +243,10 @@ sf::Shape* BossRobot::getNarrowHitbox() const {
 	return mHitbox;
 }
 
+int BossRobot::getCollisionDamage() const{
+	return 0;
+}
+
 void BossRobot::stun(const sf::Time& deltatime) {
 	mTimeStunned = float(deltatime.asSeconds());
 }

@@ -28,19 +28,19 @@ static const float INVULNERABLE_TIMER = 1.5f;
 static const sf::RectangleShape HITBOX_SHAPE = sf::RectangleShape(sf::Vector2f(55, 17));
 
 Silverfish::Silverfish(sf::RenderWindow* window, FishType type, const sf::Vector2f& position, const float& angle, const float& activation, Transformable* aTarget) :
-mIsAlive(true),
-mIsActive(false),
-mSwimAway(false),
-mBefriend(false),
-mLife(LIFE),
-mActivate(activation),
-mWindow(window),
-mType(type),
-mAnimation(ANIMATION1_SWIM),
-mHitbox(new sf::RectangleShape(HITBOX_SHAPE)),
-mAlignment(ENEMY_DAMAGE),
-mTarget(aTarget),
-mInvulnerable(0)
+	mIsAlive(true),
+	mIsActive(false),
+	mSwimAway(false),
+	mBefriend(false),
+	mLife(LIFE),
+	mActivate(activation),
+	mWindow(window),
+	mType(type),
+	mAnimation(ANIMATION1_SWIM),
+	mHitbox(new sf::RectangleShape(HITBOX_SHAPE)),
+	mAlignment(ENEMY_DAMAGE),
+	mTarget(aTarget),
+	mInvulnerable(0)
 {
 	mSprite.setOrigin((float)mSprite.getTextureRect().width / 2, (float)mSprite.getTextureRect().height / 2);
 	// Get a y-spawn position
@@ -56,7 +56,7 @@ mInvulnerable(0)
 
 	// TODO flip if changing direction when swimming aways
 
-	if (mDirection.x > 0){
+	if (mDirection.x > 0) {
 		scale(sf::Vector2f(1, -1));
 	}
 
@@ -70,12 +70,12 @@ mInvulnerable(0)
 
 }
 
-Silverfish::~Silverfish(){
+Silverfish::~Silverfish() {
 	delete mHitbox;
 }
 
-void Silverfish::tick(const sf::Time& deltaTime){
-	
+void Silverfish::tick(const sf::Time& deltaTime) {
+
 	if (mTarget->getPosition().x >= mActivate) {
 		mIsActive = true;
 	}
@@ -105,7 +105,7 @@ void Silverfish::tick(const sf::Time& deltaTime){
 
 }
 
-void Silverfish::updateMovement(const sf::Time& deltaTime){
+void Silverfish::updateMovement(const sf::Time& deltaTime) {
 	float rotation = VectorMath::getAngle(sf::Vector2f(FRONTVECTOR), mDirection) * 180 / (float)M_PI;
 	setRotation(rotation);
 
@@ -122,67 +122,67 @@ void Silverfish::updateMovement(const sf::Time& deltaTime){
 	move(mDirection * speed * deltaTime.asSeconds());
 }
 
-void Silverfish::draw(sf::RenderTarget& target, sf::RenderStates states) const{
+void Silverfish::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	if (!mIsActive) return;
 	states.transform *= getTransform();
 	target.draw(mAnimation.getCurrAnimation(), states);
 }
 
-bool Silverfish::isAlive() const{
+bool Silverfish::isAlive() const {
 	return mIsAlive;
 }
 
-bool Silverfish::isActive() const{
+bool Silverfish::isActive() const {
 	return mIsActive;
 }
 
-void Silverfish::setActive(const bool& active){
+void Silverfish::setActive(const bool& active) {
 	mIsActive = active;
 }
 
-Renderer::RenderLayer Silverfish::getRenderLayer() const{
+Renderer::RenderLayer Silverfish::getRenderLayer() const {
 	return LAYER;
 }
 
-Silverfish::Category Silverfish::getCollisionCategory(){
+Silverfish::Category Silverfish::getCollisionCategory() {
 	return mAlignment;
 }
 
-Silverfish::Type Silverfish::getCollisionType(){
+Silverfish::Type Silverfish::getCollisionType() {
 	return REC;
 }
 
-void Silverfish::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway){
-	if (collidable->getCollisionCategory() == PLAYER_PROJECTILE){
-		if (mSwimAway== false){
-		mLife -= 5;
-		SoundEngine* se = &SoundEngine::getInstance();
-		se->playEvent("event:/Gameplay/Luddis/Interaction/Luddis_Hit");
-		if (mLife <= 0){
-			if (mType == GOLD) {
-				mAnimation.replaceAnimation(ANIMATION2_DEATH);
-				mAnimation.setDefaultAnimation(ANIMATION2_DEAD);
-			}
+void Silverfish::collide(CollidableEntity *collidable, const sf::Vector2f& moveAway) {
+	if (collidable->getCollisionCategory() == PLAYER_PROJECTILE) {
+		if (mSwimAway == false) {
+			mLife -= collidable->getCollisionDamage();
+			SoundEngine* se = &SoundEngine::getInstance();
+			se->playEvent("event:/Gameplay/Luddis/Interaction/Luddis_Hit");
+			if (mLife <= 0) {
+				if (mType == GOLD) {
+					mAnimation.replaceAnimation(ANIMATION2_DEATH);
+					mAnimation.setDefaultAnimation(ANIMATION2_DEAD);
+				}
 
-			else if (mType == SILVER){
-				mAnimation.replaceAnimation(ANIMATION1_DEATH);
-				mAnimation.setDefaultAnimation(ANIMATION1_DEAD);
+				else if (mType == SILVER) {
+					mAnimation.replaceAnimation(ANIMATION1_DEATH);
+					mAnimation.setDefaultAnimation(ANIMATION1_DEAD);
+				}
+				mSwimAway = true;
+				mNextDir = VectorMath::normalizeVector(getPosition() - collidable->getPosition());
+				mBefriend = true;
+				mTimeStunned = 0;
 			}
-			mSwimAway = true;
-			mNextDir = VectorMath::normalizeVector(getPosition() - collidable->getPosition());
-			mBefriend = true;
-			mTimeStunned = 0;
-			}
-		else if (mLife > 0) {
-			if (mType == GOLD) mAnimation.replaceAnimation(ANIMATION2_HIT);
-			else if (mType == SILVER) mAnimation.replaceAnimation(ANIMATION1_HIT);
+			else if (mLife > 0) {
+				if (mType == GOLD) mAnimation.replaceAnimation(ANIMATION2_HIT);
+				else if (mType == SILVER) mAnimation.replaceAnimation(ANIMATION1_HIT);
 			}
 		}
 	}
 	if (collidable->getCollisionCategory() == PLAYER_OBJECT) {
-		if (mInvulnerable <= 0) {
+		if (mInvulnerable <= 0 && mTimeStunned <= 0) {
 			if (mType == SILVER) {
-			Inventory::getInstance().addDust(-1);
+				Inventory::getInstance().addDust(-1);
 			}
 			else if (mType == GOLD) {
 				Inventory::getInstance().addDust(-15);
@@ -194,8 +194,8 @@ void Silverfish::collide(CollidableEntity *collidable, const sf::Vector2f& moveA
 	}
 }
 
-sf::FloatRect Silverfish::getHitBox(){
-	if (mIsActive){
+sf::FloatRect Silverfish::getHitBox() {
+	if (mIsActive) {
 		return getTransform().transformRect(mAnimation.getCurrAnimation().getSprite().getGlobalBounds());
 	}
 	else {
@@ -204,10 +204,15 @@ sf::FloatRect Silverfish::getHitBox(){
 	}
 }
 
-sf::Shape* Silverfish::getNarrowHitbox() const{
+sf::Shape* Silverfish::getNarrowHitbox() const {
 	mHitbox->setPosition(getPosition());
-	
+
 	return mHitbox;
+}
+
+int Silverfish::getCollisionDamage() const {
+	// the fish does no damage to the target, but to the inventory.
+	return 0;
 }
 
 void Silverfish::stun(const sf::Time& deltatime) {

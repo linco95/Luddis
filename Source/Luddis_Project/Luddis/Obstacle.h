@@ -27,6 +27,7 @@ public:
 	Renderer::RenderLayer getRenderLayer() const override;
 	sf::FloatRect getHitBox() override;
 	sf::Shape* getNarrowHitbox() const override;
+	int getCollisionDamage() const override;
 	void stun(const sf::Time& deltatime) override;
 private:
 	bool mIsAlive;

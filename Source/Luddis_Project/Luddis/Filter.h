@@ -29,6 +29,7 @@ public:
 
 private:
 	sf::RectangleShape mFadeEffect;
+	sf::Uint8 mRed, mGreen, mBlue;
 	bool mIsAlive;
 	bool mFade;
 	bool mFadeOut;

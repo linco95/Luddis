@@ -83,7 +83,11 @@ void Level::initializeEntities(sf::RenderWindow* window, const rapidjson::Docume
 
 	SoundEngine* se = &SoundEngine::getInstance();
 	std::string levelMusic = "event:/Music/Levels/Lvl" + std::to_string(level); //TODO: make dynamic
-	se->playEvent(levelMusic.c_str());
+	if(level != 3)
+		se->playEvent(levelMusic.c_str());
+	else
+		se->playEvent("event:/Music/Levels/Boss");
+
 
 	// Silverfishes
 	if (configDoc.HasMember("Silverfish_spawns") && configDoc["Silverfish_spawns"].IsArray()) {

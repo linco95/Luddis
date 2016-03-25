@@ -186,7 +186,7 @@ void BossFinal::collide(CollidableEntity* collidable, const sf::Vector2f& moveAw
 			mDead = true;
 		}
 		else if (mLife > 0) {
-			mLife -= 25;
+			mLife -= collidable->getCollisionDamage();
 			mAnimation.replaceAnimation(ANIMATION_HIT);
 		}
 	}
@@ -202,6 +202,10 @@ sf::Shape* BossFinal::getNarrowHitbox() const {
 	mHitbox->setPosition(getPosition());
 	mHitbox->setScale(getScale());
 	return mHitbox;
+}
+
+int BossFinal::getCollisionDamage() const{
+	return 0;
 }
 
 void BossFinal::stun(const sf::Time& deltatime) {

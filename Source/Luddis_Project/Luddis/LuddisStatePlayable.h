@@ -39,6 +39,8 @@ private:
 	bool mIsFlipped;
 	
 	bool mMoved;
+	bool mShield;
+	float mShieldTimer;
 
 	PowerupDisplay* mDisplay;
 

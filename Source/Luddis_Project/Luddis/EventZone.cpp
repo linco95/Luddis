@@ -60,6 +60,10 @@ sf::Shape* EventZone::getNarrowHitbox() const{
 	return mHitbox;
 }
 
+int EventZone::getCollisionDamage() const{
+	return 0;
+}
+
 EventZone::Category EventZone::getCollisionCategory(){
 	return EVENTZONE;
 }

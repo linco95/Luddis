@@ -79,6 +79,9 @@ sf::FloatRect Collectible::getHitBox() {
 sf::Shape* Collectible::getNarrowHitbox() const {
 	return mHitbox;
 }
+int Collectible::getCollisionDamage() const{
+	return 0;
+}
 Collectible::Category Collectible::getCollisionCategory() {
 	return COLLECT;
 }

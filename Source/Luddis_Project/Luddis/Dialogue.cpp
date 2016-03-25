@@ -17,7 +17,7 @@ static const float ANIMATION_TIME = 0.9f;
 static const float RECT_WIDTH = ViewUtility::VIEW_WIDTH;
 static const float RECT_HEIGHT = 300;
 static const int INDENT = 30;
-static sf::IntRect DEFAULT_RECT(INDENT*7, INDENT, (int)RECT_WIDTH-INDENT*1, 0);
+static sf::IntRect DEFAULT_RECT(INDENT*7, INDENT, (int)RECT_WIDTH-INDENT*9, 0);
 
 Dialogue::Dialogue(const std::string& dialogueFile, sf::RenderWindow* window, GUIManager* guiManager, EventManager* eventManager, sf::Vector2f pos, GameState* gameState, int initialPage) :
 mButtonCount(0),
@@ -107,7 +107,7 @@ void Dialogue::initialize(std::string dialogueFile){
 			std::string buttonFunc = buttonInfo["Button_func"].GetString();
 			addButton(buttonImage, buttonText, buttonFunc, offset +  sf::Vector2f((float)INDENT*4, (float)INDENT + (float)i * 65.0f), (int)itr);
 		}
-		TextBox textBox(DEFAULT_RECT, pages[itr]["Text"].GetString(), 24, true);
+		TextBox textBox(DEFAULT_RECT, pages[itr]["Text"].GetString(), 32, true);
 		textBox.setPosition(offset);
 		textBox.setColor(sf::Color::White);
 		//textBox
@@ -115,7 +115,7 @@ void Dialogue::initialize(std::string dialogueFile){
 		if (pages[itr].HasMember("Header")){
 			assert(pages[itr]["Header"].IsString());
 			std::string text = pages[itr]["Header"].GetString();
-			int fontSize = 32;
+			int fontSize = 40;
 
 			mHeaders[itr] = new TextBox(DEFAULT_RECT, text, fontSize);
 			mHeaders[itr]->setColor(sf::Color::White);

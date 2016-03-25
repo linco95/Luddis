@@ -129,6 +129,10 @@ sf::Shape* Luddis::getNarrowHitbox() const {
 	return mHitbox;
 }
 
+int Luddis::getCollisionDamage() const{
+	return 0;
+}
+
 Renderer::RenderLayer Luddis::getRenderLayer() const {
 	return LAYER;
 }

@@ -9,7 +9,7 @@
 class Projectile : public CollidableEntity{
 public:
 	//The max life time should be entered in seconds
-	Projectile(std::string textureFilename, sf::Vector2f direction,sf::Vector2f position, float maxLifeTimeMS, Category collisionCategory);
+	Projectile(std::string textureFilename, sf::Vector2f direction,sf::Vector2f position, float maxLifeTimeMS, int damageValue, Category collisionCategory);
 	virtual ~Projectile();
 
 	void tick(const sf::Time& deltaTime) override;
@@ -20,6 +20,7 @@ public:
 	Renderer::RenderLayer getRenderLayer() const override;
 	sf::FloatRect getHitBox() override;
 	sf::Shape* getNarrowHitbox() const override;
+	int getCollisionDamage() const override;
 	void setTexture(std::string filename);
 	void stun(const sf::Time& deltatime) override;
 private:
@@ -28,6 +29,7 @@ private:
 
 	sf::Sprite mSprite;
 	float mLifeTime;
+	int mDamage;
 	bool mIsAlive;
 	bool mIsActive;
 	Category mCollisionCategory;

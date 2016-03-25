@@ -10,9 +10,10 @@ Filter::Filter(float fadeTimer, FilterType filterType, std::string filename) :
 	mHalfway(false), mComplete(false),
 	mFilterType(filterType),
 	mFadeEffect(ViewUtility::getViewSize().getSize()) {
-
-	mFadeEffect.setFillColor(sf::Color::White);
-	mFadeEffect.setOutlineColor(sf::Color::White);
+	mRed = 255;
+	mGreen = 255;
+	mBlue = 255;
+	//mFadeEffect.setOutlineColor(sf::Color::Black);
 	if (filterType == FADEBOTH)
 		mMaxTimer /= 2;
 	else if (filterType == FADEOUT) {
@@ -20,8 +21,9 @@ Filter::Filter(float fadeTimer, FilterType filterType, std::string filename) :
 		mFadeOut = false;
 	}
 
-		if (filename != "")
-			mFadeEffect.setTexture(&ResourceManager::getInstance().getTexture(filename));
+	if (filename != "")
+		mFadeEffect.setTexture(&ResourceManager::getInstance().getTexture(filename));
+	mFadeEffect.setFillColor(sf::Color(mRed, mGreen, mBlue));
 }
 
 Filter::~Filter() {
@@ -34,7 +36,7 @@ void Filter::draw(sf::RenderTarget & target, sf::RenderStates states) const {
 }
 
 void Filter::tick(const sf::Time & deltaTime) {
-	sf::Color fadeColor(0, 0, 0, (unsigned)(mTimer / mMaxTimer * 255.0f));
+	sf::Color fadeColor(mRed, mBlue, mGreen, (unsigned)(mTimer / mMaxTimer * 255.0f));
 	if (mFade && mFadeOut) {
 		mTimer += deltaTime.asSeconds();
 		mTimer = std::min(mTimer, mMaxTimer);

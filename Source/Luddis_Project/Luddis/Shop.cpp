@@ -114,20 +114,20 @@ void Shop::initializeContents() {
 		assert(configDoc[itr].HasMember("icon") && configDoc[itr]["icon"].IsString());
 		assert(configDoc[itr].HasMember("image") && configDoc[itr]["image"].IsString());
 		assert(configDoc[itr].HasMember("description") && configDoc[itr]["description"].IsString());
-		assert(configDoc[itr].HasMember("ID") && configDoc[itr]["ID"].IsInt());
+		assert(configDoc[itr].HasMember("type") && configDoc[itr]["type"].IsInt());
 
 		std::string icon = configDoc[itr]["icon"].GetString();
 		std::string description = configDoc[itr]["description"].GetString();
 		std::string image = configDoc[itr]["image"].GetString();
-		int ID = configDoc[itr]["ID"].GetInt();
+		int type = configDoc[itr]["type"].GetInt();
 		sf::Vector2f position = sf::Vector2f(200, (float)(486 + counter * 200)) + mBackground.getPosition() - mBackground.getOrigin();
-		addItemButton(icon, "Accessory" + std::to_string(ID), position, mMaxPage);
+		addItemButton(icon, "Accessory" + std::to_string(itr), position, mMaxPage);
 		sf::IntRect box(130, 0, 382, 142);
 		TextBoxDecorator* textBox = new TextBoxDecorator(box, description, 32);
 		textBox->setOrigin(0, (float)box.height / 2.0f);
 		textBox->setPosition(position);
 		mDescriptions[mMaxPage].push_back(textBox);
-		mAccessoryImages[ID] = image;
+		mAccessoryImages[itr] = image;
 		counter++;
 
 	}
@@ -202,19 +202,7 @@ void Shop::onClick(std::string command) {
 			mMannequin->setColorScheme(Mannequin::ColorScheme::GREEN);
 			break;
 
-		case 3:
-			mMannequin->setHeadAccessory(mAccessoryImages[ID].c_str());
-			break;
-
-		case 4:
-			mMannequin->setHeadAccessory(mAccessoryImages[ID].c_str());
-			break;
-
-		case 5:
-			mMannequin->setHeadAccessory(mAccessoryImages[ID].c_str());
-			break;
-
-		case 6:
+		default:
 			mMannequin->setHeadAccessory(mAccessoryImages[ID].c_str());
 			break;
 		}

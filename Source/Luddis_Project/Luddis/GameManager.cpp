@@ -168,7 +168,9 @@ struct GameManagerImp : public EventObserver {
 		se->createEvent("event:/Gameplay/Ambience/Room", SoundEngine::SOUND);
 		se->createEvent("event:/Gameplay/Ambience/Shop", SoundEngine::SOUND);
 	
+		se->createEvent("event:/Music/Levels/Lvl1", SoundEngine::MUSIC);
 		se->createEvent("event:/Music/Levels/Lvl2", SoundEngine::MUSIC);
+		se->createEvent("event:/Music/Levels/Boss", SoundEngine::MUSIC);
 		se->createEvent("event:/Music/Sockshop", SoundEngine::MUSIC);
 		se->createEvent("event:/Music/Meny", SoundEngine::MUSIC);
 

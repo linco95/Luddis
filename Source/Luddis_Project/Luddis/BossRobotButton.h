@@ -21,8 +21,10 @@ public:
 	void collide(CollidableEntity *collidable, const sf::Vector2f& moveAway) override;
 	sf::FloatRect getHitBox() override;
 	sf::Shape* getNarrowHitbox() const override;
+	int getCollisionDamage() const override;
 	void stun(const sf::Time& deltatime) override;
 	int getLife();
+
 private:
 	sf::RenderWindow* mWindow;
 	sf::Transformable* mTarget;

@@ -189,6 +189,10 @@ sf::Shape* Obstacle::getNarrowHitbox() const {
 	return mHitbox;
 }
 
+int Obstacle::getCollisionDamage() const{
+	return 0;
+}
+
 Obstacle::Category Obstacle::getCollisionCategory() {
 	if (mType == DAMAGE) {
 		if (mIsDamaging) {

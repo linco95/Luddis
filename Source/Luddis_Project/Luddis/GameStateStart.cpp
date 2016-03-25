@@ -240,16 +240,16 @@ void GameStateStart::setupFiles(std::string filename) {
 		mFiles[itr].mannequin->setPosition(125.0f, 200.0f + (float)itr*225.0f);
 
 		for (rapidjson::SizeType itr2 = 0; itr2 < configDocAccessories.Size(); itr2++) {
-			assert(configDocAccessories[itr2].HasMember("ID") && configDocAccessories[itr2]["ID"].IsInt());
-			int accessoryID = configDocAccessories[itr2]["ID"].GetInt();
-			if (colorID != -1 && accessoryID == colorID) {
-				mFiles[itr].mannequin->setColorScheme(Mannequin::ColorScheme(accessoryID));
+			assert(configDocAccessories[itr2].HasMember("type") && configDocAccessories[itr2]["type"].IsInt());
+			int accessoryType = configDocAccessories[itr2]["type"].GetInt();
+			if (colorID != -1 && itr2 == colorID) {
+				mFiles[itr].mannequin->setColorScheme(Mannequin::ColorScheme(itr2));
 			}
-			if (colorID != -1 && accessoryID == headID) {
+			if (headID != -1 && itr2 == headID) {
 				std::string image = configDocAccessories[itr2]["image"].GetString();
 				mFiles[itr].mannequin->setHeadAccessory(image.c_str());
 			}
-			if (colorID != -1 && accessoryID == tailID) {
+			if (tailID != -1 && itr2 == tailID) {
 				std::string image = configDocAccessories[itr2]["image"].GetString();
 				mFiles[itr].mannequin->setHeadAccessory(image.c_str());
 			}

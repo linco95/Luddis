@@ -82,7 +82,7 @@ BossRobotButton::Type BossRobotButton::getCollisionType() {
 
 void BossRobotButton::collide(CollidableEntity * collidable, const sf::Vector2f & moveAway) {
 	if (mInvulnerableTimer <= 0 && collidable->getCollisionCategory() == PLAYER_PROJECTILE) {
-		mLife -= 5;
+		mLife -= collidable->getCollisionDamage();
 		mHit = true;
 		mInvulnerableTimer = INVLULNERABLE_INTERVAL;
 	}
@@ -97,6 +97,10 @@ sf::Shape* BossRobotButton::getNarrowHitbox() const {
 	mHitbox->setScale(getScale());
 	mHitbox->setRotation(getRotation());
 	return mHitbox;
+}
+
+int BossRobotButton::getCollisionDamage() const{
+	return 0;
 }
 
 void BossRobotButton::stun(const sf::Time & deltatime) {

@@ -120,6 +120,7 @@ void Slider::onEvent(const sf::Event & aEvent) {
 			mAttributeText.setString(mAttribute + " " + std::to_string((int)(mIntensity * 100)));
 			mOwner->onClick(mButtonFunc + std::to_string(mIntensity));
 		}
+		mWindow->setView(mapView);
 	}
 }
 
